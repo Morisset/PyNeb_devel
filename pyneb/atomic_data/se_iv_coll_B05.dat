@@ -1,0 +1,10 @@
+       0       0   3.505   3.903   4.204   4.505   4.903   5.204   5.505   5.903   6.204   6.505
+       1       2   8.420   7.710   7.670   7.670   6.980   5.580   3.970   2.450   1.750   1.210
+*** Se IV  effective collision strengths data
+*** ATOM selenium
+*** SPECTRUM 4
+*** GSCONFIG p1
+*** N_LEVELS 2
+*** T_UNIT	        'log(K)' 
+*** SOURCE1	'Butler 2005, private communication' 
+*** NOTE1 	'Effective Collision Strengths Omega' 

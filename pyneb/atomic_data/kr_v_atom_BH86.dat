@@ -1,0 +1,14 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+9.26E-01  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+1.90E-03  6.90E-01  0.00E+00  0.00E+00  0.00E+00
+5.53E-04  4.98E+00  5.99E+00  0.00E+00  0.00E+00
+0.00E+00  7.95E+01  1.89E+00  3.61E+00  0.00E+00
+*** Kr V transition probabilities
+*** ATOM krypton
+*** SPECTRUM 5
+*** N_LEVELS 5
+*** SOURCE1	Biemont & Hansen 1986, Phys. Scr., 34, 116 
+*** NOTE1  	Transition Probabilities, A
+*** GSCONFIG p2 

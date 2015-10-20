@@ -1,0 +1,54 @@
+\hypertarget{namespacepyneb_1_1utils_1_1fits}{}\section{pyneb.\+utils.\+fits Namespace Reference}
+\label{namespacepyneb_1_1utils_1_1fits}\index{pyneb.\+utils.\+fits@{pyneb.\+utils.\+fits}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr}{Hdr}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{write\+Atom} (input\+\_\+file)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{write\+Coll}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{}\index{pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}!write\+Atom@{write\+Atom}}
+\index{write\+Atom@{write\+Atom}!pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}}
+\subsubsection[{write\+Atom}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+fits.\+write\+Atom (
+\begin{DoxyParamCaption}
+\item[{}]{input\+\_\+file}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}
+\begin{DoxyVerb}Write the Es and As read from an ascii file into a fits file in PyNeb format.
+The bibliographic references are read from comment lines in the file.
+    
+Parameters:
+    - input_file    name of the ascii input file containing the energy levels (in 1/A or eV) and the Aij,
+                    in the format elem_spec_atom_REF-STRING.dat
+
+Example: 
+writeAtom('o_iii_atom_AB01-CD02-EFG03.dat')\end{DoxyVerb}
+ \hypertarget{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{}\index{pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}!write\+Coll@{write\+Coll}}
+\index{write\+Coll@{write\+Coll}!pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}}
+\subsubsection[{write\+Coll}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+fits.\+write\+Coll (
+\begin{DoxyParamCaption}
+\item[{}]{input\+\_\+file, }
+\item[{}]{temp\+\_\+in\+\_\+cols = {\ttfamily True}, }
+\item[{}]{cheb\+Order = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}
+\begin{DoxyVerb}Write the Omegas read from an ascii file into a fits file in PyNeb format.
+The bibliographic references are read from comment lines in the file.
+    
+Parameters:
+    - input_file    name of the ascii input file containing the Omegas,
+                    in the format elem_spec_coll_REF-STRING.dat
+    - temp_in_cols  If True, each column of the input file corresponds to a given Te, 
+                     otherwise each rows corresponds to a given Te (a transposition is 
+                     thus applied to the data)
+Example: 
+writeColl('o_iii_coll_AB01-CD02-EFG03.dat')\end{DoxyVerb}
+ 

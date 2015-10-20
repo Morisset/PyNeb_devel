@@ -1,0 +1,18 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 
+0.0000000e+00 0.0000000e+00 0.0000000e+00 0.0000000e+00 0.0000000e+00 
+0.0000000e+00 0.0000000e+00 0.0000000e+00 0.0000000e+00 0.0000000e+00 
+1.1400000e+02 2.3900000e-07 0.0000000e+00 0.0000000e+00 0.0000000e+00 
+5.1899999e-03 1.4999999e-13 2.4100000e-06 0.0000000e+00 0.0000000e+00 
+1.7670001e+09 1.5000000e-03 3.3600000e-03 1.9200000e-03 0.0000000e+00 
+*** C III transition probabilities
+*** ATOM carbon
+*** SPECTRUM 3
+*** N_LEVELS 5
+*** SOURCE2 Glass, 1983, Astrophy. Space Sci., 92, 307
+*** NOTE2 A-value for 4-2
+*** SOURCE3 Nussbaumer & Storey, 1978, A&A, 64, 139
+*** NOTE3 A-values of 3-2
+*** SOURCE4 Wiese, Fuhr & Deters, 1996, JPCRD, Monograph No. 7, 96
+*** NOTE4 All other A-values
+*** GSCONFIG s2

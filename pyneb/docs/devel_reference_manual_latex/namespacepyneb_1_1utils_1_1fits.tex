@@ -1,0 +1,299 @@
+\hypertarget{namespacepyneb_1_1utils_1_1fits}{}\section{pyneb.\+utils.\+fits Namespace Reference}
+\label{namespacepyneb_1_1utils_1_1fits}\index{pyneb.\+utils.\+fits@{pyneb.\+utils.\+fits}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr}{Hdr}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\+\_\+update\+Header} (hdu, input\+\_\+file, content, elem, spec)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{write\+Atom} (input\+\_\+file)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{write\+Coll}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{}\index{pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}!\+\_\+update\+Header@{\+\_\+update\+Header}}
+\index{\+\_\+update\+Header@{\+\_\+update\+Header}!pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}}
+\subsubsection[{\+\_\+update\+Header}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+fits.\+\_\+update\+Header (
+\begin{DoxyParamCaption}
+\item[{}]{hdu, }
+\item[{}]{input\+\_\+file, }
+\item[{}]{content, }
+\item[{}]{elem, }
+\item[{}]{spec}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}
+\begin{DoxyVerb}Update the header of the output fits file
+
+Parameters: 
+    - hdu          pyfits file
+    - input_file   name of the ascii files containing the original data
+    - content      type of physical quantities contained in the file
+    - elem         symbol of the selected element
+    - spec         ionization stage in spectroscopic notation (I = 1, II = 2, etc.)\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{fits_8py_source_l00015}{15} of file \hyperlink{fits_8py_source}{fits.\+py}.
+
+
+
+References \hyperlink{misc_8py_source_l00053}{pyneb.\+utils.\+misc.\+roman\+\_\+to\+\_\+int()}.
+
+
+
+Referenced by \hyperlink{fits_8py_source_l00040}{pyneb.\+utils.\+fits.\+write\+Atom()}, and \hyperlink{fits_8py_source_l00114}{pyneb.\+utils.\+fits.\+write\+Coll()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_l00015}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{00015} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, content, elem, spec):
+00016     \textcolor{stringliteral}{"""}
+00017 \textcolor{stringliteral}{    Update the header of the output fits file}
+00018 \textcolor{stringliteral}{}
+00019 \textcolor{stringliteral}{    Parameters: }
+00020 \textcolor{stringliteral}{        - hdu          pyfits file}
+00021 \textcolor{stringliteral}{        - input\_file   name of the ascii files containing the original data}
+00022 \textcolor{stringliteral}{        - content      type of physical quantities contained in the file}
+00023 \textcolor{stringliteral}{        - elem         symbol of the selected element}
+00024 \textcolor{stringliteral}{        - spec         ionization stage in spectroscopic notation (I = 1, II = 2, etc.)}
+00025 \textcolor{stringliteral}{        }
+00026 \textcolor{stringliteral}{    """}
+00027     hdu.header.update(\textcolor{stringliteral}{'ORIGIN'}, \textcolor{stringliteral}{'File \{0\}, PyNeb v\{1\}'}.format(input\_file, pn.\_\_version\_\_))
+00028     hdu.header.update(\textcolor{stringliteral}{'CONTENT'}, content)
+00029     hdu.header.update(\textcolor{stringliteral}{'ATOM'}, sym2name[elem.capitalize()])
+00030     hdu.header.update(\textcolor{stringliteral}{'SPECTRUM'}, \hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{roman\_to\_int}(spec))
+00031     atom = elem.capitalize() + str(\hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{roman\_to\_int}(spec))
+00032     \textcolor{keywordflow}{for} key \textcolor{keywordflow}{in} gsDict.keys():
+00033         \textcolor{keywordflow}{if} (atom \textcolor{keywordflow}{in} gsDict[key]):
+00034             gs = key
+00035         \textcolor{keywordflow}{else}:
+00036             gs = \textcolor{stringliteral}{'unknown'}
+00037     hdu.header.update(\textcolor{stringliteral}{'GSCONFIG'}, gs)
+00038     
+00039 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{}\index{pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}!write\+Atom@{write\+Atom}}
+\index{write\+Atom@{write\+Atom}!pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}}
+\subsubsection[{write\+Atom}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+fits.\+write\+Atom (
+\begin{DoxyParamCaption}
+\item[{}]{input\+\_\+file}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}
+\begin{DoxyVerb}Write the Es and As read from an ascii file into a fits file in PyNeb format.
+The bibliographic references are read from comment lines in the file.
+    
+Parameters:
+    - input_file    name of the ascii input file containing the energy levels (in 1/A or eV) and the Aij,
+                    in the format elem_spec_atom_REF-STRING.dat
+
+Example: 
+writeAtom('o_iii_atom_AB01-CD02-EFG03.dat')\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{fits_8py_source_l00040}{40} of file \hyperlink{fits_8py_source}{fits.\+py}.
+
+
+
+References \hyperlink{fits_8py_source_l00015}{pyneb.\+utils.\+fits.\+\_\+update\+Header()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_l00040}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{00040} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{writeAtom}(input\_file):
+00041     \textcolor{stringliteral}{""" }
+00042 \textcolor{stringliteral}{    Write the Es and As read from an ascii file into a fits file in PyNeb format.}
+00043 \textcolor{stringliteral}{    The bibliographic references are read from comment lines in the file.}
+00044 \textcolor{stringliteral}{        }
+00045 \textcolor{stringliteral}{    Parameters:}
+00046 \textcolor{stringliteral}{        - input\_file    name of the ascii input file containing the energy levels (in 1/A or eV) and the
+       Aij,}
+00047 \textcolor{stringliteral}{                        in the format elem\_spec\_atom\_REF-STRING.dat}
+00048 \textcolor{stringliteral}{}
+00049 \textcolor{stringliteral}{    Example: }
+00050 \textcolor{stringliteral}{    writeAtom('o\_iii\_atom\_AB01-CD02-EFG03.dat')}
+00051 \textcolor{stringliteral}{}
+00052 \textcolor{stringliteral}{    """}
+00053     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(input\_file):
+00054         pn.log\_.error(\textcolor{stringliteral}{'\{0\} not found.'}.format(input\_file), calling=\textcolor{stringliteral}{'writeAtom'})
+00055         sys.exit(0)
+00056     data\_type = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[2]
+00057     \textcolor{keywordflow}{if} (data\_type != \textcolor{stringliteral}{'atom'}):
+00058         pn.log\_.error(\textcolor{stringliteral}{'The name of \{0\} does not conform to the prescribed format.'}.format(input\_file), 
+      calling=\textcolor{stringliteral}{'writeAtom'})
+00059         sys.exit(0)
+00060     elem = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[0]
+00061     spec = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[1]
+00062     ref = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[-1]
+00063     out\_fits = \textcolor{stringliteral}{'\{0\}\_\{1\}\_\{2\}\_\{3\}.fits'}.format(elem.lower(), spec.lower(), data\_type, ref)
+00064     atom\_dat = []
+00065 
+00066     \textcolor{comment}{# Read data from ascii file}
+00067     \textcolor{comment}{#}
+00068     \textcolor{comment}{# Read energies and stat weights }
+00069     f = open(input\_file)
+00070     units = f.readlines()[1].split()[0]
+00071     all\_data = np.genfromtxt(input\_file, comments=\textcolor{stringliteral}{'***'}, skip\_header=2, unpack=\textcolor{keyword}{True})
+00072     \textcolor{comment}{# Read Es}
+00073     energy = all\_data[0, :]
+00074     NLevels = len(energy)
+00075     \textcolor{keywordflow}{if} units[0] \textcolor{keywordflow}{is} \textcolor{stringliteral}{'eV'}: 
+00076         energy = energy / (pn.CST.RYD\_EV * pn.CST.RYD\_ANG)
+00077     \textcolor{comment}{# Read statistical weights}
+00078     stat\_weight = all\_data[1, :]
+00079     atom\_dat.append(pyfits.Column(name=\textcolor{stringliteral}{'Energy'}, format=\textcolor{stringliteral}{'1D'}, unit=\textcolor{stringliteral}{'1/Ang'}, array=energy))
+00080     atom\_dat.append(pyfits.Column(name=\textcolor{stringliteral}{'Stat\_Weight'}, format=\textcolor{stringliteral}{'1J'}, unit=\textcolor{stringliteral}{'none'}, array=stat\_weight))    
+00081     \textcolor{comment}{# Read As}
+00082     \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} np.arange(NLevels - 1):
+00083         lev\_j = j + 1
+00084         fieldName = \textcolor{stringliteral}{'A(*->\{0\})'}.format(lev\_j)
+00085         atom\_dat.append(pyfits.Column(name=fieldName, format=\textcolor{stringliteral}{'1D'}, unit=\textcolor{stringliteral}{'1/sec'}, array=all\_data[1 + lev\_j, 
+      :]))
+00086 
+00087     \textcolor{comment}{# Create fits file and start adding info to the header}
+00088     atom\_hdu = pyfits.new\_table(atom\_dat)   
+00089             
+00090     \textcolor{comment}{# Primary header (extension 0)}
+00091     hdu = pyfits.PrimaryHDU()
+00092     hdu.header.update(\textcolor{stringliteral}{'FILENAME'}, out\_fits)
+00093     hdu.header.update(\textcolor{stringliteral}{'NEXTEND'}, 1)
+00094  
+00095     \textcolor{comment}{# Write references in the header}
+00096     refs = []
+00097     \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} open(input\_file):
+00098         \textcolor{keywordflow}{if} \textcolor{stringliteral}{'***'} \textcolor{keywordflow}{in} line:
+00099             text = line.strip(\textcolor{stringliteral}{"***"}).split(\textcolor{stringliteral}{"'"})
+00100             \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'SOURCE'} \textcolor{keywordflow}{in} text[0]) \textcolor{keywordflow}{or} (\textcolor{stringliteral}{'NOTE'} \textcolor{keywordflow}{in} text[0]):
+00101                 refs.append((text[0], text[1]))
+00102 
+00103     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(atom\_hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, 
+      spec)
+00104     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, spec)
+00105     atom\_hdu.header.update(\textcolor{stringliteral}{'N\_LEVELS'}, NLevels)
+00106     \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} refs:
+00107         atom\_hdu.header.update(item[0], item[1])
+00108 
+00109     hdulist = pyfits.HDUList([hdu])
+00110     hdulist.append(atom\_hdu)
+00111     hdulist.writeto(out\_fits, clobber=\textcolor{keyword}{True})
+00112 
+00113 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{}\index{pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}!write\+Coll@{write\+Coll}}
+\index{write\+Coll@{write\+Coll}!pyneb\+::utils\+::fits@{pyneb\+::utils\+::fits}}
+\subsubsection[{write\+Coll}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+fits.\+write\+Coll (
+\begin{DoxyParamCaption}
+\item[{}]{input\+\_\+file, }
+\item[{}]{temp\+\_\+in\+\_\+cols = {\ttfamily True}, }
+\item[{}]{cheb\+Order = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}
+\begin{DoxyVerb}Write the Omegas read from an ascii file into a fits file in PyNeb format.
+The bibliographic references are read from comment lines in the file.
+    
+Parameters:
+    - input_file    name of the ascii input file containing the Omegas,
+                    in the format elem_spec_coll_REF-STRING.dat
+    - temp_in_cols  If True, each column of the input file corresponds to a given Te, 
+                     otherwise each rows corresponds to a given Te (a transposition is 
+                     thus applied to the data)
+Example: 
+writeColl('o_iii_coll_AB01-CD02-EFG03.dat')\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{fits_8py_source_l00114}{114} of file \hyperlink{fits_8py_source}{fits.\+py}.
+
+
+
+References \hyperlink{fits_8py_source_l00015}{pyneb.\+utils.\+fits.\+\_\+update\+Header()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1fits_l00114}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{00114} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a468ecdfaa21de61a1037128ee889fd76}{writeColl}(input\_file, temp\_in\_cols = True, chebOrder = None):
+00115     \textcolor{stringliteral}{""" }
+00116 \textcolor{stringliteral}{    Write the Omegas read from an ascii file into a fits file in PyNeb format.}
+00117 \textcolor{stringliteral}{    The bibliographic references are read from comment lines in the file.}
+00118 \textcolor{stringliteral}{        }
+00119 \textcolor{stringliteral}{    Parameters:}
+00120 \textcolor{stringliteral}{        - input\_file    name of the ascii input file containing the Omegas,}
+00121 \textcolor{stringliteral}{                        in the format elem\_spec\_coll\_REF-STRING.dat}
+00122 \textcolor{stringliteral}{        - temp\_in\_cols  If True, each column of the input file corresponds to a given Te, }
+00123 \textcolor{stringliteral}{                         otherwise each rows corresponds to a given Te (a transposition is }
+00124 \textcolor{stringliteral}{                         thus applied to the data)}
+00125 \textcolor{stringliteral}{    Example: }
+00126 \textcolor{stringliteral}{    writeColl('o\_iii\_coll\_AB01-CD02-EFG03.dat')}
+00127 \textcolor{stringliteral}{}
+00128 \textcolor{stringliteral}{    """}
+00129     \textcolor{keyword}{def }\_omegaArray(lev\_j, lev\_i):
+00130         \textcolor{stringliteral}{"""}
+00131 \textcolor{stringliteral}{        Return the array of collision strength values for given levels}
+00132 \textcolor{stringliteral}{ }
+00133 \textcolor{stringliteral}{        """}       
+00134         ij = (cs[:, 0] == lev\_j) & (cs[:, 1] == lev\_i)
+00135         \textcolor{keywordflow}{if} ij.sum() == 0.:
+00136             \textcolor{keywordflow}{return} np.zeros(n\_temp)
+00137         \textcolor{keywordflow}{else}:
+00138             \textcolor{keywordflow}{return} cs[ij, 2::].reshape(n\_temp)
+00139 
+00140     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(input\_file):
+00141         pn.log\_.error(\textcolor{stringliteral}{'\{0\} not found.'}.format(input\_file), calling=\textcolor{stringliteral}{'writeColl'})
+00142         sys.exit(0)
+00143     data\_type = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[2]
+00144     \textcolor{keywordflow}{if} (data\_type != \textcolor{stringliteral}{'coll'}):
+00145         pn.log\_.error(\textcolor{stringliteral}{'The name of \{0\} does not conform to the prescribed format.'}.format(input\_file), 
+      calling=\textcolor{stringliteral}{'writeColl'})
+00146         sys.exit(0)
+00147     elem = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[0]
+00148     spec = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[1]
+00149     ref = input\_file.split(\textcolor{stringliteral}{"."})[0].split(\textcolor{stringliteral}{"\_"})[-1]
+00150     out\_fits = \textcolor{stringliteral}{'\{0\}\_\{1\}\_\{2\}\_\{3\}.fits'}.format(elem.lower(), spec.lower(), data\_type, ref)
+00151     coll\_dat = []
+00152 
+00153     \textcolor{comment}{# Read Omegas}
+00154     cs = np.genfromtxt(input\_file, comments=\textcolor{stringliteral}{'***'})
+00155     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} temp\_in\_cols:
+00156         cs = cs.transpose()
+00157     n\_temp = np.size(cs[0]) - 2
+00158     temArray = cs[0, 2::]
+00159     NLevels = int(np.max(cs[:, 1]))
+00160     \textcolor{keywordflow}{if} chebOrder \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00161         chebOrder = n\_temp
+00162     coll\_dat.append(pyfits.Column(name=\textcolor{stringliteral}{'Te'}, format=\textcolor{stringliteral}{'1E'}, unit=\textcolor{stringliteral}{'log(K)'}, array=temArray)) \textcolor{comment}{# Change if
+       linear T used (see below)}
+00163     \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} np.arange(NLevels - 1):
+00164         lev\_j = j + 1
+00165         lev\_i = lev\_j + 1
+00166         \textcolor{keywordflow}{while} (lev\_i < NLevels + 1):
+00167             fieldName = \textcolor{stringliteral}{'Omega(\{0\}->\{1\})'}.format(int(lev\_i), int(lev\_j))
+00168             omegaArray = \_omegaArray(lev\_j, lev\_i)
+00169             coll\_dat.append(pyfits.Column(name=fieldName, format=\textcolor{stringliteral}{'1E'}, unit=chebOrder, array=omegaArray))
+00170             lev\_i += 1
+00171     coll\_hdu = pyfits.new\_table(coll\_dat)        
+00172             
+00173     \textcolor{comment}{# Primary header (extension 0)}
+00174     hdu = pyfits.PrimaryHDU()
+00175     hdu.header.update(\textcolor{stringliteral}{'FILENAME'}, out\_fits)
+00176     hdu.header.update(\textcolor{stringliteral}{'NEXTEND'}, 1)
+00177  
+00178     \textcolor{comment}{# Write references in the header}
+00179     refs = []
+00180     \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} open(input\_file):
+00181         \textcolor{keywordflow}{if} \textcolor{stringliteral}{'***'} \textcolor{keywordflow}{in} line:
+00182             text = line.strip(\textcolor{stringliteral}{"***"}).split(\textcolor{stringliteral}{"'"})
+00183             \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'SOURCE'} \textcolor{keywordflow}{in} text[0]) \textcolor{keywordflow}{or} (\textcolor{stringliteral}{'NOTE'} \textcolor{keywordflow}{in} text[0]):
+00184                 refs.append((text[0], text[1]))
+00185 
+00186     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(coll\_hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
+00187     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
+00188     coll\_hdu.header.update(\textcolor{stringliteral}{'N\_LEVELS'}, NLevels)
+00189     \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} refs:
+00190         coll\_hdu.header.update(item[0], item[1])
+00191 
+00192     hdulist = pyfits.HDUList([hdu])
+00193     hdulist.append(coll\_hdu)
+00194     hdulist.writeto(out\_fits, clobber=\textcolor{keyword}{True})
+00195 
+00196 
+\end{DoxyCode}

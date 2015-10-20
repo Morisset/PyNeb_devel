@@ -1,0 +1,414 @@
+\hypertarget{misc_8py_source}{}\section{misc.\+py}
+\label{misc_8py_source}\index{pyneb/utils/misc.\+py@{pyneb/utils/misc.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{misc_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1misc}{00001} \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00002 \textcolor{keyword}{import} os
+00003 \textcolor{keyword}{import} sys
+00004 \textcolor{keyword}{import} traceback
+00005 \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
+00006 
+\hypertarget{misc_8py_source_l00007}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_a0e9572755930aabb03c6b0e5d66b8356}{00007} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_a0e9572755930aabb03c6b0e5d66b8356}{execution\_path}(filename):
+00008     \textcolor{keywordflow}{return} os.path.join(os.path.dirname(sys.\_getframe(1).f\_code.co\_filename), filename)
+00009 
+\hypertarget{misc_8py_source_l00010}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_adca84ea86408b88ee4f54583e19d4a18}{00010} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_adca84ea86408b88ee4f54583e19d4a18}{\_returnNone}(*argv, **kwargs):
+00011     \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00012 
+\hypertarget{misc_8py_source_l00013}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{00013} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(input\_):
+00014     \textcolor{stringliteral}{"""}
+00015 \textcolor{stringliteral}{    Convert an integer to Roman numerals.}
+00016 \textcolor{stringliteral}{    }
+00017 \textcolor{stringliteral}{    Examples:}
+00018 \textcolor{stringliteral}{    >>> int\_to\_roman(0)}
+00019 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00020 \textcolor{stringliteral}{    ValueError: Argument must be between 1 and 3999}
+00021 \textcolor{stringliteral}{    }
+00022 \textcolor{stringliteral}{    >>> int\_to\_roman(-1)}
+00023 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00024 \textcolor{stringliteral}{    ValueError: Argument must be between 1 and 3999}
+00025 \textcolor{stringliteral}{    }
+00026 \textcolor{stringliteral}{    >>> int\_to\_roman(1.5)}
+00027 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00028 \textcolor{stringliteral}{    TypeError: expected integer, got <type 'float'>}
+00029 \textcolor{stringliteral}{    }
+00030 \textcolor{stringliteral}{    >>> print int\_to\_roman(2000)}
+00031 \textcolor{stringliteral}{    MM}
+00032 \textcolor{stringliteral}{}
+00033 \textcolor{stringliteral}{    >>> print int\_to\_roman(1999)}
+00034 \textcolor{stringliteral}{    MCMXCIX}
+00035 \textcolor{stringliteral}{}
+00036 \textcolor{stringliteral}{    """}
+00037     \textcolor{keywordflow}{if} type(input\_) != type(1):
+00038         \textcolor{comment}{#raise TypeError, "expected integer, got %s" % type(input\_)}
+00039         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00040     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} 0 < input\_ < 4000:
+00041         \textcolor{comment}{#raise ValueError, "Argument must be between 1 and 3999"}
+00042         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00043     ints = (1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+00044     nums = (\textcolor{stringliteral}{'M'}, \textcolor{stringliteral}{'CM'}, \textcolor{stringliteral}{'D'}, \textcolor{stringliteral}{'CD'}, \textcolor{stringliteral}{'C'}, \textcolor{stringliteral}{'XC'}, \textcolor{stringliteral}{'L'}, \textcolor{stringliteral}{'XL'}, \textcolor{stringliteral}{'X'}, \textcolor{stringliteral}{'IX'}, \textcolor{stringliteral}{'V'}, \textcolor{stringliteral}{'IV'}, \textcolor{stringliteral}{'I'})
+00045     result = \textcolor{stringliteral}{""}
+00046     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(len(ints)):
+00047         count = int(input\_ / ints[i])
+00048         result += nums[i] * count
+00049         input\_ -= ints[i] * count
+00050     \textcolor{keywordflow}{return} result
+00051 
+00052 
+\hypertarget{misc_8py_source_l00053}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{00053} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{roman\_to\_int}(input\_):
+00054     \textcolor{stringliteral}{"""}
+00055 \textcolor{stringliteral}{    Convert a roman numeral to an integer.}
+00056 \textcolor{stringliteral}{    }
+00057 \textcolor{stringliteral}{    >>> r = range(1, 4000)}
+00058 \textcolor{stringliteral}{    >>> nums = [int\_to\_roman(i) for i in r]}
+00059 \textcolor{stringliteral}{    >>> ints = [roman\_to\_int(n) for n in nums]}
+00060 \textcolor{stringliteral}{    >>> print r == ints}
+00061 \textcolor{stringliteral}{    1}
+00062 \textcolor{stringliteral}{    }
+00063 \textcolor{stringliteral}{    >>> roman\_to\_int('VVVIV')}
+00064 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00065 \textcolor{stringliteral}{     ...}
+00066 \textcolor{stringliteral}{    ValueError: input is not a valid roman numeral: VVVIV}
+00067 \textcolor{stringliteral}{}
+00068 \textcolor{stringliteral}{    >>> roman\_to\_int(1)}
+00069 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00070 \textcolor{stringliteral}{     ...}
+00071 \textcolor{stringliteral}{    TypeError: expected string, got <type 'int'>}
+00072 \textcolor{stringliteral}{}
+00073 \textcolor{stringliteral}{    >>> roman\_to\_int('a')}
+00074 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00075 \textcolor{stringliteral}{     ...}
+00076 \textcolor{stringliteral}{    ValueError: input is not a valid roman numeral: A}
+00077 \textcolor{stringliteral}{}
+00078 \textcolor{stringliteral}{    >>> roman\_to\_int('IL')}
+00079 \textcolor{stringliteral}{    Traceback (most recent call last):}
+00080 \textcolor{stringliteral}{     ...}
+00081 \textcolor{stringliteral}{    ValueError: input is not a valid roman numeral: IL}
+00082 \textcolor{stringliteral}{}
+00083 \textcolor{stringliteral}{    """}   
+00084     \textcolor{keywordflow}{if} type(input\_) != type(\textcolor{stringliteral}{""}):
+00085         \textcolor{comment}{#raise TypeError, "expected string, got %s" % type(input\_)}
+00086         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00087     input\_ = input\_.upper()
+00088     nums = [\textcolor{stringliteral}{'M'}, \textcolor{stringliteral}{'D'}, \textcolor{stringliteral}{'C'}, \textcolor{stringliteral}{'L'}, \textcolor{stringliteral}{'X'}, \textcolor{stringliteral}{'V'}, \textcolor{stringliteral}{'I'}]
+00089     ints = [1000, 500, 100, 50, 10, 5, 1]
+00090     places = []
+00091     \textcolor{keywordflow}{for} c \textcolor{keywordflow}{in} input\_:
+00092         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} c \textcolor{keywordflow}{in} nums:
+00093             \textcolor{comment}{#raise ValueError, "input is not a valid roman numeral: %s" % input\_}
+00094             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00095     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(len(input\_)):
+00096         c = input\_[i]
+00097         value = ints[nums.index(c)]
+00098         \textcolor{comment}{# If the next place holds a larger number, this value is negative.}
+00099         \textcolor{keywordflow}{try}:
+00100             nextvalue = ints[nums.index(input\_[i + 1])]
+00101             \textcolor{keywordflow}{if} nextvalue > value:
+00102                 value *= -1
+00103         \textcolor{keywordflow}{except} IndexError:
+00104             \textcolor{comment}{# there is no next place.}
+00105             \textcolor{keywordflow}{pass}
+00106         places.append(value)
+00107     sum\_ = 0
+00108     \textcolor{keywordflow}{for} n \textcolor{keywordflow}{in} places: sum\_ += n
+00109     \textcolor{comment}{# Easiest test for validity...}
+00110     \textcolor{keywordflow}{if} \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(sum\_) == input\_:
+00111         \textcolor{keywordflow}{return} sum\_
+00112     \textcolor{keywordflow}{else}:
+00113         \textcolor{comment}{#raise ValueError, 'input is not a valid roman numeral: %s' % input\_}
+00114         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00115       
+00116       
+\hypertarget{misc_8py_source_l00117}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{00117} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom):
+00118     \textcolor{stringliteral}{'''Parses an atom label into the element and spectrum parts'''}
+00119 
+00120     iso = \textcolor{stringliteral}{''}
+00121     elem = \textcolor{stringliteral}{''}
+00122     spec = \textcolor{stringliteral}{''}
+00123     cont = \textcolor{keyword}{True}
+00124     firstdigit = \textcolor{keyword}{True}
+00125     \textcolor{keywordflow}{for} l \textcolor{keywordflow}{in} atom:
+00126         \textcolor{keywordflow}{if} l.isalpha() \textcolor{keywordflow}{and} cont:
+00127             elem += l
+00128             firstdigit = \textcolor{keyword}{False}
+00129         \textcolor{keywordflow}{elif} l.isdigit():
+00130             \textcolor{keywordflow}{if} firstdigit:
+00131                 iso += l
+00132             \textcolor{keywordflow}{else}:
+00133                 spec += l
+00134                 cont = \textcolor{keyword}{False}
+00135     \textcolor{keywordflow}{return} iso+str.capitalize(elem), spec
+00136 
+00137 
+\hypertarget{misc_8py_source_l00138}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_aaf9c5249e3c3104e38854ca30f9df4b7}{00138} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_aaf9c5249e3c3104e38854ca30f9df4b7}{strExtract}(text, par1=None, par2=None): 
+00139     \textcolor{stringliteral}{"""}
+00140 \textcolor{stringliteral}{    Extract a substring from text (first parameter)}
+00141 \textcolor{stringliteral}{     }
+00142 \textcolor{stringliteral}{    If par1 is a string, the extraction starts after par1,}
+00143 \textcolor{stringliteral}{    else if it is an integer, it starts at position par1.}
+00144 \textcolor{stringliteral}{    If par 2 is a string, extraction stops at par2, }
+00145 \textcolor{stringliteral}{    else if par2 is an integer, extraction stops after par2 characters.}
+00146 \textcolor{stringliteral}{    }
+00147 \textcolor{stringliteral}{    Examples: }
+00148 \textcolor{stringliteral}{    }
+00149 \textcolor{stringliteral}{    strExtract('test123','e','1')}
+00150 \textcolor{stringliteral}{    strExtract('test123','st',4)}
+00151 \textcolor{stringliteral}{    }
+00152 \textcolor{stringliteral}{    """}
+00153     \textcolor{keywordflow}{if} np.size(text) == 1:
+00154         \textcolor{keywordflow}{if} type(par1) \textcolor{keywordflow}{is} int:
+00155             str1 = text[par1::]
+00156         \textcolor{keywordflow}{elif} type(par1) \textcolor{keywordflow}{is} str:
+00157             str1 = text.split(par1)[-1]
+00158         \textcolor{keywordflow}{else}:
+00159             str1 = text
+00160     
+00161         \textcolor{keywordflow}{if} type(par2) \textcolor{keywordflow}{is} int:
+00162             str2 = str1[0:par2]
+00163         \textcolor{keywordflow}{elif} type(par2) \textcolor{keywordflow}{is} str:
+00164             str2 = str1.split(par2)[0]
+00165         \textcolor{keywordflow}{else}:
+00166             str2 = str1
+00167         \textcolor{keywordflow}{return} str2
+00168     \textcolor{keywordflow}{else}:
+00169         res = []
+00170         \textcolor{keywordflow}{for} subtext \textcolor{keywordflow}{in} text:
+00171             res1 = \hyperlink{namespacepyneb_1_1utils_1_1misc_aaf9c5249e3c3104e38854ca30f9df4b7}{strExtract}(subtext, par1=par1, par2=par2)
+00172             \textcolor{keywordflow}{if} res1 != \textcolor{stringliteral}{''}:
+00173                 res.append(res1)
+00174         \textcolor{keywordflow}{return} res
+00175 
+00176 
+\hypertarget{misc_8py_source_l00177}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_ab2eb7efdb086136e683e7f05f17958a9}{00177} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_ab2eb7efdb086136e683e7f05f17958a9}{formatExceptionInfo}(maxTBlevel=5):
+00178     cla, exc, trbk = sys.exc\_info()
+00179     excName = cla.\_\_name\_\_
+00180     \textcolor{keywordflow}{try}:
+00181         excArgs = exc.\_\_dict\_\_[\textcolor{stringliteral}{"args"}]
+00182     \textcolor{keywordflow}{except} KeyError:
+00183         excArgs = \textcolor{stringliteral}{"<no args>"}
+00184     excTb = traceback.format\_tb(trbk, maxTBlevel)
+00185     \textcolor{keywordflow}{return} (excName, excArgs, excTb)
+00186 
+\hypertarget{misc_8py_source_l00187}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_a4fc4f061f0c41f29de52ec765f894faf}{00187} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_a4fc4f061f0c41f29de52ec765f894faf}{multi\_split}(s, seps):
+00188     res = [s]
+00189     \textcolor{keywordflow}{for} sep \textcolor{keywordflow}{in} seps:
+00190         s, res = res, []
+00191         \textcolor{keywordflow}{for} seq \textcolor{keywordflow}{in} s:
+00192             res += seq.split(sep)
+00193     \textcolor{keywordflow}{return} res
+00194 
+00195 
+\hypertarget{misc_8py_source_l00196}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_a71fea98dc66e2a1793b5c86a345da052}{00196} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_a71fea98dc66e2a1793b5c86a345da052}{cleanPypicFiles}(files=None, all\_=False, dir\_=None):
+00197     \textcolor{stringliteral}{"""}
+00198 \textcolor{stringliteral}{    Method to clean the directory containing the pypics files.}
+00199 \textcolor{stringliteral}{}
+00200 \textcolor{stringliteral}{    Parameters:}
+00201 \textcolor{stringliteral}{        - files    list of files to be removed}
+00202 \textcolor{stringliteral}{        - all\_      Boolean, is set to True, all the files are deleted from the directory}
+00203 \textcolor{stringliteral}{        - dir\_      directory from where the files are removed. }
+00204 \textcolor{stringliteral}{                If None (default), pn.config.pypic\_path is used.}
+00205 \textcolor{stringliteral}{}
+00206 \textcolor{stringliteral}{    """}
+00207     \textcolor{keywordflow}{if} dir\_ \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00208         dir\_ = pn.config.pypic\_path
+00209     \textcolor{keywordflow}{if} all\_:
+00210         files = os.listdir(dir\_)
+00211         \textcolor{keywordflow}{if} np.ndim(files) == 0:
+00212             files = [files]
+00213     \textcolor{keywordflow}{if} files \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00214         \textcolor{keywordflow}{return}
+00215     \textcolor{keywordflow}{if} type(files) == type(\textcolor{stringliteral}{''}):
+00216         files = [files]
+00217     \textcolor{keywordflow}{for} file\_ \textcolor{keywordflow}{in} files:
+00218         file\_path = os.path.join(dir\_, file\_)
+00219         \textcolor{keywordflow}{try}:
+00220             \textcolor{keywordflow}{if} os.path.isfile(file\_path):
+00221                 os.remove(file\_path)
+00222                 pn.log\_.message(\textcolor{stringliteral}{'Deleting \{0\}'}.format(file\_path), calling=\textcolor{stringliteral}{'cleanPypicFiles'})
+00223         \textcolor{keywordflow}{except}:
+00224             pn.log\_.warn(\textcolor{stringliteral}{'Unable to remove \{0\}'}.format(file\_path), calling=\textcolor{stringliteral}{'cleanPypicFiles'})
+00225 
+00226 
+\hypertarget{misc_8py_source_l00227}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_aee812eafa08b828b4c65c700a6cf4ff6}{00227} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_aee812eafa08b828b4c65c700a6cf4ff6}{getPypicFiles}(dir\_=None):
+00228     \textcolor{stringliteral}{"""}
+00229 \textcolor{stringliteral}{    Return the list of files in the directory.}
+00230 \textcolor{stringliteral}{}
+00231 \textcolor{stringliteral}{    Parameters:}
+00232 \textcolor{stringliteral}{        - dir\_     directory from where the files are removed. }
+00233 \textcolor{stringliteral}{                   If None (default), pn.pypic\_path is used.}
+00234 \textcolor{stringliteral}{}
+00235 \textcolor{stringliteral}{    """}
+00236     \textcolor{keywordflow}{if} dir\_ \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00237         dir\_ = pn.config.pypic\_path
+00238     files = os.listdir(dir\_)
+00239     \textcolor{keywordflow}{return} files
+00240 
+00241 
+\hypertarget{misc_8py_source_l00242}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_adadbbcc030d1e6da419e5c7af03f5a2d}{00242} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_adadbbcc030d1e6da419e5c7af03f5a2d}{revert\_seterr}(oldsettings):
+00243     \textcolor{stringliteral}{"""}
+00244 \textcolor{stringliteral}{    This function revert the options of seterr to a value saved in oldsettings.}
+00245 \textcolor{stringliteral}{    }
+00246 \textcolor{stringliteral}{    Usage:}
+00247 \textcolor{stringliteral}{        oldsettings = np.seterr(all='ignore')}
+00248 \textcolor{stringliteral}{        to\_return = (result - int\_ratio) / int\_ratio # this will not issue Warning messages}
+00249 \textcolor{stringliteral}{        revert\_seterr(oldsettings)}
+00250 \textcolor{stringliteral}{}
+00251 \textcolor{stringliteral}{    Parameters:}
+00252 \textcolor{stringliteral}{        oldsettings  result of np.seterr(all='ignore')}
+00253 \textcolor{stringliteral}{}
+00254 \textcolor{stringliteral}{    """}
+00255     np.seterr(over=oldsettings[\textcolor{stringliteral}{'over'}])
+00256     np.seterr(divide=oldsettings[\textcolor{stringliteral}{'divide'}])
+00257     np.seterr(invalid=oldsettings[\textcolor{stringliteral}{'invalid'}])
+00258     np.seterr(under=oldsettings[\textcolor{stringliteral}{'under'}])
+00259 
+\hypertarget{misc_8py_source_l00260}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_afa4163f24be7b1472200c24824c72ae1}{00260} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_afa4163f24be7b1472200c24824c72ae1}{quiet\_divide}(a, b):
+00261     \textcolor{stringliteral}{"""}
+00262 \textcolor{stringliteral}{    This function returns the division of a by b, without any waring in case of b beeing 0.}
+00263 \textcolor{stringliteral}{    """}
+00264     oldsettings = np.seterr(all=\textcolor{stringliteral}{'ignore'})
+00265     to\_return = a / b \textcolor{comment}{# this will not issue Warning messages}
+00266     \hyperlink{namespacepyneb_1_1utils_1_1misc_adadbbcc030d1e6da419e5c7af03f5a2d}{revert\_seterr}(oldsettings)
+00267     \textcolor{keywordflow}{return} to\_return
+00268 
+\hypertarget{misc_8py_source_l00269}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_ad7f2bfdb7125df3d6a57156deb181179}{00269} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_ad7f2bfdb7125df3d6a57156deb181179}{quiet\_log10}(a):
+00270     \textcolor{stringliteral}{"""}
+00271 \textcolor{stringliteral}{    This function returns the log10 of a, without any waring in case of b beeing 0.}
+00272 \textcolor{stringliteral}{    """}
+00273     oldsettings = np.seterr(all=\textcolor{stringliteral}{'ignore'})
+00274     to\_return = np.log10(a) \textcolor{comment}{# this will not issue Warning messages}
+00275     \hyperlink{namespacepyneb_1_1utils_1_1misc_adadbbcc030d1e6da419e5c7af03f5a2d}{revert\_seterr}(oldsettings)
+00276     \textcolor{keywordflow}{return} to\_return
+00277      
+\hypertarget{misc_8py_source_l00278}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_ae69de9c9e8f8bde114b8edd326f3b993}{00278} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_ae69de9c9e8f8bde114b8edd326f3b993}{get\_reduced}(N\_rand, a, value\_method = 'original', error\_method='std'):
+00279     \textcolor{stringliteral}{"""}
+00280 \textcolor{stringliteral}{    This function returns a tuple of value and error corresponding to an array of values }
+00281 \textcolor{stringliteral}{        obtained from a MonteCarlo computation}
+00282 \textcolor{stringliteral}{    It takes as argument an array that contains the original value, }
+00283 \textcolor{stringliteral}{        followed by N\_rand MonteCarlo values.}
+00284 \textcolor{stringliteral}{    The relevant value is computed by returning the original value (default), the mean or the median, }
+00285 \textcolor{stringliteral}{        depending on "value\_method"}
+00286 \textcolor{stringliteral}{    The errors are computed by 68% quantiles or standart deviation (Default), }
+00287 \textcolor{stringliteral}{        depending on "error\_method"}
+00288 \textcolor{stringliteral}{    }
+00289 \textcolor{stringliteral}{    """}
+00290 
+00291     \textcolor{keywordflow}{if} error\_method == \textcolor{stringliteral}{'quants'} \textcolor{keywordflow}{and} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'scipy'}]:
+00292         pn.log\_.error(\textcolor{stringliteral}{'Scipy not installed, use\_quants not available'}, calling = \textcolor{stringliteral}{'get\_reduced'})
+00293     \textcolor{keywordflow}{else}:
+00294         \textcolor{keyword}{from} scipy.stats.mstats \textcolor{keyword}{import} mquantiles
+00295     
+00296     
+00297     \textcolor{keywordflow}{if} value\_method == \textcolor{stringliteral}{'original'}:
+00298         value = a[0]
+00299     \textcolor{keywordflow}{elif} value\_method == \textcolor{stringliteral}{'mean'}:
+00300         value = a.mean()
+00301     \textcolor{keywordflow}{elif} value\_method == \textcolor{stringliteral}{'median'}:
+00302         value = np.median(a)
+00303     
+00304     \textcolor{keywordflow}{if} error\_method == \textcolor{stringliteral}{'quants'}:
+00305         quants = mquantiles(a, [0.16, 0.84])
+00306         error = (quants[1]-quants[0])/2.
+00307     \textcolor{keywordflow}{elif} error\_method == \textcolor{stringliteral}{'uquants'}:
+00308         quants = mquantiles(a, [0.16, 0.84])
+00309         error = quants[1] - value
+00310     \textcolor{keywordflow}{elif} error\_method == \textcolor{stringliteral}{'lquants'}:
+00311         quants = mquantiles(a, [0.16, 0.84])
+00312         error = value - quants[0]
+00313         \textcolor{comment}{# error = (quants[1]-quants[0])/2)}
+00314     \textcolor{keywordflow}{elif} error\_method == \textcolor{stringliteral}{'upper'}:
+00315         mask = (a - value) >= 0
+00316         error =  ((((a[mask] - value)**2).sum())/np.float(mask.sum()))**0.5
+00317     \textcolor{keywordflow}{elif} error\_method == \textcolor{stringliteral}{'lower'}:
+00318         mask = (a - value) <= 0
+00319         error = -((((a[mask] - value)**2).sum())/np.float(mask.sum()))**0.5
+00320     \textcolor{keywordflow}{elif} error\_method == \textcolor{stringliteral}{'std'}:
+00321         error = a.std()
+00322     \textcolor{keywordflow}{else}:
+00323         pn.log\_.error(\textcolor{stringliteral}{'Unknown error method \{\}'}.format(error\_method))
+00324         
+00325     \textcolor{keywordflow}{return} (value, error)
+00326     
+00327 \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_ad6fc4e32ea4c076ac81e99b5c1e74f13}{get\_reduced\_dic}(N\_rand, n\_obs\_ori, dic, value\_method = 'original', 
+\hypertarget{misc_8py_source_l00328}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_ad6fc4e32ea4c076ac81e99b5c1e74f13}{00328}                     error\_method=\textcolor{stringliteral}{'std'}, abund12 = \textcolor{keyword}{False}):
+00329     \textcolor{stringliteral}{"""}
+00330 \textcolor{stringliteral}{    This function returns a dictionary of values (ionic or atomic abundances, temp...) and errors.}
+00331 \textcolor{stringliteral}{    It takes as argument a dictionary that is supposed to contains n\_obs\_ori values from}
+00332 \textcolor{stringliteral}{        the original observations, followed (optionaly) by N\_rand*n\_obs\_ori MonteCarlo values.}
+00333 \textcolor{stringliteral}{    The new values are computed by returning the original value (default), the mean or the median, }
+00334 \textcolor{stringliteral}{        depending on "value\_method"}
+00335 \textcolor{stringliteral}{    The errors are computed by 68% quantiles or standart deviation (Default), depending on on "error\_method
+      "}
+00336 \textcolor{stringliteral}{    }
+00337 \textcolor{stringliteral}{    It also transforms the abundances by number into 12+log10(abundances by number)}
+00338 \textcolor{stringliteral}{    """}
+00339     res = \{\}
+00340     \textcolor{keywordflow}{for} key \textcolor{keywordflow}{in} dic:
+00341         value = []
+00342         error = []
+00343         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} np.arange(n\_obs\_ori):
+00344             \textcolor{keywordflow}{if} abund12:
+00345                 values = 12 + np.log10(dic[key][n\_obs\_ori+i*N\_rand:n\_obs\_ori+(i+1)*N\_rand])
+00346                 values = np.insert(values, 0, 12 + np.log10(dic[key][i]))
+00347             \textcolor{keywordflow}{else}:
+00348                 values = dic[key][n\_obs\_ori+i*N\_rand:n\_obs\_ori+(i+1)*N\_rand]
+00349                 values = np.insert(values, 0, dic[key][i])
+00350             tt = np.isfinite(values)
+00351             \textcolor{keywordflow}{if} tt.sum() == 0:
+00352                 value.append(np.NAN)
+00353                 error.append(0.0)
+00354             \textcolor{keywordflow}{else}:
+00355                 v, e = \hyperlink{namespacepyneb_1_1utils_1_1misc_ae69de9c9e8f8bde114b8edd326f3b993}{get\_reduced}(N\_rand, values[tt], value\_method = value\_method, 
+00356                                    error\_method=error\_method)
+00357                 value.append(v)
+00358                 error.append(e)
+00359         res[key] = np.array(value)
+00360         res[\textcolor{stringliteral}{'\{0\}\_e'}.format(key)] = np.array(error)
+00361     \textcolor{keywordflow}{return} res
+00362 
+\hypertarget{misc_8py_source_l00363}{}\hyperlink{namespacepyneb_1_1utils_1_1misc_af39dcb3c2627e5f29063e47ca4327f94}{00363} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1misc_af39dcb3c2627e5f29063e47ca4327f94}{addRand}(N, list\_, list\_errors=None, lowlim=None):
+00364     \textcolor{stringliteral}{"""}
+00365 \textcolor{stringliteral}{    This function adds MonteCarlo random-gauss values to a list.}
+00366 \textcolor{stringliteral}{    }
+00367 \textcolor{stringliteral}{    Parameters:}
+00368 \textcolor{stringliteral}{        N: number of MonteCarlo values to be added}
+00369 \textcolor{stringliteral}{        list\_: list of input values}
+00370 \textcolor{stringliteral}{        list\_errors: list of errors associated to the values in list\_. The errors are absolutes, the }
+00371 \textcolor{stringliteral}{            result will be a gaussian distribution of sigma=list\_errors.}
+00372 \textcolor{stringliteral}{            If None, the functions adds N time the same values to the list}
+00373 \textcolor{stringliteral}{        lowlim: if not None (default), any random-gauss number lower then the lowlim value is set to
+       lowlim.}
+00374 \textcolor{stringliteral}{        }
+00375 \textcolor{stringliteral}{    Usage:}
+00376 \textcolor{stringliteral}{        print addRand(3, [1,2,3]) # no errors: no random values, only replicates the values}
+00377 \textcolor{stringliteral}{            [1, 2, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3]}
+00378 \textcolor{stringliteral}{        print addRand(3, [1,20,300], [1, 1, 0.1])}
+00379 \textcolor{stringliteral}{            [1, 20, 300, }
+00380 \textcolor{stringliteral}{            1.550094377016822, 1.868307356917796, 1.0242090163674675, }
+00381 \textcolor{stringliteral}{            19.782857703031276, 19.049474190752157, 21.58680361755194, }
+00382 \textcolor{stringliteral}{            299.99810384362934, 300.00753905080154, 299.94052054137694]}
+00383 \textcolor{stringliteral}{    """}
+00384     
+00385     \textcolor{comment}{# Check that the 2nd argument is a list}
+00386     \textcolor{keywordflow}{if} type(list\_) != type([]):
+00387         pn.log\_.error(\textcolor{stringliteral}{'The second argument must be a list'}, calling = \textcolor{stringliteral}{'addRand'})
+00388     new\_list = list\_[:]
+00389     \textcolor{comment}{# Computes the new values}
+00390     \textcolor{keywordflow}{if} N != 0:
+00391         \textcolor{comment}{# initialize the new list with the values of list\_}
+00392         to\_extend = []
+00393         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} xrange(len(list\_)):
+00394             \textcolor{keywordflow}{if} list\_errors \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00395                 to\_extend.extend([list\_[i]] * N)
+00396             \textcolor{keywordflow}{else}:
+00397                 to\_extend.extend(np.random.standard\_normal(N) * list\_errors[i] + list\_[i])
+00398         \textcolor{comment}{# filter the values lower than lowlim}
+00399         \textcolor{keywordflow}{if} lowlim \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00400             to\_extend = [value \textcolor{keywordflow}{if} value > lowlim \textcolor{keywordflow}{else} lowlim \textcolor{keywordflow}{for} value \textcolor{keywordflow}{in} to\_extend]
+00401         new\_list.extend(to\_extend)
+00402     \textcolor{keywordflow}{return} new\_list
+00403 
+00404     
+00405     
+00406     
+00407     
+\end{DoxyCode}

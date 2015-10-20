@@ -1,0 +1,1411 @@
+\hypertarget{chebyshev_8py_source}{}\section{chebyshev.\+py}
+\label{chebyshev_8py_source}\index{pyneb/utils/chebyshev.\+py@{pyneb/utils/chebyshev.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{chebyshev_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev}{00001} \textcolor{stringliteral}{"""}
+00002 \textcolor{stringliteral}{Objects for dealing with Chebyshev series.}
+00003 \textcolor{stringliteral}{}
+00004 \textcolor{stringliteral}{This module provides a number of objects (mostly functions) useful for}
+00005 \textcolor{stringliteral}{dealing with Chebyshev series, including a `Chebyshev` class that}
+00006 \textcolor{stringliteral}{encapsulates the usual arithmetic operations.  (General information}
+00007 \textcolor{stringliteral}{on how this module represents and works with such polynomials is in the}
+00008 \textcolor{stringliteral}{docstring for its "parent" sub-package, `numpy.polynomial`).}
+00009 \textcolor{stringliteral}{}
+00010 \textcolor{stringliteral}{Constants}
+00011 \textcolor{stringliteral}{---------}
+00012 \textcolor{stringliteral}{- `chebdomain` -- Chebyshev series default domain, [-1,1].}
+00013 \textcolor{stringliteral}{- `chebzero` -- (Coefficients of the) Chebyshev series that evaluates}
+00014 \textcolor{stringliteral}{  identically to 0.}
+00015 \textcolor{stringliteral}{- `chebone` -- (Coefficients of the) Chebyshev series that evaluates}
+00016 \textcolor{stringliteral}{  identically to 1.}
+00017 \textcolor{stringliteral}{- `chebx` -- (Coefficients of the) Chebyshev series for the identity map,}
+00018 \textcolor{stringliteral}{  ``f(x) = x``.}
+00019 \textcolor{stringliteral}{}
+00020 \textcolor{stringliteral}{Arithmetic}
+00021 \textcolor{stringliteral}{----------}
+00022 \textcolor{stringliteral}{- `chebadd` -- add two Chebyshev series.}
+00023 \textcolor{stringliteral}{- `chebsub` -- subtract one Chebyshev series from another.}
+00024 \textcolor{stringliteral}{- `chebmul` -- multiply two Chebyshev series.}
+00025 \textcolor{stringliteral}{- `chebdiv` -- divide one Chebyshev series by another.}
+00026 \textcolor{stringliteral}{- `chebpow` -- raise a Chebyshev series to an positive integer power}
+00027 \textcolor{stringliteral}{- `chebval` -- evaluate a Chebyshev series at given points.}
+00028 \textcolor{stringliteral}{}
+00029 \textcolor{stringliteral}{Calculus}
+00030 \textcolor{stringliteral}{--------}
+00031 \textcolor{stringliteral}{- `chebder` -- differentiate a Chebyshev series.}
+00032 \textcolor{stringliteral}{- `chebint` -- integrate a Chebyshev series.}
+00033 \textcolor{stringliteral}{}
+00034 \textcolor{stringliteral}{Misc Functions}
+00035 \textcolor{stringliteral}{--------------}
+00036 \textcolor{stringliteral}{- `chebfromroots` -- create a Chebyshev series with specified roots.}
+00037 \textcolor{stringliteral}{- `chebroots` -- find the roots of a Chebyshev series.}
+00038 \textcolor{stringliteral}{- `chebvander` -- Vandermonde-like matrix for Chebyshev polynomials.}
+00039 \textcolor{stringliteral}{- `chebfit` -- least-squares fit returning a Chebyshev series.}
+00040 \textcolor{stringliteral}{- `chebpts1` -- Chebyshev points of the first kind.}
+00041 \textcolor{stringliteral}{- `chebpts2` -- Chebyshev points of the second kind.}
+00042 \textcolor{stringliteral}{- `chebtrim` -- trim leading coefficients from a Chebyshev series.}
+00043 \textcolor{stringliteral}{- `chebline` -- Chebyshev series representing given straight line.}
+00044 \textcolor{stringliteral}{- `cheb2poly` -- convert a Chebyshev series to a polynomial.}
+00045 \textcolor{stringliteral}{- `poly2cheb` -- convert a polynomial to a Chebyshev series.}
+00046 \textcolor{stringliteral}{}
+00047 \textcolor{stringliteral}{Classes}
+00048 \textcolor{stringliteral}{-------}
+00049 \textcolor{stringliteral}{- `Chebyshev` -- A Chebyshev series class.}
+00050 \textcolor{stringliteral}{}
+00051 \textcolor{stringliteral}{See also}
+00052 \textcolor{stringliteral}{--------}
+00053 \textcolor{stringliteral}{`numpy.polynomial`}
+00054 \textcolor{stringliteral}{}
+00055 \textcolor{stringliteral}{Notes}
+00056 \textcolor{stringliteral}{-----}
+00057 \textcolor{stringliteral}{The implementations of multiplication, division, integration, and}
+00058 \textcolor{stringliteral}{differentiation use the algebraic identities [1]\_:}
+00059 \textcolor{stringliteral}{}
+00060 \textcolor{stringliteral}{.. math ::}
+00061 \textcolor{stringliteral}{    T\_n(x) = \(\backslash\)\(\backslash\)frac\{z^n + z^\{-n\}\}\{2\} \(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)}
+00062 \textcolor{stringliteral}{    z\(\backslash\)\(\backslash\)frac\{dx\}\{dz\} = \(\backslash\)\(\backslash\)frac\{z - z^\{-1\}\}\{2\}.}
+00063 \textcolor{stringliteral}{}
+00064 \textcolor{stringliteral}{where}
+00065 \textcolor{stringliteral}{}
+00066 \textcolor{stringliteral}{.. math :: x = \(\backslash\)\(\backslash\)frac\{z + z^\{-1\}\}\{2\}.}
+00067 \textcolor{stringliteral}{}
+00068 \textcolor{stringliteral}{These identities allow a Chebyshev series to be expressed as a finite,}
+00069 \textcolor{stringliteral}{symmetric Laurent series.  In this module, this sort of Laurent series}
+00070 \textcolor{stringliteral}{is referred to as a "z-series."}
+00071 \textcolor{stringliteral}{}
+00072 \textcolor{stringliteral}{References}
+00073 \textcolor{stringliteral}{----------}
+00074 \textcolor{stringliteral}{.. [1] A. T. Benjamin, et al., "Combinatorial Trigonometry with Chebyshev}
+00075 \textcolor{stringliteral}{  Polynomials," *Journal of Statistical Planning and Inference 14*, 2008}
+00076 \textcolor{stringliteral}{  (preprint: http://www.math.hmc.edu/~benjamin/papers/CombTrig.pdf, pg. 4)}
+00077 \textcolor{stringliteral}{}
+00078 \textcolor{stringliteral}{"""}
+00079 \textcolor{keyword}{from} \_\_future\_\_ \textcolor{keyword}{import} division
+00080 
+\hypertarget{chebyshev_8py_source_l00081}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a9cb4e1ba55fc61d6dd46d5c6f534edbc}{00081} \_\_all\_\_ = [\textcolor{stringliteral}{'chebzero'}, \textcolor{stringliteral}{'chebone'}, \textcolor{stringliteral}{'chebx'}, \textcolor{stringliteral}{'chebdomain'}, \textcolor{stringliteral}{'chebline'},
+00082         \textcolor{stringliteral}{'chebadd'}, \textcolor{stringliteral}{'chebsub'}, \textcolor{stringliteral}{'chebmulx'}, \textcolor{stringliteral}{'chebmul'}, \textcolor{stringliteral}{'chebdiv'}, \textcolor{stringliteral}{'chebpow'},
+00083         \textcolor{stringliteral}{'chebval'}, \textcolor{stringliteral}{'chebder'}, \textcolor{stringliteral}{'chebint'}, \textcolor{stringliteral}{'cheb2poly'}, \textcolor{stringliteral}{'poly2cheb'},
+00084         \textcolor{stringliteral}{'chebfromroots'}, \textcolor{stringliteral}{'chebvander'}, \textcolor{stringliteral}{'chebfit'}, \textcolor{stringliteral}{'chebtrim'}, \textcolor{stringliteral}{'chebroots'},
+00085         \textcolor{stringliteral}{'chebpts1'}, \textcolor{stringliteral}{'chebpts2'}, \textcolor{stringliteral}{'Chebyshev'}]
+00086 
+00087 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00088 \textcolor{keyword}{import} numpy.linalg \textcolor{keyword}{as} la
+00089 \textcolor{keyword}{import} polyutils \textcolor{keyword}{as} pu
+00090 \textcolor{keyword}{import} warnings
+00091 \textcolor{keyword}{from} polytemplate \textcolor{keyword}{import} polytemplate
+00092 
+\hypertarget{chebyshev_8py_source_l00093}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a66b8c25023851573f25dc418071de82b}{00093} chebtrim = pu.trimcoef
+00094 
+00095 \textcolor{comment}{#}
+00096 \textcolor{comment}{# A collection of functions for manipulating z-series. These are private}
+00097 \textcolor{comment}{# functions and do minimal error checking.}
+00098 \textcolor{comment}{#}
+00099 
+\hypertarget{chebyshev_8py_source_l00100}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{00100} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs) :
+00101     \textcolor{stringliteral}{"""Covert Chebyshev series to z-series.}
+00102 \textcolor{stringliteral}{}
+00103 \textcolor{stringliteral}{    Covert a Chebyshev series to the equivalent z-series. The result is}
+00104 \textcolor{stringliteral}{    never an empty array. The dtype of the return is the same as that of}
+00105 \textcolor{stringliteral}{    the input. No checks are run on the arguments as this routine is for}
+00106 \textcolor{stringliteral}{    internal use.}
+00107 \textcolor{stringliteral}{}
+00108 \textcolor{stringliteral}{    Parameters}
+00109 \textcolor{stringliteral}{    ----------}
+00110 \textcolor{stringliteral}{    cs : 1-d ndarray}
+00111 \textcolor{stringliteral}{        Chebyshev coefficients, ordered from low to high}
+00112 \textcolor{stringliteral}{}
+00113 \textcolor{stringliteral}{    Returns}
+00114 \textcolor{stringliteral}{    -------}
+00115 \textcolor{stringliteral}{    zs : 1-d ndarray}
+00116 \textcolor{stringliteral}{        Odd length symmetric z-series, ordered from  low to high.}
+00117 \textcolor{stringliteral}{}
+00118 \textcolor{stringliteral}{    """}
+00119     n = cs.size
+00120     zs = np.zeros(2*n-1, dtype=cs.dtype)
+00121     zs[n-1:] = cs/2
+00122     \textcolor{keywordflow}{return} zs + zs[::-1]
+00123 
+\hypertarget{chebyshev_8py_source_l00124}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{00124} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs) :
+00125     \textcolor{stringliteral}{"""Covert z-series to a Chebyshev series.}
+00126 \textcolor{stringliteral}{}
+00127 \textcolor{stringliteral}{    Covert a z series to the equivalent Chebyshev series. The result is}
+00128 \textcolor{stringliteral}{    never an empty array. The dtype of the return is the same as that of}
+00129 \textcolor{stringliteral}{    the input. No checks are run on the arguments as this routine is for}
+00130 \textcolor{stringliteral}{    internal use.}
+00131 \textcolor{stringliteral}{}
+00132 \textcolor{stringliteral}{    Parameters}
+00133 \textcolor{stringliteral}{    ----------}
+00134 \textcolor{stringliteral}{    zs : 1-d ndarray}
+00135 \textcolor{stringliteral}{        Odd length symmetric z-series, ordered from  low to high.}
+00136 \textcolor{stringliteral}{}
+00137 \textcolor{stringliteral}{    Returns}
+00138 \textcolor{stringliteral}{    -------}
+00139 \textcolor{stringliteral}{    cs : 1-d ndarray}
+00140 \textcolor{stringliteral}{        Chebyshev coefficients, ordered from  low to high.}
+00141 \textcolor{stringliteral}{}
+00142 \textcolor{stringliteral}{    """}
+00143     n = (zs.size + 1)//2
+00144     cs = zs[n-1:].copy()
+00145     cs[1:n] *= 2
+00146     \textcolor{keywordflow}{return} cs
+00147 
+\hypertarget{chebyshev_8py_source_l00148}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{00148} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(z1, z2) :
+00149     \textcolor{stringliteral}{"""Multiply two z-series.}
+00150 \textcolor{stringliteral}{}
+00151 \textcolor{stringliteral}{    Multiply two z-series to produce a z-series.}
+00152 \textcolor{stringliteral}{}
+00153 \textcolor{stringliteral}{    Parameters}
+00154 \textcolor{stringliteral}{    ----------}
+00155 \textcolor{stringliteral}{    z1, z2 : 1-d ndarray}
+00156 \textcolor{stringliteral}{        The arrays must be 1-d but this is not checked.}
+00157 \textcolor{stringliteral}{}
+00158 \textcolor{stringliteral}{    Returns}
+00159 \textcolor{stringliteral}{    -------}
+00160 \textcolor{stringliteral}{    product : 1-d ndarray}
+00161 \textcolor{stringliteral}{        The product z-series.}
+00162 \textcolor{stringliteral}{}
+00163 \textcolor{stringliteral}{    Notes}
+00164 \textcolor{stringliteral}{    -----}
+00165 \textcolor{stringliteral}{    This is simply convolution. If symmetic/anti-symmetric z-series are}
+00166 \textcolor{stringliteral}{    denoted by S/A then the following rules apply:}
+00167 \textcolor{stringliteral}{}
+00168 \textcolor{stringliteral}{    S*S, A*A -> S}
+00169 \textcolor{stringliteral}{    S*A, A*S -> A}
+00170 \textcolor{stringliteral}{}
+00171 \textcolor{stringliteral}{    """}
+00172     \textcolor{keywordflow}{return} np.convolve(z1, z2)
+00173 
+\hypertarget{chebyshev_8py_source_l00174}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{00174} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(z1, z2) :
+00175     \textcolor{stringliteral}{"""Divide the first z-series by the second.}
+00176 \textcolor{stringliteral}{}
+00177 \textcolor{stringliteral}{    Divide `z1` by `z2` and return the quotient and remainder as z-series.}
+00178 \textcolor{stringliteral}{    Warning: this implementation only applies when both z1 and z2 have the}
+00179 \textcolor{stringliteral}{    same symmetry, which is sufficient for present purposes.}
+00180 \textcolor{stringliteral}{}
+00181 \textcolor{stringliteral}{    Parameters}
+00182 \textcolor{stringliteral}{    ----------}
+00183 \textcolor{stringliteral}{    z1, z2 : 1-d ndarray}
+00184 \textcolor{stringliteral}{        The arrays must be 1-d and have the same symmetry, but this is not}
+00185 \textcolor{stringliteral}{        checked.}
+00186 \textcolor{stringliteral}{}
+00187 \textcolor{stringliteral}{    Returns}
+00188 \textcolor{stringliteral}{    -------}
+00189 \textcolor{stringliteral}{}
+00190 \textcolor{stringliteral}{    (quotient, remainder) : 1-d ndarrays}
+00191 \textcolor{stringliteral}{        Quotient and remainder as z-series.}
+00192 \textcolor{stringliteral}{}
+00193 \textcolor{stringliteral}{    Notes}
+00194 \textcolor{stringliteral}{    -----}
+00195 \textcolor{stringliteral}{    This is not the same as polynomial division on account of the desired form}
+00196 \textcolor{stringliteral}{    of the remainder. If symmetic/anti-symmetric z-series are denoted by S/A}
+00197 \textcolor{stringliteral}{    then the following rules apply:}
+00198 \textcolor{stringliteral}{}
+00199 \textcolor{stringliteral}{    S/S -> S,S}
+00200 \textcolor{stringliteral}{    A/A -> S,A}
+00201 \textcolor{stringliteral}{}
+00202 \textcolor{stringliteral}{    The restriction to types of the same symmetry could be fixed but seems like}
+00203 \textcolor{stringliteral}{    uneeded generality. There is no natural form for the remainder in the case}
+00204 \textcolor{stringliteral}{    where there is no symmetry.}
+00205 \textcolor{stringliteral}{}
+00206 \textcolor{stringliteral}{    """}
+00207     z1 = z1.copy()
+00208     z2 = z2.copy()
+00209     len1 = len(z1)
+00210     len2 = len(z2)
+00211     \textcolor{keywordflow}{if} len2 == 1 :
+00212         z1 /= z2
+00213         \textcolor{keywordflow}{return} z1, z1[:1]*0
+00214     \textcolor{keywordflow}{elif} len1 < len2 :
+00215         \textcolor{keywordflow}{return} z1[:1]*0, z1
+00216     \textcolor{keywordflow}{else} :
+00217         dlen = len1 - len2
+00218         scl = z2[0]
+00219         z2 /= scl
+00220         quo = np.empty(dlen + 1, dtype=z1.dtype)
+00221         i = 0
+00222         j = dlen
+00223         \textcolor{keywordflow}{while} i < j :
+00224             r = z1[i]
+00225             quo[i] = z1[i]
+00226             quo[dlen - i] = r
+00227             tmp = r*z2
+00228             z1[i:i+len2] -= tmp
+00229             z1[j:j+len2] -= tmp
+00230             i += 1
+00231             j -= 1
+00232         r = z1[i]
+00233         quo[i] = r
+00234         tmp = r*z2
+00235         z1[i:i+len2] -= tmp
+00236         quo /= scl
+00237         rem = z1[i+1:i-1+len2].copy()
+00238         \textcolor{keywordflow}{return} quo, rem
+00239 
+\hypertarget{chebyshev_8py_source_l00240}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{00240} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{\_zseries\_der}(zs) :
+00241     \textcolor{stringliteral}{"""Differentiate a z-series.}
+00242 \textcolor{stringliteral}{}
+00243 \textcolor{stringliteral}{    The derivative is with respect to x, not z. This is achieved using the}
+00244 \textcolor{stringliteral}{    chain rule and the value of dx/dz given in the module notes.}
+00245 \textcolor{stringliteral}{}
+00246 \textcolor{stringliteral}{    Parameters}
+00247 \textcolor{stringliteral}{    ----------}
+00248 \textcolor{stringliteral}{    zs : z-series}
+00249 \textcolor{stringliteral}{        The z-series to differentiate.}
+00250 \textcolor{stringliteral}{}
+00251 \textcolor{stringliteral}{    Returns}
+00252 \textcolor{stringliteral}{    -------}
+00253 \textcolor{stringliteral}{    derivative : z-series}
+00254 \textcolor{stringliteral}{        The derivative}
+00255 \textcolor{stringliteral}{}
+00256 \textcolor{stringliteral}{    Notes}
+00257 \textcolor{stringliteral}{    -----}
+00258 \textcolor{stringliteral}{    The zseries for x (ns) has been multiplied by two in order to avoid}
+00259 \textcolor{stringliteral}{    using floats that are incompatible with Decimal and likely other}
+00260 \textcolor{stringliteral}{    specialized scalar types. This scaling has been compensated by}
+00261 \textcolor{stringliteral}{    multiplying the value of zs by two also so that the two cancels in the}
+00262 \textcolor{stringliteral}{    division.}
+00263 \textcolor{stringliteral}{}
+00264 \textcolor{stringliteral}{    """}
+00265     n = len(zs)//2
+00266     ns = np.array([-1, 0, 1], dtype=zs.dtype)
+00267     zs *= np.arange(-n, n+1)*2
+00268     d, r = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(zs, ns)
+00269     \textcolor{keywordflow}{return} d
+00270 
+\hypertarget{chebyshev_8py_source_l00271}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{00271} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{\_zseries\_int}(zs) :
+00272     \textcolor{stringliteral}{"""Integrate a z-series.}
+00273 \textcolor{stringliteral}{}
+00274 \textcolor{stringliteral}{    The integral is with respect to x, not z. This is achieved by a change}
+00275 \textcolor{stringliteral}{    of variable using dx/dz given in the module notes.}
+00276 \textcolor{stringliteral}{}
+00277 \textcolor{stringliteral}{    Parameters}
+00278 \textcolor{stringliteral}{    ----------}
+00279 \textcolor{stringliteral}{    zs : z-series}
+00280 \textcolor{stringliteral}{        The z-series to integrate}
+00281 \textcolor{stringliteral}{}
+00282 \textcolor{stringliteral}{    Returns}
+00283 \textcolor{stringliteral}{    -------}
+00284 \textcolor{stringliteral}{    integral : z-series}
+00285 \textcolor{stringliteral}{        The indefinite integral}
+00286 \textcolor{stringliteral}{}
+00287 \textcolor{stringliteral}{    Notes}
+00288 \textcolor{stringliteral}{    -----}
+00289 \textcolor{stringliteral}{    The zseries for x (ns) has been multiplied by two in order to avoid}
+00290 \textcolor{stringliteral}{    using floats that are incompatible with Decimal and likely other}
+00291 \textcolor{stringliteral}{    specialized scalar types. This scaling has been compensated by}
+00292 \textcolor{stringliteral}{    dividing the resulting zs by two.}
+00293 \textcolor{stringliteral}{}
+00294 \textcolor{stringliteral}{    """}
+00295     n = 1 + len(zs)//2
+00296     ns = np.array([-1, 0, 1], dtype=zs.dtype)
+00297     zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(zs, ns)
+00298     div = np.arange(-n, n+1)*2
+00299     zs[:n] /= div[:n]
+00300     zs[n+1:] /= div[n+1:]
+00301     zs[n] = 0
+00302     \textcolor{keywordflow}{return} zs
+00303 
+00304 \textcolor{comment}{#}
+00305 \textcolor{comment}{# Chebyshev series functions}
+00306 \textcolor{comment}{#}
+00307 
+00308 
+\hypertarget{chebyshev_8py_source_l00309}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1f91018c86380adf38318e4e224279e7}{00309} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1f91018c86380adf38318e4e224279e7}{poly2cheb}(pol) :
+00310     \textcolor{stringliteral}{"""}
+00311 \textcolor{stringliteral}{    Convert a polynomial to a Chebyshev series.}
+00312 \textcolor{stringliteral}{}
+00313 \textcolor{stringliteral}{    Convert an array representing the coefficients of a polynomial (relative}
+00314 \textcolor{stringliteral}{    to the "standard" basis) ordered from lowest degree to highest, to an}
+00315 \textcolor{stringliteral}{    array of the coefficients of the equivalent Chebyshev series, ordered}
+00316 \textcolor{stringliteral}{    from lowest to highest degree.}
+00317 \textcolor{stringliteral}{}
+00318 \textcolor{stringliteral}{    Parameters}
+00319 \textcolor{stringliteral}{    ----------}
+00320 \textcolor{stringliteral}{    pol : array\_like}
+00321 \textcolor{stringliteral}{        1-d array containing the polynomial coefficients}
+00322 \textcolor{stringliteral}{}
+00323 \textcolor{stringliteral}{    Returns}
+00324 \textcolor{stringliteral}{    -------}
+00325 \textcolor{stringliteral}{    cs : ndarray}
+00326 \textcolor{stringliteral}{        1-d array containing the coefficients of the equivalent Chebyshev}
+00327 \textcolor{stringliteral}{        series.}
+00328 \textcolor{stringliteral}{}
+00329 \textcolor{stringliteral}{    See Also}
+00330 \textcolor{stringliteral}{    --------}
+00331 \textcolor{stringliteral}{    cheb2poly}
+00332 \textcolor{stringliteral}{}
+00333 \textcolor{stringliteral}{    Notes}
+00334 \textcolor{stringliteral}{    -----}
+00335 \textcolor{stringliteral}{    The easy way to do conversions between polynomial basis sets}
+00336 \textcolor{stringliteral}{    is to use the convert method of a class instance.}
+00337 \textcolor{stringliteral}{}
+00338 \textcolor{stringliteral}{    Examples}
+00339 \textcolor{stringliteral}{    --------}
+00340 \textcolor{stringliteral}{    >>> from numpy import polynomial as P}
+00341 \textcolor{stringliteral}{    >>> p = P.Polynomial(range(4))}
+00342 \textcolor{stringliteral}{    >>> p}
+00343 \textcolor{stringliteral}{    Polynomial([ 0.,  1.,  2.,  3.], [-1.,  1.])}
+00344 \textcolor{stringliteral}{    >>> c = p.convert(kind=P.Chebyshev)}
+00345 \textcolor{stringliteral}{    >>> c}
+00346 \textcolor{stringliteral}{    Chebyshev([ 1.  ,  3.25,  1.  ,  0.75], [-1.,  1.])}
+00347 \textcolor{stringliteral}{    >>> P.poly2cheb(range(4))}
+00348 \textcolor{stringliteral}{    array([ 1.  ,  3.25,  1.  ,  0.75])}
+00349 \textcolor{stringliteral}{}
+00350 \textcolor{stringliteral}{    """}
+00351     [pol] = pu.as\_series([pol])
+00352     deg = len(pol) - 1
+00353     res = 0
+00354     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(deg, -1, -1) :
+00355         res = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{chebadd}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(res), pol[i])
+00356     \textcolor{keywordflow}{return} res
+00357 
+00358 
+\hypertarget{chebyshev_8py_source_l00359}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a640344fc14aa36e14d0e93eba4411188}{00359} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a640344fc14aa36e14d0e93eba4411188}{cheb2poly}(cs) :
+00360     \textcolor{stringliteral}{"""}
+00361 \textcolor{stringliteral}{    Convert a Chebyshev series to a polynomial.}
+00362 \textcolor{stringliteral}{}
+00363 \textcolor{stringliteral}{    Convert an array representing the coefficients of a Chebyshev series,}
+00364 \textcolor{stringliteral}{    ordered from lowest degree to highest, to an array of the coefficients}
+00365 \textcolor{stringliteral}{    of the equivalent polynomial (relative to the "standard" basis) ordered}
+00366 \textcolor{stringliteral}{    from lowest to highest degree.}
+00367 \textcolor{stringliteral}{}
+00368 \textcolor{stringliteral}{    Parameters}
+00369 \textcolor{stringliteral}{    ----------}
+00370 \textcolor{stringliteral}{    cs : array\_like}
+00371 \textcolor{stringliteral}{        1-d array containing the Chebyshev series coefficients, ordered}
+00372 \textcolor{stringliteral}{        from lowest order term to highest.}
+00373 \textcolor{stringliteral}{}
+00374 \textcolor{stringliteral}{    Returns}
+00375 \textcolor{stringliteral}{    -------}
+00376 \textcolor{stringliteral}{    pol : ndarray}
+00377 \textcolor{stringliteral}{        1-d array containing the coefficients of the equivalent polynomial}
+00378 \textcolor{stringliteral}{        (relative to the "standard" basis) ordered from lowest order term}
+00379 \textcolor{stringliteral}{        to highest.}
+00380 \textcolor{stringliteral}{}
+00381 \textcolor{stringliteral}{    See Also}
+00382 \textcolor{stringliteral}{    --------}
+00383 \textcolor{stringliteral}{    poly2cheb}
+00384 \textcolor{stringliteral}{}
+00385 \textcolor{stringliteral}{    Notes}
+00386 \textcolor{stringliteral}{    -----}
+00387 \textcolor{stringliteral}{    The easy way to do conversions between polynomial basis sets}
+00388 \textcolor{stringliteral}{    is to use the convert method of a class instance.}
+00389 \textcolor{stringliteral}{}
+00390 \textcolor{stringliteral}{    Examples}
+00391 \textcolor{stringliteral}{    --------}
+00392 \textcolor{stringliteral}{    >>> from numpy import polynomial as P}
+00393 \textcolor{stringliteral}{    >>> c = P.Chebyshev(range(4))}
+00394 \textcolor{stringliteral}{    >>> c}
+00395 \textcolor{stringliteral}{    Chebyshev([ 0.,  1.,  2.,  3.], [-1.,  1.])}
+00396 \textcolor{stringliteral}{    >>> p = c.convert(kind=P.Polynomial)}
+00397 \textcolor{stringliteral}{    >>> p}
+00398 \textcolor{stringliteral}{    Polynomial([ -2.,  -8.,   4.,  12.], [-1.,  1.])}
+00399 \textcolor{stringliteral}{    >>> P.cheb2poly(range(4))}
+00400 \textcolor{stringliteral}{    array([ -2.,  -8.,   4.,  12.])}
+00401 \textcolor{stringliteral}{}
+00402 \textcolor{stringliteral}{    """}
+00403     \textcolor{keyword}{from} polynomial \textcolor{keyword}{import} polyadd, polysub, polymulx
+00404 
+00405     [cs] = pu.as\_series([cs])
+00406     n = len(cs)
+00407     \textcolor{keywordflow}{if} n < 3:
+00408         \textcolor{keywordflow}{return} cs
+00409     \textcolor{keywordflow}{else}:
+00410         c0 = cs[-2]
+00411         c1 = cs[-1]
+00412         \textcolor{comment}{# i is the current degree of c1}
+00413         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(n - 1, 1, -1) :
+00414             tmp = c0
+00415             c0 = polysub(cs[i - 2], c1)
+00416             c1 = polyadd(tmp, polymulx(c1)*2)
+00417         \textcolor{keywordflow}{return} polyadd(c0, polymulx(c1))
+00418 
+00419 
+00420 \textcolor{comment}{#}
+00421 \textcolor{comment}{# These are constant arrays are of integer type so as to be compatible}
+00422 \textcolor{comment}{# with the widest range of other types, such as Decimal.}
+00423 \textcolor{comment}{#}
+00424 
+00425 \textcolor{comment}{# Chebyshev default domain.}
+\hypertarget{chebyshev_8py_source_l00426}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a57e110567544748d0de429d3743d1241}{00426} chebdomain = np.array([-1,1])
+00427 
+00428 \textcolor{comment}{# Chebyshev coefficients representing zero.}
+\hypertarget{chebyshev_8py_source_l00429}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad707fa9ec865920c2d8eedf6dfedf21c}{00429} chebzero = np.array([0])
+00430 
+00431 \textcolor{comment}{# Chebyshev coefficients representing one.}
+\hypertarget{chebyshev_8py_source_l00432}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a26a6cedd505a161858435461e1645503}{00432} chebone = np.array([1])
+00433 
+00434 \textcolor{comment}{# Chebyshev coefficients representing the identity x.}
+\hypertarget{chebyshev_8py_source_l00435}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a00f984b78341cd7920c46d1a6acacc5f}{00435} chebx = np.array([0,1])
+00436 
+\hypertarget{chebyshev_8py_source_l00437}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad14ae6340a5a9e3c93c1bb720f4e5a04}{00437} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad14ae6340a5a9e3c93c1bb720f4e5a04}{chebline}(off, scl) :
+00438     \textcolor{stringliteral}{"""}
+00439 \textcolor{stringliteral}{    Chebyshev series whose graph is a straight line.}
+00440 \textcolor{stringliteral}{}
+00441 \textcolor{stringliteral}{}
+00442 \textcolor{stringliteral}{}
+00443 \textcolor{stringliteral}{    Parameters}
+00444 \textcolor{stringliteral}{    ----------}
+00445 \textcolor{stringliteral}{    off, scl : scalars}
+00446 \textcolor{stringliteral}{        The specified line is given by ``off + scl*x``.}
+00447 \textcolor{stringliteral}{}
+00448 \textcolor{stringliteral}{    Returns}
+00449 \textcolor{stringliteral}{    -------}
+00450 \textcolor{stringliteral}{    y : ndarray}
+00451 \textcolor{stringliteral}{        This module's representation of the Chebyshev series for}
+00452 \textcolor{stringliteral}{        ``off + scl*x``.}
+00453 \textcolor{stringliteral}{}
+00454 \textcolor{stringliteral}{    See Also}
+00455 \textcolor{stringliteral}{    --------}
+00456 \textcolor{stringliteral}{    polyline}
+00457 \textcolor{stringliteral}{}
+00458 \textcolor{stringliteral}{    Examples}
+00459 \textcolor{stringliteral}{    --------}
+00460 \textcolor{stringliteral}{    >>> import numpy.polynomial.chebyshev as C}
+00461 \textcolor{stringliteral}{    >>> C.chebline(3,2)}
+00462 \textcolor{stringliteral}{    array([3, 2])}
+00463 \textcolor{stringliteral}{    >>> C.chebval(-3, C.chebline(3,2)) # should be -3}
+00464 \textcolor{stringliteral}{    -3.0}
+00465 \textcolor{stringliteral}{}
+00466 \textcolor{stringliteral}{    """}
+00467     \textcolor{keywordflow}{if} scl != 0 :
+00468         \textcolor{keywordflow}{return} np.array([off,scl])
+00469     \textcolor{keywordflow}{else} :
+00470         \textcolor{keywordflow}{return} np.array([off])
+00471 
+\hypertarget{chebyshev_8py_source_l00472}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abedf5cf14ea9229321fc5e4043c42a0d}{00472} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abedf5cf14ea9229321fc5e4043c42a0d}{chebfromroots}(roots) :
+00473     \textcolor{stringliteral}{"""}
+00474 \textcolor{stringliteral}{    Generate a Chebyshev series with the given roots.}
+00475 \textcolor{stringliteral}{}
+00476 \textcolor{stringliteral}{    Return the array of coefficients for the C-series whose roots (a.k.a.}
+00477 \textcolor{stringliteral}{    "zeros") are given by *roots*.  The returned array of coefficients is}
+00478 \textcolor{stringliteral}{    ordered from lowest order "term" to highest, and zeros of multiplicity}
+00479 \textcolor{stringliteral}{    greater than one must be included in *roots* a number of times equal}
+00480 \textcolor{stringliteral}{    to their multiplicity (e.g., if `2` is a root of multiplicity three,}
+00481 \textcolor{stringliteral}{    then [2,2,2] must be in *roots*).}
+00482 \textcolor{stringliteral}{}
+00483 \textcolor{stringliteral}{    Parameters}
+00484 \textcolor{stringliteral}{    ----------}
+00485 \textcolor{stringliteral}{    roots : array\_like}
+00486 \textcolor{stringliteral}{        Sequence containing the roots.}
+00487 \textcolor{stringliteral}{}
+00488 \textcolor{stringliteral}{    Returns}
+00489 \textcolor{stringliteral}{    -------}
+00490 \textcolor{stringliteral}{    out : ndarray}
+00491 \textcolor{stringliteral}{        1-d array of the C-series' coefficients, ordered from low to}
+00492 \textcolor{stringliteral}{        high.  If all roots are real, ``out.dtype`` is a float type;}
+00493 \textcolor{stringliteral}{        otherwise, ``out.dtype`` is a complex type, even if all the}
+00494 \textcolor{stringliteral}{        coefficients in the result are real (see Examples below).}
+00495 \textcolor{stringliteral}{}
+00496 \textcolor{stringliteral}{    See Also}
+00497 \textcolor{stringliteral}{    --------}
+00498 \textcolor{stringliteral}{    polyfromroots}
+00499 \textcolor{stringliteral}{}
+00500 \textcolor{stringliteral}{    Notes}
+00501 \textcolor{stringliteral}{    -----}
+00502 \textcolor{stringliteral}{    What is returned are the :math:`c\_i` such that:}
+00503 \textcolor{stringliteral}{}
+00504 \textcolor{stringliteral}{    .. math::}
+00505 \textcolor{stringliteral}{}
+00506 \textcolor{stringliteral}{        \(\backslash\)\(\backslash\)sum\_\{i=0\}^\{n\} c\_i*T\_i(x) = \(\backslash\)\(\backslash\)prod\_\{i=0\}^\{n\} (x - roots[i])}
+00507 \textcolor{stringliteral}{}
+00508 \textcolor{stringliteral}{    where ``n == len(roots)`` and :math:`T\_i(x)` is the `i`-th Chebyshev}
+00509 \textcolor{stringliteral}{    (basis) polynomial over the domain `[-1,1]`.  Note that, unlike}
+00510 \textcolor{stringliteral}{    `polyfromroots`, due to the nature of the C-series basis set, the}
+00511 \textcolor{stringliteral}{    above identity *does not* imply :math:`c\_n = 1` identically (see}
+00512 \textcolor{stringliteral}{    Examples).}
+00513 \textcolor{stringliteral}{}
+00514 \textcolor{stringliteral}{    Examples}
+00515 \textcolor{stringliteral}{    --------}
+00516 \textcolor{stringliteral}{    >>> import numpy.polynomial.chebyshev as C}
+00517 \textcolor{stringliteral}{    >>> C.chebfromroots((-1,0,1)) # x^3 - x relative to the standard basis}
+00518 \textcolor{stringliteral}{    array([ 0.  , -0.25,  0.  ,  0.25])}
+00519 \textcolor{stringliteral}{    >>> j = complex(0,1)}
+00520 \textcolor{stringliteral}{    >>> C.chebfromroots((-j,j)) # x^2 + 1 relative to the standard basis}
+00521 \textcolor{stringliteral}{    array([ 1.5+0.j,  0.0+0.j,  0.5+0.j])}
+00522 \textcolor{stringliteral}{}
+00523 \textcolor{stringliteral}{    """}
+00524     \textcolor{keywordflow}{if} len(roots) == 0 :
+00525         \textcolor{keywordflow}{return} np.ones(1)
+00526     \textcolor{keywordflow}{else} :
+00527         [roots] = pu.as\_series([roots], trim=\textcolor{keyword}{False})
+00528         prd = np.array([1], dtype=roots.dtype)
+00529         \textcolor{keywordflow}{for} r \textcolor{keywordflow}{in} roots:
+00530             prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{chebsub}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(prd), r*prd)
+00531         \textcolor{keywordflow}{return} prd
+00532 
+00533 
+\hypertarget{chebyshev_8py_source_l00534}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{00534} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{chebadd}(c1, c2):
+00535     \textcolor{stringliteral}{"""}
+00536 \textcolor{stringliteral}{    Add one Chebyshev series to another.}
+00537 \textcolor{stringliteral}{}
+00538 \textcolor{stringliteral}{    Returns the sum of two Chebyshev series `c1` + `c2`.  The arguments}
+00539 \textcolor{stringliteral}{    are sequences of coefficients ordered from lowest order term to}
+00540 \textcolor{stringliteral}{    highest, i.e., [1,2,3] represents the series ``T\_0 + 2*T\_1 + 3*T\_2``.}
+00541 \textcolor{stringliteral}{}
+00542 \textcolor{stringliteral}{    Parameters}
+00543 \textcolor{stringliteral}{    ----------}
+00544 \textcolor{stringliteral}{    c1, c2 : array\_like}
+00545 \textcolor{stringliteral}{        1-d arrays of Chebyshev series coefficients ordered from low to}
+00546 \textcolor{stringliteral}{        high.}
+00547 \textcolor{stringliteral}{}
+00548 \textcolor{stringliteral}{    Returns}
+00549 \textcolor{stringliteral}{    -------}
+00550 \textcolor{stringliteral}{    out : ndarray}
+00551 \textcolor{stringliteral}{        Array representing the Chebyshev series of their sum.}
+00552 \textcolor{stringliteral}{}
+00553 \textcolor{stringliteral}{    See Also}
+00554 \textcolor{stringliteral}{    --------}
+00555 \textcolor{stringliteral}{    chebsub, chebmul, chebdiv, chebpow}
+00556 \textcolor{stringliteral}{}
+00557 \textcolor{stringliteral}{    Notes}
+00558 \textcolor{stringliteral}{    -----}
+00559 \textcolor{stringliteral}{    Unlike multiplication, division, etc., the sum of two Chebyshev series}
+00560 \textcolor{stringliteral}{    is a Chebyshev series (without having to "reproject" the result onto}
+00561 \textcolor{stringliteral}{    the basis set) so addition, just like that of "standard" polynomials,}
+00562 \textcolor{stringliteral}{    is simply "component-wise."}
+00563 \textcolor{stringliteral}{}
+00564 \textcolor{stringliteral}{    Examples}
+00565 \textcolor{stringliteral}{    --------}
+00566 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00567 \textcolor{stringliteral}{    >>> c1 = (1,2,3)}
+00568 \textcolor{stringliteral}{    >>> c2 = (3,2,1)}
+00569 \textcolor{stringliteral}{    >>> C.chebadd(c1,c2)}
+00570 \textcolor{stringliteral}{    array([ 4.,  4.,  4.])}
+00571 \textcolor{stringliteral}{}
+00572 \textcolor{stringliteral}{    """}
+00573     \textcolor{comment}{# c1, c2 are trimmed copies}
+00574     [c1, c2] = pu.as\_series([c1, c2])
+00575     \textcolor{keywordflow}{if} len(c1) > len(c2) :
+00576         c1[:c2.size] += c2
+00577         ret = c1
+00578     \textcolor{keywordflow}{else} :
+00579         c2[:c1.size] += c1
+00580         ret = c2
+00581     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00582 
+00583 
+\hypertarget{chebyshev_8py_source_l00584}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{00584} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{chebsub}(c1, c2):
+00585     \textcolor{stringliteral}{"""}
+00586 \textcolor{stringliteral}{    Subtract one Chebyshev series from another.}
+00587 \textcolor{stringliteral}{}
+00588 \textcolor{stringliteral}{    Returns the difference of two Chebyshev series `c1` - `c2`.  The}
+00589 \textcolor{stringliteral}{    sequences of coefficients are from lowest order term to highest, i.e.,}
+00590 \textcolor{stringliteral}{    [1,2,3] represents the series ``T\_0 + 2*T\_1 + 3*T\_2``.}
+00591 \textcolor{stringliteral}{}
+00592 \textcolor{stringliteral}{    Parameters}
+00593 \textcolor{stringliteral}{    ----------}
+00594 \textcolor{stringliteral}{    c1, c2 : array\_like}
+00595 \textcolor{stringliteral}{        1-d arrays of Chebyshev series coefficients ordered from low to}
+00596 \textcolor{stringliteral}{        high.}
+00597 \textcolor{stringliteral}{}
+00598 \textcolor{stringliteral}{    Returns}
+00599 \textcolor{stringliteral}{    -------}
+00600 \textcolor{stringliteral}{    out : ndarray}
+00601 \textcolor{stringliteral}{        Of Chebyshev series coefficients representing their difference.}
+00602 \textcolor{stringliteral}{}
+00603 \textcolor{stringliteral}{    See Also}
+00604 \textcolor{stringliteral}{    --------}
+00605 \textcolor{stringliteral}{    chebadd, chebmul, chebdiv, chebpow}
+00606 \textcolor{stringliteral}{}
+00607 \textcolor{stringliteral}{    Notes}
+00608 \textcolor{stringliteral}{    -----}
+00609 \textcolor{stringliteral}{    Unlike multiplication, division, etc., the difference of two Chebyshev}
+00610 \textcolor{stringliteral}{    series is a Chebyshev series (without having to "reproject" the result}
+00611 \textcolor{stringliteral}{    onto the basis set) so subtraction, just like that of "standard"}
+00612 \textcolor{stringliteral}{    polynomials, is simply "component-wise."}
+00613 \textcolor{stringliteral}{}
+00614 \textcolor{stringliteral}{    Examples}
+00615 \textcolor{stringliteral}{    --------}
+00616 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00617 \textcolor{stringliteral}{    >>> c1 = (1,2,3)}
+00618 \textcolor{stringliteral}{    >>> c2 = (3,2,1)}
+00619 \textcolor{stringliteral}{    >>> C.chebsub(c1,c2)}
+00620 \textcolor{stringliteral}{    array([-2.,  0.,  2.])}
+00621 \textcolor{stringliteral}{    >>> C.chebsub(c2,c1) # -C.chebsub(c1,c2)}
+00622 \textcolor{stringliteral}{    array([ 2.,  0., -2.])}
+00623 \textcolor{stringliteral}{}
+00624 \textcolor{stringliteral}{    """}
+00625     \textcolor{comment}{# c1, c2 are trimmed copies}
+00626     [c1, c2] = pu.as\_series([c1, c2])
+00627     \textcolor{keywordflow}{if} len(c1) > len(c2) :
+00628         c1[:c2.size] -= c2
+00629         ret = c1
+00630     \textcolor{keywordflow}{else} :
+00631         c2 = -c2
+00632         c2[:c1.size] += c1
+00633         ret = c2
+00634     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00635 
+00636 
+\hypertarget{chebyshev_8py_source_l00637}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{00637} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(cs):
+00638     \textcolor{stringliteral}{"""Multiply a Chebyshev series by x.}
+00639 \textcolor{stringliteral}{}
+00640 \textcolor{stringliteral}{    Multiply the polynomial `cs` by x, where x is the independent}
+00641 \textcolor{stringliteral}{    variable.}
+00642 \textcolor{stringliteral}{}
+00643 \textcolor{stringliteral}{}
+00644 \textcolor{stringliteral}{    Parameters}
+00645 \textcolor{stringliteral}{    ----------}
+00646 \textcolor{stringliteral}{    cs : array\_like}
+00647 \textcolor{stringliteral}{        1-d array of Chebyshev series coefficients ordered from low to}
+00648 \textcolor{stringliteral}{        high.}
+00649 \textcolor{stringliteral}{}
+00650 \textcolor{stringliteral}{    Returns}
+00651 \textcolor{stringliteral}{    -------}
+00652 \textcolor{stringliteral}{    out : ndarray}
+00653 \textcolor{stringliteral}{        Array representing the result of the multiplication.}
+00654 \textcolor{stringliteral}{}
+00655 \textcolor{stringliteral}{    Notes}
+00656 \textcolor{stringliteral}{    -----}
+00657 \textcolor{stringliteral}{    .. versionadded:: 1.5.0}
+00658 \textcolor{stringliteral}{}
+00659 \textcolor{stringliteral}{    """}
+00660     \textcolor{comment}{# cs is a trimmed copy}
+00661     [cs] = pu.as\_series([cs])
+00662     \textcolor{comment}{# The zero series needs special treatment}
+00663     \textcolor{keywordflow}{if} len(cs) == 1 \textcolor{keywordflow}{and} cs[0] == 0:
+00664         \textcolor{keywordflow}{return} cs
+00665 
+00666     prd = np.empty(len(cs) + 1, dtype=cs.dtype)
+00667     prd[0] = cs[0]*0
+00668     prd[1] = cs[0]
+00669     \textcolor{keywordflow}{if} len(cs) > 1:
+00670         tmp = cs[1:]/2
+00671         prd[2:] = tmp
+00672         prd[0:-2] += tmp
+00673     \textcolor{keywordflow}{return} prd
+00674 
+00675 
+\hypertarget{chebyshev_8py_source_l00676}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aca5aab8be2c47559d4489fd1dac11f75}{00676} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aca5aab8be2c47559d4489fd1dac11f75}{chebmul}(c1, c2):
+00677     \textcolor{stringliteral}{"""}
+00678 \textcolor{stringliteral}{    Multiply one Chebyshev series by another.}
+00679 \textcolor{stringliteral}{}
+00680 \textcolor{stringliteral}{    Returns the product of two Chebyshev series `c1` * `c2`.  The arguments}
+00681 \textcolor{stringliteral}{    are sequences of coefficients, from lowest order "term" to highest,}
+00682 \textcolor{stringliteral}{    e.g., [1,2,3] represents the series ``T\_0 + 2*T\_1 + 3*T\_2``.}
+00683 \textcolor{stringliteral}{}
+00684 \textcolor{stringliteral}{    Parameters}
+00685 \textcolor{stringliteral}{    ----------}
+00686 \textcolor{stringliteral}{    c1, c2 : array\_like}
+00687 \textcolor{stringliteral}{        1-d arrays of Chebyshev series coefficients ordered from low to}
+00688 \textcolor{stringliteral}{        high.}
+00689 \textcolor{stringliteral}{}
+00690 \textcolor{stringliteral}{    Returns}
+00691 \textcolor{stringliteral}{    -------}
+00692 \textcolor{stringliteral}{    out : ndarray}
+00693 \textcolor{stringliteral}{        Of Chebyshev series coefficients representing their product.}
+00694 \textcolor{stringliteral}{}
+00695 \textcolor{stringliteral}{    See Also}
+00696 \textcolor{stringliteral}{    --------}
+00697 \textcolor{stringliteral}{    chebadd, chebsub, chebdiv, chebpow}
+00698 \textcolor{stringliteral}{}
+00699 \textcolor{stringliteral}{    Notes}
+00700 \textcolor{stringliteral}{    -----}
+00701 \textcolor{stringliteral}{    In general, the (polynomial) product of two C-series results in terms}
+00702 \textcolor{stringliteral}{    that are not in the Chebyshev polynomial basis set.  Thus, to express}
+00703 \textcolor{stringliteral}{    the product as a C-series, it is typically necessary to "re-project"}
+00704 \textcolor{stringliteral}{    the product onto said basis set, which typically produces}
+00705 \textcolor{stringliteral}{    "un-intuitive" (but correct) results; see Examples section below.}
+00706 \textcolor{stringliteral}{}
+00707 \textcolor{stringliteral}{    Examples}
+00708 \textcolor{stringliteral}{    --------}
+00709 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00710 \textcolor{stringliteral}{    >>> c1 = (1,2,3)}
+00711 \textcolor{stringliteral}{    >>> c2 = (3,2,1)}
+00712 \textcolor{stringliteral}{    >>> C.chebmul(c1,c2) # multiplication requires "reprojection"}
+00713 \textcolor{stringliteral}{    array([  6.5,  12. ,  12. ,   4. ,   1.5])}
+00714 \textcolor{stringliteral}{}
+00715 \textcolor{stringliteral}{    """}
+00716     \textcolor{comment}{# c1, c2 are trimmed copies}
+00717     [c1, c2] = pu.as\_series([c1, c2])
+00718     z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c1)
+00719     z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c2)
+00720     prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(z1, z2)
+00721     ret = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(prd)
+00722     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00723 
+00724 
+\hypertarget{chebyshev_8py_source_l00725}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa84df28815f29342a7cdce9b95470f02}{00725} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa84df28815f29342a7cdce9b95470f02}{chebdiv}(c1, c2):
+00726     \textcolor{stringliteral}{"""}
+00727 \textcolor{stringliteral}{    Divide one Chebyshev series by another.}
+00728 \textcolor{stringliteral}{}
+00729 \textcolor{stringliteral}{    Returns the quotient-with-remainder of two Chebyshev series}
+00730 \textcolor{stringliteral}{    `c1` / `c2`.  The arguments are sequences of coefficients from lowest}
+00731 \textcolor{stringliteral}{    order "term" to highest, e.g., [1,2,3] represents the series}
+00732 \textcolor{stringliteral}{    ``T\_0 + 2*T\_1 + 3*T\_2``.}
+00733 \textcolor{stringliteral}{}
+00734 \textcolor{stringliteral}{    Parameters}
+00735 \textcolor{stringliteral}{    ----------}
+00736 \textcolor{stringliteral}{    c1, c2 : array\_like}
+00737 \textcolor{stringliteral}{        1-d arrays of Chebyshev series coefficients ordered from low to}
+00738 \textcolor{stringliteral}{        high.}
+00739 \textcolor{stringliteral}{}
+00740 \textcolor{stringliteral}{    Returns}
+00741 \textcolor{stringliteral}{    -------}
+00742 \textcolor{stringliteral}{    [quo, rem] : ndarrays}
+00743 \textcolor{stringliteral}{        Of Chebyshev series coefficients representing the quotient and}
+00744 \textcolor{stringliteral}{        remainder.}
+00745 \textcolor{stringliteral}{}
+00746 \textcolor{stringliteral}{    See Also}
+00747 \textcolor{stringliteral}{    --------}
+00748 \textcolor{stringliteral}{    chebadd, chebsub, chebmul, chebpow}
+00749 \textcolor{stringliteral}{}
+00750 \textcolor{stringliteral}{    Notes}
+00751 \textcolor{stringliteral}{    -----}
+00752 \textcolor{stringliteral}{    In general, the (polynomial) division of one C-series by another}
+00753 \textcolor{stringliteral}{    results in quotient and remainder terms that are not in the Chebyshev}
+00754 \textcolor{stringliteral}{    polynomial basis set.  Thus, to express these results as C-series, it}
+00755 \textcolor{stringliteral}{    is typically necessary to "re-project" the results onto said basis}
+00756 \textcolor{stringliteral}{    set, which typically produces "un-intuitive" (but correct) results;}
+00757 \textcolor{stringliteral}{    see Examples section below.}
+00758 \textcolor{stringliteral}{}
+00759 \textcolor{stringliteral}{    Examples}
+00760 \textcolor{stringliteral}{    --------}
+00761 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00762 \textcolor{stringliteral}{    >>> c1 = (1,2,3)}
+00763 \textcolor{stringliteral}{    >>> c2 = (3,2,1)}
+00764 \textcolor{stringliteral}{    >>> C.chebdiv(c1,c2) # quotient "intuitive," remainder not}
+00765 \textcolor{stringliteral}{    (array([ 3.]), array([-8., -4.]))}
+00766 \textcolor{stringliteral}{    >>> c2 = (0,1,2,3)}
+00767 \textcolor{stringliteral}{    >>> C.chebdiv(c2,c1) # neither "intuitive"}
+00768 \textcolor{stringliteral}{    (array([ 0.,  2.]), array([-2., -4.]))}
+00769 \textcolor{stringliteral}{}
+00770 \textcolor{stringliteral}{    """}
+00771     \textcolor{comment}{# c1, c2 are trimmed copies}
+00772     [c1, c2] = pu.as\_series([c1, c2])
+00773     \textcolor{keywordflow}{if} c2[-1] == 0 :
+00774         \textcolor{keywordflow}{raise} ZeroDivisionError()
+00775 
+00776     lc1 = len(c1)
+00777     lc2 = len(c2)
+00778     \textcolor{keywordflow}{if} lc1 < lc2 :
+00779         \textcolor{keywordflow}{return} c1[:1]*0, c1
+00780     \textcolor{keywordflow}{elif} lc2 == 1 :
+00781         \textcolor{keywordflow}{return} c1/c2[-1], c1[:1]*0
+00782     \textcolor{keywordflow}{else} :
+00783         z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c1)
+00784         z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c2)
+00785         quo, rem = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(z1, z2)
+00786         quo = pu.trimseq(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(quo))
+00787         rem = pu.trimseq(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(rem))
+00788         \textcolor{keywordflow}{return} quo, rem
+00789 
+\hypertarget{chebyshev_8py_source_l00790}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab647ff3aa7750a09b934b98cddd4c90d}{00790} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab647ff3aa7750a09b934b98cddd4c90d}{chebpow}(cs, pow, maxpower=16) :
+00791     \textcolor{stringliteral}{"""Raise a Chebyshev series to a power.}
+00792 \textcolor{stringliteral}{}
+00793 \textcolor{stringliteral}{    Returns the Chebyshev series `cs` raised to the power `pow`. The}
+00794 \textcolor{stringliteral}{    arguement `cs` is a sequence of coefficients ordered from low to high.}
+00795 \textcolor{stringliteral}{    i.e., [1,2,3] is the series  ``T\_0 + 2*T\_1 + 3*T\_2.``}
+00796 \textcolor{stringliteral}{}
+00797 \textcolor{stringliteral}{    Parameters}
+00798 \textcolor{stringliteral}{    ----------}
+00799 \textcolor{stringliteral}{    cs : array\_like}
+00800 \textcolor{stringliteral}{        1d array of chebyshev series coefficients ordered from low to}
+00801 \textcolor{stringliteral}{        high.}
+00802 \textcolor{stringliteral}{    pow : integer}
+00803 \textcolor{stringliteral}{        Power to which the series will be raised}
+00804 \textcolor{stringliteral}{    maxpower : integer, optional}
+00805 \textcolor{stringliteral}{        Maximum power allowed. This is mainly to limit growth of the series}
+00806 \textcolor{stringliteral}{        to umanageable size. Default is 16}
+00807 \textcolor{stringliteral}{}
+00808 \textcolor{stringliteral}{    Returns}
+00809 \textcolor{stringliteral}{    -------}
+00810 \textcolor{stringliteral}{    coef : ndarray}
+00811 \textcolor{stringliteral}{        Chebyshev series of power.}
+00812 \textcolor{stringliteral}{}
+00813 \textcolor{stringliteral}{    See Also}
+00814 \textcolor{stringliteral}{    --------}
+00815 \textcolor{stringliteral}{    chebadd, chebsub, chebmul, chebdiv}
+00816 \textcolor{stringliteral}{}
+00817 \textcolor{stringliteral}{    Examples}
+00818 \textcolor{stringliteral}{    --------}
+00819 \textcolor{stringliteral}{}
+00820 \textcolor{stringliteral}{    """}
+00821     \textcolor{comment}{# cs is a trimmed copy}
+00822     [cs] = pu.as\_series([cs])
+00823     power = int(pow)
+00824     \textcolor{keywordflow}{if} power != pow \textcolor{keywordflow}{or} power < 0 :
+00825         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Power must be a non-negative integer."})
+00826     \textcolor{keywordflow}{elif} maxpower \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None} \textcolor{keywordflow}{and} power > maxpower :
+00827         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Power is too large"})
+00828     \textcolor{keywordflow}{elif} power == 0 :
+00829         \textcolor{keywordflow}{return} np.array([1], dtype=cs.dtype)
+00830     \textcolor{keywordflow}{elif} power == 1 :
+00831         \textcolor{keywordflow}{return} cs
+00832     \textcolor{keywordflow}{else} :
+00833         \textcolor{comment}{# This can be made more efficient by using powers of two}
+00834         \textcolor{comment}{# in the usual way.}
+00835         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
+00836         prd = zs
+00837         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(2, power + 1) :
+00838             prd = np.convolve(prd, zs)
+00839         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(prd)
+00840 
+\hypertarget{chebyshev_8py_source_l00841}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1ed2b9248c247449584904025ec9d460}{00841} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1ed2b9248c247449584904025ec9d460}{chebder}(cs, m=1, scl=1) :
+00842     \textcolor{stringliteral}{"""}
+00843 \textcolor{stringliteral}{    Differentiate a Chebyshev series.}
+00844 \textcolor{stringliteral}{}
+00845 \textcolor{stringliteral}{    Returns the series `cs` differentiated `m` times.  At each iteration the}
+00846 \textcolor{stringliteral}{    result is multiplied by `scl` (the scaling factor is for use in a linear}
+00847 \textcolor{stringliteral}{    change of variable).  The argument `cs` is the sequence of coefficients}
+00848 \textcolor{stringliteral}{    from lowest order "term" to highest, e.g., [1,2,3] represents the series}
+00849 \textcolor{stringliteral}{    ``T\_0 + 2*T\_1 + 3*T\_2``.}
+00850 \textcolor{stringliteral}{}
+00851 \textcolor{stringliteral}{    Parameters}
+00852 \textcolor{stringliteral}{    ----------}
+00853 \textcolor{stringliteral}{    cs: array\_like}
+00854 \textcolor{stringliteral}{        1-d array of Chebyshev series coefficients ordered from low to high.}
+00855 \textcolor{stringliteral}{    m : int, optional}
+00856 \textcolor{stringliteral}{        Number of derivatives taken, must be non-negative. (Default: 1)}
+00857 \textcolor{stringliteral}{    scl : scalar, optional}
+00858 \textcolor{stringliteral}{        Each differentiation is multiplied by `scl`.  The end result is}
+00859 \textcolor{stringliteral}{        multiplication by ``scl**m``.  This is for use in a linear change of}
+00860 \textcolor{stringliteral}{        variable. (Default: 1)}
+00861 \textcolor{stringliteral}{}
+00862 \textcolor{stringliteral}{    Returns}
+00863 \textcolor{stringliteral}{    -------}
+00864 \textcolor{stringliteral}{    der : ndarray}
+00865 \textcolor{stringliteral}{        Chebyshev series of the derivative.}
+00866 \textcolor{stringliteral}{}
+00867 \textcolor{stringliteral}{    See Also}
+00868 \textcolor{stringliteral}{    --------}
+00869 \textcolor{stringliteral}{    chebint}
+00870 \textcolor{stringliteral}{}
+00871 \textcolor{stringliteral}{    Notes}
+00872 \textcolor{stringliteral}{    -----}
+00873 \textcolor{stringliteral}{    In general, the result of differentiating a C-series needs to be}
+00874 \textcolor{stringliteral}{    "re-projected" onto the C-series basis set. Thus, typically, the}
+00875 \textcolor{stringliteral}{    result of this function is "un-intuitive," albeit correct; see Examples}
+00876 \textcolor{stringliteral}{    section below.}
+00877 \textcolor{stringliteral}{}
+00878 \textcolor{stringliteral}{    Examples}
+00879 \textcolor{stringliteral}{    --------}
+00880 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00881 \textcolor{stringliteral}{    >>> cs = (1,2,3,4)}
+00882 \textcolor{stringliteral}{    >>> C.chebder(cs)}
+00883 \textcolor{stringliteral}{    array([ 14.,  12.,  24.])}
+00884 \textcolor{stringliteral}{    >>> C.chebder(cs,3)}
+00885 \textcolor{stringliteral}{    array([ 96.])}
+00886 \textcolor{stringliteral}{    >>> C.chebder(cs,scl=-1)}
+00887 \textcolor{stringliteral}{    array([-14., -12., -24.])}
+00888 \textcolor{stringliteral}{    >>> C.chebder(cs,2,-1)}
+00889 \textcolor{stringliteral}{    array([ 12.,  96.])}
+00890 \textcolor{stringliteral}{}
+00891 \textcolor{stringliteral}{    """}
+00892     cnt = int(m)
+00893 
+00894     \textcolor{keywordflow}{if} cnt != m:
+00895         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of derivation must be integer"}
+00896     \textcolor{keywordflow}{if} cnt < 0 :
+00897         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of derivation must be non-negative"}
+00898 
+00899     \textcolor{comment}{# cs is a trimmed copy}
+00900     [cs] = pu.as\_series([cs])
+00901     \textcolor{keywordflow}{if} cnt == 0:
+00902         \textcolor{keywordflow}{return} cs
+00903     \textcolor{keywordflow}{elif} cnt >= len(cs):
+00904         \textcolor{keywordflow}{return} cs[:1]*0
+00905     \textcolor{keywordflow}{else} :
+00906         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
+00907         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(cnt):
+00908             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{\_zseries\_der}(zs)*scl
+00909         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs)
+00910 
+00911 
+\hypertarget{chebyshev_8py_source_l00912}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a233e686a07b9935c74ce1e053f0c5f5f}{00912} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a233e686a07b9935c74ce1e053f0c5f5f}{chebint}(cs, m=1, k=[], lbnd=0, scl=1):
+00913     \textcolor{stringliteral}{"""}
+00914 \textcolor{stringliteral}{    Integrate a Chebyshev series.}
+00915 \textcolor{stringliteral}{}
+00916 \textcolor{stringliteral}{    Returns, as a C-series, the input C-series `cs`, integrated `m` times}
+00917 \textcolor{stringliteral}{    from `lbnd` to `x`.  At each iteration the resulting series is}
+00918 \textcolor{stringliteral}{    **multiplied** by `scl` and an integration constant, `k`, is added.}
+00919 \textcolor{stringliteral}{    The scaling factor is for use in a linear change of variable.  ("Buyer}
+00920 \textcolor{stringliteral}{    beware": note that, depending on what one is doing, one may want `scl`}
+00921 \textcolor{stringliteral}{    to be the reciprocal of what one might expect; for more information,}
+00922 \textcolor{stringliteral}{    see the Notes section below.)  The argument `cs` is a sequence of}
+00923 \textcolor{stringliteral}{    coefficients, from lowest order C-series "term" to highest, e.g.,}
+00924 \textcolor{stringliteral}{    [1,2,3] represents the series :math:`T\_0(x) + 2T\_1(x) + 3T\_2(x)`.}
+00925 \textcolor{stringliteral}{}
+00926 \textcolor{stringliteral}{    Parameters}
+00927 \textcolor{stringliteral}{    ----------}
+00928 \textcolor{stringliteral}{    cs : array\_like}
+00929 \textcolor{stringliteral}{        1-d array of C-series coefficients, ordered from low to high.}
+00930 \textcolor{stringliteral}{    m : int, optional}
+00931 \textcolor{stringliteral}{        Order of integration, must be positive. (Default: 1)}
+00932 \textcolor{stringliteral}{    k : \{[], list, scalar\}, optional}
+00933 \textcolor{stringliteral}{        Integration constant(s).  The value of the first integral at zero}
+00934 \textcolor{stringliteral}{        is the first value in the list, the value of the second integral}
+00935 \textcolor{stringliteral}{        at zero is the second value, etc.  If ``k == []`` (the default),}
+00936 \textcolor{stringliteral}{        all constants are set to zero.  If ``m == 1``, a single scalar can}
+00937 \textcolor{stringliteral}{        be given instead of a list.}
+00938 \textcolor{stringliteral}{    lbnd : scalar, optional}
+00939 \textcolor{stringliteral}{        The lower bound of the integral. (Default: 0)}
+00940 \textcolor{stringliteral}{    scl : scalar, optional}
+00941 \textcolor{stringliteral}{        Following each integration the result is *multiplied* by `scl`}
+00942 \textcolor{stringliteral}{        before the integration constant is added. (Default: 1)}
+00943 \textcolor{stringliteral}{}
+00944 \textcolor{stringliteral}{    Returns}
+00945 \textcolor{stringliteral}{    -------}
+00946 \textcolor{stringliteral}{    S : ndarray}
+00947 \textcolor{stringliteral}{        C-series coefficients of the integral.}
+00948 \textcolor{stringliteral}{}
+00949 \textcolor{stringliteral}{    Raises}
+00950 \textcolor{stringliteral}{    ------}
+00951 \textcolor{stringliteral}{    ValueError}
+00952 \textcolor{stringliteral}{        If ``m < 1``, ``len(k) > m``, ``np.isscalar(lbnd) == False``, or}
+00953 \textcolor{stringliteral}{        ``np.isscalar(scl) == False``.}
+00954 \textcolor{stringliteral}{}
+00955 \textcolor{stringliteral}{    See Also}
+00956 \textcolor{stringliteral}{    --------}
+00957 \textcolor{stringliteral}{    chebder}
+00958 \textcolor{stringliteral}{}
+00959 \textcolor{stringliteral}{    Notes}
+00960 \textcolor{stringliteral}{    -----}
+00961 \textcolor{stringliteral}{    Note that the result of each integration is *multiplied* by `scl`.}
+00962 \textcolor{stringliteral}{    Why is this important to note?  Say one is making a linear change of}
+00963 \textcolor{stringliteral}{    variable :math:`u = ax + b` in an integral relative to `x`.  Then}
+00964 \textcolor{stringliteral}{    :math:`dx = du/a`, so one will need to set `scl` equal to :math:`1/a`}
+00965 \textcolor{stringliteral}{    - perhaps not what one would have first thought.}
+00966 \textcolor{stringliteral}{}
+00967 \textcolor{stringliteral}{    Also note that, in general, the result of integrating a C-series needs}
+00968 \textcolor{stringliteral}{    to be "re-projected" onto the C-series basis set.  Thus, typically,}
+00969 \textcolor{stringliteral}{    the result of this function is "un-intuitive," albeit correct; see}
+00970 \textcolor{stringliteral}{    Examples section below.}
+00971 \textcolor{stringliteral}{}
+00972 \textcolor{stringliteral}{    Examples}
+00973 \textcolor{stringliteral}{    --------}
+00974 \textcolor{stringliteral}{    >>> from numpy.polynomial import chebyshev as C}
+00975 \textcolor{stringliteral}{    >>> cs = (1,2,3)}
+00976 \textcolor{stringliteral}{    >>> C.chebint(cs)}
+00977 \textcolor{stringliteral}{    array([ 0.5, -0.5,  0.5,  0.5])}
+00978 \textcolor{stringliteral}{    >>> C.chebint(cs,3)}
+00979 \textcolor{stringliteral}{    array([ 0.03125   , -0.1875    ,  0.04166667, -0.05208333,  0.01041667,}
+00980 \textcolor{stringliteral}{            0.00625   ])}
+00981 \textcolor{stringliteral}{    >>> C.chebint(cs, k=3)}
+00982 \textcolor{stringliteral}{    array([ 3.5, -0.5,  0.5,  0.5])}
+00983 \textcolor{stringliteral}{    >>> C.chebint(cs,lbnd=-2)}
+00984 \textcolor{stringliteral}{    array([ 8.5, -0.5,  0.5,  0.5])}
+00985 \textcolor{stringliteral}{    >>> C.chebint(cs,scl=-2)}
+00986 \textcolor{stringliteral}{    array([-1.,  1., -1., -1.])}
+00987 \textcolor{stringliteral}{}
+00988 \textcolor{stringliteral}{    """}
+00989     cnt = int(m)
+00990     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} np.iterable(k):
+00991         k = [k]
+00992 
+00993     \textcolor{keywordflow}{if} cnt != m:
+00994         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of integration must be integer"}
+00995     \textcolor{keywordflow}{if} cnt < 0 :
+00996         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of integration must be non-negative"}
+00997     \textcolor{keywordflow}{if} len(k) > cnt :
+00998         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"Too many integration constants"}
+00999 
+01000     \textcolor{comment}{# cs is a trimmed copy}
+01001     [cs] = pu.as\_series([cs])
+01002     \textcolor{keywordflow}{if} cnt == 0:
+01003         \textcolor{keywordflow}{return} cs
+01004 
+01005     k = list(k) + [0]*(cnt - len(k))
+01006     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(cnt) :
+01007         n = len(cs)
+01008         cs *= scl
+01009         \textcolor{keywordflow}{if} n == 1 \textcolor{keywordflow}{and} cs[0] == 0:
+01010             cs[0] += k[i]
+01011         \textcolor{keywordflow}{else}:
+01012             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
+01013             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{\_zseries\_int}(zs)
+01014             cs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs)
+01015             cs[0] += k[i] - \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{chebval}(lbnd, cs)
+01016     \textcolor{keywordflow}{return} cs
+01017 
+\hypertarget{chebyshev_8py_source_l01018}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{01018} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{chebval}(x, cs):
+01019     \textcolor{stringliteral}{"""Evaluate a Chebyshev series.}
+01020 \textcolor{stringliteral}{}
+01021 \textcolor{stringliteral}{    If `cs` is of length `n`, this function returns :}
+01022 \textcolor{stringliteral}{}
+01023 \textcolor{stringliteral}{    ``p(x) = cs[0]*T\_0(x) + cs[1]*T\_1(x) + ... + cs[n-1]*T\_\{n-1\}(x)``}
+01024 \textcolor{stringliteral}{}
+01025 \textcolor{stringliteral}{    If x is a sequence or array then p(x) will have the same shape as x.}
+01026 \textcolor{stringliteral}{    If r is a ring\_like object that supports multiplication and addition}
+01027 \textcolor{stringliteral}{    by the values in `cs`, then an object of the same type is returned.}
+01028 \textcolor{stringliteral}{}
+01029 \textcolor{stringliteral}{    Parameters}
+01030 \textcolor{stringliteral}{    ----------}
+01031 \textcolor{stringliteral}{    x : array\_like, ring\_like}
+01032 \textcolor{stringliteral}{        Array of numbers or objects that support multiplication and}
+01033 \textcolor{stringliteral}{        addition with themselves and with the elements of `cs`.}
+01034 \textcolor{stringliteral}{    cs : array\_like}
+01035 \textcolor{stringliteral}{        1-d array of Chebyshev coefficients ordered from low to high.}
+01036 \textcolor{stringliteral}{}
+01037 \textcolor{stringliteral}{    Returns}
+01038 \textcolor{stringliteral}{    -------}
+01039 \textcolor{stringliteral}{    values : ndarray, ring\_like}
+01040 \textcolor{stringliteral}{        If the return is an ndarray then it has the same shape as `x`.}
+01041 \textcolor{stringliteral}{}
+01042 \textcolor{stringliteral}{    See Also}
+01043 \textcolor{stringliteral}{    --------}
+01044 \textcolor{stringliteral}{    chebfit}
+01045 \textcolor{stringliteral}{}
+01046 \textcolor{stringliteral}{    Examples}
+01047 \textcolor{stringliteral}{    --------}
+01048 \textcolor{stringliteral}{}
+01049 \textcolor{stringliteral}{    Notes}
+01050 \textcolor{stringliteral}{    -----}
+01051 \textcolor{stringliteral}{    The evaluation uses Clenshaw recursion, aka synthetic division.}
+01052 \textcolor{stringliteral}{}
+01053 \textcolor{stringliteral}{    Examples}
+01054 \textcolor{stringliteral}{    --------}
+01055 \textcolor{stringliteral}{}
+01056 \textcolor{stringliteral}{    """}
+01057     \textcolor{comment}{# cs is a trimmed copy}
+01058     [cs] = pu.as\_series([cs])
+01059     \textcolor{keywordflow}{if} isinstance(x, tuple) \textcolor{keywordflow}{or} isinstance(x, list) :
+01060         x = np.asarray(x)
+01061 
+01062     \textcolor{keywordflow}{if} len(cs) == 1 :
+01063         c0 = cs[0]
+01064         c1 = 0
+01065     \textcolor{keywordflow}{elif} len(cs) == 2 :
+01066         c0 = cs[0]
+01067         c1 = cs[1]
+01068     \textcolor{keywordflow}{else} :
+01069         x2 = 2*x
+01070         c0 = cs[-2]
+01071         c1 = cs[-1]
+01072         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(3, len(cs) + 1) :
+01073             tmp = c0
+01074             c0 = cs[-i] - c1
+01075             c1 = tmp + c1*x2
+01076     \textcolor{keywordflow}{return} c0 + c1*x
+01077 
+\hypertarget{chebyshev_8py_source_l01078}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{01078} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{chebvander}(x, deg) :
+01079     \textcolor{stringliteral}{"""Vandermonde matrix of given degree.}
+01080 \textcolor{stringliteral}{}
+01081 \textcolor{stringliteral}{    Returns the Vandermonde matrix of degree `deg` and sample points `x`.}
+01082 \textcolor{stringliteral}{    This isn't a true Vandermonde matrix because `x` can be an arbitrary}
+01083 \textcolor{stringliteral}{    ndarray and the Chebyshev polynomials aren't powers. If ``V`` is the}
+01084 \textcolor{stringliteral}{    returned matrix and `x` is a 2d array, then the elements of ``V`` are}
+01085 \textcolor{stringliteral}{    ``V[i,j,k] = T\_k(x[i,j])``, where ``T\_k`` is the Chebyshev polynomial}
+01086 \textcolor{stringliteral}{    of degree ``k``.}
+01087 \textcolor{stringliteral}{}
+01088 \textcolor{stringliteral}{    Parameters}
+01089 \textcolor{stringliteral}{    ----------}
+01090 \textcolor{stringliteral}{    x : array\_like}
+01091 \textcolor{stringliteral}{        Array of points. The values are converted to double or complex}
+01092 \textcolor{stringliteral}{        doubles. If x is scalar it is converted to a 1D array.}
+01093 \textcolor{stringliteral}{    deg : integer}
+01094 \textcolor{stringliteral}{        Degree of the resulting matrix.}
+01095 \textcolor{stringliteral}{}
+01096 \textcolor{stringliteral}{    Returns}
+01097 \textcolor{stringliteral}{    -------}
+01098 \textcolor{stringliteral}{    vander : Vandermonde matrix.}
+01099 \textcolor{stringliteral}{        The shape of the returned matrix is ``x.shape + (deg+1,)``. The last}
+01100 \textcolor{stringliteral}{        index is the degree.}
+01101 \textcolor{stringliteral}{}
+01102 \textcolor{stringliteral}{    """}
+01103     ideg = int(deg)
+01104     \textcolor{keywordflow}{if} ideg != deg:
+01105         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"deg must be integer"})
+01106     \textcolor{keywordflow}{if} ideg < 0:
+01107         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"deg must be non-negative"})
+01108 
+01109     x = np.array(x, copy=0, ndmin=1) + 0.0
+01110     v = np.empty((ideg + 1,) + x.shape, dtype=x.dtype)
+01111     \textcolor{comment}{# Use forward recursion to generate the entries.}
+01112     v[0] = x*0 + 1
+01113     \textcolor{keywordflow}{if} ideg > 0 :
+01114         x2 = 2*x
+01115         v[1] = x
+01116         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(2, ideg + 1) :
+01117             v[i] = v[i-1]*x2 - v[i-2]
+01118     \textcolor{keywordflow}{return} np.rollaxis(v, 0, v.ndim)
+01119 
+01120 
+\hypertarget{chebyshev_8py_source_l01121}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a6bb5eb95525fd0572aea52fcd2a12c6c}{01121} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a6bb5eb95525fd0572aea52fcd2a12c6c}{chebfit}(x, y, deg, rcond=None, full=False, w=None):
+01122     \textcolor{stringliteral}{"""}
+01123 \textcolor{stringliteral}{    Least squares fit of Chebyshev series to data.}
+01124 \textcolor{stringliteral}{}
+01125 \textcolor{stringliteral}{    Fit a Chebyshev series ``p(x) = p[0] * T\_\{0\}(x) + ... + p[deg] *}
+01126 \textcolor{stringliteral}{    T\_\{deg\}(x)`` of degree `deg` to points `(x, y)`. Returns a vector of}
+01127 \textcolor{stringliteral}{    coefficients `p` that minimises the squared error.}
+01128 \textcolor{stringliteral}{}
+01129 \textcolor{stringliteral}{    Parameters}
+01130 \textcolor{stringliteral}{    ----------}
+01131 \textcolor{stringliteral}{    x : array\_like, shape (M,)}
+01132 \textcolor{stringliteral}{        x-coordinates of the M sample points ``(x[i], y[i])``.}
+01133 \textcolor{stringliteral}{    y : array\_like, shape (M,) or (M, K)}
+01134 \textcolor{stringliteral}{        y-coordinates of the sample points. Several data sets of sample}
+01135 \textcolor{stringliteral}{        points sharing the same x-coordinates can be fitted at once by}
+01136 \textcolor{stringliteral}{        passing in a 2D-array that contains one dataset per column.}
+01137 \textcolor{stringliteral}{    deg : int}
+01138 \textcolor{stringliteral}{        Degree of the fitting polynomial}
+01139 \textcolor{stringliteral}{    rcond : float, optional}
+01140 \textcolor{stringliteral}{        Relative condition number of the fit. Singular values smaller than}
+01141 \textcolor{stringliteral}{        this relative to the largest singular value will be ignored. The}
+01142 \textcolor{stringliteral}{        default value is len(x)*eps, where eps is the relative precision of}
+01143 \textcolor{stringliteral}{        the float type, about 2e-16 in most cases.}
+01144 \textcolor{stringliteral}{    full : bool, optional}
+01145 \textcolor{stringliteral}{        Switch determining nature of return value. When it is False (the}
+01146 \textcolor{stringliteral}{        default) just the coefficients are returned, when True diagnostic}
+01147 \textcolor{stringliteral}{        information from the singular value decomposition is also returned.}
+01148 \textcolor{stringliteral}{    w : array\_like, shape (`M`,), optional}
+01149 \textcolor{stringliteral}{        Weights. If not None, the contribution of each point}
+01150 \textcolor{stringliteral}{        ``(x[i],y[i])`` to the fit is weighted by `w[i]`. Ideally the}
+01151 \textcolor{stringliteral}{        weights are chosen so that the errors of the products ``w[i]*y[i]``}
+01152 \textcolor{stringliteral}{        all have the same variance.  The default value is None.}
+01153 \textcolor{stringliteral}{        .. versionadded:: 1.5.0}
+01154 \textcolor{stringliteral}{}
+01155 \textcolor{stringliteral}{    Returns}
+01156 \textcolor{stringliteral}{    -------}
+01157 \textcolor{stringliteral}{    coef : ndarray, shape (M,) or (M, K)}
+01158 \textcolor{stringliteral}{        Chebyshev coefficients ordered from low to high. If `y` was 2-D,}
+01159 \textcolor{stringliteral}{        the coefficients for the data in column k  of `y` are in column}
+01160 \textcolor{stringliteral}{        `k`.}
+01161 \textcolor{stringliteral}{}
+01162 \textcolor{stringliteral}{    [residuals, rank, singular\_values, rcond] : present when `full` = True}
+01163 \textcolor{stringliteral}{        Residuals of the least-squares fit, the effective rank of the}
+01164 \textcolor{stringliteral}{        scaled Vandermonde matrix and its singular values, and the}
+01165 \textcolor{stringliteral}{        specified value of `rcond`. For more details, see `linalg.lstsq`.}
+01166 \textcolor{stringliteral}{}
+01167 \textcolor{stringliteral}{    Warns}
+01168 \textcolor{stringliteral}{    -----}
+01169 \textcolor{stringliteral}{    RankWarning}
+01170 \textcolor{stringliteral}{        The rank of the coefficient matrix in the least-squares fit is}
+01171 \textcolor{stringliteral}{        deficient. The warning is only raised if `full` = False.  The}
+01172 \textcolor{stringliteral}{        warnings can be turned off by}
+01173 \textcolor{stringliteral}{}
+01174 \textcolor{stringliteral}{        >>> import warnings}
+01175 \textcolor{stringliteral}{        >>> warnings.simplefilter('ignore', RankWarning)}
+01176 \textcolor{stringliteral}{}
+01177 \textcolor{stringliteral}{    See Also}
+01178 \textcolor{stringliteral}{    --------}
+01179 \textcolor{stringliteral}{    chebval : Evaluates a Chebyshev series.}
+01180 \textcolor{stringliteral}{    chebvander : Vandermonde matrix of Chebyshev series.}
+01181 \textcolor{stringliteral}{    polyfit : least squares fit using polynomials.}
+01182 \textcolor{stringliteral}{    linalg.lstsq : Computes a least-squares fit from the matrix.}
+01183 \textcolor{stringliteral}{    scipy.interpolate.UnivariateSpline : Computes spline fits.}
+01184 \textcolor{stringliteral}{}
+01185 \textcolor{stringliteral}{    Notes}
+01186 \textcolor{stringliteral}{    -----}
+01187 \textcolor{stringliteral}{    The solution are the coefficients ``c[i]`` of the Chebyshev series}
+01188 \textcolor{stringliteral}{    ``T(x)`` that minimizes the squared error}
+01189 \textcolor{stringliteral}{}
+01190 \textcolor{stringliteral}{    ``E = \(\backslash\)\(\backslash\)sum\_j |y\_j - T(x\_j)|^2``.}
+01191 \textcolor{stringliteral}{}
+01192 \textcolor{stringliteral}{    This problem is solved by setting up as the overdetermined matrix}
+01193 \textcolor{stringliteral}{    equation}
+01194 \textcolor{stringliteral}{}
+01195 \textcolor{stringliteral}{    ``V(x)*c = y``,}
+01196 \textcolor{stringliteral}{}
+01197 \textcolor{stringliteral}{    where ``V`` is the Vandermonde matrix of `x`, the elements of ``c`` are}
+01198 \textcolor{stringliteral}{    the coefficients to be solved for, and the elements of `y` are the}
+01199 \textcolor{stringliteral}{    observed values.  This equation is then solved using the singular value}
+01200 \textcolor{stringliteral}{    decomposition of ``V``.}
+01201 \textcolor{stringliteral}{}
+01202 \textcolor{stringliteral}{    If some of the singular values of ``V`` are so small that they are}
+01203 \textcolor{stringliteral}{    neglected, then a `RankWarning` will be issued. This means that the}
+01204 \textcolor{stringliteral}{    coeficient values may be poorly determined. Using a lower order fit}
+01205 \textcolor{stringliteral}{    will usually get rid of the warning.  The `rcond` parameter can also be}
+01206 \textcolor{stringliteral}{    set to a value smaller than its default, but the resulting fit may be}
+01207 \textcolor{stringliteral}{    spurious and have large contributions from roundoff error.}
+01208 \textcolor{stringliteral}{}
+01209 \textcolor{stringliteral}{    Fits using Chebyshev series are usually better conditioned than fits}
+01210 \textcolor{stringliteral}{    using power series, but much can depend on the distribution of the}
+01211 \textcolor{stringliteral}{    sample points and the smoothness of the data. If the quality of the fit}
+01212 \textcolor{stringliteral}{    is inadequate splines may be a good alternative.}
+01213 \textcolor{stringliteral}{}
+01214 \textcolor{stringliteral}{    References}
+01215 \textcolor{stringliteral}{    ----------}
+01216 \textcolor{stringliteral}{    .. [1] Wikipedia, "Curve fitting",}
+01217 \textcolor{stringliteral}{           http://en.wikipedia.org/wiki/Curve\_fitting}
+01218 \textcolor{stringliteral}{}
+01219 \textcolor{stringliteral}{    Examples}
+01220 \textcolor{stringliteral}{    --------}
+01221 \textcolor{stringliteral}{}
+01222 \textcolor{stringliteral}{    """}
+01223     order = int(deg) + 1
+01224     x = np.asarray(x) + 0.0
+01225     y = np.asarray(y) + 0.0
+01226 
+01227     \textcolor{comment}{# check arguments.}
+01228     \textcolor{keywordflow}{if} deg < 0 :
+01229         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"expected deg >= 0"}
+01230     \textcolor{keywordflow}{if} x.ndim != 1:
+01231         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D vector for x"}
+01232     \textcolor{keywordflow}{if} x.size == 0:
+01233         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected non-empty vector for x"}
+01234     \textcolor{keywordflow}{if} y.ndim < 1 \textcolor{keywordflow}{or} y.ndim > 2 :
+01235         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D or 2D array for y"}
+01236     \textcolor{keywordflow}{if} len(x) != len(y):
+01237         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected x and y to have same length"}
+01238 
+01239     \textcolor{comment}{# set up the least squares matrices}
+01240     lhs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{chebvander}(x, deg)
+01241     rhs = y
+01242     \textcolor{keywordflow}{if} w \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+01243         w = np.asarray(w) + 0.0
+01244         \textcolor{keywordflow}{if} w.ndim != 1:
+01245             \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D vector for w"}
+01246         \textcolor{keywordflow}{if} len(x) != len(w):
+01247             \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected x and w to have same length"}
+01248         \textcolor{comment}{# apply weights}
+01249         \textcolor{keywordflow}{if} rhs.ndim == 2:
+01250             lhs *= w[:, np.newaxis]
+01251             rhs *= w[:, np.newaxis]
+01252         \textcolor{keywordflow}{else}:
+01253             lhs *= w[:, np.newaxis]
+01254             rhs *= w
+01255 
+01256     \textcolor{comment}{# set rcond}
+01257     \textcolor{keywordflow}{if} rcond \textcolor{keywordflow}{is} \textcolor{keywordtype}{None} :
+01258         rcond = len(x)*np.finfo(x.dtype).eps
+01259 
+01260     \textcolor{comment}{# scale the design matrix and solve the least squares equation}
+01261     scl = np.sqrt((lhs*lhs).sum(0))
+01262     c, resids, rank, s = la.lstsq(lhs/scl, rhs, rcond)
+01263     c = (c.T/scl).T
+01264 
+01265     \textcolor{comment}{# warn on rank reduction}
+01266     \textcolor{keywordflow}{if} rank != order \textcolor{keywordflow}{and} \textcolor{keywordflow}{not} full:
+01267         msg = \textcolor{stringliteral}{"The fit may be poorly conditioned"}
+01268         warnings.warn(msg, pu.RankWarning)
+01269 
+01270     \textcolor{keywordflow}{if} full :
+01271         \textcolor{keywordflow}{return} c, [resids, rank, s, rcond]
+01272     \textcolor{keywordflow}{else} :
+01273         \textcolor{keywordflow}{return} c
+01274 
+01275 
+\hypertarget{chebyshev_8py_source_l01276}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2f01a14e36b415a2f3ebc67c95cceb26}{01276} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2f01a14e36b415a2f3ebc67c95cceb26}{chebroots}(cs):
+01277     \textcolor{stringliteral}{"""}
+01278 \textcolor{stringliteral}{    Compute the roots of a Chebyshev series.}
+01279 \textcolor{stringliteral}{}
+01280 \textcolor{stringliteral}{    Return the roots (a.k.a "zeros") of the C-series represented by `cs`,}
+01281 \textcolor{stringliteral}{    which is the sequence of the C-series' coefficients from lowest order}
+01282 \textcolor{stringliteral}{    "term" to highest, e.g., [1,2,3] represents the C-series}
+01283 \textcolor{stringliteral}{    ``T\_0 + 2*T\_1 + 3*T\_2``.}
+01284 \textcolor{stringliteral}{}
+01285 \textcolor{stringliteral}{    Parameters}
+01286 \textcolor{stringliteral}{    ----------}
+01287 \textcolor{stringliteral}{    cs : array\_like}
+01288 \textcolor{stringliteral}{        1-d array of C-series coefficients ordered from low to high.}
+01289 \textcolor{stringliteral}{}
+01290 \textcolor{stringliteral}{    Returns}
+01291 \textcolor{stringliteral}{    -------}
+01292 \textcolor{stringliteral}{    out : ndarray}
+01293 \textcolor{stringliteral}{        Array of the roots.  If all the roots are real, then so is the}
+01294 \textcolor{stringliteral}{        dtype of ``out``; otherwise, ``out``'s dtype is complex.}
+01295 \textcolor{stringliteral}{}
+01296 \textcolor{stringliteral}{    See Also}
+01297 \textcolor{stringliteral}{    --------}
+01298 \textcolor{stringliteral}{    polyroots}
+01299 \textcolor{stringliteral}{}
+01300 \textcolor{stringliteral}{    Notes}
+01301 \textcolor{stringliteral}{    -----}
+01302 \textcolor{stringliteral}{    Algorithm(s) used:}
+01303 \textcolor{stringliteral}{}
+01304 \textcolor{stringliteral}{    Remember: because the C-series basis set is different from the}
+01305 \textcolor{stringliteral}{    "standard" basis set, the results of this function *may* not be what}
+01306 \textcolor{stringliteral}{    one is expecting.}
+01307 \textcolor{stringliteral}{}
+01308 \textcolor{stringliteral}{    Examples}
+01309 \textcolor{stringliteral}{    --------}
+01310 \textcolor{stringliteral}{    >>> import numpy.polynomial as P}
+01311 \textcolor{stringliteral}{    >>> import numpy.polynomial.chebyshev as C}
+01312 \textcolor{stringliteral}{    >>> P.polyroots((-1,1,-1,1)) # x^3 - x^2 + x - 1 has two complex roots}
+01313 \textcolor{stringliteral}{    array([ -4.99600361e-16-1.j,  -4.99600361e-16+1.j,   1.00000e+00+0.j])}
+01314 \textcolor{stringliteral}{    >>> C.chebroots((-1,1,-1,1)) # T3 - T2 + T1 - T0 has only real roots}
+01315 \textcolor{stringliteral}{    array([ -5.00000000e-01,   2.60860684e-17,   1.00000000e+00])}
+01316 \textcolor{stringliteral}{}
+01317 \textcolor{stringliteral}{    """}
+01318     \textcolor{comment}{# cs is a trimmed copy}
+01319     [cs] = pu.as\_series([cs])
+01320     \textcolor{keywordflow}{if} len(cs) <= 1 :
+01321         \textcolor{keywordflow}{return} np.array([], dtype=cs.dtype)
+01322     \textcolor{keywordflow}{if} len(cs) == 2 :
+01323         \textcolor{keywordflow}{return} np.array([-cs[0]/cs[1]])
+01324 
+01325     n = len(cs) - 1
+01326     cs /= cs[-1]
+01327     cmat = np.zeros((n,n), dtype=cs.dtype)
+01328     cmat[1, 0] = 1
+01329     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, n):
+01330         cmat[i - 1, i] = .5
+01331         \textcolor{keywordflow}{if} i != n - 1:
+01332             cmat[i + 1, i] = .5
+01333         \textcolor{keywordflow}{else}:
+01334             cmat[:, i] -= cs[:-1]*.5
+01335     roots = la.eigvals(cmat)
+01336     roots.sort()
+01337     \textcolor{keywordflow}{return} roots
+01338 
+01339 
+\hypertarget{chebyshev_8py_source_l01340}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5ac57e95809a1f627400a7c3a34606f7}{01340} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5ac57e95809a1f627400a7c3a34606f7}{chebpts1}(npts):
+01341     \textcolor{stringliteral}{"""Chebyshev points of the first kind.}
+01342 \textcolor{stringliteral}{}
+01343 \textcolor{stringliteral}{    Chebyshev points of the first kind are the set ``\{cos(x\_k)\}``,}
+01344 \textcolor{stringliteral}{    where ``x\_k = pi*(k + .5)/npts`` for k in ``range(npts\}``.}
+01345 \textcolor{stringliteral}{}
+01346 \textcolor{stringliteral}{    Parameters}
+01347 \textcolor{stringliteral}{    ----------}
+01348 \textcolor{stringliteral}{    npts : int}
+01349 \textcolor{stringliteral}{        Number of sample points desired.}
+01350 \textcolor{stringliteral}{}
+01351 \textcolor{stringliteral}{    Returns}
+01352 \textcolor{stringliteral}{    -------}
+01353 \textcolor{stringliteral}{    pts : ndarray}
+01354 \textcolor{stringliteral}{        The Chebyshev points of the second kind.}
+01355 \textcolor{stringliteral}{}
+01356 \textcolor{stringliteral}{    Notes}
+01357 \textcolor{stringliteral}{    -----}
+01358 \textcolor{stringliteral}{    .. versionadded:: 1.5.0}
+01359 \textcolor{stringliteral}{}
+01360 \textcolor{stringliteral}{    """}
+01361     \_npts = int(npts)
+01362     \textcolor{keywordflow}{if} \_npts != npts:
+01363         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"npts must be integer"})
+01364     \textcolor{keywordflow}{if} \_npts < 1:
+01365         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"npts must be >= 1"})
+01366 
+01367     x = np.linspace(-np.pi, 0, \_npts, endpoint=\textcolor{keyword}{False}) + np.pi/(2*\_npts)
+01368     \textcolor{keywordflow}{return} np.cos(x)
+01369 
+01370 
+\hypertarget{chebyshev_8py_source_l01371}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a224bc370de0cfa204c3ac15d626d13e3}{01371} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a224bc370de0cfa204c3ac15d626d13e3}{chebpts2}(npts):
+01372     \textcolor{stringliteral}{"""Chebyshev points of the second kind.}
+01373 \textcolor{stringliteral}{}
+01374 \textcolor{stringliteral}{    Chebyshev points of the second kind are the set ``\{cos(x\_k)\}``,}
+01375 \textcolor{stringliteral}{    where ``x\_k = pi*/(npts - 1)`` for k in ``range(npts\}``.}
+01376 \textcolor{stringliteral}{}
+01377 \textcolor{stringliteral}{    Parameters}
+01378 \textcolor{stringliteral}{    ----------}
+01379 \textcolor{stringliteral}{    npts : int}
+01380 \textcolor{stringliteral}{        Number of sample points desired.}
+01381 \textcolor{stringliteral}{}
+01382 \textcolor{stringliteral}{    Returns}
+01383 \textcolor{stringliteral}{    -------}
+01384 \textcolor{stringliteral}{    pts : ndarray}
+01385 \textcolor{stringliteral}{        The Chebyshev points of the second kind.}
+01386 \textcolor{stringliteral}{}
+01387 \textcolor{stringliteral}{    Notes}
+01388 \textcolor{stringliteral}{    -----}
+01389 \textcolor{stringliteral}{    .. versionadded:: 1.5.0}
+01390 \textcolor{stringliteral}{}
+01391 \textcolor{stringliteral}{    """}
+01392     \_npts = int(npts)
+01393     \textcolor{keywordflow}{if} \_npts != npts:
+01394         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"npts must be integer"})
+01395     \textcolor{keywordflow}{if} \_npts < 2:
+01396         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"npts must be >= 2"})
+01397 
+01398     x = np.linspace(-np.pi, 0, \_npts)
+01399     \textcolor{keywordflow}{return} np.cos(x)
+01400 
+01401 
+01402 \textcolor{comment}{#}
+01403 \textcolor{comment}{# Chebyshev series class}
+01404 \textcolor{comment}{#}
+01405 
+01406 exec polytemplate.substitute(name=\textcolor{stringliteral}{'Chebyshev'}, nick=\textcolor{stringliteral}{'cheb'}, domain=\textcolor{stringliteral}{'[-1,1]'})
+\end{DoxyCode}

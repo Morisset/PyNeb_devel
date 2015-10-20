@@ -1,0 +1,12 @@
+Aij
+1/s 1/s 1/s 
+0.0000000e+00 0.0000000e+00 0.0000000e+00 
+2.6400000e+08 0.0000000e+00 0.0000000e+00 
+2.6500000e+08 0.0000000e+00 0.0000000e+00 
+*** C IV transition probabilities
+*** ATOM carbon
+*** SPECTRUM 4
+*** N_LEVELS 3
+*** GSCONFIG s1
+*** SOURCE2 Wiese, Fuhr and Deters 1996, JPCRD, Monograph 7, p. 127
+*** NOTE2 All A-values

@@ -1,0 +1,12 @@
+Energy Stat_Weight Aij
+1/Ang         none     1/s      1/s      1/s      1/s   
+0.000	       5   0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+0.0000813008   1   4.451e-2 0.00e+00 0.00e+00 0.00e+00 
+0.0000979436   3   1.922e+1 5.085e-2 0.00e+00 0.00e+00 
+0.0001709873   5   2.193e+1 2.730e-3 6.309e-1 0.00e+00 
+0.0003610294   1   2.770e+0 0.00e+00 1.920e+2 7.216e+0 
+*** Xe III energy and Aij data
+*** SOURCE1 'Moore 1993, CRC Series in Evaluated Data in Atomic Physics, 339'
+*** NOTE1 'Energy levels'
+*** SOURCE2 'Biemont et al 1995, A&AS, 111, 333'
+*** NOTE2   'All As'

@@ -1,0 +1,727 @@
+\hypertarget{physics_8py_source}{}\section{physics.\+py}
+\label{physics_8py_source}\index{pyneb/utils/physics.\+py@{pyneb/utils/physics.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{physics_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1physics}{00001} \textcolor{keyword}{from} math \textcolor{keyword}{import} sqrt
+00002 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00003 
+\hypertarget{physics_8py_source_l00004}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t}{00004} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t}{CST}(object):
+\hypertarget{physics_8py_source_l00005}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_aee0d21a1f9edd72e75c5369bd5bc36b9}{00005}     BOLTZMANN = 1.3806488e-16 \textcolor{comment}{# erg/K - NIST 2010}
+\hypertarget{physics_8py_source_l00006}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a316a5d8a7c983441bd40589f040f3a09}{00006}     CLIGHT = 2.99792458e10 \textcolor{comment}{# cm/s - NIST 2010}
+\hypertarget{physics_8py_source_l00007}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a00251eede3f56eadeb766c97f3144c55}{00007}     HPLANCK = 6.62606957e-27 \textcolor{comment}{# erg s - NIST 2010}
+\hypertarget{physics_8py_source_l00008}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a0131d55ea22f1ecb699a8d5dcf18e62e}{00008}     EMASS = 9.10938291e-28 \textcolor{comment}{# g - NIST 2010}
+\hypertarget{physics_8py_source_l00009}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_affe8f9c45db60b472fb1779b6e88c43b}{00009}     ECHARGE = 1.602176565e-19 \textcolor{comment}{# Electron charge in Coulomb - NIST 2010}
+\hypertarget{physics_8py_source_l00010}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_adeb7151ce462944ff7a0ff2803f873c3}{00010}     PI = 3.141592653589793238462643
+\hypertarget{physics_8py_source_l00011}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a7c0a4476149f179955c86bfdb63ade78}{00011}     BOLTZMANN\_ANGK = (BOLTZMANN) / (HPLANCK * CLIGHT * 1.e8) \textcolor{comment}{# Boltzmann constant in (Ang * Kelvin) ** -1}
+\hypertarget{physics_8py_source_l00012}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a468e4f9fac1fbd71b5ca458a84ae05cc}{00012}     RYD = 109737.31568539 \textcolor{comment}{# Rydberg constant in cm^-1 - NIST 2010 }
+\hypertarget{physics_8py_source_l00013}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a337f87b4676ea337149e177d81b481e1}{00013}     RYD\_EV = HPLANCK * CLIGHT * RYD * 1.e-7 / ECHARGE \textcolor{comment}{# infinite mass Rydberg in eV}
+\hypertarget{physics_8py_source_l00014}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a43417605886b2dc4060af9388d7990bd}{00014}     RYD\_ANG = 1.e8 / RYD \textcolor{comment}{# infinite mass Rydberg in A}
+\hypertarget{physics_8py_source_l00015}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a3da260eac736f7d74c20f76f79239425}{00015}     RYD2ERG = HPLANCK * CLIGHT * RYD
+\hypertarget{physics_8py_source_l00016}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a7f947f81f3596cb129cec85e6ecb78e7}{00016}     KCOLLRATE = sqrt(2 * PI / BOLTZMANN) * (HPLANCK / (2 * PI))**2 / EMASS**1.5 \textcolor{comment}{# constant of collisional
+       rate equation}
+\hypertarget{physics_8py_source_l00017}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_aa08a3a7d69c5377fa02f0129aeec8526}{00017}     BOLTZMANN\_eVK = 8.617343e-5 \textcolor{comment}{# Boltzmann constant in eV/K}
+00018     
+\hypertarget{physics_8py_source_l00019}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a969cf775617cba19633611eb7fc1b10b}{00019}     HBETA = 4861.3316598713955
+00020 
+\hypertarget{physics_8py_source_l00021}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a041738a1b0abdb597dd654aec4d96757}{00021} IP = \{\}
+00022 IP[\textcolor{stringliteral}{'H2'}] = 13.598
+00023 IP[\textcolor{stringliteral}{'He1'}] = 0.0
+00024 IP[\textcolor{stringliteral}{'He2'}] = 24.6
+00025 IP[\textcolor{stringliteral}{'He3'}] = 54.4
+00026 IP[\textcolor{stringliteral}{'H1r'}] = 13.598
+00027 IP[\textcolor{stringliteral}{'He1r'}] = 24.6
+00028 IP[\textcolor{stringliteral}{'He2r'}] = 54.4
+00029 IP[\textcolor{stringliteral}{'C1'}] = 0.0
+00030 IP[\textcolor{stringliteral}{'C2'}] = 11.26
+00031 IP[\textcolor{stringliteral}{'C3'}] = 24.38
+00032 IP[\textcolor{stringliteral}{'C4'}] = 47.89
+00033 IP[\textcolor{stringliteral}{'C5'}] = 64.49
+00034 IP[\textcolor{stringliteral}{'N1'}] = 0.0
+00035 IP[\textcolor{stringliteral}{'N2'}] = 14.53
+00036 IP[\textcolor{stringliteral}{'N3'}] = 29.60
+00037 IP[\textcolor{stringliteral}{'N4'}] = 47.45
+00038 IP[\textcolor{stringliteral}{'N5'}] = 77.47
+00039 IP[\textcolor{stringliteral}{'O1'}] = 0.0
+00040 IP[\textcolor{stringliteral}{'O2'}] = 13.62
+00041 IP[\textcolor{stringliteral}{'O3'}] = 35.12
+00042 IP[\textcolor{stringliteral}{'O4'}] = 54.94
+00043 IP[\textcolor{stringliteral}{'S1'}] = 0.0
+00044 IP[\textcolor{stringliteral}{'S2'}] = 10.36
+00045 IP[\textcolor{stringliteral}{'S3'}] = 23.34
+00046 IP[\textcolor{stringliteral}{'S4'}] = 34.79
+00047 IP[\textcolor{stringliteral}{'S5'}] = 47.22
+00048 IP[\textcolor{stringliteral}{'Ne1'}] = 0.0
+00049 IP[\textcolor{stringliteral}{'Ne2'}] = 21.56
+00050 IP[\textcolor{stringliteral}{'Ne3'}] = 40.96
+00051 IP[\textcolor{stringliteral}{'Ne4'}] = 63.45
+00052 IP[\textcolor{stringliteral}{'Ne5'}] = 97.12
+00053 IP[\textcolor{stringliteral}{'Ne6'}] = 126.21
+00054 IP[\textcolor{stringliteral}{'Cl1'}] = 0.0
+00055 IP[\textcolor{stringliteral}{'Cl2'}] = 12.97
+00056 IP[\textcolor{stringliteral}{'Cl3'}] = 23.81
+00057 IP[\textcolor{stringliteral}{'Cl4'}] = 39.61
+00058 IP[\textcolor{stringliteral}{'Ar1'}] = 0.0
+00059 IP[\textcolor{stringliteral}{'Ar2'}] = 15.76
+00060 IP[\textcolor{stringliteral}{'Ar3'}] = 27.63
+00061 IP[\textcolor{stringliteral}{'Ar4'}] = 40.74
+00062 IP[\textcolor{stringliteral}{'Ar5'}] = 59.81
+00063 IP[\textcolor{stringliteral}{'Ba1'}] = 0.00
+00064 IP[\textcolor{stringliteral}{'Ba2'}] = 5.21
+00065 IP[\textcolor{stringliteral}{'Ba3'}] = 10.003826
+00066 IP[\textcolor{stringliteral}{'Ba4'}] = 35.84
+00067 IP[\textcolor{stringliteral}{'Xe1'}] = 0.00
+00068 IP[\textcolor{stringliteral}{'Xe3'}] = 20.98
+00069 IP[\textcolor{stringliteral}{'Xe4'}] = 31.05
+00070 IP[\textcolor{stringliteral}{'Xe5'}] = 42.20
+00071 IP[\textcolor{stringliteral}{'Xe6'}] = 54.1
+00072 IP[\textcolor{stringliteral}{'Mg1'}] = 0.00
+00073 IP[\textcolor{stringliteral}{'Mg2'}] = 7.65
+00074 IP[\textcolor{stringliteral}{'Mg3'}] = 15.03
+00075 IP[\textcolor{stringliteral}{'Mg4'}] = 80.14
+00076 IP[\textcolor{stringliteral}{'Mg5'}] = 109.26
+00077 IP[\textcolor{stringliteral}{'Fe1'}] = 0.0
+00078 IP[\textcolor{stringliteral}{'Fe2'}] = 7.90 
+00079 IP[\textcolor{stringliteral}{'Fe3'}] = 16.188
+00080 IP[\textcolor{stringliteral}{'Fe4'}] = 30.652
+00081 IP[\textcolor{stringliteral}{'Fe5'}] = 54.8
+00082 IP[\textcolor{stringliteral}{'Fe6'}] = 75.0
+00083 IP[\textcolor{stringliteral}{'Fe7'}] = 98.99
+00084 IP[\textcolor{stringliteral}{'Ni1'}] = 0.
+00085 IP[\textcolor{stringliteral}{'Ni2'}] = 7.639877
+00086 IP[\textcolor{stringliteral}{'Ni3'}] = 18.168837
+00087 IP[\textcolor{stringliteral}{'Ni4'}] = 35.187
+00088 IP[\textcolor{stringliteral}{'Kr1'}] = 0.0
+00089 IP[\textcolor{stringliteral}{'Kr2'}] = 13.9996
+00090 IP[\textcolor{stringliteral}{'Kr3'}] = 24.35984
+00091 IP[\textcolor{stringliteral}{'Kr4'}] = 35.67
+00092 IP[\textcolor{stringliteral}{'Kr5'}] = 50.85
+00093 IP[\textcolor{stringliteral}{'Na1'}] = 0.0
+00094 IP[\textcolor{stringliteral}{'Na2'}] = 5.1390767
+00095 IP[\textcolor{stringliteral}{'Na3'}] = 47.28636
+00096 IP[\textcolor{stringliteral}{'Na4'}] = 71.6200
+00097 IP[\textcolor{stringliteral}{'Na5'}] = 98.936
+00098 IP[\textcolor{stringliteral}{'Rb1'}] = 0.0
+00099 IP[\textcolor{stringliteral}{'Rb2'}] = 4.177128
+00100 IP[\textcolor{stringliteral}{'Rb3'}] = 27.28954
+00101 IP[\textcolor{stringliteral}{'Rb4'}] = 39.2472
+00102 IP[\textcolor{stringliteral}{'Rb5'}] = 52.20
+00103 IP[\textcolor{stringliteral}{'K1'}] = 0.0
+00104 IP[\textcolor{stringliteral}{'K2'}] = 4.34066354
+00105 IP[\textcolor{stringliteral}{'K3'}] = 31.62500
+00106 IP[\textcolor{stringliteral}{'K4'}] = 45.8031
+00107 IP[\textcolor{stringliteral}{'K5'}] = 60.917
+00108 IP[\textcolor{stringliteral}{'K6'}] = 82.66
+00109 
+\hypertarget{physics_8py_source_l00110}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_aaad8df22981701858aa5539c86a96b5b}{00110} sym2name = \{
+00111             \textcolor{stringliteral}{'H'}: \textcolor{stringliteral}{'hydrogen'},
+00112             \textcolor{stringliteral}{'He'}: \textcolor{stringliteral}{'helium'},
+00113             \textcolor{stringliteral}{'3He'}: \textcolor{stringliteral}{'helium'},
+00114             \textcolor{stringliteral}{'B'}: \textcolor{stringliteral}{'boron'},
+00115             \textcolor{stringliteral}{'C'}: \textcolor{stringliteral}{'carbon'},
+00116             \textcolor{stringliteral}{'N'}: \textcolor{stringliteral}{'nitrogen'},
+00117             \textcolor{stringliteral}{'O'}: \textcolor{stringliteral}{'oxygen'},
+00118             \textcolor{stringliteral}{'F'}: \textcolor{stringliteral}{'fluorine'},
+00119             \textcolor{stringliteral}{'Ne'}: \textcolor{stringliteral}{'neon'},
+00120             \textcolor{stringliteral}{'Na'}: \textcolor{stringliteral}{'sodium'},
+00121             \textcolor{stringliteral}{'Mg'}: \textcolor{stringliteral}{'magnesium'},
+00122             \textcolor{stringliteral}{'Al'}: \textcolor{stringliteral}{'aluminium'},
+00123             \textcolor{stringliteral}{'Si'}: \textcolor{stringliteral}{'silicon'},
+00124             \textcolor{stringliteral}{'P'}: \textcolor{stringliteral}{'phosphorus'},
+00125             \textcolor{stringliteral}{'S'}: \textcolor{stringliteral}{'sulfur'},
+00126             \textcolor{stringliteral}{'Cl'}: \textcolor{stringliteral}{'chlorine'},
+00127             \textcolor{stringliteral}{'Ar'}: \textcolor{stringliteral}{'argon'},
+00128             \textcolor{stringliteral}{'K'}: \textcolor{stringliteral}{'potassium'},
+00129             \textcolor{stringliteral}{'Ca'}: \textcolor{stringliteral}{'calcium'},
+00130             \textcolor{stringliteral}{'Cr'}: \textcolor{stringliteral}{'chromium'},
+00131             \textcolor{stringliteral}{'Fe'}: \textcolor{stringliteral}{'iron'},
+00132             \textcolor{stringliteral}{'Co'}: \textcolor{stringliteral}{'cobalt'},
+00133             \textcolor{stringliteral}{'Ni'}: \textcolor{stringliteral}{'nickel'},
+00134             \textcolor{stringliteral}{'Cu'}: \textcolor{stringliteral}{'copper'},
+00135             \textcolor{stringliteral}{'Zn'}: \textcolor{stringliteral}{'zinc'},
+00136             \textcolor{stringliteral}{'Se'}: \textcolor{stringliteral}{'selenium'},
+00137             \textcolor{stringliteral}{'Br'}: \textcolor{stringliteral}{'bromine'},
+00138             \textcolor{stringliteral}{'Kr'}: \textcolor{stringliteral}{'krypton'},
+00139             \textcolor{stringliteral}{'Ag'}: \textcolor{stringliteral}{'silver'},
+00140             \textcolor{stringliteral}{'Au'}: \textcolor{stringliteral}{'gold'},
+00141             \textcolor{stringliteral}{'Ba'}: \textcolor{stringliteral}{'barium'},
+00142             \textcolor{stringliteral}{'Xe'}: \textcolor{stringliteral}{'xenon'},
+00143             \textcolor{stringliteral}{'Rb'}: \textcolor{stringliteral}{'rubidium'}
+00144             \}
+00145 
+\hypertarget{physics_8py_source_l00146}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a1960e51460ec0d63ffe40b02e0280186}{00146} gsDict = \{
+00147             \textcolor{stringliteral}{'p1'}: [\textcolor{stringliteral}{'C2'}, \textcolor{stringliteral}{'N3'}, \textcolor{stringliteral}{'O4'}, \textcolor{stringliteral}{'Si2'}, \textcolor{stringliteral}{'S4'}, \textcolor{stringliteral}{'Se4'}, \textcolor{stringliteral}{'Xe6'}],
+00148             \textcolor{stringliteral}{'p2'}: [\textcolor{stringliteral}{'N2'}, \textcolor{stringliteral}{'O3'}, \textcolor{stringliteral}{'Ne5'}, \textcolor{stringliteral}{'S3'}, \textcolor{stringliteral}{'Cl4'}, \textcolor{stringliteral}{'Ar5'}, \textcolor{stringliteral}{'Se3'}, \textcolor{stringliteral}{'Kr5'}, \textcolor{stringliteral}{'Xe5'}, \textcolor{stringliteral}{'Rb6'}],
+00149             \textcolor{stringliteral}{'p3'}: [\textcolor{stringliteral}{'N1'}, \textcolor{stringliteral}{'O2'}, \textcolor{stringliteral}{'Ne4'}, \textcolor{stringliteral}{'Na5'}, \textcolor{stringliteral}{'S2'}, \textcolor{stringliteral}{'Cl3'}, \textcolor{stringliteral}{'Ar4'}, \textcolor{stringliteral}{'K5'}, \textcolor{stringliteral}{'Se2'}, \textcolor{stringliteral}{'Kr4'}, \textcolor{stringliteral}{'Xe4'}, \textcolor{stringliteral}{'Rb5'}, \textcolor{stringliteral}{'Br3'}],
+00150             \textcolor{stringliteral}{'p4'}: [\textcolor{stringliteral}{'O1'}, \textcolor{stringliteral}{'Ne3'}, \textcolor{stringliteral}{'Na4'}, \textcolor{stringliteral}{'Mg5'}, \textcolor{stringliteral}{'Cl2'}, \textcolor{stringliteral}{'Ar3'}, \textcolor{stringliteral}{'K4'}, \textcolor{stringliteral}{'Ca5'}, \textcolor{stringliteral}{'Kr3'}, \textcolor{stringliteral}{'Xe3'}, \textcolor{stringliteral}{'Rb4'}],
+00151             \textcolor{stringliteral}{'p5'}: [\textcolor{stringliteral}{'Ne2'}, \textcolor{stringliteral}{'Na3'}, \textcolor{stringliteral}{'Si6'}, \textcolor{stringliteral}{'Cl1'}, \textcolor{stringliteral}{'Ar2'}, \textcolor{stringliteral}{'K3'}, \textcolor{stringliteral}{'Ba4'}],
+00152             \textcolor{stringliteral}{'s1'}: [\textcolor{stringliteral}{'C4'}, \textcolor{stringliteral}{'N5'}, \textcolor{stringliteral}{'Ba2'}],
+00153             \textcolor{stringliteral}{'s2'}: [\textcolor{stringliteral}{'C3'}, \textcolor{stringliteral}{'N4'}, \textcolor{stringliteral}{'O5'}, \textcolor{stringliteral}{'Si3'}],
+00154             \textcolor{stringliteral}{'d2'}: [\textcolor{stringliteral}{'Fe7'}],
+00155             \textcolor{stringliteral}{'d3'}: [\textcolor{stringliteral}{'Fe6'}],
+00156             \textcolor{stringliteral}{'d4'}: [\textcolor{stringliteral}{'Fe5'}],
+00157             \textcolor{stringliteral}{'d5'}: [\textcolor{stringliteral}{'Fe4'}],
+00158             \textcolor{stringliteral}{'d6'}: [\textcolor{stringliteral}{'Fe3'}],
+00159             \textcolor{stringliteral}{'d8'}: [\textcolor{stringliteral}{'Ni3'}]
+00160             \}
+00161 
+\hypertarget{physics_8py_source_l00162}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{00162} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{gsFromAtom}(atom):
+00163     result = \textcolor{stringliteral}{'unknown'}
+00164     \textcolor{keywordflow}{for} gs \textcolor{keywordflow}{in} gsDict:
+00165         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{in} gsDict[gs]:
+00166             result = gs
+00167     \textcolor{keywordflow}{return} result
+00168     
+\hypertarget{physics_8py_source_l00169}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a18b749f74e825f8a60744ecba2078ce2}{00169} gsLevelDict = \{
+00170             \textcolor{stringliteral}{'p1'}: [\textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$S$\_\{1/2\}$'}],
+00171             \textcolor{stringliteral}{'p2'}: [\textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^1$S$\_0$'}, \textcolor{stringliteral}{'$^5$S$\_2$'}],
+00172             \textcolor{stringliteral}{'p3'}: [\textcolor{stringliteral}{'$^4$S$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'
+      $^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}],
+00173             \textcolor{stringliteral}{'p4'}: [\textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^1$S$\_0$'}],
+00174             \textcolor{stringliteral}{'p5'}: [\textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}],
+00175             \textcolor{stringliteral}{'s1'}: [\textcolor{stringliteral}{'$^2$S$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}],
+00176             \textcolor{stringliteral}{'s2'}: [\textcolor{stringliteral}{'$^1$S$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$P$\_1$'}],
+00177             \textcolor{stringliteral}{'d2'}: [\textcolor{stringliteral}{'$^3$F$\_\{2\}$'}, \textcolor{stringliteral}{'$^3$F$\_\{3\}$'}, \textcolor{stringliteral}{'$^3$F$\_\{4\}$'},\textcolor{stringliteral}{'$^1$D$\_\{2\}$'}, \textcolor{stringliteral}{'$^3$P$\_\{0\}$'}, \textcolor{stringliteral}{'$^3$P$\_\{1\}$'},
+       \textcolor{stringliteral}{'$^3$P$\_\{2\}$'}, \textcolor{stringliteral}{'$^1$G$\_\{4\}$'}, \textcolor{stringliteral}{'$^1$S$\_\{0\}$'}], 
+00178             \textcolor{stringliteral}{'d3'}: [\textcolor{stringliteral}{'$^4$F$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$F$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^4$F$\_\{7/2\}$'},\textcolor{stringliteral}{'$^4$F$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'
+      $^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$G$\_\{7/2\}$'}, \textcolor{stringliteral}{'$^2$G$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D2$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$D2$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$H$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^2$H$\_\{11/2\}$'}, \textcolor{stringliteral}{'$^2$F$\_\{7/2\}$'}, \textcolor{stringliteral}{'$^2$F$\_\{5/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D1$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$D1$\_\{3/2\}$'}], 
+00179             \textcolor{stringliteral}{'d6'}: [\textcolor{stringliteral}{'$^5$D$\_4$'}, \textcolor{stringliteral}{'$^5$D$\_3$'}, \textcolor{stringliteral}{'$^5$D$\_2$'}, \textcolor{stringliteral}{'$^5$D$\_1$'}, \textcolor{stringliteral}{'$^5$D$\_0$'}, \textcolor{stringliteral}{'$^3$P2$\_2$'}, \textcolor{stringliteral}{'
+      $^3$H$\_6$'}], 
+00180             \textcolor{stringliteral}{'d8'}: [\textcolor{stringliteral}{'$3$F$\_4$'}, \textcolor{stringliteral}{'$^3$F$\_3$'}, \textcolor{stringliteral}{'$^3$F$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^3$P2$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_0$
+      '}]
+00181             \}
+00182 
+00183 
+\hypertarget{physics_8py_source_l00184}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a07a026669fde4152bdb02f243cc4f4d4}{00184} \_predefinedDataFileDict = \{\textcolor{stringliteral}{'IRAF\_09\_orig'}:
+00185                            \{\textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'al\_ii\_coll.fits'}\},
+00186                             \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll.fits'}\},
+00187                             \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iii\_coll.fits'}\},
+00188                             \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iv\_coll.fits'}\},
+00189                             \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_v\_coll.fits'}\},
+00190                             \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_i\_coll.fits'}\},
+00191                             \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_ii\_coll.fits'}\},
+00192                             \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iii\_coll.fits'}\},
+00193                             \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll.fits'}\},
+00194                             \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll.fits'}\},
+00195                             \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iv\_coll.fits'}\},
+00196                             \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll.fits'}\},
+00197                             \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll.fits'}\},
+00198                             \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll.fits'}\},
+00199                             \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_vii\_coll.fits'}\},
+00200                             \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_i\_coll.fits'}\},
+00201                             \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_ii\_coll.fits'}\},
+00202                             \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iii\_coll.fits'}\},
+00203                             \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll.fits'}\},
+00204                             \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_iv\_coll.fits'}\},
+00205                             \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_vi\_coll.fits'}\},
+00206                             \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll.fits'}\},
+00207                             \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iii\_coll.fits'}\},
+00208                             \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll.fits'}\},
+00209                             \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_v\_coll.fits'}\},
+00210                             \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_vi\_coll.fits'}\},
+00211                             \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll.fits'}\},
+00212                             \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_ii\_coll.fits'}\},
+00213                             \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iii\_coll.fits'}\},
+00214                             \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll.fits'}\},
+00215                             \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_v\_coll.fits'}\},
+00216                             \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll.fits'}\},
+00217                             \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iii\_coll.fits'}\},
+00218                             \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iv\_coll.fits'}\},
+00219                             \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'si\_ii\_coll.fits'}\},
+00220                             \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'si\_iii\_coll.fits'}\},
+00221                             \},
+00222                          \textcolor{stringliteral}{'IRAF\_09'}:
+00223                            \{\textcolor{stringliteral}{'H1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'h\_i\_rec\_SH95.fits'}\},
+00224                             \textcolor{stringliteral}{'He1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_i\_rec\_Pal12-Pal13.fits'}\},
+00225                             \textcolor{stringliteral}{'He2'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_ii\_rec\_SH95.fits'}\},
+00226                             \textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom\_JSP86-HK87-VVF96-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      al\_ii\_coll\_KHAF92-TBK85-TBK84.fits'}\},
+00227                             \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll\_PB95.fits'}\},
+00228                             \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_iii\_coll\_GMZ95.fits'}\},
+00229                             \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom\_B60-MZ82a-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_iv\_coll\_ZBL87.fits'}\},
+00230                             \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom\_B60-LL93-MZ82-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_v\_coll\_GMZ95.fits'}\},
+00231                             \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom\_B60-NS84-FFS85.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_i\_coll\_JBK87-PA76.fits'}\},
+00232                             \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom\_MG93-PP95-NS81-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_ii\_coll\_BP92.fits'}\},
+00233                             \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom\_BK93-G83-NS78-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_iii\_coll\_Bal85.fits'}\},
+00234                             \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll\_GMZ95.fits'}\},
+00235                             \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom\_M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll\_BZ89.fits'}\},
+00236                             \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom\_B60-H85-KS86-MZ82-EM84.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      cl\_iv\_coll\_GMZ95.fits'}\},
+00237                             \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll\_GMZ95.fits'}\},
+00238                             \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll\_BZL88.fits'}\},
+00239                             \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll\_BZ94.fits'}
+      \},
+00240                             \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom\_Bal06-B60-BD95-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      mg\_vii\_coll\_LB94-U.fits'}\},
+00241                             \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom\_B60-KS86-F75-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_i\_coll\_PA76-DMR76.fits'}\},
+00242                             \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom\_MG93-B60-PP95-GMZ97-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_ii\_coll\_LB94.fits'}\},
+00243                             \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom\_MG93-BFFJ95-BP92-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_iii\_coll\_BP92.fits'}\},
+00244                             \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom\_NS79-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll\_RBHB94.fits'}\},
+00245                             \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_iv\_coll\_BZ94.fits'}\},
+00246                             \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_vi\_coll\_LB94.fits'}\},
+00247                             \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll\_GMB01.fits'}\},
+00248                             \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_iii\_coll\_BZ94.fits'}\},
+00249                             \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom\_E84-BBZ89-BK88.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll\_G81.fits'}
+      \},
+00250                             \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom\_Bal06-B60-M83-GMZ97-U-BD93.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_v\_coll\_LB94.fits'}\},
+00251                             \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom\_Bal06-KS86-MVGK95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_vi\_coll\_ZGP94.fits'}\},
+00252                             \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom\_M83b-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll\_BK95.fits'}\},
+00253                             \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom\_B60-KS86-F75-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_ii\_coll\_P76-McLB93-v1.fits'}\},
+00254                             \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom\_MG93-B60-M85-GMZ97-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_iii\_coll\_LB94.fits'}\},
+00255                             \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom\_U-U-GMZ98b.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll\_BP92.fits'}\},
+00256                             \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom\_BJ68-B80-H80-NS79.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_v\_coll\_BBDK85.fits
+      '}\},
+00257                             \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom\_B60-VVF96-KHOC93.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll\_RBS96.fits
+      '}\},
+00258                             \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom\_B60-Sal84-LL93-HSC95-MZ82b-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iii\_coll\_GMZ95.fits'}\},
+00259                             \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom\_BDF80-JKD86-DHKD82.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iv\_coll\_DHKD82.fits'}\},
+00260                             \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom\_Dal91-BL93-CSB93-N77.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_ii\_coll\_DK91.fits'}\},
+00261                             \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom\_WL95-M83-OKH88-FW90-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_iii\_coll\_DK94.fits'}\},
+00262                             \},
+00263                            \textcolor{stringliteral}{'PYNEB\_13\_01'}:
+00264                             \{\textcolor{stringliteral}{'H1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'h\_i\_rec\_SH95.fits'}\},
+00265                              \textcolor{stringliteral}{'He1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_i\_rec\_Pal12-Pal13.fits'}\},
+00266                              \textcolor{stringliteral}{'He2'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_ii\_rec\_SH95.fits'}\},
+00267                              \textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom\_JSP86-HK87-VVF96-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      al\_ii\_coll\_KHAF92-TBK85-TBK84.fits'}\},
+00268                              \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll\_PB95.fits'}\},
+00269                              \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_iii\_coll\_GMZ95.fits'}\},
+00270                              \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom\_MZ82.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iv\_coll\_RB97.fits'}\},
+00271                              \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom\_B60-LL93-MZ82-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_v\_coll\_GMZ95.fits'}\},
+00272                              \textcolor{stringliteral}{'Ba2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_ii\_atom\_C04.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_ii\_coll\_SB98.fits'}\},
+00273                              \textcolor{stringliteral}{'Ba4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_iv\_atom\_SC10-BHQZ95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_iv\_coll\_SB98.fits'}\}
+      ,
+00274                              \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom\_B60-NS84-FFS85.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_i\_coll\_JBK87-PA76.fits'}\},
+00275                              \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom\_MG93-PP95-NS81-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_ii\_coll\_BP92.fits'}\},
+00276                              \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom\_BK93-G83-NS78-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_iii\_coll\_Bal85.fits'}\},
+00277                              \textcolor{stringliteral}{'C4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iv\_atom\_M83-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iv\_coll\_AK04.fits'}\},
+00278                              \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll\_GMZ95.fits'}\}
+      ,
+00279                              \textcolor{stringliteral}{'Cl2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_ii\_atom\_RK74-MZ83.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_ii\_coll\_T04.fits'}\},
+00280                              \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom\_M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll\_BZ89.fits'}\},
+00281                              \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom\_B60-H85-KS86-MZ82-EM84.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      cl\_iv\_coll\_GMZ95.fits'}\},
+00282                              \textcolor{stringliteral}{'Fe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_iii\_atom\_Q96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_iii\_coll\_Q96.fits'}\},
+00283                              \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll\_GMZ95.fits'}\},
+00284                              \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll\_BZL88.fits'}\},
+00285                              \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll\_BZ94.fits
+      '}\},
+00286                              \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom\_Bal06-B60-BD95-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      mg\_vii\_coll\_LB94-U.fits'}\},
+00287                              \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom\_B60-KS86-F75-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_i\_coll\_PA76-DMR76.fits'}\},
+00288                              \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom\_MG93-B60-PP95-GMZ97-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_ii\_coll\_T11.fits'}\},
+00289                              \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom\_MG93-BFFJ95-BP92-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_iii\_coll\_BP92.fits'}\},
+00290                              \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom\_NS79-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll\_RBHB94.fits'}\},
+00291                              \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_iv\_coll\_BZ94.fits'}\},
+00292                              \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_vi\_coll\_LB94.fits'}\},
+00293                              \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll\_GMB01.fits'}\},
+00294                              \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_iii\_coll\_McLB00.fits'}\},
+00295                              \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom\_E84-BBZ89-BK88.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll\_G81.fits
+      '}\},
+00296                              \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom\_Bal06-B60-M83-GMZ97-U-BD93.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_v\_coll\_LB94.fits'}\},
+00297                              \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom\_Bal06-KS86-MVGK95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_vi\_coll\_ZGP94.fits'}\},
+00298                              \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom\_M83b-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll\_BK95.fits'}\},
+00299                              \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom\_B60-KS86-F75-Z82-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_ii\_coll\_P06-T07.fits'}\},
+00300                              \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom\_B60-M85-WFD96-SZ00-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_iii\_coll\_AK99.fits'}\},
+00301                              \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom\_U-U-GMZ98b.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll\_BP92.fits'}\},
+00302                              \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom\_BJ68-B80-H80-NS79.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_v\_coll\_BBDK85.fits'}\},
+00303                              \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom\_B60-VVF96-PKW09.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll\_TZ10.fits'}
+      \},
+00304                              \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom\_B60-Sal84-PKW09.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iii\_coll\_GMZ95.fits'}\},
+00305                              \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom\_BDF80-JKD86-DHKD82.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iv\_coll\_DHKD82.fits'}\},
+00306                              \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom\_Dal91-BL93-CSB93-N77.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_ii\_coll\_DK91.fits'}\},
+00307                              \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom\_WL95-M83-OKH88-FW90-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_iii\_coll\_DK94.fits'}\},
+00308                              \textcolor{stringliteral}{'Xe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iii\_atom\_M93-BHQZ95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iii\_coll\_SB98.fits'}
+      \},
+00309                              \textcolor{stringliteral}{'Xe4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iv\_atom\_S04-BHQZ95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iv\_coll\_SB98.fits'}\}
+00310                              \},
+00311                            \textcolor{stringliteral}{'PYNEB\_14\_01'}:
+00312                             \{\textcolor{stringliteral}{'H1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'h\_i\_rec\_SH95.fits'}\},
+00313                              \textcolor{stringliteral}{'He1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_i\_rec\_Pal12-Pal13.fits'}\},
+00314                              \textcolor{stringliteral}{'He2'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_ii\_rec\_SH95.fits'}\},
+00315                              \textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom\_JSP86-HK87-VVF96-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      al\_ii\_coll\_KHAF92-TBK85-TBK84.fits'}\},
+00316                              \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll\_PB95.fits'}\},
+00317                              \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_iii\_coll\_GMZ95.fits'}\},
+00318                              \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom\_MZ82.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iv\_coll\_RB97.fits'}\},
+00319                              \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom\_B60-LL93-MZ82-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ar\_v\_coll\_GMZ95.fits'}\},
+00320                              \textcolor{comment}{#'Ba2': \{'atom': 'ba\_ii\_atom\_C04.fits', 'coll': 'ba\_ii\_coll\_SB98.fits'\},}
+00321                              \textcolor{comment}{#'Ba4': \{'atom': 'ba\_iv\_atom\_SC10-BHQZ95.fits', 'coll':
+       'ba\_iv\_coll\_SB98.fits'\},}
+00322                              \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom\_B60-NS84-FFS85.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_i\_coll\_JBK87-PA76.fits'}\},
+00323                              \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom\_MG93-PP95-NS81-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_ii\_coll\_BP92.fits'}\},
+00324                              \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom\_BK93-G83-NS78-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      c\_iii\_coll\_Bal85.fits'}\},
+00325                              \textcolor{stringliteral}{'C4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iv\_atom\_M83-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iv\_coll\_AK04.fits'}\},
+00326                              \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll\_GMZ95.fits'}\}
+      ,
+00327                              \textcolor{stringliteral}{'Cl2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_ii\_atom\_RK74-MZ83.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_ii\_coll\_T04.fits'}\},
+00328                              \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom\_M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll\_BZ89.fits'}\},
+00329                              \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom\_B60-H85-KS86-MZ82-EM84.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      cl\_iv\_coll\_GMZ95.fits'}\},
+00330                              \textcolor{comment}{#'Fe3': \{'atom': 'fe\_iii\_atom\_Z96\_Q96\_J00.dat', 'coll':
+       'fe\_iii\_coll\_Z96.dat'\},}
+00331                              \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll\_GMZ95.fits'}\},
+00332                              \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom\_B60-M83-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll\_BZL88.fits'}\},
+00333                              \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll\_BZ94.fits
+      '}\},
+00334                              \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom\_Bal06-B60-BD95-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      mg\_vii\_coll\_LB94-U.fits'}\},
+00335                              \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom\_B60-KS86-F75-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_i\_coll\_PA76-DMR76.fits'}\},
+00336                              \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom\_MG93-B60-PP95-GMZ97-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_ii\_coll\_T11.fits'}\},
+00337                              \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom\_MG93-BFFJ95-BP92-GMZ98.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      n\_iii\_coll\_BP92.fits'}\},
+00338                              \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom\_NS79-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll\_RBHB94.fits'}\},
+00339                              \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_iv\_coll\_BZ94.fits'}\},
+00340                              \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      na\_vi\_coll\_LB94.fits'}\},
+00341                              \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom\_Bal06.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll\_GMB01.fits'}\},
+00342                              \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom\_Bal06-B60-GMZ97.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_iii\_coll\_McLB00.fits'}\},
+00343                              \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom\_E84-BBZ89-BK88.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll\_G81.fits
+      '}\},
+00344                              \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom\_Bal06-B60-M83-GMZ97-U-BD93.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_v\_coll\_LB94.fits'}\},
+00345                              \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom\_Bal06-KS86-MVGK95.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      ne\_vi\_coll\_ZGP94.fits'}\},
+00346                              \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom\_M83b-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll\_BK95.fits'}\},
+00347                              \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom\_B60-KS86-F75-Z82-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_ii\_coll\_P06-T07.fits'}\},
+00348                              \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom\_B60-M85-WFD96-SZ00-WFD96.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_iii\_coll\_AK99.fits'}\},
+00349                              \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom\_U-U-GMZ98b.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll\_BP92.fits'}\},
+00350                              \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom\_BJ68-B80-H80-NS79.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      o\_v\_coll\_BBDK85.fits'}\},
+00351                              \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom\_B60-VVF96-PKW09.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll\_TZ10.fits'}
+      \},
+00352                              \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom\_B60-Sal84-PKW09.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iii\_coll\_GMZ95.fits'}\},
+00353                              \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom\_BDF80-JKD86-DHKD82.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      s\_iv\_coll\_DHKD82.fits'}\},
+00354                              \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom\_Dal91-BL93-CSB93-N77.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_ii\_coll\_DK91.fits'}\},
+00355                              \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom\_WL95-M83-OKH88-FW90-KS86.fits'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_iii\_coll\_DK94.fits'}\},
+00356                              \textcolor{stringliteral}{'Xe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iii\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iii\_coll\_SB98.fits'}\},
+00357                              \textcolor{stringliteral}{'Xe4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iv\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iv\_coll\_SB98.fits'}\},
+00358                              \textcolor{stringliteral}{'Xe6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_vi\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_vi\_coll\_SB98.fits'}\},
+00359                              \textcolor{stringliteral}{'Kr3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}:\textcolor{stringliteral}{'kr\_iii\_coll\_S97.dat'}\},
+00360                              \textcolor{stringliteral}{'Kr4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_iv\_coll\_S97.dat'}\},
+00361                              \textcolor{stringliteral}{'Kr5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_v\_coll\_S97.dat'}\},
+00362                              \textcolor{stringliteral}{'Se3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iii\_coll\_S97.dat'}\},
+00363                              \textcolor{stringliteral}{'Se4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iv\_atom\_B05.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iv\_coll\_B05.dat'}\},
+00364                              \textcolor{stringliteral}{'Br3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iii\_coll\_S97.dat'}\},
+00365                              \textcolor{stringliteral}{'Br4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iv\_coll\_S97.dat'}\},
+00366                              \textcolor{stringliteral}{'Rb4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_iv\_coll\_S97.dat'}\},
+00367                              \textcolor{stringliteral}{'Rb5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_v\_coll\_S97.dat'}\},
+00368                              \textcolor{stringliteral}{'Rb6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_vi\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_vi\_coll\_S97.dat'}\}
+00369                              \},
+00370                            \textcolor{stringliteral}{'PYNEB\_14\_02'}:
+00371                             \{\textcolor{stringliteral}{'H1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'h\_i\_rec\_SH95.fits'}\},
+00372                              \textcolor{stringliteral}{'He1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_i\_rec\_Pal12-Pal13.fits'}\},
+00373                              \textcolor{stringliteral}{'He2'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_ii\_rec\_SH95.fits'}\},
+00374                              \textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom\_JSP86-HK87-VVF96-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      al\_ii\_coll\_KHAF92-TBK85-TBK84.dat'}\},
+00375                              \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom\_Bal06.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll\_PB95.dat'}\},
+00376                              \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iii\_coll\_GMZ95.dat'}\},
+00377                              \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom\_MZ82.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iv\_coll\_RB97.dat'}\},
+00378                              \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom\_LL93-MZ82-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_v\_coll\_GMZ95.dat'}\}
+      ,
+00379                              \textcolor{stringliteral}{'Ba2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_ii\_atom\_C04.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_ii\_coll\_SB98.dat'}\},
+00380                              \textcolor{stringliteral}{'Ba4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_iv\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_iv\_coll\_SB98.dat'}\},
+00381                              \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom\_FFS85.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_i\_coll\_JBK87-PA76.dat'}\},
+00382                              \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_ii\_coll\_BP92.dat'}\},
+00383                              \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom\_G83-NS78-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iii\_coll\_Bal85.dat'}
+      \},
+00384                              \textcolor{stringliteral}{'C4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iv\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iv\_coll\_AK04.dat'}\},
+00385                              \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll\_GMZ95.dat'}\},
+00386                              \textcolor{stringliteral}{'Cl2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_ii\_atom\_MZ83.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_ii\_coll\_T04.dat'}\},
+00387                              \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll\_BZ89.dat'}\},
+00388                              \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom\_KS86-MZ82-EM84.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iv\_coll\_GMZ95.dat
+      '}\},
+00389                              \textcolor{stringliteral}{'Fe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_iii\_atom\_Q96\_J00.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_iii\_coll\_Z96.dat'}\},
+00390                              \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll\_GMZ95.dat'}\},
+00391                              \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll\_BZL88.dat'}\},
+00392                              \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll\_BZ94.dat'}\},
+00393                              \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_vii\_coll\_LB94-U.dat'}\},
+00394                              \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom\_KS86-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_i\_coll\_PA76-DMR76.dat'}\},
+00395                              \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom\_GMZ97-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_ii\_coll\_T11.dat'}\},
+00396                              \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iii\_coll\_BP92.dat'}\},
+00397                              \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll\_RBHB94.dat'}\},
+00398                              \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_iv\_coll\_BZ94.dat'}\},
+00399                              \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_vi\_coll\_LB94.dat'}\},
+00400                              \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom\_Bal06.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll\_GMB01.dat'}\},
+00401                              \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iii\_coll\_McLB00.dat'}\},
+00402                              \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom\_BBZ89-BK88.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll\_G81.dat'}\},
+00403                              \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom\_GMZ97-U-BD93.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_v\_coll\_LB94.dat'}\},
+00404                              \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_vi\_coll\_ZGP94.dat'}\},
+00405                              \textcolor{stringliteral}{'Ni3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ni\_iii\_atom\_B01.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ni\_iii\_coll\_B01.dat'}\},
+00406                              \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll\_BK95.dat'}\},
+00407                              \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom\_Z82-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_ii\_coll\_P06-T07.dat'}\},
+00408                              \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom\_SZ00-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iii\_coll\_AK99.dat'}\},
+00409                              \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll\_BP92.dat'}\},
+00410                              \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom\_H80-NS79.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_v\_coll\_BBDK85.dat'}\},
+00411                              \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom\_PKW09.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll\_TZ10.dat'}\},
+00412                              \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom\_PKW09.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iii\_coll\_GMZ95.dat'}\},
+00413                              \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom\_JKD86-DHKD82.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iv\_coll\_DHKD82.dat'}\},
+00414                              \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom\_BL93-CSB93-N77.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'si\_ii\_coll\_DK91.dat'}
+      \},
+00415                              \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom\_M83-OKH88-FW90-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_iii\_coll\_DK94.dat'}\},
+00416                              \textcolor{stringliteral}{'Xe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iii\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iii\_coll\_SB98.dat'}\},
+00417                              \textcolor{stringliteral}{'Xe4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iv\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iv\_coll\_SB98.dat'}\},
+00418                              \textcolor{stringliteral}{'Xe6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_vi\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_vi\_coll\_SB98.dat'}\},
+00419                              \textcolor{stringliteral}{'Kr3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}:\textcolor{stringliteral}{'kr\_iii\_coll\_S97.dat'}\},
+00420                              \textcolor{stringliteral}{'Kr4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_iv\_coll\_S97.dat'}\},
+00421                              \textcolor{stringliteral}{'Kr5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_v\_coll\_S97.dat'}\},
+00422                              \textcolor{stringliteral}{'Se3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iii\_coll\_S97.dat'}\},
+00423                              \textcolor{stringliteral}{'Se4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iv\_atom\_B05.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iv\_coll\_B05.dat'}\},
+00424                              \textcolor{stringliteral}{'Br3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iii\_coll\_S97.dat'}\},
+00425                              \textcolor{stringliteral}{'Br4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iv\_coll\_S97.dat'}\},
+00426                              \textcolor{stringliteral}{'Rb4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_iv\_coll\_S97.dat'}\},
+00427                              \textcolor{stringliteral}{'Rb5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_v\_coll\_S97.dat'}\},
+00428                              \textcolor{stringliteral}{'Rb6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_vi\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_vi\_coll\_S97.dat'}\}
+00429                              \},
+00430                            \textcolor{stringliteral}{'PYNEB\_14\_03'}:
+00431                             \{\textcolor{stringliteral}{'H1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'h\_i\_rec\_SH95.fits'}, \textcolor{stringliteral}{'trc'}: \textcolor{stringliteral}{'h\_i\_trc\_SH95-caseB.dat'}\},
+00432                              \textcolor{stringliteral}{'He1'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_i\_rec\_Pal12-Pal13.fits'}\},
+00433                              \textcolor{stringliteral}{'He2'}: \{\textcolor{stringliteral}{'rec'}: \textcolor{stringliteral}{'he\_ii\_rec\_SH95.fits'}, \textcolor{stringliteral}{'trc'}: \textcolor{stringliteral}{'he\_ii\_trc\_SH95-caseB.dat'}\},
+00434                              \textcolor{stringliteral}{'3He2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'3he\_ii\_atom\_cloudy.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'3he\_ii\_coll\_cloudy.dat'}\},
+00435                              \textcolor{stringliteral}{'Al2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'al\_ii\_atom\_JSP86-HK87-VVF96-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      al\_ii\_coll\_KHAF92-TBK85-TBK84.dat'}\},
+00436                              \textcolor{stringliteral}{'Ar2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_ii\_atom\_Bal06.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_ii\_coll\_PB95.dat'}\},
+00437                              \textcolor{stringliteral}{'Ar3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iii\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iii\_coll\_GMZ95.dat'}\},
+00438                              \textcolor{comment}{#'Ar3': \{'atom': 'ar\_iii\_atom\_MB09.dat', 'coll': 'ar\_iii\_coll\_MB09.dat'\},}
+00439                              \textcolor{stringliteral}{'Ar4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_iv\_atom\_MZ82.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_iv\_coll\_RB97.dat'}\},
+00440                              \textcolor{stringliteral}{'Ar5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ar\_v\_atom\_LL93-MZ82-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ar\_v\_coll\_GMZ95.dat'}\}
+      ,
+00441                              \textcolor{stringliteral}{'Ba2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_ii\_atom\_C04.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_ii\_coll\_SB98.dat'}\},
+00442                              \textcolor{stringliteral}{'Ba4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ba\_iv\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ba\_iv\_coll\_SB98.dat'}\},
+00443                              \textcolor{stringliteral}{'C1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_i\_atom\_FFS85.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_i\_coll\_JBK87-PA76.dat'}\},
+00444                              \textcolor{stringliteral}{'C2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_ii\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_ii\_coll\_BP92.dat'}\},
+00445                              \textcolor{stringliteral}{'C3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iii\_atom\_G83-NS78-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iii\_coll\_Bal85.dat'}
+      \},
+00446                              \textcolor{stringliteral}{'C4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'c\_iv\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'c\_iv\_coll\_AK04.dat'}\},
+00447                              \textcolor{stringliteral}{'Ca5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ca\_v\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ca\_v\_coll\_GMZ95.dat'}\},
+00448                              \textcolor{stringliteral}{'Cl2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_ii\_atom\_MZ83.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_ii\_coll\_T04.dat'}\},
+00449                              \textcolor{stringliteral}{'Cl3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iii\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iii\_coll\_BZ89.dat'}\},
+00450                              \textcolor{stringliteral}{'Cl4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'cl\_iv\_atom\_KS86-MZ82-EM84.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'cl\_iv\_coll\_GMZ95.dat
+      '}\},
+00451                              \textcolor{stringliteral}{'Fe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_iii\_atom\_Q96\_J00.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_iii\_coll\_Z96.dat'}\},
+00452                              \textcolor{stringliteral}{'Fe4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_iv\_atom\_FFRR08.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_iv\_coll\_ZP97.dat'}\},
+00453                              \textcolor{stringliteral}{'Fe5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_v\_atom\_Nal00.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_v\_coll\_BGMcL07.dat'}\},
+00454                              \textcolor{stringliteral}{'Fe6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_vi\_atom\_CP00.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_vi\_coll\_CP99.dat'}\},
+00455                              \textcolor{stringliteral}{'Fe7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'fe\_vii\_atom\_WB08.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'fe\_vii\_coll\_WB08.dat'}\},
+00456                              \textcolor{stringliteral}{'K4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_iv\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_iv\_coll\_GMZ95.dat'}\},
+00457                              \textcolor{stringliteral}{'K5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'k\_v\_atom\_M83-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'k\_v\_coll\_BZL88.dat'}\},
+00458                              \textcolor{stringliteral}{'Mg5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_v\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_v\_coll\_BZ94.dat'}\},
+00459                              \textcolor{stringliteral}{'Mg7'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'mg\_vii\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'mg\_vii\_coll\_LB94-U.dat'}\},
+00460                              \textcolor{stringliteral}{'N1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_i\_atom\_KS86-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_i\_coll\_PA76-DMR76.dat'}\},
+00461                              \textcolor{stringliteral}{'N2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_ii\_atom\_GMZ97-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_ii\_coll\_T11.dat'}\},
+00462                              \textcolor{stringliteral}{'N3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iii\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iii\_coll\_BP92.dat'}\},
+00463                              \textcolor{stringliteral}{'N4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'n\_iv\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'n\_iv\_coll\_RBHB94.dat'}\},
+00464                              \textcolor{stringliteral}{'Na4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_iv\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_iv\_coll\_BZ94.dat'}\},
+00465                              \textcolor{stringliteral}{'Na6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'na\_vi\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'na\_vi\_coll\_LB94.dat'}\},
+00466                              \textcolor{stringliteral}{'Ne2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_ii\_atom\_Bal06.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_ii\_coll\_GMB01.dat'}\},
+00467                              \textcolor{stringliteral}{'Ne3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iii\_atom\_GMZ97.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iii\_coll\_McLB00.dat'}\},
+00468                              \textcolor{stringliteral}{'Ne4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_iv\_atom\_BBZ89-BK88.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_iv\_coll\_G81.dat'}\},
+00469                              \textcolor{stringliteral}{'Ne5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_v\_atom\_GMZ97-U-BD93.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_v\_coll\_LB94.dat'}\},
+00470                              \textcolor{stringliteral}{'Ne6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ne\_vi\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ne\_vi\_coll\_ZGP94.dat'}\},
+00471                              \textcolor{stringliteral}{'Ni3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'ni\_iii\_atom\_B01.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'ni\_iii\_coll\_B01.dat'}\},
+00472                              \textcolor{stringliteral}{'O1'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_i\_atom\_WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_i\_coll\_BK95.dat'}\},
+00473                              \textcolor{stringliteral}{'O2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_ii\_atom\_Z82-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_ii\_coll\_P06-T07.dat'}\},
+00474                              \textcolor{stringliteral}{'O3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iii\_atom\_SZ00-WFD96.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iii\_coll\_AK99.dat'}\},
+00475                              \textcolor{stringliteral}{'O4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_iv\_atom\_GMZ98.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_iv\_coll\_BP92.dat'}\},
+00476                              \textcolor{stringliteral}{'O5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'o\_v\_atom\_H80-NS79.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'o\_v\_coll\_BBDK85.dat'}\},
+00477                              \textcolor{stringliteral}{'S2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_ii\_atom\_PKW09.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_ii\_coll\_TZ10.dat'}\},
+00478                              \textcolor{stringliteral}{'S3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iii\_atom\_PKW09.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iii\_coll\_TG99.dat'}\},
+00479                              \textcolor{stringliteral}{'S4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'s\_iv\_atom\_JKD86-DHKD82.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'s\_iv\_coll\_DHKD82.dat'}\},
+00480                              \textcolor{stringliteral}{'Si2'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_ii\_atom\_BL93-CSB93-N77.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'si\_ii\_coll\_DK91.dat'}
+      \},
+00481                              \textcolor{stringliteral}{'Si3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'si\_iii\_atom\_M83-OKH88-FW90-KS86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'
+      si\_iii\_coll\_DK94.dat'}\},
+00482                              \textcolor{stringliteral}{'Xe3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iii\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iii\_coll\_SB98.dat'}\},
+00483                              \textcolor{stringliteral}{'Xe4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_iv\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_iv\_coll\_SB98.dat'}\},
+00484                              \textcolor{stringliteral}{'Xe6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'xe\_vi\_atom\_BHQZ95.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'xe\_vi\_coll\_SB98.dat'}\},
+00485                              \textcolor{stringliteral}{'Kr3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}:\textcolor{stringliteral}{'kr\_iii\_coll\_S97.dat'}\},
+00486                              \textcolor{stringliteral}{'Kr4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_iv\_coll\_S97.dat'}\},
+00487                              \textcolor{stringliteral}{'Kr5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'kr\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'kr\_v\_coll\_S97.dat'}\},
+00488                              \textcolor{stringliteral}{'Se3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iii\_coll\_S97.dat'}\},
+00489                              \textcolor{stringliteral}{'Se4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'se\_iv\_atom\_B05.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'se\_iv\_coll\_B05.dat'}\},
+00490                              \textcolor{stringliteral}{'Br3'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iii\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iii\_coll\_S97.dat'}\},
+00491                              \textcolor{stringliteral}{'Br4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'br\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'br\_iv\_coll\_S97.dat'}\},
+00492                              \textcolor{stringliteral}{'Rb4'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_iv\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_iv\_coll\_S97.dat'}\},
+00493                              \textcolor{stringliteral}{'Rb5'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_v\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_v\_coll\_S97.dat'}\},
+00494                              \textcolor{stringliteral}{'Rb6'}: \{\textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'rb\_vi\_atom\_BH86.dat'}, \textcolor{stringliteral}{'coll'}: \textcolor{stringliteral}{'rb\_vi\_coll\_S97.dat'}\}
+00495                              \}
+00496                            \} 
+00497 
+\hypertarget{physics_8py_source_l00498}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{00498} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{airtovac}(wave):
+00499     \textcolor{stringliteral}{"""}
+00500 \textcolor{stringliteral}{Convert air wavelengths to vacuum wavelengths}
+00501 \textcolor{stringliteral}{Parameters}
+00502 \textcolor{stringliteral}{----------}
+00503 \textcolor{stringliteral}{wave: float, array}
+00504 \textcolor{stringliteral}{The wavelength in air [Angstrom]}
+00505 \textcolor{stringliteral}{Returns}
+00506 \textcolor{stringliteral}{-------}
+00507 \textcolor{stringliteral}{Wavelength: array}
+00508 \textcolor{stringliteral}{Wavelength in vacuum [Angstrom]}
+00509 \textcolor{stringliteral}{Notes}
+00510 \textcolor{stringliteral}{-----}
+00511 \textcolor{stringliteral}{}
+00512 \textcolor{stringliteral}{.. note:: This function was ported from the IDL Astronomy User's Library.}
+00513 \textcolor{stringliteral}{:IDL - Documentation:}
+00514 \textcolor{stringliteral}{NAME:}
+00515 \textcolor{stringliteral}{AIRTOVAC}
+00516 \textcolor{stringliteral}{PURPOSE:}
+00517 \textcolor{stringliteral}{Convert air wavelengths to vacuum wavelengths}
+00518 \textcolor{stringliteral}{EXPLANATION:}
+00519 \textcolor{stringliteral}{Wavelengths are corrected for the index of refraction of air under}
+00520 \textcolor{stringliteral}{standard conditions. Wavelength values below 2000 A will not be}
+00521 \textcolor{stringliteral}{altered. Uses the IAU standard for conversion given in Morton}
+00522 \textcolor{stringliteral}{(1991 Ap.J. Suppl. 77, 119)}
+00523 \textcolor{stringliteral}{CALLING SEQUENCE:}
+00524 \textcolor{stringliteral}{AIRTOVAC, WAVE}
+00525 \textcolor{stringliteral}{INPUT/OUTPUT:}
+00526 \textcolor{stringliteral}{WAVE - Wavelength in Angstroms, scalar or vector}
+00527 \textcolor{stringliteral}{WAVE should be input as air wavelength(s), it will be}
+00528 \textcolor{stringliteral}{returned as vacuum wavelength(s). WAVE is always converted to}
+00529 \textcolor{stringliteral}{double precision upon return.}
+00530 \textcolor{stringliteral}{EXAMPLE:}
+00531 \textcolor{stringliteral}{If the air wavelength is W = 6056.125 (a Krypton line), then}
+00532 \textcolor{stringliteral}{AIRTOVAC, W yields an vacuum wavelength of W = 6057.8019}
+00533 \textcolor{stringliteral}{METHOD:}
+00534 \textcolor{stringliteral}{See Morton (Ap. J. Suppl. 77, 119) for the formula used}
+00535 \textcolor{stringliteral}{REVISION HISTORY}
+00536 \textcolor{stringliteral}{Written W. Landsman November 1991}
+00537 \textcolor{stringliteral}{Converted to IDL V5.0 W. Landsman September 1997}
+00538 \textcolor{stringliteral}{    """}
+00539     
+00540     sigma2 = (1.e4/wave)**2. \textcolor{comment}{#Convert to wavenumber squared}
+00541     
+00542     \textcolor{comment}{# Compute conversion factor}
+00543     
+00544     fact = 1. + 6.4328e-5 + 2.94981e-2/(146.-sigma2) + 2.5540e-4/(41.-sigma2)
+00545     
+00546     fact = fact*(wave >= 2000.) + 1.*(wave < 2000.)
+00547     
+00548     wave = wave*fact \textcolor{comment}{#Convert Wavelength}
+00549     
+00550     \textcolor{keywordflow}{return} wave
+00551 
+00552 
+00553 
+\hypertarget{physics_8py_source_l00554}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{00554} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{vactoair}(wave):
+00555     \textcolor{stringliteral}{"""}
+00556 \textcolor{stringliteral}{Convert vacuum wavelengths to air wavelengths}
+00557 \textcolor{stringliteral}{}
+00558 \textcolor{stringliteral}{Parameters}
+00559 \textcolor{stringliteral}{----------}
+00560 \textcolor{stringliteral}{wave: float, array}
+00561 \textcolor{stringliteral}{The wavelength in vacuum [Angstrom]}
+00562 \textcolor{stringliteral}{Returns}
+00563 \textcolor{stringliteral}{-------}
+00564 \textcolor{stringliteral}{Wavelength: array,}
+00565 \textcolor{stringliteral}{Wavelength in air [Angstrom]}
+00566 \textcolor{stringliteral}{Notes}
+00567 \textcolor{stringliteral}{-----}
+00568 \textcolor{stringliteral}{}
+00569 \textcolor{stringliteral}{.. note:: This function was ported from the IDL Astronomy User's Library.}
+00570 \textcolor{stringliteral}{:IDL - Documentation:}
+00571 \textcolor{stringliteral}{}
+00572 \textcolor{stringliteral}{NAME:}
+00573 \textcolor{stringliteral}{VACTOAIR}
+00574 \textcolor{stringliteral}{PURPOSE:}
+00575 \textcolor{stringliteral}{Convert vacuum wavelengths to air wavelengths}
+00576 \textcolor{stringliteral}{EXPLANATION:}
+00577 \textcolor{stringliteral}{Corrects for the index of refraction of air under standard conditions.}
+00578 \textcolor{stringliteral}{Wavelength values below 2000 A will not be altered. Accurate to}
+00579 \textcolor{stringliteral}{about 0.005 A}
+00580 \textcolor{stringliteral}{}
+00581 \textcolor{stringliteral}{CALLING SEQUENCE:}
+00582 \textcolor{stringliteral}{VACTOAIR, WAVE}
+00583 \textcolor{stringliteral}{}
+00584 \textcolor{stringliteral}{INPUT/OUTPUT:}
+00585 \textcolor{stringliteral}{WAVE - Wavelength in Angstroms, scalar or vector}
+00586 \textcolor{stringliteral}{WAVE should be input as vacuum wavelength(s), it will be}
+00587 \textcolor{stringliteral}{returned as air wavelength(s). WAVE is always converted to}
+00588 \textcolor{stringliteral}{double precision}
+00589 \textcolor{stringliteral}{}
+00590 \textcolor{stringliteral}{EXAMPLE:}
+00591 \textcolor{stringliteral}{If the vacuum wavelength is W = 2000, then}
+00592 \textcolor{stringliteral}{}
+00593 \textcolor{stringliteral}{IDL> VACTOAIR, W}
+00594 \textcolor{stringliteral}{}
+00595 \textcolor{stringliteral}{yields an air wavelength of W = 1999.353 Angstroms}
+00596 \textcolor{stringliteral}{}
+00597 \textcolor{stringliteral}{METHOD:}
+00598 \textcolor{stringliteral}{An approximation to the 4th power of inverse wavenumber is used}
+00599 \textcolor{stringliteral}{See IUE Image Processing Manual Page 6-15.}
+00600 \textcolor{stringliteral}{}
+00601 \textcolor{stringliteral}{REVISION HISTORY}
+00602 \textcolor{stringliteral}{Written, D. Lindler 1982}
+00603 \textcolor{stringliteral}{Documentation W. Landsman Feb. 1989}
+00604 \textcolor{stringliteral}{Converted to IDL V5.0 W. Landsman September 1997}
+00605 \textcolor{stringliteral}{    """}
+00606 
+00607     wave2 = wave**2.
+00608     fact = 1. + 2.735182e-4 + 131.4182/wave2 + 2.76249e8/(wave2**2.)
+00609     fact = fact * ( wave >= 2000. ) + 1.*( wave < 2000. )
+00610     
+00611     \textcolor{comment}{# Convert wavelengths}
+00612     
+00613     wave = wave/fact
+00614     
+00615     \textcolor{keywordflow}{return} wave
+00616 
+\end{DoxyCode}

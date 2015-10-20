@@ -1,0 +1,136 @@
+\hypertarget{test__lines_8py_source}{}\section{test\+\_\+lines.\+py}
+\label{test__lines_8py_source}\index{pyneb/test/test\+\_\+lines.\+py@{pyneb/test/test\+\_\+lines.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{test__lines_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines}{00001} \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
+00002 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00003 
+\hypertarget{test__lines_8py_source_l00004}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_af8bbc40c02e8cac6dcd70407e6382974}{00004} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_af8bbc40c02e8cac6dcd70407e6382974}{test\_line\_lists}():
+00005     \textcolor{stringliteral}{"""}
+00006 \textcolor{stringliteral}{    Check the validity of all the lines in diags\_dict by comparing the wavelengths}
+00007 \textcolor{stringliteral}{    """}
+00008     \textcolor{keyword}{def }L(wave):
+00009         \textcolor{keywordflow}{if} wave > 10000:
+00010             \textcolor{keywordflow}{return} 1
+00011         \textcolor{keywordflow}{if} pn.isValid(\textcolor{stringliteral}{'\{0\}\_\{1\}A'}.format(atom,wave)):
+00012             \textcolor{keywordflow}{return} 1
+00013         \textcolor{keywordflow}{else}:
+00014             print(\textcolor{stringliteral}{'Wrong: \{0\}\_\{1\}A'}.format(atom,wave))
+00015             \textcolor{keywordflow}{return} 1
+00016         
+00017     \textcolor{keyword}{def }I(i, j):
+00018         \textcolor{keywordflow}{return} 1
+00019     
+00020     \textcolor{keyword}{def }B(wave):
+00021         \textcolor{keywordflow}{if} pn.isValid(\textcolor{stringliteral}{'\{0\}\_\{1\}'}.format(atom,wave)):
+00022             \textcolor{keywordflow}{return} 1
+00023         \textcolor{keywordflow}{else}:
+00024             print(\textcolor{stringliteral}{'Wrong: \{0\}\_\{1\}'}.format(atom,wave))
+00025             \textcolor{keywordflow}{return} 1
+00026     
+00027     \textcolor{keywordflow}{for} diag \textcolor{keywordflow}{in} pn.diags\_dict:
+00028         atom = pn.diags\_dict[diag][0]
+00029         \textcolor{comment}{#print atom}
+00030         atom\_obj = pn.Atom(atom = atom)
+00031         eval(pn.diags\_dict[diag][1])
+00032 
+00033 
+\hypertarget{test__lines_8py_source_l00034}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a0717401ecf42fd5215ae1c8b8f3cf413}{00034} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a0717401ecf42fd5215ae1c8b8f3cf413}{test\_diags}():
+00035     \textcolor{stringliteral}{"""}
+00036 \textcolor{stringliteral}{}
+00037 \textcolor{stringliteral}{    """}
+00038     pn.atomicData.setDataFile(\textcolor{stringliteral}{'o\_iii\_coll\_AK99.dat'})
+00039     tem = 1e4 
+00040     den = 1e2
+00041     L = \textcolor{keyword}{lambda} wave: atom.getEmissivity(tem, den, wave = wave)
+00042     I = \textcolor{keyword}{lambda} i, j: atom.getEmissivity(tem, den, i, j)
+00043     \textcolor{keyword}{def }B(wave):
+00044         \textcolor{keywordflow}{if} pn.isValid(\textcolor{stringliteral}{'\{0\}\_\{1\}'}.format(atom.atom,wave)):
+00045             \textcolor{keywordflow}{return} 1
+00046         \textcolor{keywordflow}{else}:
+00047             print(\textcolor{stringliteral}{'!!! Wrong: \{0\}\_\{1\}'}.format(atom.atom,wave))
+00048             \textcolor{keywordflow}{return} 1
+00049         
+00050     \textcolor{keywordflow}{for} diag \textcolor{keywordflow}{in} pn.diags\_dict:
+00051         \textcolor{keywordflow}{print} diag
+00052         atom = pn.Atom(atom = pn.diags\_dict[diag][0])
+00053         to\_eval = pn.diags\_dict[diag][1]
+00054         \textcolor{keywordflow}{try}:
+00055             lines\_rat = eval(to\_eval)
+00056         \textcolor{keywordflow}{except}:
+00057             print(\textcolor{stringliteral}{'\{\} failed'}.format(to\_eval))
+00058             
+\hypertarget{test__lines_8py_source_l00059}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a59a9d4f79b935f54e1a4fe6186b4e539}{00059} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a59a9d4f79b935f54e1a4fe6186b4e539}{test\_labels}():
+00060     \textcolor{stringliteral}{"""}
+00061 \textcolor{stringliteral}{    This tool scans all the lines from pn.LINE\_LABEL\_LIST, extract the wavelength and compare with the }
+00062 \textcolor{stringliteral}{    wavelength given by the corresponding atom for the corresponding transition. Is the difference is
+       greater }
+00063 \textcolor{stringliteral}{    than 1AA for optical or 0.1mu for IR, it prints the information}
+00064 \textcolor{stringliteral}{    """}
+00065     \textcolor{keywordflow}{for} atom\_str \textcolor{keywordflow}{in} pn.LINE\_LABEL\_LIST:
+00066         \textcolor{keywordflow}{try}:
+00067             \textcolor{keywordflow}{if} atom\_str[-1] == \textcolor{stringliteral}{'}\textcolor{stringliteral}{r':}
+00068 \textcolor{stringliteral}{                atom = pn.RecAtom(atom=atom\_str)}
+00069 \textcolor{stringliteral}{            }\textcolor{keywordflow}{else}:
+00070                 atom = pn.Atom(atom=atom\_str)
+00071         \textcolor{keywordflow}{except}:
+00072             atom = \textcolor{keywordtype}{None}
+00073         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00074             \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} pn.LINE\_LABEL\_LIST[atom\_str]:
+00075                 \textcolor{keywordflow}{if} line[-1] == \textcolor{stringliteral}{'m'}:
+00076                     wavelength = float(line[:-1])*1e4
+00077                 \textcolor{keywordflow}{else}:
+00078                     wavelength = float(line[:-1])
+00079                 i, j = atom.getTransition(wavelength)
+00080                 wave = atom.wave\_Ang[i-1, j-1]
+00081                 \textcolor{keywordflow}{if} wave < 1e4:
+00082                     dif = np.abs(wavelength-wave)
+00083                 \textcolor{keywordflow}{else}:
+00084                     dif = np.abs(wavelength-wave)/1e3
+00085                 \textcolor{comment}{#print atom\_str}
+00086                 \textcolor{keywordflow}{if} dif > 1.0:
+00087                     print(\textcolor{stringliteral}{'\{0\} \{1:.2f\} =? \{2:.2f\}  \{3:.2f\}'}.format(atom\_str, wavelength, wave, dif))
+00088                     
+00089 
+\hypertarget{test__lines_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a8db24c6e938952a1ab108577567f2d7c}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a8db24c6e938952a1ab108577567f2d7c}{test\_atom\_data}():
+00091     \textcolor{stringliteral}{"""}
+00092 \textcolor{stringliteral}{    This tool try to instantiate all the atoms using all the atomic data.}
+00093 \textcolor{stringliteral}{    """}
+00094     atoms = pn.atomicData.getAllAtoms()
+00095     i = 0
+00096     \textcolor{keywordflow}{for} atom \textcolor{keywordflow}{in} atoms:
+00097         \textcolor{keywordflow}{for} atom\_file \textcolor{keywordflow}{in} pn.atomicData.getAllAvailableFiles(atom, \textcolor{stringliteral}{'atom'}):
+00098             \textcolor{keywordflow}{for} coll\_file \textcolor{keywordflow}{in} pn.atomicData.getAllAvailableFiles(atom, \textcolor{stringliteral}{'coll'}):
+00099                 \textcolor{keywordflow}{print} atom, atom\_file, coll\_file
+00100                 pn.atomicData.setDataFile(atom\_file)
+00101                 pn.atomicData.setDataFile(coll\_file)
+00102                 atm = pn.Atom(atom=atom)
+00103                 \textcolor{keywordflow}{print} atm
+00104                 i += 1
+00105     print(\textcolor{stringliteral}{'Just did \{\} atoms for the \{\} ions'}.format(i, len(atoms)))
+00106     \textcolor{comment}{# Just did 263 atoms for the 55 ions}
+00107 
+\hypertarget{test__lines_8py_source_l00108}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_ac3883054959f6ecfe33f8437d9a925c8}{00108} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_ac3883054959f6ecfe33f8437d9a925c8}{compare\_line\_list}():
+00109     OLD\_LINE\_LABEL\_LIST = pn.utils.init.OLD\_LINE\_LABEL\_LIST
+00110     LINE\_LABEL\_LIST = pn.LINE\_LABEL\_LIST
+00111     
+00112     \textcolor{keywordflow}{for} atom \textcolor{keywordflow}{in} np.sort(LINE\_LABEL\_LIST.keys()):
+00113         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{in} OLD\_LINE\_LABEL\_LIST:
+00114             \textcolor{keywordflow}{print} atom + \textcolor{stringliteral}{' NEW'},
+00115             \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} LINE\_LABEL\_LIST[atom]:
+00116                 \textcolor{keywordflow}{if} line \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} OLD\_LINE\_LABEL\_LIST[atom]:
+00117                     \textcolor{keywordflow}{print} line,
+00118             \textcolor{keywordflow}{print} \textcolor{stringliteral}{''}
+00119             \textcolor{keywordflow}{print} atom + \textcolor{stringliteral}{' OLD'},
+00120             \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} OLD\_LINE\_LABEL\_LIST[atom]:
+00121                 \textcolor{keywordflow}{if} line \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} LINE\_LABEL\_LIST[atom]:
+00122                     \textcolor{keywordflow}{print} line,
+00123             \textcolor{keywordflow}{print} \textcolor{stringliteral}{''}
+00124         \textcolor{keywordflow}{else}:
+00125             \textcolor{keywordflow}{print} atom + \textcolor{stringliteral}{' NEW ATOM'}
+00126             \textcolor{keywordflow}{print} LINE\_LABEL\_LIST[atom]
+00127         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'==================='}
+00128         
+00129         
+00130                     
+\end{DoxyCode}

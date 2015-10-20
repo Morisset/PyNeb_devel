@@ -1,0 +1,30 @@
+\hypertarget{saverestore_8py_source}{}\section{saverestore.\+py}
+\label{saverestore_8py_source}\index{pyneb/utils/saverestore.\+py@{pyneb/utils/saverestore.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{saverestore_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1saverestore}{00001} \textcolor{keyword}{import} cPickle
+00002 
+\hypertarget{saverestore_8py_source_l00003}{}\hyperlink{namespacepyneb_1_1utils_1_1saverestore_a9af489d3adae16abe18013129170baeb}{00003} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1saverestore_a9af489d3adae16abe18013129170baeb}{save}(file\_, *args, **kwargs):
+00004     \textcolor{stringliteral}{"""}
+00005 \textcolor{stringliteral}{    Save the value of some data in a file.}
+00006 \textcolor{stringliteral}{    Usage: save('misdatos.pypic','a',b=b)}
+00007 \textcolor{stringliteral}{}
+00008 \textcolor{stringliteral}{    """}
+00009     f=open(file\_, \textcolor{stringliteral}{"wb"})
+00010     dict = kwargs
+00011     \textcolor{keywordflow}{for} name \textcolor{keywordflow}{in} args:
+00012         dict[name] = eval(name)
+00013     cPickle.dump(dict, f, protocol=2)
+00014     f.close
+00015 
+\hypertarget{saverestore_8py_source_l00016}{}\hyperlink{namespacepyneb_1_1utils_1_1saverestore_a0e34f7283fd65ca1d7905f55d3ed5ed7}{00016} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1saverestore_a0e34f7283fd65ca1d7905f55d3ed5ed7}{restore}(file\_):
+00017     \textcolor{stringliteral}{"""}
+00018 \textcolor{stringliteral}{    Read data saved with save function.}
+00019 \textcolor{stringliteral}{    Usage: datos = restore('misdatos.pypic')}
+00020 \textcolor{stringliteral}{}
+00021 \textcolor{stringliteral}{    """}
+00022     f=open(file\_, \textcolor{stringliteral}{"rb"})
+00023     result = cPickle.load(f)
+00024     f.close
+00025     \textcolor{keywordflow}{return} result
+\end{DoxyCode}

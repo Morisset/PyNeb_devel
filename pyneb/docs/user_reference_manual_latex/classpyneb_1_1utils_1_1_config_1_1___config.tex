@@ -1,0 +1,127 @@
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config}{}\section{\+\_\+\+Config Class Reference}
+\label{classpyneb_1_1utils_1_1_config_1_1___config}\index{\+\_\+\+Config@{\+\_\+\+Config}}
+
+
+Inherits object.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae64f0875afe3067b97ba370b354b9213}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a3f4a32a346511439c061526ca9ef6d3e}{set\+\_\+no\+Extrapol} (self, value)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ab1f88e757d19b03965760022b9d81a17}{get\+\_\+no\+Extrapol} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a66b920089052d4d39cdef44b5f228781}{use\+\_\+multiprocs} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a28889407e4f3f28f5fb9920f56709780}{unuse\+\_\+multiprocs} (self)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_afd87151907f32bc0dc45f0171b61374e}{log\+\_\+}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ab25fa7ebe84b603684dee62410c1e34c}{calling}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a22ccf7c4d0168625234d7deeab717f08}{I\+N\+S\+T\+A\+L\+L\+E\+D}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ade05ba3ca67358e003a5068f5c8d0943}{Nprocs}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a39a6ddc32b12b3b09096acc6b9761503}{Data\+Files}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a05c35019108b510c24383c505ab98b92}{kappa}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a2cb68c3749e1d6a9c68b83594bfb2973}{pypic\+\_\+path} = property(\+\_\+get\+\_\+\+Pypic\+Path, \+\_\+set\+\_\+\+Pypic\+Path, None, None)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}This is the place where to put stuff that any module may need, a kind of COMMON.
+An instantiation is done in the main __init__ file using the "config" name.\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_ae64f0875afe3067b97ba370b354b9213}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_config_1_1___config_ae64f0875afe3067b97ba370b354b9213}
+\begin{DoxyVerb}Define variables that will be known from everywhere:
+- INSTALLED: a dictionary whose keys are the libraries that PyNeb may need
+    e.g. 'plt' for matplotlib.pyplot, 'scipy' for scipy.interpolate. and whose values
+    are Boolean
+
+- Datafile: a dictionary holding the HI atom, which can be used intensively in Atom.getIonAbundance
+
+- pypic_path: This is only set when needed (basically by getEmisGridDict).
+    The default value for the pypic_path parameter of getEmisGridDict().
+    The first try is ./.pypics: if it cannot be created, or it exists but it is not writable, 
+    /tmp/pypics is tried; if it cannot be created, or it exists but it is not writable, the path
+    is set to None and a pypic_path value shall be provided to getEmisGridDict().
+
+Parameters: none\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_ab1f88e757d19b03965760022b9d81a17}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!get\+\_\+no\+Extrapol@{get\+\_\+no\+Extrapol}}
+\index{get\+\_\+no\+Extrapol@{get\+\_\+no\+Extrapol}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{get\+\_\+no\+Extrapol}]{\setlength{\rightskip}{0pt plus 5cm}def get\+\_\+no\+Extrapol (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_config_1_1___config_ab1f88e757d19b03965760022b9d81a17}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a3f4a32a346511439c061526ca9ef6d3e}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!set\+\_\+no\+Extrapol@{set\+\_\+no\+Extrapol}}
+\index{set\+\_\+no\+Extrapol@{set\+\_\+no\+Extrapol}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{set\+\_\+no\+Extrapol}]{\setlength{\rightskip}{0pt plus 5cm}def set\+\_\+no\+Extrapol (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{value}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_config_1_1___config_a3f4a32a346511439c061526ca9ef6d3e}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a28889407e4f3f28f5fb9920f56709780}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!unuse\+\_\+multiprocs@{unuse\+\_\+multiprocs}}
+\index{unuse\+\_\+multiprocs@{unuse\+\_\+multiprocs}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{unuse\+\_\+multiprocs}]{\setlength{\rightskip}{0pt plus 5cm}def unuse\+\_\+multiprocs (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_config_1_1___config_a28889407e4f3f28f5fb9920f56709780}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a66b920089052d4d39cdef44b5f228781}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!use\+\_\+multiprocs@{use\+\_\+multiprocs}}
+\index{use\+\_\+multiprocs@{use\+\_\+multiprocs}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{use\+\_\+multiprocs}]{\setlength{\rightskip}{0pt plus 5cm}def use\+\_\+multiprocs (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_config_1_1___config_a66b920089052d4d39cdef44b5f228781}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_ab25fa7ebe84b603684dee62410c1e34c}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!calling@{calling}}
+\index{calling@{calling}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{calling}]{\setlength{\rightskip}{0pt plus 5cm}calling}\label{classpyneb_1_1utils_1_1_config_1_1___config_ab25fa7ebe84b603684dee62410c1e34c}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a39a6ddc32b12b3b09096acc6b9761503}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!Data\+Files@{Data\+Files}}
+\index{Data\+Files@{Data\+Files}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{Data\+Files}]{\setlength{\rightskip}{0pt plus 5cm}Data\+Files}\label{classpyneb_1_1utils_1_1_config_1_1___config_a39a6ddc32b12b3b09096acc6b9761503}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a22ccf7c4d0168625234d7deeab717f08}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!I\+N\+S\+T\+A\+L\+L\+E\+D@{I\+N\+S\+T\+A\+L\+L\+E\+D}}
+\index{I\+N\+S\+T\+A\+L\+L\+E\+D@{I\+N\+S\+T\+A\+L\+L\+E\+D}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{I\+N\+S\+T\+A\+L\+L\+E\+D}]{\setlength{\rightskip}{0pt plus 5cm}I\+N\+S\+T\+A\+L\+L\+E\+D}\label{classpyneb_1_1utils_1_1_config_1_1___config_a22ccf7c4d0168625234d7deeab717f08}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a05c35019108b510c24383c505ab98b92}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!kappa@{kappa}}
+\index{kappa@{kappa}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{kappa}]{\setlength{\rightskip}{0pt plus 5cm}kappa}\label{classpyneb_1_1utils_1_1_config_1_1___config_a05c35019108b510c24383c505ab98b92}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_afd87151907f32bc0dc45f0171b61374e}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!log\+\_\+@{log\+\_\+}}
+\index{log\+\_\+@{log\+\_\+}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{log\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}log\+\_\+}\label{classpyneb_1_1utils_1_1_config_1_1___config_afd87151907f32bc0dc45f0171b61374e}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_ade05ba3ca67358e003a5068f5c8d0943}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!Nprocs@{Nprocs}}
+\index{Nprocs@{Nprocs}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{Nprocs}]{\setlength{\rightskip}{0pt plus 5cm}Nprocs}\label{classpyneb_1_1utils_1_1_config_1_1___config_ade05ba3ca67358e003a5068f5c8d0943}
+
+
+\subsection{Property Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_config_1_1___config_a2cb68c3749e1d6a9c68b83594bfb2973}{}\index{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}!pypic\+\_\+path@{pypic\+\_\+path}}
+\index{pypic\+\_\+path@{pypic\+\_\+path}!pyneb\+::utils\+::\+Config\+::\+\_\+\+Config@{pyneb\+::utils\+::\+Config\+::\+\_\+\+Config}}
+\subsubsection[{pypic\+\_\+path}]{\setlength{\rightskip}{0pt plus 5cm}pypic\+\_\+path = property(\+\_\+get\+\_\+\+Pypic\+Path, \+\_\+set\+\_\+\+Pypic\+Path, None, None)\hspace{0.3cm}{\ttfamily [static]}}\label{classpyneb_1_1utils_1_1_config_1_1___config_a2cb68c3749e1d6a9c68b83594bfb2973}

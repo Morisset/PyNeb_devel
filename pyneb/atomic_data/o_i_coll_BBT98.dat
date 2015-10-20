@@ -1,0 +1,12 @@
+0 0 50     100  200  500 1000 2000 3000
+1 2 .834  1.26 1.79 2.58 3.35 4.61 5.92 
+1 3 .323  .500 .734 1.12 1.49 2.08 2.64 
+2 3  2.74e-4 8.92e-4 2.78e-3 1.05e-2 2.38e-2 4.62e-2 6.98e-2
+*** O I IR collision strengths data
+*** ATOM oxygen
+*** SPECTRUM 1
+*** N_LEVELS 3
+*** SOURCE1  K. L. Bell, K. A. Berrington and M. R. J. Thomas 1998, AAP 56
+*** NOTE1    Collision strengths
+*** T_UNIT 'K'
+*** COEFF 1e-3

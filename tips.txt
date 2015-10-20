@@ -1,0 +1,7 @@
+Change the version from N.M.Prc to N.M.P
+python make_documentation.py
+python setup.py sdist upload
+svn ci -m 'This is the version N.M.P'
+upload the documentation to the pipy site
+Change the version to N.M.P+1rc
+

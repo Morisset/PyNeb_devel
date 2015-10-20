@@ -1,0 +1,369 @@
+\hypertarget{namespacepyneb_1_1utils_1_1physics}{}\section{pyneb.\+utils.\+physics Namespace Reference}
+\label{namespacepyneb_1_1utils_1_1physics}\index{pyneb.\+utils.\+physics@{pyneb.\+utils.\+physics}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t}{C\+S\+T}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{gs\+From\+Atom} (atom)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{airtovac} (wave)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{vactoair} (wave)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+dictionary \hyperlink{namespacepyneb_1_1utils_1_1physics_a041738a1b0abdb597dd654aec4d96757}{I\+P} = \{\}
+\item 
+dictionary \hyperlink{namespacepyneb_1_1utils_1_1physics_aaad8df22981701858aa5539c86a96b5b}{sym2name}
+\item 
+dictionary \hyperlink{namespacepyneb_1_1utils_1_1physics_a1960e51460ec0d63ffe40b02e0280186}{gs\+Dict}
+\item 
+dictionary \hyperlink{namespacepyneb_1_1utils_1_1physics_a18b749f74e825f8a60744ecba2078ce2}{gs\+Level\+Dict}
+\item 
+dictionary \hyperlink{namespacepyneb_1_1utils_1_1physics_a07a026669fde4152bdb02f243cc4f4d4}{\+\_\+predefined\+Data\+File\+Dict}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!airtovac@{airtovac}}
+\index{airtovac@{airtovac}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{airtovac}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+physics.\+airtovac (
+\begin{DoxyParamCaption}
+\item[{}]{wave}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}
+\begin{DoxyVerb}Convert air wavelengths to vacuum wavelengths
+Parameters
+----------
+wave: float, array
+The wavelength in air [Angstrom]
+Returns
+-------
+Wavelength: array
+Wavelength in vacuum [Angstrom]
+Notes
+-----
+
+.. note:: This function was ported from the IDL Astronomy User's Library.
+:IDL - Documentation:
+NAME:
+AIRTOVAC
+PURPOSE:
+Convert air wavelengths to vacuum wavelengths
+EXPLANATION:
+Wavelengths are corrected for the index of refraction of air under
+standard conditions. Wavelength values below 2000 A will not be
+altered. Uses the IAU standard for conversion given in Morton
+(1991 Ap.J. Suppl. 77, 119)
+CALLING SEQUENCE:
+AIRTOVAC, WAVE
+INPUT/OUTPUT:
+WAVE - Wavelength in Angstroms, scalar or vector
+WAVE should be input as air wavelength(s), it will be
+returned as vacuum wavelength(s). WAVE is always converted to
+double precision upon return.
+EXAMPLE:
+If the air wavelength is W = 6056.125 (a Krypton line), then
+AIRTOVAC, W yields an vacuum wavelength of W = 6057.8019
+METHOD:
+See Morton (Ap. J. Suppl. 77, 119) for the formula used
+REVISION HISTORY
+Written W. Landsman November 1991
+Converted to IDL V5.0 W. Landsman September 1997
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{physics_8py_source_l00498}{498} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00498}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{00498} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_a75304d89e533b2199decec697f90c9a4}{airtovac}(wave):
+00499     \textcolor{stringliteral}{"""}
+00500 \textcolor{stringliteral}{Convert air wavelengths to vacuum wavelengths}
+00501 \textcolor{stringliteral}{Parameters}
+00502 \textcolor{stringliteral}{----------}
+00503 \textcolor{stringliteral}{wave: float, array}
+00504 \textcolor{stringliteral}{The wavelength in air [Angstrom]}
+00505 \textcolor{stringliteral}{Returns}
+00506 \textcolor{stringliteral}{-------}
+00507 \textcolor{stringliteral}{Wavelength: array}
+00508 \textcolor{stringliteral}{Wavelength in vacuum [Angstrom]}
+00509 \textcolor{stringliteral}{Notes}
+00510 \textcolor{stringliteral}{-----}
+00511 \textcolor{stringliteral}{}
+00512 \textcolor{stringliteral}{.. note:: This function was ported from the IDL Astronomy User's Library.}
+00513 \textcolor{stringliteral}{:IDL - Documentation:}
+00514 \textcolor{stringliteral}{NAME:}
+00515 \textcolor{stringliteral}{AIRTOVAC}
+00516 \textcolor{stringliteral}{PURPOSE:}
+00517 \textcolor{stringliteral}{Convert air wavelengths to vacuum wavelengths}
+00518 \textcolor{stringliteral}{EXPLANATION:}
+00519 \textcolor{stringliteral}{Wavelengths are corrected for the index of refraction of air under}
+00520 \textcolor{stringliteral}{standard conditions. Wavelength values below 2000 A will not be}
+00521 \textcolor{stringliteral}{altered. Uses the IAU standard for conversion given in Morton}
+00522 \textcolor{stringliteral}{(1991 Ap.J. Suppl. 77, 119)}
+00523 \textcolor{stringliteral}{CALLING SEQUENCE:}
+00524 \textcolor{stringliteral}{AIRTOVAC, WAVE}
+00525 \textcolor{stringliteral}{INPUT/OUTPUT:}
+00526 \textcolor{stringliteral}{WAVE - Wavelength in Angstroms, scalar or vector}
+00527 \textcolor{stringliteral}{WAVE should be input as air wavelength(s), it will be}
+00528 \textcolor{stringliteral}{returned as vacuum wavelength(s). WAVE is always converted to}
+00529 \textcolor{stringliteral}{double precision upon return.}
+00530 \textcolor{stringliteral}{EXAMPLE:}
+00531 \textcolor{stringliteral}{If the air wavelength is W = 6056.125 (a Krypton line), then}
+00532 \textcolor{stringliteral}{AIRTOVAC, W yields an vacuum wavelength of W = 6057.8019}
+00533 \textcolor{stringliteral}{METHOD:}
+00534 \textcolor{stringliteral}{See Morton (Ap. J. Suppl. 77, 119) for the formula used}
+00535 \textcolor{stringliteral}{REVISION HISTORY}
+00536 \textcolor{stringliteral}{Written W. Landsman November 1991}
+00537 \textcolor{stringliteral}{Converted to IDL V5.0 W. Landsman September 1997}
+00538 \textcolor{stringliteral}{    """}
+00539     
+00540     sigma2 = (1.e4/wave)**2. \textcolor{comment}{#Convert to wavenumber squared}
+00541     
+00542     \textcolor{comment}{# Compute conversion factor}
+00543     
+00544     fact = 1. + 6.4328e-5 + 2.94981e-2/(146.-sigma2) + 2.5540e-4/(41.-sigma2)
+00545     
+00546     fact = fact*(wave >= 2000.) + 1.*(wave < 2000.)
+00547     
+00548     wave = wave*fact \textcolor{comment}{#Convert Wavelength}
+00549     
+00550     \textcolor{keywordflow}{return} wave
+00551 
+00552 
+00553 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!gs\+From\+Atom@{gs\+From\+Atom}}
+\index{gs\+From\+Atom@{gs\+From\+Atom}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{gs\+From\+Atom}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+physics.\+gs\+From\+Atom (
+\begin{DoxyParamCaption}
+\item[{}]{atom}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}
+
+
+Definition at line \hyperlink{physics_8py_source_l00162}{162} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00162}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{00162} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_affea300d5f6d64b440b7363755a67cef}{gsFromAtom}(atom):
+00163     result = \textcolor{stringliteral}{'unknown'}
+00164     \textcolor{keywordflow}{for} gs \textcolor{keywordflow}{in} gsDict:
+00165         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{in} gsDict[gs]:
+00166             result = gs
+00167     \textcolor{keywordflow}{return} result
+00168     
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!vactoair@{vactoair}}
+\index{vactoair@{vactoair}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{vactoair}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+physics.\+vactoair (
+\begin{DoxyParamCaption}
+\item[{}]{wave}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}
+\begin{DoxyVerb}Convert vacuum wavelengths to air wavelengths
+
+Parameters
+----------
+wave: float, array
+The wavelength in vacuum [Angstrom]
+Returns
+-------
+Wavelength: array,
+Wavelength in air [Angstrom]
+Notes
+-----
+
+.. note:: This function was ported from the IDL Astronomy User's Library.
+:IDL - Documentation:
+
+NAME:
+VACTOAIR
+PURPOSE:
+Convert vacuum wavelengths to air wavelengths
+EXPLANATION:
+Corrects for the index of refraction of air under standard conditions.
+Wavelength values below 2000 A will not be altered. Accurate to
+about 0.005 A
+
+CALLING SEQUENCE:
+VACTOAIR, WAVE
+
+INPUT/OUTPUT:
+WAVE - Wavelength in Angstroms, scalar or vector
+WAVE should be input as vacuum wavelength(s), it will be
+returned as air wavelength(s). WAVE is always converted to
+double precision
+
+EXAMPLE:
+If the vacuum wavelength is W = 2000, then
+
+IDL> VACTOAIR, W
+
+yields an air wavelength of W = 1999.353 Angstroms
+
+METHOD:
+An approximation to the 4th power of inverse wavenumber is used
+See IUE Image Processing Manual Page 6-15.
+
+REVISION HISTORY
+Written, D. Lindler 1982
+Documentation W. Landsman Feb. 1989
+Converted to IDL V5.0 W. Landsman September 1997
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{physics_8py_source_l00554}{554} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00554}{}\hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{00554} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{vactoair}(wave):
+00555     \textcolor{stringliteral}{"""}
+00556 \textcolor{stringliteral}{Convert vacuum wavelengths to air wavelengths}
+00557 \textcolor{stringliteral}{}
+00558 \textcolor{stringliteral}{Parameters}
+00559 \textcolor{stringliteral}{----------}
+00560 \textcolor{stringliteral}{wave: float, array}
+00561 \textcolor{stringliteral}{The wavelength in vacuum [Angstrom]}
+00562 \textcolor{stringliteral}{Returns}
+00563 \textcolor{stringliteral}{-------}
+00564 \textcolor{stringliteral}{Wavelength: array,}
+00565 \textcolor{stringliteral}{Wavelength in air [Angstrom]}
+00566 \textcolor{stringliteral}{Notes}
+00567 \textcolor{stringliteral}{-----}
+00568 \textcolor{stringliteral}{}
+00569 \textcolor{stringliteral}{.. note:: This function was ported from the IDL Astronomy User's Library.}
+00570 \textcolor{stringliteral}{:IDL - Documentation:}
+00571 \textcolor{stringliteral}{}
+00572 \textcolor{stringliteral}{NAME:}
+00573 \textcolor{stringliteral}{VACTOAIR}
+00574 \textcolor{stringliteral}{PURPOSE:}
+00575 \textcolor{stringliteral}{Convert vacuum wavelengths to air wavelengths}
+00576 \textcolor{stringliteral}{EXPLANATION:}
+00577 \textcolor{stringliteral}{Corrects for the index of refraction of air under standard conditions.}
+00578 \textcolor{stringliteral}{Wavelength values below 2000 A will not be altered. Accurate to}
+00579 \textcolor{stringliteral}{about 0.005 A}
+00580 \textcolor{stringliteral}{}
+00581 \textcolor{stringliteral}{CALLING SEQUENCE:}
+00582 \textcolor{stringliteral}{VACTOAIR, WAVE}
+00583 \textcolor{stringliteral}{}
+00584 \textcolor{stringliteral}{INPUT/OUTPUT:}
+00585 \textcolor{stringliteral}{WAVE - Wavelength in Angstroms, scalar or vector}
+00586 \textcolor{stringliteral}{WAVE should be input as vacuum wavelength(s), it will be}
+00587 \textcolor{stringliteral}{returned as air wavelength(s). WAVE is always converted to}
+00588 \textcolor{stringliteral}{double precision}
+00589 \textcolor{stringliteral}{}
+00590 \textcolor{stringliteral}{EXAMPLE:}
+00591 \textcolor{stringliteral}{If the vacuum wavelength is W = 2000, then}
+00592 \textcolor{stringliteral}{}
+00593 \textcolor{stringliteral}{IDL> VACTOAIR, W}
+00594 \textcolor{stringliteral}{}
+00595 \textcolor{stringliteral}{yields an air wavelength of W = 1999.353 Angstroms}
+00596 \textcolor{stringliteral}{}
+00597 \textcolor{stringliteral}{METHOD:}
+00598 \textcolor{stringliteral}{An approximation to the 4th power of inverse wavenumber is used}
+00599 \textcolor{stringliteral}{See IUE Image Processing Manual Page 6-15.}
+00600 \textcolor{stringliteral}{}
+00601 \textcolor{stringliteral}{REVISION HISTORY}
+00602 \textcolor{stringliteral}{Written, D. Lindler 1982}
+00603 \textcolor{stringliteral}{Documentation W. Landsman Feb. 1989}
+00604 \textcolor{stringliteral}{Converted to IDL V5.0 W. Landsman September 1997}
+00605 \textcolor{stringliteral}{    """}
+00606 
+00607     wave2 = wave**2.
+00608     fact = 1. + 2.735182e-4 + 131.4182/wave2 + 2.76249e8/(wave2**2.)
+00609     fact = fact * ( wave >= 2000. ) + 1.*( wave < 2000. )
+00610     
+00611     \textcolor{comment}{# Convert wavelengths}
+00612     
+00613     wave = wave/fact
+00614     
+00615     \textcolor{keywordflow}{return} wave
+00616 
+00617 \end{DoxyCode}
+
+
+\subsection{Variable Documentation}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_a07a026669fde4152bdb02f243cc4f4d4}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!\+\_\+predefined\+Data\+File\+Dict@{\+\_\+predefined\+Data\+File\+Dict}}
+\index{\+\_\+predefined\+Data\+File\+Dict@{\+\_\+predefined\+Data\+File\+Dict}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{\+\_\+predefined\+Data\+File\+Dict}]{\setlength{\rightskip}{0pt plus 5cm}dictionary pyneb.\+utils.\+physics.\+\_\+predefined\+Data\+File\+Dict}\label{namespacepyneb_1_1utils_1_1physics_a07a026669fde4152bdb02f243cc4f4d4}
+
+
+Definition at line \hyperlink{physics_8py_source_l00184}{184} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+\hypertarget{namespacepyneb_1_1utils_1_1physics_a1960e51460ec0d63ffe40b02e0280186}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!gs\+Dict@{gs\+Dict}}
+\index{gs\+Dict@{gs\+Dict}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{gs\+Dict}]{\setlength{\rightskip}{0pt plus 5cm}dictionary pyneb.\+utils.\+physics.\+gs\+Dict}\label{namespacepyneb_1_1utils_1_1physics_a1960e51460ec0d63ffe40b02e0280186}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1physics}{00001} = \{
+00002             \textcolor{stringliteral}{'p1'}: [\textcolor{stringliteral}{'C2'}, \textcolor{stringliteral}{'N3'}, \textcolor{stringliteral}{'O4'}, \textcolor{stringliteral}{'Si2'}, \textcolor{stringliteral}{'S4'}, \textcolor{stringliteral}{'Se4'}, \textcolor{stringliteral}{'Xe6'}],
+00003             \textcolor{stringliteral}{'p2'}: [\textcolor{stringliteral}{'N2'}, \textcolor{stringliteral}{'O3'}, \textcolor{stringliteral}{'Ne5'}, \textcolor{stringliteral}{'S3'}, \textcolor{stringliteral}{'Cl4'}, \textcolor{stringliteral}{'Ar5'}, \textcolor{stringliteral}{'Se3'}, \textcolor{stringliteral}{'Kr5'}, \textcolor{stringliteral}{'Xe5'}, \textcolor{stringliteral}{'Rb6'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00004}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t}{00004}             \textcolor{stringliteral}{'p3'}: [\textcolor{stringliteral}{'N1'}, \textcolor{stringliteral}{'O2'}, \textcolor{stringliteral}{'Ne4'}, \textcolor{stringliteral}{'Na5'}, \textcolor{stringliteral}{'S2'}, \textcolor{stringliteral}{'Cl3'}, \textcolor{stringliteral}{'Ar4'}, \textcolor{stringliteral}{'K5'}, \textcolor{stringliteral}{'Se2'}, \textcolor{stringliteral}{'Kr4'}, \textcolor{stringliteral}{'Xe4'}, \textcolor{stringliteral}{'Rb5'}, \textcolor{stringliteral}{'Br3'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00005}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_aee0d21a1f9edd72e75c5369bd5bc36b9}{00005}             \textcolor{stringliteral}{'p4'}: [\textcolor{stringliteral}{'O1'}, \textcolor{stringliteral}{'Ne3'}, \textcolor{stringliteral}{'Na4'}, \textcolor{stringliteral}{'Mg5'}, \textcolor{stringliteral}{'Cl2'}, \textcolor{stringliteral}{'Ar3'}, \textcolor{stringliteral}{'K4'}, \textcolor{stringliteral}{'Ca5'}, \textcolor{stringliteral}{'Kr3'}, \textcolor{stringliteral}{'Xe3'}, \textcolor{stringliteral}{'Rb4'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00006}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a316a5d8a7c983441bd40589f040f3a09}{00006}             \textcolor{stringliteral}{'p5'}: [\textcolor{stringliteral}{'Ne2'}, \textcolor{stringliteral}{'Na3'}, \textcolor{stringliteral}{'Si6'}, \textcolor{stringliteral}{'Cl1'}, \textcolor{stringliteral}{'Ar2'}, \textcolor{stringliteral}{'K3'}, \textcolor{stringliteral}{'Ba4'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00007}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a00251eede3f56eadeb766c97f3144c55}{00007}             \textcolor{stringliteral}{'s1'}: [\textcolor{stringliteral}{'C4'}, \textcolor{stringliteral}{'N5'}, \textcolor{stringliteral}{'Ba2'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00008}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a0131d55ea22f1ecb699a8d5dcf18e62e}{00008}             \textcolor{stringliteral}{'s2'}: [\textcolor{stringliteral}{'C3'}, \textcolor{stringliteral}{'N4'}, \textcolor{stringliteral}{'O5'}, \textcolor{stringliteral}{'Si3'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00009}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_affe8f9c45db60b472fb1779b6e88c43b}{00009}             \textcolor{stringliteral}{'d2'}: [\textcolor{stringliteral}{'Fe7'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00010}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_adeb7151ce462944ff7a0ff2803f873c3}{00010}             \textcolor{stringliteral}{'d3'}: [\textcolor{stringliteral}{'Fe6'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00011}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a7c0a4476149f179955c86bfdb63ade78}{00011}             \textcolor{stringliteral}{'d4'}: [\textcolor{stringliteral}{'Fe5'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00012}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a468e4f9fac1fbd71b5ca458a84ae05cc}{00012}             \textcolor{stringliteral}{'d5'}: [\textcolor{stringliteral}{'Fe4'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00013}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a337f87b4676ea337149e177d81b481e1}{00013}             \textcolor{stringliteral}{'d6'}: [\textcolor{stringliteral}{'Fe3'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00014}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a43417605886b2dc4060af9388d7990bd}{00014}             \textcolor{stringliteral}{'d8'}: [\textcolor{stringliteral}{'Ni3'}]
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00015}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a3da260eac736f7d74c20f76f79239425}{00015}             \}
+\end{DoxyCode}
+
+
+Definition at line \hyperlink{physics_8py_source_l00146}{146} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+\hypertarget{namespacepyneb_1_1utils_1_1physics_a18b749f74e825f8a60744ecba2078ce2}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!gs\+Level\+Dict@{gs\+Level\+Dict}}
+\index{gs\+Level\+Dict@{gs\+Level\+Dict}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{gs\+Level\+Dict}]{\setlength{\rightskip}{0pt plus 5cm}dictionary pyneb.\+utils.\+physics.\+gs\+Level\+Dict}\label{namespacepyneb_1_1utils_1_1physics_a18b749f74e825f8a60744ecba2078ce2}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1physics}{00001} = \{
+00002             \textcolor{stringliteral}{'p1'}: [\textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$S$\_\{1/2\}$'}],
+00003             \textcolor{stringliteral}{'p2'}: [\textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^1$S$\_0$'}, \textcolor{stringliteral}{'$^5$S$\_2$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00004}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t}{00004}             \textcolor{stringliteral}{'p3'}: [\textcolor{stringliteral}{'$^4$S$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$D$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'
+      $^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00005}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_aee0d21a1f9edd72e75c5369bd5bc36b9}{00005}             \textcolor{stringliteral}{'p4'}: [\textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^1$S$\_0$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00006}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a316a5d8a7c983441bd40589f040f3a09}{00006}             \textcolor{stringliteral}{'p5'}: [\textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00007}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a00251eede3f56eadeb766c97f3144c55}{00007}             \textcolor{stringliteral}{'s1'}: [\textcolor{stringliteral}{'$^2$S$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00008}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a0131d55ea22f1ecb699a8d5dcf18e62e}{00008}             \textcolor{stringliteral}{'s2'}: [\textcolor{stringliteral}{'$^1$S$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_0$'}, \textcolor{stringliteral}{'$^3$P$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^1$P$\_1$'}],
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00009}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_affe8f9c45db60b472fb1779b6e88c43b}{00009}             \textcolor{stringliteral}{'d2'}: [\textcolor{stringliteral}{'$^3$F$\_\{2\}$'}, \textcolor{stringliteral}{'$^3$F$\_\{3\}$'}, \textcolor{stringliteral}{'$^3$F$\_\{4\}$'},\textcolor{stringliteral}{'$^1$D$\_\{2\}$'}, \textcolor{stringliteral}{'$^3$P$\_\{0\}$'}, \textcolor{stringliteral}{'$^3$P$\_\{1\}$'},
+       \textcolor{stringliteral}{'$^3$P$\_\{2\}$'}, \textcolor{stringliteral}{'$^1$G$\_\{4\}$'}, \textcolor{stringliteral}{'$^1$S$\_\{0\}$'}], 
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00010}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_adeb7151ce462944ff7a0ff2803f873c3}{00010}             \textcolor{stringliteral}{'d3'}: [\textcolor{stringliteral}{'$^4$F$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$F$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^4$F$\_\{7/2\}$'},\textcolor{stringliteral}{'$^4$F$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'
+      $^4$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^4$P$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$G$\_\{7/2\}$'}, \textcolor{stringliteral}{'$^2$G$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$P$\_\{1/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D2$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$D2$\_\{3/2\}$'}, \textcolor{stringliteral}{'$^2$H$\_\{9/2\}$'}, \textcolor{stringliteral}{'$^2$H$\_\{11/2\}$'}, \textcolor{stringliteral}{'$^2$F$\_\{7/2\}$'}, \textcolor{stringliteral}{'$^2$F$\_\{5/2\}$'}, \textcolor{stringliteral}{'
+      $^2$D1$\_\{5/2\}$'}, \textcolor{stringliteral}{'$^2$D1$\_\{3/2\}$'}], 
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00011}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a7c0a4476149f179955c86bfdb63ade78}{00011}             \textcolor{stringliteral}{'d6'}: [\textcolor{stringliteral}{'$^5$D$\_4$'}, \textcolor{stringliteral}{'$^5$D$\_3$'}, \textcolor{stringliteral}{'$^5$D$\_2$'}, \textcolor{stringliteral}{'$^5$D$\_1$'}, \textcolor{stringliteral}{'$^5$D$\_0$'}, \textcolor{stringliteral}{'$^3$P2$\_2$'}, \textcolor{stringliteral}{'
+      $^3$H$\_6$'}], 
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00012}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a468e4f9fac1fbd71b5ca458a84ae05cc}{00012}             \textcolor{stringliteral}{'d8'}: [\textcolor{stringliteral}{'$3$F$\_4$'}, \textcolor{stringliteral}{'$^3$F$\_3$'}, \textcolor{stringliteral}{'$^3$F$\_2$'}, \textcolor{stringliteral}{'$^1$D$\_2$'}, \textcolor{stringliteral}{'$^3$P$\_2$'}, \textcolor{stringliteral}{'$^3$P2$\_1$'}, \textcolor{stringliteral}{'$^3$P$\_0$
+      '}]
+\hypertarget{namespacepyneb_1_1utils_1_1physics_l00013}{}\hyperlink{classpyneb_1_1utils_1_1physics_1_1_c_s_t_a337f87b4676ea337149e177d81b481e1}{00013}             \}
+\end{DoxyCode}
+
+
+Definition at line \hyperlink{physics_8py_source_l00169}{169} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+\hypertarget{namespacepyneb_1_1utils_1_1physics_a041738a1b0abdb597dd654aec4d96757}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!I\+P@{I\+P}}
+\index{I\+P@{I\+P}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{I\+P}]{\setlength{\rightskip}{0pt plus 5cm}dictionary pyneb.\+utils.\+physics.\+I\+P = \{\}}\label{namespacepyneb_1_1utils_1_1physics_a041738a1b0abdb597dd654aec4d96757}
+
+
+Definition at line \hyperlink{physics_8py_source_l00021}{21} of file \hyperlink{physics_8py_source}{physics.\+py}.
+
+\hypertarget{namespacepyneb_1_1utils_1_1physics_aaad8df22981701858aa5539c86a96b5b}{}\index{pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}!sym2name@{sym2name}}
+\index{sym2name@{sym2name}!pyneb\+::utils\+::physics@{pyneb\+::utils\+::physics}}
+\subsubsection[{sym2name}]{\setlength{\rightskip}{0pt plus 5cm}dictionary pyneb.\+utils.\+physics.\+sym2name}\label{namespacepyneb_1_1utils_1_1physics_aaad8df22981701858aa5539c86a96b5b}
+
+
+Definition at line \hyperlink{physics_8py_source_l00110}{110} of file \hyperlink{physics_8py_source}{physics.\+py}.
+

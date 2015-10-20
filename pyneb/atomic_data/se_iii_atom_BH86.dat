@@ -1,0 +1,12 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+9.60E-02  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+1.66E-04  1.34E-01  0.00E+00  0.00E+00  0.00E+00
+2.37E-04  8.00E-01  1.21E+00  0.00E+00  0.00E+00
+0.00E+00  1.70E+01  5.81E-01  2.81E+00  0.00E+00
+*** Se III  energy and Aij data
+*** N_LEVELS 5
+*** GSCONFIG p2
+*** SOURCE1	'Biemont & Hansen 1986, Phys. Scr., 33,117' 
+*** NOTE1  	'Transition Probabilities, A' 

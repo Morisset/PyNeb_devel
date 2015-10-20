@@ -1,0 +1,136 @@
+\hypertarget{multi__comp_8py_source}{}\section{multi\+\_\+comp.\+py}
+\label{multi__comp_8py_source}\index{pyneb/test/multi\+\_\+comp.\+py@{pyneb/test/multi\+\_\+comp.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{multi__comp_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp}{00001} \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
+00002 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00003 
+00004 \textcolor{stringliteral}{"""}
+00005 \textcolor{stringliteral}{This is a toy-program to test the effect of a 2-densities region on the nebular analysis of the
+       observations.}
+00006 \textcolor{stringliteral}{The 2 regions have different temperature (tem1 and tem2), densities (dens1 and dens2), masses (mass1 and
+       mass2, }
+00007 \textcolor{stringliteral}{whatever unit, the important being the ratio). Intensities for various lines from various ions (included
+       Hbeta) are computed: }
+00008 \textcolor{stringliteral}{emis1 from region 1, emis2 from region2 and emis 3 from the sum of the 2 regions.}
+00009 \textcolor{stringliteral}{Then Te and Ne are computed from these pseudo-observations, using various diagnostic line ratios.}
+00010 \textcolor{stringliteral}{Finally, ionic fractions are obtained and compared to the original ionic fractions used to compute the
+       intensities.}
+00011 \textcolor{stringliteral}{"""}
+00012 
+00013 pn.log\_.level = 3
+00014 
+00015 \textcolor{comment}{# Parameters of the toy model:}
+\hypertarget{multi__comp_8py_source_l00016}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_ab8fc3832c90b6cbaed3c320eff36daf2}{00016} tem1 = 1.e4
+\hypertarget{multi__comp_8py_source_l00017}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_ae01807adbb34e2f438764f04a898750f}{00017} tem2 = 1.e4
+\hypertarget{multi__comp_8py_source_l00018}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a2078ba8e90b451762c3c912b5644b070}{00018} dens1 = 1e3
+\hypertarget{multi__comp_8py_source_l00019}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a29f2b08d213d1af5d448ea758345f0a1}{00019} dens2 = 5.e4
+\hypertarget{multi__comp_8py_source_l00020}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0f4f1d8d7cca8ff5626b7e39261d92d5}{00020} mass1 = 1
+\hypertarget{multi__comp_8py_source_l00021}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_ad8cdd898f34b451cac9f738570b8fde6}{00021} mass2 = 1e-2
+\hypertarget{multi__comp_8py_source_l00022}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7dc22733a7dc31447af80b017a4366c0}{00022} Sp = -6 \textcolor{comment}{#log S+/H+}
+\hypertarget{multi__comp_8py_source_l00023}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a730973bb5d66cde8c39de757702e2116}{00023} Np = -5 \textcolor{comment}{#log N+/H+}
+\hypertarget{multi__comp_8py_source_l00024}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_acb5b32b16511efc23433aaade5b41544}{00024} Op = -4 \textcolor{comment}{#log O+/H+}
+\hypertarget{multi__comp_8py_source_l00025}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_abd16a9dd120d958a9edbf2ec1322c026}{00025} Opp = -4 \textcolor{comment}{#log O++/H+}
+00026 
+00027 \textcolor{comment}{# The atoms and lines we will need:}
+\hypertarget{multi__comp_8py_source_l00028}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a8d90734f103bcd80bced4c908bfeb493}{00028} S2 = pn.Atom(\textcolor{stringliteral}{'S'}, 2)
+\hypertarget{multi__comp_8py_source_l00029}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7ee3bebe71b0ebfd1ae4e1026bf854d2}{00029} N2 = pn.Atom(\textcolor{stringliteral}{'N'}, 2)
+\hypertarget{multi__comp_8py_source_l00030}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a823eed65ec2dc8d8c130674f0fed04c7}{00030} O2 = pn.Atom(\textcolor{stringliteral}{'O'}, 2)
+\hypertarget{multi__comp_8py_source_l00031}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_ac49b06657ba235ae0972deab3dd715ab}{00031} O3 = pn.Atom(\textcolor{stringliteral}{'O'}, 3)
+\hypertarget{multi__comp_8py_source_l00032}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_aac760bd0cfecb07df5afa64ec3f82947}{00032} S2\_lambda = (4069, 4076, 6716, 6731)
+\hypertarget{multi__comp_8py_source_l00033}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a221d8a406c3127c62480d7f3bc0149e3}{00033} N2\_lambda = (6583, 5755)
+\hypertarget{multi__comp_8py_source_l00034}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a1f68d28fa47ec3f8062f76c21d772d6e}{00034} O2\_lambda = (3726, 3729)
+\hypertarget{multi__comp_8py_source_l00035}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_ab480689bf8f9614cc0a70a5613489c99}{00035} O3\_lambda = (5007, 4363)
+00036 
+00037 \textcolor{comment}{# computing line intensities:}
+\hypertarget{multi__comp_8py_source_l00038}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_aebd32d235cbe50309883179020a725cc}{00038} emis1 = \{\}
+\hypertarget{multi__comp_8py_source_l00039}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a1a175a8aaa7357bc4f694ee7d9105e56}{00039} emis2 = \{\}
+\hypertarget{multi__comp_8py_source_l00040}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_aefc15ba67ef2411cad13adcc08d97d41}{00040} emis3 = \{\}
+00041 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} S2\_lambda:
+00042     emis1[\textcolor{stringliteral}{'SII\_'}+str(line)] = S2.getEmissivity(tem1, dens1, wave = line) * 10.**Sp * dens1 * mass1
+00043     emis2[\textcolor{stringliteral}{'SII\_'}+str(line)] = S2.getEmissivity(tem2, dens2, wave = line) * 10.**Sp * dens2 * mass2
+00044     emis3[\textcolor{stringliteral}{'SII\_'}+str(line)] = emis1[\textcolor{stringliteral}{'SII\_'}+str(line)] + emis2[\textcolor{stringliteral}{'SII\_'}+str(line)]
+00045 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} N2\_lambda:
+00046     emis1[\textcolor{stringliteral}{'NII\_'}+str(line)] = N2.getEmissivity(tem1, dens1, wave = line) * 10.**Np * dens1 * mass1
+00047     emis2[\textcolor{stringliteral}{'NII\_'}+str(line)] = N2.getEmissivity(tem2, dens2, wave = line) * 10.**Np * dens2 * mass2
+00048     emis3[\textcolor{stringliteral}{'NII\_'}+str(line)] = emis1[\textcolor{stringliteral}{'NII\_'}+str(line)] + emis2[\textcolor{stringliteral}{'NII\_'}+str(line)]
+00049 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} O3\_lambda:
+00050     emis1[\textcolor{stringliteral}{'OIII\_'}+str(line)] = O3.getEmissivity(tem1, dens1, wave = line) * 10.**Opp * dens1 * mass1
+00051     emis2[\textcolor{stringliteral}{'OIII\_'}+str(line)] = O3.getEmissivity(tem2, dens2, wave = line) * 10.**Opp * dens2 * mass2
+00052     emis3[\textcolor{stringliteral}{'OIII\_'}+str(line)] = emis1[\textcolor{stringliteral}{'OIII\_'}+str(line)] + emis2[\textcolor{stringliteral}{'OIII\_'}+str(line)]
+00053 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} O2\_lambda:
+00054     emis1[\textcolor{stringliteral}{'OII\_'}+str(line)] = O2.getEmissivity(tem1, dens1, wave = line) * 10.**Op * dens1 * mass1
+00055     emis2[\textcolor{stringliteral}{'OII\_'}+str(line)] = O2.getEmissivity(tem2, dens2, wave = line) * 10.**Op * dens2 * mass2
+00056     emis3[\textcolor{stringliteral}{'OII\_'}+str(line)] = emis1[\textcolor{stringliteral}{'OII\_'}+str(line)] + emis2[\textcolor{stringliteral}{'OII\_'}+str(line)]
+00057         
+00058 emis1[\textcolor{stringliteral}{'Hbeta'}] = pn.getHbEmissivity(tem1) * dens1 * mass1
+00059 emis2[\textcolor{stringliteral}{'Hbeta'}] = pn.getHbEmissivity(tem2) * dens2 * mass2
+00060 emis3[\textcolor{stringliteral}{'Hbeta'}] = emis1[\textcolor{stringliteral}{'Hbeta'}] + emis2[\textcolor{stringliteral}{'Hbeta'}] 
+00061 
+00062 \textcolor{comment}{# determining Te and Ne for different regions and diagnostics:}
+00063 \textcolor{comment}{# Region 1 only}
+00064 temp\_1, dens\_S2\_1 = pn.getCrossTemDen(\textcolor{stringliteral}{'N'}, 2, \textcolor{stringliteral}{'L(6583) / L(5755)'}, \textcolor{stringliteral}{'S'}, 2, \textcolor{stringliteral}{'L(6716)/L(6731)'}, 
+00065                                       emis1[\textcolor{stringliteral}{'NII\_6583'}]/emis1[\textcolor{stringliteral}{'NII\_5755'}], 
+00066                                       emis1[\textcolor{stringliteral}{'SII\_6716'}]/emis1[\textcolor{stringliteral}{'SII\_6731'}], 
+\hypertarget{multi__comp_8py_source_l00067}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a727ee7c8e06d8c8f88ee5ca2989968a2}{00067}                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
+00068 \textcolor{comment}{# Region 2 only}
+00069 temp\_2, dens\_S2\_2 = pn.getCrossTemDen(\textcolor{stringliteral}{'N'}, 2, \textcolor{stringliteral}{'L(6583) / L(5755)'},\textcolor{stringliteral}{'S'}, 2, \textcolor{stringliteral}{'L(6716)/L(6731)'}, 
+00070                                       emis2[\textcolor{stringliteral}{'NII\_6583'}]/emis2[\textcolor{stringliteral}{'NII\_5755'}], 
+00071                                       emis2[\textcolor{stringliteral}{'SII\_6716'}]/emis2[\textcolor{stringliteral}{'SII\_6731'}], 
+00072                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
+00073 \textcolor{comment}{# sum of region 1 and 2, using Te(NII) and Ne(SII)}
+00074 temp\_3, dens\_S2\_3 = pn.getCrossTemDen(\textcolor{stringliteral}{'N'}, 2, \textcolor{stringliteral}{'L(6583) / L(5755)'}, \textcolor{stringliteral}{'S'}, 2, \textcolor{stringliteral}{'L(6716)/L(6731)'}, 
+00075                                       emis3[\textcolor{stringliteral}{'NII\_6583'}]/emis3[\textcolor{stringliteral}{'NII\_5755'}], 
+00076                                       emis3[\textcolor{stringliteral}{'SII\_6716'}]/emis3[\textcolor{stringliteral}{'SII\_6731'}], 
+00077                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
+00078 \textcolor{comment}{# sum of region 1 and 2, using Te(NII) and Ne(SII 4 lines)}
+00079 temp\_4, dens\_S2\_4 = pn.getCrossTemDen(\textcolor{stringliteral}{'N'}, 2, \textcolor{stringliteral}{'L(6583) / L(5755)'},
+00080                                       \textcolor{stringliteral}{'S'}, 2, \textcolor{stringliteral}{'(L(4069) + L(4076)) / (L(6716)+L(6731))'}, 
+00081                                       emis3[\textcolor{stringliteral}{'NII\_6583'}]/emis3[\textcolor{stringliteral}{'NII\_5755'}],
+00082                                       (emis3[\textcolor{stringliteral}{'SII\_4069'}]+emis3[\textcolor{stringliteral}{'SII\_4076'}]) / (emis3[\textcolor{stringliteral}{'SII\_6716'}]+emis3[\textcolor{stringliteral}{'
+      SII\_6731'}]), 
+00083                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
+00084 \textcolor{comment}{# sum of region 1 and 2, using Te(OIII) and Ne(SII)}
+00085 temp\_5, dens\_S2\_5 = pn.getCrossTemDen(\textcolor{stringliteral}{'O'}, 3, \textcolor{stringliteral}{'L(5007) / L(4363)'}, \textcolor{stringliteral}{'S'}, 2, \textcolor{stringliteral}{'L(6716)/L(6731)'}, 
+00086                                       emis3[\textcolor{stringliteral}{'OIII\_5007'}]/emis3[\textcolor{stringliteral}{'OIII\_4363'}], 
+00087                                       emis3[\textcolor{stringliteral}{'SII\_6716'}]/emis3[\textcolor{stringliteral}{'SII\_6731'}], 
+00088                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
+00089 
+\hypertarget{multi__comp_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(atom, line, wave):
+00091     \textcolor{stringliteral}{"""}
+00092 \textcolor{stringliteral}{    this return ionic abundances in 5 cases: region 1, 2 and the sum of the 2 regions (using different Te
+       and Ne)}
+00093 \textcolor{stringliteral}{    """}
+00094     ab\_1 = np.log10(atom.getIonAbundance(emis1[line]/emis1[\textcolor{stringliteral}{'Hbeta'}]*100, temp\_1, dens\_S2\_1, wave= wave))
+00095     ab\_2 = np.log10(atom.getIonAbundance(emis2[line]/emis2[\textcolor{stringliteral}{'Hbeta'}]*100, temp\_2, dens\_S2\_2, wave= wave))
+00096     ab\_3 = np.log10(atom.getIonAbundance(emis3[line]/emis3[\textcolor{stringliteral}{'Hbeta'}]*100, temp\_3, dens\_S2\_3, wave= wave))
+00097     ab\_4 = np.log10(atom.getIonAbundance(emis3[line]/emis3[\textcolor{stringliteral}{'Hbeta'}]*100, temp\_4, dens\_S2\_4, wave= wave))
+00098     ab\_5 = np.log10(atom.getIonAbundance(emis3[line]/emis3[\textcolor{stringliteral}{'Hbeta'}]*100, temp\_5, dens\_S2\_5, wave= wave))
+00099     \textcolor{keywordflow}{return} ab\_1, ab\_2, ab\_3, ab\_4, ab\_5
+00100 
+00101 \textcolor{keywordflow}{print} \textcolor{stringliteral}{'   Dens1 = %.0f, Dens2 = %.0f,  Dens3 = %.0f,  Dens4 = %.0f,  Dens5 = %.0f'} % \(\backslash\)
+00102     (dens\_S2\_1, dens\_S2\_2, dens\_S2\_3, dens\_S2\_4, dens\_S2\_5)
+00103 \textcolor{keywordflow}{print} \textcolor{stringliteral}{'   Temp1 = %.0f, Temp2 = %.0f, Temp3 = %.0f, Temp4 = %.0f, Temp5 = %.0f'} % \(\backslash\)
+00104     (temp\_1, temp\_2, temp\_3, temp\_4, temp\_5)
+00105 
+00106 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} S2\_lambda:
+00107     ab\_Sp1, ab\_Sp2, ab\_Sp3, ab\_Sp4, ab\_Sp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(S2, \textcolor{stringliteral}{'SII\_'}+str(line), line)        
+00108     \textcolor{keywordflow}{print} \textcolor{stringliteral}{' S+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
+00109         (line,ab\_Sp1-Sp, ab\_Sp2-Sp, ab\_Sp3-Sp, ab\_Sp4-Sp, ab\_Sp5-Sp)
+00110 
+00111 ab\_Np1, ab\_Np2, ab\_Np3, ab\_Np4, ab\_Np5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(N2, \textcolor{stringliteral}{'NII\_6583'}, 6583)  
+00112 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' N+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
+00113         (6583,ab\_Np1-Np, ab\_Np2-Np, ab\_Np3-Np, ab\_Np4-Np, ab\_Np5-Np)
+00114 
+00115 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3726'}, 3726)  
+00116 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
+00117         (3726,ab\_Op1-Op, ab\_Op2-Op, ab\_Op3-Op, ab\_Op4-Op, ab\_Op5-Op)
+00118 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3729'}, 3729)  
+00119 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
+00120         (3729,ab\_Op1-Op, ab\_Op2-Op, ab\_Op3-Op, ab\_Op4-Op, ab\_Op5-Op)
+00121 
+00122 ab\_Opp1, ab\_Opp2, ab\_Opp3, ab\_Opp4, ab\_Opp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O3, \textcolor{stringliteral}{'OIII\_5007'}, 5007)  
+00123 \textcolor{keywordflow}{print} \textcolor{stringliteral}{'O++%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
+00124         (5007,ab\_Opp1-Opp, ab\_Opp2-Opp, ab\_Opp3-Opp, ab\_Opp4-Opp, ab\_Opp5-Opp)
+00125 
+\end{DoxyCode}

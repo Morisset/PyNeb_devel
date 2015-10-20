@@ -1,0 +1,14 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+3.22E-01  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+6.12E-04  3.33E-01  0.00E+00  0.00E+00  0.00E+00
+3.83E-04  2.13E+00  2.85E+00  0.00E+00  0.00E+00
+0.00E+00  3.92E+01  1.11E+00  3.32E+00  0.00E+00
+*** Br IV transition probabilities
+*** ATOM bromine
+*** SPECTRUM 4
+*** GSCONFIG p2
+*** N_LEVELS 5
+*** SOURCE	Biemont & Hansen 1986, Phys. Scr., 33,117 
+*** NOTE	All A-values

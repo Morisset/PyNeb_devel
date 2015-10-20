@@ -1,0 +1,10 @@
+*** BaIV collision strength data
+0 0 2.000e-01 4.000e-01 6.000e-01 8.000e-01 1.000e+00 1.200e+00 1.400e+00 1.600e+00 1.800e+00 2.000e+00 5.000e+00
+1 2 2.622e+00 2.892e+00 3.172e+00 3.468e+00 3.744e+00 3.987e+00 4.196e+00 4.375e+00 4.529e+00 4.663e+00 5.491e+00
+*** T_UNIT K/10000
+*** ATOM barium
+*** SPECTRUM 4
+*** N_LEVELS 2
+*** GSCONFIG p5
+*** SOURCE1 Schoning & Butler 1998, Astron. Astrophys. Suppl. Ser. 128, 581-588
+*** NOTE1 Collision strengths

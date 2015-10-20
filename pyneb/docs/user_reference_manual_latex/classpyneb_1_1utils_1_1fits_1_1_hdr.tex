@@ -1,0 +1,116 @@
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr}{}\section{Hdr Class Reference}
+\label{classpyneb_1_1utils_1_1fits_1_1_hdr}\index{Hdr@{Hdr}}
+
+
+Inherits object.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a2d05a033f2d6358dd8018f460a214b74}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ad092fe9d48062772503ecf85d5881066}{fits\+File}, \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a6215e022267dc11d572ec677098947ab}{ext})
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ab4f4398c3f210fe4ea6e720401357691}{show} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7d1926e51bf2cd3bae647806c129e621}{up} (self, key, value)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a13a8831ae566e4704c64bc3fdda044f5}{delete} (self, key)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ad5bfaa37294f63ee40597c9c5bd0a03e}{cheb} (self, order\+File)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a564562f082521e37c7029e239abb56c6}{save} (self)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ad092fe9d48062772503ecf85d5881066}{fits\+File}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_acab07a969db3493dffcc4db737d4fb74}{hdu}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a6215e022267dc11d572ec677098947ab}{ext}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Explore and update headers of fits files
+
+Parameters:
+    - fitsFile  name of the fits file
+    - ext       file extension
+
+Examples:
+    f=hdr('o_iii.fits', 2)
+    f.show()
+    f.up('ATOM', 'kriptonyte')
+    f.up('NATURE', 'invented')
+    f.save\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_a2d05a033f2d6358dd8018f460a214b74}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{fits\+File, }
+\item[{}]{ext}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_a2d05a033f2d6358dd8018f460a214b74}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_ad5bfaa37294f63ee40597c9c5bd0a03e}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!cheb@{cheb}}
+\index{cheb@{cheb}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{cheb}]{\setlength{\rightskip}{0pt plus 5cm}def cheb (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{order\+File}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_ad5bfaa37294f63ee40597c9c5bd0a03e}
+\begin{DoxyVerb}Update the Chebyshev order of a coll fits file.
+
+Parameters:
+    - orderFile    ascii file with upper level, lower level, order\end{DoxyVerb}
+ \hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_a13a8831ae566e4704c64bc3fdda044f5}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!delete@{delete}}
+\index{delete@{delete}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{delete}]{\setlength{\rightskip}{0pt plus 5cm}def delete (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{key}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_a13a8831ae566e4704c64bc3fdda044f5}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_a564562f082521e37c7029e239abb56c6}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!save@{save}}
+\index{save@{save}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{save}]{\setlength{\rightskip}{0pt plus 5cm}def save (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_a564562f082521e37c7029e239abb56c6}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_ab4f4398c3f210fe4ea6e720401357691}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!show@{show}}
+\index{show@{show}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{show}]{\setlength{\rightskip}{0pt plus 5cm}def show (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_ab4f4398c3f210fe4ea6e720401357691}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_a7d1926e51bf2cd3bae647806c129e621}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!up@{up}}
+\index{up@{up}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{up}]{\setlength{\rightskip}{0pt plus 5cm}def up (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{key, }
+\item[{}]{value}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_a7d1926e51bf2cd3bae647806c129e621}
+\begin{DoxyVerb}This will be changed to header.set at some point\end{DoxyVerb}
+ 
+
+\subsection{Member Data Documentation}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_a6215e022267dc11d572ec677098947ab}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!ext@{ext}}
+\index{ext@{ext}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{ext}]{\setlength{\rightskip}{0pt plus 5cm}ext}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_a6215e022267dc11d572ec677098947ab}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_ad092fe9d48062772503ecf85d5881066}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!fits\+File@{fits\+File}}
+\index{fits\+File@{fits\+File}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{fits\+File}]{\setlength{\rightskip}{0pt plus 5cm}fits\+File}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_ad092fe9d48062772503ecf85d5881066}
+\hypertarget{classpyneb_1_1utils_1_1fits_1_1_hdr_acab07a969db3493dffcc4db737d4fb74}{}\index{pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}!hdu@{hdu}}
+\index{hdu@{hdu}!pyneb\+::utils\+::fits\+::\+Hdr@{pyneb\+::utils\+::fits\+::\+Hdr}}
+\subsubsection[{hdu}]{\setlength{\rightskip}{0pt plus 5cm}hdu}\label{classpyneb_1_1utils_1_1fits_1_1_hdr_acab07a969db3493dffcc4db737d4fb74}

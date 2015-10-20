@@ -1,0 +1,830 @@
+\hypertarget{polytemplate_8py_source}{}\section{polytemplate.\+py}
+\label{polytemplate_8py_source}\index{pyneb/utils/polytemplate.\+py@{pyneb/utils/polytemplate.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{polytemplate_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1polytemplate}{00001} \textcolor{stringliteral}{"""}
+00002 \textcolor{stringliteral}{Template for the Chebyshev and Polynomial classes.}
+00003 \textcolor{stringliteral}{}
+00004 \textcolor{stringliteral}{This module houses a Python string module Template object (see, e.g.,}
+00005 \textcolor{stringliteral}{http://docs.python.org/library/string.html#template-strings) used by}
+00006 \textcolor{stringliteral}{the `polynomial` and `chebyshev` modules to implement their respective}
+00007 \textcolor{stringliteral}{`Polynomial` and `Chebyshev` classes.  It provides a mechanism for easily}
+00008 \textcolor{stringliteral}{creating additional specific polynomial classes (e.g., Legendre, Jacobi,}
+00009 \textcolor{stringliteral}{etc.) in the future, such that all these classes will have a common API.}
+00010 \textcolor{stringliteral}{}
+00011 \textcolor{stringliteral}{"""}
+00012 \textcolor{keyword}{import} string
+00013 \textcolor{keyword}{import} sys
+00014 
+00015 \textcolor{keywordflow}{if} sys.version\_info[0] >= 3:
+\hypertarget{polytemplate_8py_source_l00016}{}\hyperlink{namespacepyneb_1_1utils_1_1polytemplate_af687173fec33101d65eb86ef900d1ae8}{00016}     rel\_import = \textcolor{stringliteral}{"from . import"}
+00017 \textcolor{keywordflow}{else}:
+00018     rel\_import = \textcolor{stringliteral}{"import"}
+00019 
+\hypertarget{polytemplate_8py_source_l00020}{}\hyperlink{namespacepyneb_1_1utils_1_1polytemplate_ad80e38c107bba3d56d77ce573d1e6d31}{00020} polytemplate = string.Template(\textcolor{stringliteral}{'''}
+00021 \textcolor{stringliteral}{from \_\_future\_\_ import division}
+00022 \textcolor{stringliteral}{REL\_IMPORT polyutils as pu}
+00023 \textcolor{stringliteral}{import numpy as np}
+00024 \textcolor{stringliteral}{}
+00025 \textcolor{stringliteral}{class $name(pu.PolyBase) :}
+00026 \textcolor{stringliteral}{    """A $name series class.}
+00027 \textcolor{stringliteral}{}
+00028 \textcolor{stringliteral}{    $name instances provide the standard Python numerical methods '+',}
+00029 \textcolor{stringliteral}{    '-', '*', '//', '%', 'divmod', '**', and '()' as well as the listed}
+00030 \textcolor{stringliteral}{    methods.}
+00031 \textcolor{stringliteral}{}
+00032 \textcolor{stringliteral}{    Parameters}
+00033 \textcolor{stringliteral}{    ----------}
+00034 \textcolor{stringliteral}{    coef : array\_like}
+00035 \textcolor{stringliteral}{        $name coefficients, in increasing order.  For example,}
+00036 \textcolor{stringliteral}{        ``(1, 2, 3)`` implies ``P\_0 + 2P\_1 + 3P\_2`` where the}
+00037 \textcolor{stringliteral}{        ``P\_i`` are a graded polynomial basis.}
+00038 \textcolor{stringliteral}{    domain : (2,) array\_like, optional}
+00039 \textcolor{stringliteral}{        Domain to use. The interval ``[domain[0], domain[1]]`` is mapped to}
+00040 \textcolor{stringliteral}{        the interval ``[window[0], window[1]]`` by shifting and scaling.}
+00041 \textcolor{stringliteral}{        The default value is $domain.}
+00042 \textcolor{stringliteral}{    window : (2,) array\_like, optional}
+00043 \textcolor{stringliteral}{        Window, see ``domain`` for its use. The default value is $domain.}
+00044 \textcolor{stringliteral}{        .. versionadded:: 1.6.0}
+00045 \textcolor{stringliteral}{}
+00046 \textcolor{stringliteral}{    Attributes}
+00047 \textcolor{stringliteral}{    ----------}
+00048 \textcolor{stringliteral}{    coef : (N,) array}
+00049 \textcolor{stringliteral}{        $name coefficients, from low to high.}
+00050 \textcolor{stringliteral}{    domain : (2,) array}
+00051 \textcolor{stringliteral}{        Domain that is mapped to ``window``.}
+00052 \textcolor{stringliteral}{    window : (2,) array}
+00053 \textcolor{stringliteral}{        Window that ``domain`` is mapped to.}
+00054 \textcolor{stringliteral}{}
+00055 \textcolor{stringliteral}{    Class Attributes}
+00056 \textcolor{stringliteral}{    ----------------}
+00057 \textcolor{stringliteral}{    maxpower : int}
+00058 \textcolor{stringliteral}{        Maximum power allowed, i.e., the largest number ``n`` such that}
+00059 \textcolor{stringliteral}{        ``p(x)**n`` is allowed. This is to limit runaway polynomial size.}
+00060 \textcolor{stringliteral}{    domain : (2,) ndarray}
+00061 \textcolor{stringliteral}{        Default domain of the class.}
+00062 \textcolor{stringliteral}{    window : (2,) ndarray}
+00063 \textcolor{stringliteral}{        Default window of the class.}
+00064 \textcolor{stringliteral}{}
+00065 \textcolor{stringliteral}{    Notes}
+00066 \textcolor{stringliteral}{    -----}
+00067 \textcolor{stringliteral}{    It is important to specify the domain in many cases, for instance in}
+00068 \textcolor{stringliteral}{    fitting data, because many of the important properties of the}
+00069 \textcolor{stringliteral}{    polynomial basis only hold in a specified interval and consequently}
+00070 \textcolor{stringliteral}{    the data must be mapped into that interval in order to benefit.}
+00071 \textcolor{stringliteral}{}
+00072 \textcolor{stringliteral}{    Examples}
+00073 \textcolor{stringliteral}{    --------}
+00074 \textcolor{stringliteral}{}
+00075 \textcolor{stringliteral}{    """}
+00076 \textcolor{stringliteral}{    # Limit runaway size. T\_n^m has degree n*2^m}
+00077 \textcolor{stringliteral}{    maxpower = 16}
+00078 \textcolor{stringliteral}{    # Default domain}
+00079 \textcolor{stringliteral}{    domain = np.array($domain)}
+00080 \textcolor{stringliteral}{    # Default window}
+00081 \textcolor{stringliteral}{    window = np.array($domain)}
+00082 \textcolor{stringliteral}{    # Don't let participate in array operations. Value doesn't matter.}
+00083 \textcolor{stringliteral}{    \_\_array\_priority\_\_ = 0}
+00084 \textcolor{stringliteral}{}
+00085 \textcolor{stringliteral}{    def has\_samecoef(self, other):}
+00086 \textcolor{stringliteral}{        """Check if coefficients match.}
+00087 \textcolor{stringliteral}{}
+00088 \textcolor{stringliteral}{        Parameters}
+00089 \textcolor{stringliteral}{        ----------}
+00090 \textcolor{stringliteral}{        other : class instance}
+00091 \textcolor{stringliteral}{            The other class must have the ``coef`` attribute.}
+00092 \textcolor{stringliteral}{}
+00093 \textcolor{stringliteral}{        Returns}
+00094 \textcolor{stringliteral}{        -------}
+00095 \textcolor{stringliteral}{        bool : boolean}
+00096 \textcolor{stringliteral}{            True if the coefficients are the same, False otherwise.}
+00097 \textcolor{stringliteral}{}
+00098 \textcolor{stringliteral}{        Notes}
+00099 \textcolor{stringliteral}{        -----}
+00100 \textcolor{stringliteral}{        .. versionadded:: 1.6.0}
+00101 \textcolor{stringliteral}{}
+00102 \textcolor{stringliteral}{        """}
+00103 \textcolor{stringliteral}{        if len(self.coef) != len(other.coef):}
+00104 \textcolor{stringliteral}{            return False}
+00105 \textcolor{stringliteral}{        elif not np.all(self.coef == other.coef):}
+00106 \textcolor{stringliteral}{            return False}
+00107 \textcolor{stringliteral}{        else:}
+00108 \textcolor{stringliteral}{            return True}
+00109 \textcolor{stringliteral}{}
+00110 \textcolor{stringliteral}{    def has\_samedomain(self, other):}
+00111 \textcolor{stringliteral}{        """Check if domains match.}
+00112 \textcolor{stringliteral}{}
+00113 \textcolor{stringliteral}{        Parameters}
+00114 \textcolor{stringliteral}{        ----------}
+00115 \textcolor{stringliteral}{        other : class instance}
+00116 \textcolor{stringliteral}{            The other class must have the ``domain`` attribute.}
+00117 \textcolor{stringliteral}{}
+00118 \textcolor{stringliteral}{        Returns}
+00119 \textcolor{stringliteral}{        -------}
+00120 \textcolor{stringliteral}{        bool : boolean}
+00121 \textcolor{stringliteral}{            True if the domains are the same, False otherwise.}
+00122 \textcolor{stringliteral}{}
+00123 \textcolor{stringliteral}{        Notes}
+00124 \textcolor{stringliteral}{        -----}
+00125 \textcolor{stringliteral}{        .. versionadded:: 1.6.0}
+00126 \textcolor{stringliteral}{}
+00127 \textcolor{stringliteral}{        """}
+00128 \textcolor{stringliteral}{        return np.all(self.domain == other.domain)}
+00129 \textcolor{stringliteral}{}
+00130 \textcolor{stringliteral}{    def has\_samewindow(self, other):}
+00131 \textcolor{stringliteral}{        """Check if windows match.}
+00132 \textcolor{stringliteral}{}
+00133 \textcolor{stringliteral}{        Parameters}
+00134 \textcolor{stringliteral}{        ----------}
+00135 \textcolor{stringliteral}{        other : class instance}
+00136 \textcolor{stringliteral}{            The other class must have the ``window`` attribute.}
+00137 \textcolor{stringliteral}{}
+00138 \textcolor{stringliteral}{        Returns}
+00139 \textcolor{stringliteral}{        -------}
+00140 \textcolor{stringliteral}{        bool : boolean}
+00141 \textcolor{stringliteral}{            True if the windows are the same, False otherwise.}
+00142 \textcolor{stringliteral}{}
+00143 \textcolor{stringliteral}{        Notes}
+00144 \textcolor{stringliteral}{        -----}
+00145 \textcolor{stringliteral}{        .. versionadded:: 1.6.0}
+00146 \textcolor{stringliteral}{}
+00147 \textcolor{stringliteral}{        """}
+00148 \textcolor{stringliteral}{        return np.all(self.window == other.window)}
+00149 \textcolor{stringliteral}{}
+00150 \textcolor{stringliteral}{    def has\_samewindow(self, other):}
+00151 \textcolor{stringliteral}{        """Check if windows match.}
+00152 \textcolor{stringliteral}{}
+00153 \textcolor{stringliteral}{        Parameters}
+00154 \textcolor{stringliteral}{        ----------}
+00155 \textcolor{stringliteral}{        other : class instance}
+00156 \textcolor{stringliteral}{            The other class must have the ``window`` attribute.}
+00157 \textcolor{stringliteral}{}
+00158 \textcolor{stringliteral}{        Returns}
+00159 \textcolor{stringliteral}{        -------}
+00160 \textcolor{stringliteral}{        bool : boolean}
+00161 \textcolor{stringliteral}{            True if the windows are the same, False otherwise.}
+00162 \textcolor{stringliteral}{}
+00163 \textcolor{stringliteral}{        """}
+00164 \textcolor{stringliteral}{        return np.all(self.window == other.window)}
+00165 \textcolor{stringliteral}{}
+00166 \textcolor{stringliteral}{    def \_\_init\_\_(self, coef, domain=$domain, window=$domain) :}
+00167 \textcolor{stringliteral}{        [coef, dom, win] = pu.as\_series([coef, domain, window], trim=False)}
+00168 \textcolor{stringliteral}{        if len(dom) != 2 :}
+00169 \textcolor{stringliteral}{            raise ValueError("Domain has wrong number of elements.")}
+00170 \textcolor{stringliteral}{        if len(win) != 2 :}
+00171 \textcolor{stringliteral}{            raise ValueError("Window has wrong number of elements.")}
+00172 \textcolor{stringliteral}{        self.coef = coef}
+00173 \textcolor{stringliteral}{        self.domain = dom}
+00174 \textcolor{stringliteral}{        self.window = win}
+00175 \textcolor{stringliteral}{}
+00176 \textcolor{stringliteral}{    def \_\_repr\_\_(self):}
+00177 \textcolor{stringliteral}{        format = "%s(%s, %s, %s)"}
+00178 \textcolor{stringliteral}{        coef = repr(self.coef)[6:-1]}
+00179 \textcolor{stringliteral}{        domain = repr(self.domain)[6:-1]}
+00180 \textcolor{stringliteral}{        window = repr(self.window)[6:-1]}
+00181 \textcolor{stringliteral}{        return format % ('$name', coef, domain, window)}
+00182 \textcolor{stringliteral}{}
+00183 \textcolor{stringliteral}{    def \_\_str\_\_(self) :}
+00184 \textcolor{stringliteral}{        format = "%s(%s)"}
+00185 \textcolor{stringliteral}{        coef = str(self.coef)}
+00186 \textcolor{stringliteral}{        return format % ('$nick', coef)}
+00187 \textcolor{stringliteral}{}
+00188 \textcolor{stringliteral}{    # Pickle and copy}
+00189 \textcolor{stringliteral}{}
+00190 \textcolor{stringliteral}{    def \_\_getstate\_\_(self) :}
+00191 \textcolor{stringliteral}{        ret = self.\_\_dict\_\_.copy()}
+00192 \textcolor{stringliteral}{        ret['coef'] = self.coef.copy()}
+00193 \textcolor{stringliteral}{        ret['domain'] = self.domain.copy()}
+00194 \textcolor{stringliteral}{        ret['window'] = self.window.copy()}
+00195 \textcolor{stringliteral}{        return ret}
+00196 \textcolor{stringliteral}{}
+00197 \textcolor{stringliteral}{    def \_\_setstate\_\_(self, dict) :}
+00198 \textcolor{stringliteral}{        self.\_\_dict\_\_ = dict}
+00199 \textcolor{stringliteral}{}
+00200 \textcolor{stringliteral}{    # Call}
+00201 \textcolor{stringliteral}{}
+00202 \textcolor{stringliteral}{    def \_\_call\_\_(self, arg) :}
+00203 \textcolor{stringliteral}{        off, scl = pu.mapparms(self.domain, self.window)}
+00204 \textcolor{stringliteral}{        arg = off + scl*arg}
+00205 \textcolor{stringliteral}{        return $\{nick\}val(arg, self.coef)}
+00206 \textcolor{stringliteral}{}
+00207 \textcolor{stringliteral}{    def \_\_iter\_\_(self) :}
+00208 \textcolor{stringliteral}{        return iter(self.coef)}
+00209 \textcolor{stringliteral}{}
+00210 \textcolor{stringliteral}{    def \_\_len\_\_(self) :}
+00211 \textcolor{stringliteral}{        return len(self.coef)}
+00212 \textcolor{stringliteral}{}
+00213 \textcolor{stringliteral}{    # Numeric properties.}
+00214 \textcolor{stringliteral}{}
+00215 \textcolor{stringliteral}{    def \_\_neg\_\_(self) :}
+00216 \textcolor{stringliteral}{        return self.\_\_class\_\_(-self.coef, self.domain, self.window)}
+00217 \textcolor{stringliteral}{}
+00218 \textcolor{stringliteral}{    def \_\_pos\_\_(self) :}
+00219 \textcolor{stringliteral}{        return self}
+00220 \textcolor{stringliteral}{}
+00221 \textcolor{stringliteral}{    def \_\_add\_\_(self, other) :}
+00222 \textcolor{stringliteral}{        """Returns sum"""}
+00223 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00224 \textcolor{stringliteral}{            if self.has\_samedomain(other) and self.has\_samewindow(other):}
+00225 \textcolor{stringliteral}{                coef = $\{nick\}add(self.coef, other.coef)}
+00226 \textcolor{stringliteral}{            else :}
+00227 \textcolor{stringliteral}{                raise PolyDomainError()}
+00228 \textcolor{stringliteral}{        else :}
+00229 \textcolor{stringliteral}{            try :}
+00230 \textcolor{stringliteral}{                coef = $\{nick\}add(self.coef, other)}
+00231 \textcolor{stringliteral}{            except :}
+00232 \textcolor{stringliteral}{                return NotImplemented}
+00233 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00234 \textcolor{stringliteral}{}
+00235 \textcolor{stringliteral}{    def \_\_sub\_\_(self, other) :}
+00236 \textcolor{stringliteral}{        """Returns difference"""}
+00237 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00238 \textcolor{stringliteral}{            if self.has\_samedomain(other) and self.has\_samewindow(other):}
+00239 \textcolor{stringliteral}{                coef = $\{nick\}sub(self.coef, other.coef)}
+00240 \textcolor{stringliteral}{            else :}
+00241 \textcolor{stringliteral}{                raise PolyDomainError()}
+00242 \textcolor{stringliteral}{        else :}
+00243 \textcolor{stringliteral}{            try :}
+00244 \textcolor{stringliteral}{                coef = $\{nick\}sub(self.coef, other)}
+00245 \textcolor{stringliteral}{            except :}
+00246 \textcolor{stringliteral}{                return NotImplemented}
+00247 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00248 \textcolor{stringliteral}{}
+00249 \textcolor{stringliteral}{    def \_\_mul\_\_(self, other) :}
+00250 \textcolor{stringliteral}{        """Returns product"""}
+00251 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00252 \textcolor{stringliteral}{            if self.has\_samedomain(other) and self.has\_samewindow(other):}
+00253 \textcolor{stringliteral}{                coef = $\{nick\}mul(self.coef, other.coef)}
+00254 \textcolor{stringliteral}{            else :}
+00255 \textcolor{stringliteral}{                raise PolyDomainError()}
+00256 \textcolor{stringliteral}{        else :}
+00257 \textcolor{stringliteral}{            try :}
+00258 \textcolor{stringliteral}{                coef = $\{nick\}mul(self.coef, other)}
+00259 \textcolor{stringliteral}{            except :}
+00260 \textcolor{stringliteral}{                return NotImplemented}
+00261 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00262 \textcolor{stringliteral}{}
+00263 \textcolor{stringliteral}{    def \_\_div\_\_(self, other):}
+00264 \textcolor{stringliteral}{        # set to \_\_floordiv\_\_ /.}
+00265 \textcolor{stringliteral}{        return self.\_\_floordiv\_\_(other)}
+00266 \textcolor{stringliteral}{}
+00267 \textcolor{stringliteral}{    def \_\_truediv\_\_(self, other) :}
+00268 \textcolor{stringliteral}{        # there is no true divide if the rhs is not a scalar, although it}
+00269 \textcolor{stringliteral}{        # could return the first n elements of an infinite series.}
+00270 \textcolor{stringliteral}{        # It is hard to see where n would come from, though.}
+00271 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00272 \textcolor{stringliteral}{            if len(other.coef) == 1 :}
+00273 \textcolor{stringliteral}{                coef = div(self.coef, other.coef)}
+00274 \textcolor{stringliteral}{            else :}
+00275 \textcolor{stringliteral}{                return NotImplemented}
+00276 \textcolor{stringliteral}{        elif np.isscalar(other) :}
+00277 \textcolor{stringliteral}{            # this might be overly restrictive}
+00278 \textcolor{stringliteral}{            coef = self.coef/other}
+00279 \textcolor{stringliteral}{        else :}
+00280 \textcolor{stringliteral}{            return NotImplemented}
+00281 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00282 \textcolor{stringliteral}{}
+00283 \textcolor{stringliteral}{    def \_\_floordiv\_\_(self, other) :}
+00284 \textcolor{stringliteral}{        """Returns the quotient."""}
+00285 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00286 \textcolor{stringliteral}{            if np.all(self.domain == other.domain) :}
+00287 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other.coef)}
+00288 \textcolor{stringliteral}{            else :}
+00289 \textcolor{stringliteral}{                raise PolyDomainError()}
+00290 \textcolor{stringliteral}{        else :}
+00291 \textcolor{stringliteral}{            try :}
+00292 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other)}
+00293 \textcolor{stringliteral}{            except :}
+00294 \textcolor{stringliteral}{                return NotImplemented}
+00295 \textcolor{stringliteral}{        return self.\_\_class\_\_(quo, self.domain, self.window)}
+00296 \textcolor{stringliteral}{}
+00297 \textcolor{stringliteral}{    def \_\_mod\_\_(self, other) :}
+00298 \textcolor{stringliteral}{        """Returns the remainder."""}
+00299 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00300 \textcolor{stringliteral}{            if self.has\_samedomain(other) and self.has\_samewindow(other):}
+00301 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other.coef)}
+00302 \textcolor{stringliteral}{            else :}
+00303 \textcolor{stringliteral}{                raise PolyDomainError()}
+00304 \textcolor{stringliteral}{        else :}
+00305 \textcolor{stringliteral}{            try :}
+00306 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other)}
+00307 \textcolor{stringliteral}{            except :}
+00308 \textcolor{stringliteral}{                return NotImplemented}
+00309 \textcolor{stringliteral}{        return self.\_\_class\_\_(rem, self.domain, self.window)}
+00310 \textcolor{stringliteral}{}
+00311 \textcolor{stringliteral}{    def \_\_divmod\_\_(self, other) :}
+00312 \textcolor{stringliteral}{        """Returns quo, remainder"""}
+00313 \textcolor{stringliteral}{        if isinstance(other, self.\_\_class\_\_) :}
+00314 \textcolor{stringliteral}{            if self.has\_samedomain(other) and self.has\_samewindow(other):}
+00315 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other.coef)}
+00316 \textcolor{stringliteral}{            else :}
+00317 \textcolor{stringliteral}{                raise PolyDomainError()}
+00318 \textcolor{stringliteral}{        else :}
+00319 \textcolor{stringliteral}{            try :}
+00320 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(self.coef, other)}
+00321 \textcolor{stringliteral}{            except :}
+00322 \textcolor{stringliteral}{                return NotImplemented}
+00323 \textcolor{stringliteral}{        quo = self.\_\_class\_\_(quo, self.domain, self.window)}
+00324 \textcolor{stringliteral}{        rem = self.\_\_class\_\_(rem, self.domain, self.window)}
+00325 \textcolor{stringliteral}{        return quo, rem}
+00326 \textcolor{stringliteral}{}
+00327 \textcolor{stringliteral}{    def \_\_pow\_\_(self, other) :}
+00328 \textcolor{stringliteral}{        try :}
+00329 \textcolor{stringliteral}{            coef = $\{nick\}pow(self.coef, other, maxpower = self.maxpower)}
+00330 \textcolor{stringliteral}{        except :}
+00331 \textcolor{stringliteral}{            raise}
+00332 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00333 \textcolor{stringliteral}{}
+00334 \textcolor{stringliteral}{    def \_\_radd\_\_(self, other) :}
+00335 \textcolor{stringliteral}{        try :}
+00336 \textcolor{stringliteral}{            coef = $\{nick\}add(other, self.coef)}
+00337 \textcolor{stringliteral}{        except :}
+00338 \textcolor{stringliteral}{            return NotImplemented}
+00339 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00340 \textcolor{stringliteral}{}
+00341 \textcolor{stringliteral}{    def \_\_rsub\_\_(self, other):}
+00342 \textcolor{stringliteral}{        try :}
+00343 \textcolor{stringliteral}{            coef = $\{nick\}sub(other, self.coef)}
+00344 \textcolor{stringliteral}{        except :}
+00345 \textcolor{stringliteral}{            return NotImplemented}
+00346 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00347 \textcolor{stringliteral}{}
+00348 \textcolor{stringliteral}{    def \_\_rmul\_\_(self, other) :}
+00349 \textcolor{stringliteral}{        try :}
+00350 \textcolor{stringliteral}{            coef = $\{nick\}mul(other, self.coef)}
+00351 \textcolor{stringliteral}{        except :}
+00352 \textcolor{stringliteral}{            return NotImplemented}
+00353 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00354 \textcolor{stringliteral}{}
+00355 \textcolor{stringliteral}{    def \_\_rdiv\_\_(self, other):}
+00356 \textcolor{stringliteral}{        # set to \_\_floordiv\_\_ /.}
+00357 \textcolor{stringliteral}{        return self.\_\_rfloordiv\_\_(other)}
+00358 \textcolor{stringliteral}{}
+00359 \textcolor{stringliteral}{    def \_\_rtruediv\_\_(self, other) :}
+00360 \textcolor{stringliteral}{        # there is no true divide if the rhs is not a scalar, although it}
+00361 \textcolor{stringliteral}{        # could return the first n elements of an infinite series.}
+00362 \textcolor{stringliteral}{        # It is hard to see where n would come from, though.}
+00363 \textcolor{stringliteral}{        if len(self.coef) == 1 :}
+00364 \textcolor{stringliteral}{            try :}
+00365 \textcolor{stringliteral}{                quo, rem = $\{nick\}div(other, self.coef[0])}
+00366 \textcolor{stringliteral}{            except :}
+00367 \textcolor{stringliteral}{                return NotImplemented}
+00368 \textcolor{stringliteral}{        return self.\_\_class\_\_(quo, self.domain, self.window)}
+00369 \textcolor{stringliteral}{}
+00370 \textcolor{stringliteral}{    def \_\_rfloordiv\_\_(self, other) :}
+00371 \textcolor{stringliteral}{        try :}
+00372 \textcolor{stringliteral}{            quo, rem = $\{nick\}div(other, self.coef)}
+00373 \textcolor{stringliteral}{        except :}
+00374 \textcolor{stringliteral}{            return NotImplemented}
+00375 \textcolor{stringliteral}{        return self.\_\_class\_\_(quo, self.domain, self.window)}
+00376 \textcolor{stringliteral}{}
+00377 \textcolor{stringliteral}{    def \_\_rmod\_\_(self, other) :}
+00378 \textcolor{stringliteral}{        try :}
+00379 \textcolor{stringliteral}{            quo, rem = $\{nick\}div(other, self.coef)}
+00380 \textcolor{stringliteral}{        except :}
+00381 \textcolor{stringliteral}{            return NotImplemented}
+00382 \textcolor{stringliteral}{        return self.\_\_class\_\_(rem, self.domain, self.window)}
+00383 \textcolor{stringliteral}{}
+00384 \textcolor{stringliteral}{    def \_\_rdivmod\_\_(self, other) :}
+00385 \textcolor{stringliteral}{        try :}
+00386 \textcolor{stringliteral}{            quo, rem = $\{nick\}div(other, self.coef)}
+00387 \textcolor{stringliteral}{        except :}
+00388 \textcolor{stringliteral}{            return NotImplemented}
+00389 \textcolor{stringliteral}{        quo = self.\_\_class\_\_(quo, self.domain, self.window)}
+00390 \textcolor{stringliteral}{        rem = self.\_\_class\_\_(rem, self.domain, self.window)}
+00391 \textcolor{stringliteral}{        return quo, rem}
+00392 \textcolor{stringliteral}{}
+00393 \textcolor{stringliteral}{    # Enhance me}
+00394 \textcolor{stringliteral}{    # some augmented arithmetic operations could be added here}
+00395 \textcolor{stringliteral}{}
+00396 \textcolor{stringliteral}{    def \_\_eq\_\_(self, other) :}
+00397 \textcolor{stringliteral}{        res = isinstance(other, self.\_\_class\_\_) \(\backslash\)}
+00398 \textcolor{stringliteral}{                and self.has\_samecoef(other) \(\backslash\)}
+00399 \textcolor{stringliteral}{                and self.has\_samedomain(other) \(\backslash\)}
+00400 \textcolor{stringliteral}{                and self.has\_samewindow(other)}
+00401 \textcolor{stringliteral}{        return res}
+00402 \textcolor{stringliteral}{}
+00403 \textcolor{stringliteral}{    def \_\_ne\_\_(self, other) :}
+00404 \textcolor{stringliteral}{        return not self.\_\_eq\_\_(other)}
+00405 \textcolor{stringliteral}{}
+00406 \textcolor{stringliteral}{    #}
+00407 \textcolor{stringliteral}{    # Extra methods.}
+00408 \textcolor{stringliteral}{    #}
+00409 \textcolor{stringliteral}{}
+00410 \textcolor{stringliteral}{    def copy(self) :}
+00411 \textcolor{stringliteral}{        """Return a copy.}
+00412 \textcolor{stringliteral}{}
+00413 \textcolor{stringliteral}{        Return a copy of the current $name instance.}
+00414 \textcolor{stringliteral}{}
+00415 \textcolor{stringliteral}{        Returns}
+00416 \textcolor{stringliteral}{        -------}
+00417 \textcolor{stringliteral}{        new\_instance : $name}
+00418 \textcolor{stringliteral}{            Copy of current instance.}
+00419 \textcolor{stringliteral}{}
+00420 \textcolor{stringliteral}{        """}
+00421 \textcolor{stringliteral}{        return self.\_\_class\_\_(self.coef, self.domain, self.window)}
+00422 \textcolor{stringliteral}{}
+00423 \textcolor{stringliteral}{    def degree(self) :}
+00424 \textcolor{stringliteral}{        """The degree of the series.}
+00425 \textcolor{stringliteral}{}
+00426 \textcolor{stringliteral}{        Notes}
+00427 \textcolor{stringliteral}{        -----}
+00428 \textcolor{stringliteral}{        .. versionadded:: 1.5.0}
+00429 \textcolor{stringliteral}{}
+00430 \textcolor{stringliteral}{        """}
+00431 \textcolor{stringliteral}{        return len(self) - 1}
+00432 \textcolor{stringliteral}{}
+00433 \textcolor{stringliteral}{    def cutdeg(self, deg) :}
+00434 \textcolor{stringliteral}{        """Truncate series to the given degree.}
+00435 \textcolor{stringliteral}{}
+00436 \textcolor{stringliteral}{        Reduce the degree of the $name series to `deg` by discarding the}
+00437 \textcolor{stringliteral}{        high order terms. If `deg` is greater than the current degree a}
+00438 \textcolor{stringliteral}{        copy of the current series is returned. This can be useful in least}
+00439 \textcolor{stringliteral}{        squares where the coefficients of the high degree terms may be very}
+00440 \textcolor{stringliteral}{        small.}
+00441 \textcolor{stringliteral}{}
+00442 \textcolor{stringliteral}{        Parameters}
+00443 \textcolor{stringliteral}{        ----------}
+00444 \textcolor{stringliteral}{        deg : non-negative int}
+00445 \textcolor{stringliteral}{            The series is reduced to degree `deg` by discarding the high}
+00446 \textcolor{stringliteral}{            order terms. The value of `deg` must be a non-negative integer.}
+00447 \textcolor{stringliteral}{}
+00448 \textcolor{stringliteral}{        Returns}
+00449 \textcolor{stringliteral}{        -------}
+00450 \textcolor{stringliteral}{        new\_instance : $name}
+00451 \textcolor{stringliteral}{            New instance of $name with reduced degree.}
+00452 \textcolor{stringliteral}{}
+00453 \textcolor{stringliteral}{        Notes}
+00454 \textcolor{stringliteral}{        -----}
+00455 \textcolor{stringliteral}{        .. versionadded:: 1.5.0}
+00456 \textcolor{stringliteral}{}
+00457 \textcolor{stringliteral}{        """}
+00458 \textcolor{stringliteral}{        return self.truncate(deg + 1)}
+00459 \textcolor{stringliteral}{}
+00460 \textcolor{stringliteral}{    def trim(self, tol=0) :}
+00461 \textcolor{stringliteral}{        """Remove small leading coefficients}
+00462 \textcolor{stringliteral}{}
+00463 \textcolor{stringliteral}{        Remove leading coefficients until a coefficient is reached whose}
+00464 \textcolor{stringliteral}{        absolute value greater than `tol` or the beginning of the series is}
+00465 \textcolor{stringliteral}{        reached. If all the coefficients would be removed the series is set to}
+00466 \textcolor{stringliteral}{        ``[0]``. A new $name instance is returned with the new coefficients.}
+00467 \textcolor{stringliteral}{        The current instance remains unchanged.}
+00468 \textcolor{stringliteral}{}
+00469 \textcolor{stringliteral}{        Parameters}
+00470 \textcolor{stringliteral}{        ----------}
+00471 \textcolor{stringliteral}{        tol : non-negative number.}
+00472 \textcolor{stringliteral}{            All trailing coefficients less than `tol` will be removed.}
+00473 \textcolor{stringliteral}{}
+00474 \textcolor{stringliteral}{        Returns}
+00475 \textcolor{stringliteral}{        -------}
+00476 \textcolor{stringliteral}{        new\_instance : $name}
+00477 \textcolor{stringliteral}{            Contains the new set of coefficients.}
+00478 \textcolor{stringliteral}{}
+00479 \textcolor{stringliteral}{        """}
+00480 \textcolor{stringliteral}{        coef = pu.trimcoef(self.coef, tol)}
+00481 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00482 \textcolor{stringliteral}{}
+00483 \textcolor{stringliteral}{    def truncate(self, size) :}
+00484 \textcolor{stringliteral}{        """Truncate series to length `size`.}
+00485 \textcolor{stringliteral}{}
+00486 \textcolor{stringliteral}{        Reduce the $name series to length `size` by discarding the high}
+00487 \textcolor{stringliteral}{        degree terms. The value of `size` must be a positive integer. This}
+00488 \textcolor{stringliteral}{        can be useful in least squares where the coefficients of the}
+00489 \textcolor{stringliteral}{        high degree terms may be very small.}
+00490 \textcolor{stringliteral}{}
+00491 \textcolor{stringliteral}{        Parameters}
+00492 \textcolor{stringliteral}{        ----------}
+00493 \textcolor{stringliteral}{        size : positive int}
+00494 \textcolor{stringliteral}{            The series is reduced to length `size` by discarding the high}
+00495 \textcolor{stringliteral}{            degree terms. The value of `size` must be a positive integer.}
+00496 \textcolor{stringliteral}{}
+00497 \textcolor{stringliteral}{        Returns}
+00498 \textcolor{stringliteral}{        -------}
+00499 \textcolor{stringliteral}{        new\_instance : $name}
+00500 \textcolor{stringliteral}{            New instance of $name with truncated coefficients.}
+00501 \textcolor{stringliteral}{}
+00502 \textcolor{stringliteral}{        """}
+00503 \textcolor{stringliteral}{        isize = int(size)}
+00504 \textcolor{stringliteral}{        if isize != size or isize < 1 :}
+00505 \textcolor{stringliteral}{            raise ValueError("size must be a positive integer")}
+00506 \textcolor{stringliteral}{        if isize >= len(self.coef) :}
+00507 \textcolor{stringliteral}{            coef = self.coef}
+00508 \textcolor{stringliteral}{        else :}
+00509 \textcolor{stringliteral}{            coef = self.coef[:isize]}
+00510 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00511 \textcolor{stringliteral}{}
+00512 \textcolor{stringliteral}{    def convert(self, domain=None, kind=None, window=None) :}
+00513 \textcolor{stringliteral}{        """Convert to different class and/or domain.}
+00514 \textcolor{stringliteral}{}
+00515 \textcolor{stringliteral}{        Parameters}
+00516 \textcolor{stringliteral}{        ----------}
+00517 \textcolor{stringliteral}{        domain : array\_like, optional}
+00518 \textcolor{stringliteral}{            The domain of the converted series. If the value is None,}
+00519 \textcolor{stringliteral}{            the default domain of `kind` is used.}
+00520 \textcolor{stringliteral}{        kind : class, optional}
+00521 \textcolor{stringliteral}{            The polynomial series type class to which the current instance}
+00522 \textcolor{stringliteral}{            should be converted. If kind is None, then the class of the}
+00523 \textcolor{stringliteral}{            current instance is used.}
+00524 \textcolor{stringliteral}{        window : array\_like, optional}
+00525 \textcolor{stringliteral}{            The window of the converted series. If the value is None,}
+00526 \textcolor{stringliteral}{            the default window of `kind` is used.}
+00527 \textcolor{stringliteral}{}
+00528 \textcolor{stringliteral}{        Returns}
+00529 \textcolor{stringliteral}{        -------}
+00530 \textcolor{stringliteral}{        new\_series\_instance : `kind`}
+00531 \textcolor{stringliteral}{            The returned class can be of different type than the current}
+00532 \textcolor{stringliteral}{            instance and/or have a different domain.}
+00533 \textcolor{stringliteral}{}
+00534 \textcolor{stringliteral}{        Notes}
+00535 \textcolor{stringliteral}{        -----}
+00536 \textcolor{stringliteral}{        Conversion between domains and class types can result in}
+00537 \textcolor{stringliteral}{        numerically ill defined series.}
+00538 \textcolor{stringliteral}{}
+00539 \textcolor{stringliteral}{        Examples}
+00540 \textcolor{stringliteral}{        --------}
+00541 \textcolor{stringliteral}{}
+00542 \textcolor{stringliteral}{        """}
+00543 \textcolor{stringliteral}{        if kind is None:}
+00544 \textcolor{stringliteral}{            kind = $name}
+00545 \textcolor{stringliteral}{        if domain is None:}
+00546 \textcolor{stringliteral}{            domain = kind.domain}
+00547 \textcolor{stringliteral}{        if window is None:}
+00548 \textcolor{stringliteral}{            window = kind.window}
+00549 \textcolor{stringliteral}{        return self(kind.identity(domain, window=window))}
+00550 \textcolor{stringliteral}{}
+00551 \textcolor{stringliteral}{    def mapparms(self) :}
+00552 \textcolor{stringliteral}{        """Return the mapping parameters.}
+00553 \textcolor{stringliteral}{}
+00554 \textcolor{stringliteral}{        The returned values define a linear map ``off + scl*x`` that is}
+00555 \textcolor{stringliteral}{        applied to the input arguments before the series is evaluated. The}
+00556 \textcolor{stringliteral}{        map depends on the ``domain`` and ``window``; if the current}
+00557 \textcolor{stringliteral}{        ``domain`` is equal to the ``window`` the resulting map is the}
+00558 \textcolor{stringliteral}{        identity.  If the coeffients of the ``$name`` instance are to be}
+00559 \textcolor{stringliteral}{        used by themselves outside this class, then the linear function}
+00560 \textcolor{stringliteral}{        must be substituted for the ``x`` in the standard representation of}
+00561 \textcolor{stringliteral}{        the base polynomials.}
+00562 \textcolor{stringliteral}{}
+00563 \textcolor{stringliteral}{        Returns}
+00564 \textcolor{stringliteral}{        -------}
+00565 \textcolor{stringliteral}{        off, scl : floats or complex}
+00566 \textcolor{stringliteral}{            The mapping function is defined by ``off + scl*x``.}
+00567 \textcolor{stringliteral}{}
+00568 \textcolor{stringliteral}{        Notes}
+00569 \textcolor{stringliteral}{        -----}
+00570 \textcolor{stringliteral}{        If the current domain is the interval ``[l\_1, r\_1]`` and the window}
+00571 \textcolor{stringliteral}{        is ``[l\_2, r\_2]``, then the linear mapping function ``L`` is}
+00572 \textcolor{stringliteral}{        defined by the equations::}
+00573 \textcolor{stringliteral}{}
+00574 \textcolor{stringliteral}{            L(l\_1) = l\_2}
+00575 \textcolor{stringliteral}{            L(r\_1) = r\_2}
+00576 \textcolor{stringliteral}{}
+00577 \textcolor{stringliteral}{        """}
+00578 \textcolor{stringliteral}{        return pu.mapparms(self.domain, self.window)}
+00579 \textcolor{stringliteral}{}
+00580 \textcolor{stringliteral}{    def integ(self, m=1, k=[], lbnd=None) :}
+00581 \textcolor{stringliteral}{        """Integrate.}
+00582 \textcolor{stringliteral}{}
+00583 \textcolor{stringliteral}{        Return an instance of $name that is the definite integral of the}
+00584 \textcolor{stringliteral}{        current series. Refer to `$\{nick\}int` for full documentation.}
+00585 \textcolor{stringliteral}{}
+00586 \textcolor{stringliteral}{        Parameters}
+00587 \textcolor{stringliteral}{        ----------}
+00588 \textcolor{stringliteral}{        m : non-negative int}
+00589 \textcolor{stringliteral}{            The number of integrations to perform.}
+00590 \textcolor{stringliteral}{        k : array\_like}
+00591 \textcolor{stringliteral}{            Integration constants. The first constant is applied to the}
+00592 \textcolor{stringliteral}{            first integration, the second to the second, and so on. The}
+00593 \textcolor{stringliteral}{            list of values must less than or equal to `m` in length and any}
+00594 \textcolor{stringliteral}{            missing values are set to zero.}
+00595 \textcolor{stringliteral}{        lbnd : Scalar}
+00596 \textcolor{stringliteral}{            The lower bound of the definite integral.}
+00597 \textcolor{stringliteral}{}
+00598 \textcolor{stringliteral}{        Returns}
+00599 \textcolor{stringliteral}{        -------}
+00600 \textcolor{stringliteral}{        integral : $name}
+00601 \textcolor{stringliteral}{            The integral of the series using the same domain.}
+00602 \textcolor{stringliteral}{}
+00603 \textcolor{stringliteral}{        See Also}
+00604 \textcolor{stringliteral}{        --------}
+00605 \textcolor{stringliteral}{        $\{nick\}int : similar function.}
+00606 \textcolor{stringliteral}{        $\{nick\}der : similar function for derivative.}
+00607 \textcolor{stringliteral}{}
+00608 \textcolor{stringliteral}{        """}
+00609 \textcolor{stringliteral}{        off, scl = self.mapparms()}
+00610 \textcolor{stringliteral}{        if lbnd is None :}
+00611 \textcolor{stringliteral}{            lbnd = 0}
+00612 \textcolor{stringliteral}{        else :}
+00613 \textcolor{stringliteral}{            lbnd = off + scl*lbnd}
+00614 \textcolor{stringliteral}{        coef = $\{nick\}int(self.coef, m, k, lbnd, 1./scl)}
+00615 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00616 \textcolor{stringliteral}{}
+00617 \textcolor{stringliteral}{    def deriv(self, m=1):}
+00618 \textcolor{stringliteral}{        """Differentiate.}
+00619 \textcolor{stringliteral}{}
+00620 \textcolor{stringliteral}{        Return an instance of $name that is the derivative of the current}
+00621 \textcolor{stringliteral}{        series.  Refer to `$\{nick\}der` for full documentation.}
+00622 \textcolor{stringliteral}{}
+00623 \textcolor{stringliteral}{        Parameters}
+00624 \textcolor{stringliteral}{        ----------}
+00625 \textcolor{stringliteral}{        m : non-negative int}
+00626 \textcolor{stringliteral}{            The number of integrations to perform.}
+00627 \textcolor{stringliteral}{}
+00628 \textcolor{stringliteral}{        Returns}
+00629 \textcolor{stringliteral}{        -------}
+00630 \textcolor{stringliteral}{        derivative : $name}
+00631 \textcolor{stringliteral}{            The derivative of the series using the same domain.}
+00632 \textcolor{stringliteral}{}
+00633 \textcolor{stringliteral}{        See Also}
+00634 \textcolor{stringliteral}{        --------}
+00635 \textcolor{stringliteral}{        $\{nick\}der : similar function.}
+00636 \textcolor{stringliteral}{        $\{nick\}int : similar function for integration.}
+00637 \textcolor{stringliteral}{}
+00638 \textcolor{stringliteral}{        """}
+00639 \textcolor{stringliteral}{        off, scl = self.mapparms()}
+00640 \textcolor{stringliteral}{        coef = $\{nick\}der(self.coef, m, scl)}
+00641 \textcolor{stringliteral}{        return self.\_\_class\_\_(coef, self.domain, self.window)}
+00642 \textcolor{stringliteral}{}
+00643 \textcolor{stringliteral}{    def roots(self) :}
+00644 \textcolor{stringliteral}{        """Return list of roots.}
+00645 \textcolor{stringliteral}{}
+00646 \textcolor{stringliteral}{        Return ndarray of roots for this series. See `$\{nick\}roots` for}
+00647 \textcolor{stringliteral}{        full documentation. Note that the accuracy of the roots is likely to}
+00648 \textcolor{stringliteral}{        decrease the further outside the domain they lie.}
+00649 \textcolor{stringliteral}{}
+00650 \textcolor{stringliteral}{        See Also}
+00651 \textcolor{stringliteral}{        --------}
+00652 \textcolor{stringliteral}{        $\{nick\}roots : similar function}
+00653 \textcolor{stringliteral}{        $\{nick\}fromroots : function to go generate series from roots.}
+00654 \textcolor{stringliteral}{}
+00655 \textcolor{stringliteral}{        """}
+00656 \textcolor{stringliteral}{        roots = $\{nick\}roots(self.coef)}
+00657 \textcolor{stringliteral}{        return pu.mapdomain(roots, self.window, self.domain)}
+00658 \textcolor{stringliteral}{}
+00659 \textcolor{stringliteral}{    def linspace(self, n=100, domain=None):}
+00660 \textcolor{stringliteral}{        """Return x,y values at equally spaced points in domain.}
+00661 \textcolor{stringliteral}{}
+00662 \textcolor{stringliteral}{        Returns x, y values at `n` equally spaced points across domain.}
+00663 \textcolor{stringliteral}{        Here y is the value of the polynomial at the points x.  This is}
+00664 \textcolor{stringliteral}{        intended as a plotting aid.}
+00665 \textcolor{stringliteral}{}
+00666 \textcolor{stringliteral}{        Parameters}
+00667 \textcolor{stringliteral}{        ----------}
+00668 \textcolor{stringliteral}{        n : int, optional}
+00669 \textcolor{stringliteral}{            Number of point pairs to return. The default value is 100.}
+00670 \textcolor{stringliteral}{}
+00671 \textcolor{stringliteral}{        Returns}
+00672 \textcolor{stringliteral}{        -------}
+00673 \textcolor{stringliteral}{        x, y : ndarrays}
+00674 \textcolor{stringliteral}{            ``x`` is equal to linspace(self.domain[0], self.domain[1], n)}
+00675 \textcolor{stringliteral}{            ``y`` is the polynomial evaluated at ``x``.}
+00676 \textcolor{stringliteral}{}
+00677 \textcolor{stringliteral}{        .. versionadded:: 1.5.0}
+00678 \textcolor{stringliteral}{}
+00679 \textcolor{stringliteral}{        """}
+00680 \textcolor{stringliteral}{        if domain is None:}
+00681 \textcolor{stringliteral}{            domain = self.domain}
+00682 \textcolor{stringliteral}{        x = np.linspace(domain[0], domain[1], n)}
+00683 \textcolor{stringliteral}{        y = self(x)}
+00684 \textcolor{stringliteral}{        return x, y}
+00685 \textcolor{stringliteral}{}
+00686 \textcolor{stringliteral}{}
+00687 \textcolor{stringliteral}{}
+00688 \textcolor{stringliteral}{    @staticmethod}
+00689 \textcolor{stringliteral}{    def fit(x, y, deg, domain=None, rcond=None, full=False, w=None,}
+00690 \textcolor{stringliteral}{        window=$domain):}
+00691 \textcolor{stringliteral}{        """Least squares fit to data.}
+00692 \textcolor{stringliteral}{}
+00693 \textcolor{stringliteral}{        Return a `$name` instance that is the least squares fit to the data}
+00694 \textcolor{stringliteral}{        `y` sampled at `x`. Unlike `$\{nick\}fit`, the domain of the returned}
+00695 \textcolor{stringliteral}{        instance can be specified and this will often result in a superior}
+00696 \textcolor{stringliteral}{        fit with less chance of ill conditioning. See `$\{nick\}fit` for full}
+00697 \textcolor{stringliteral}{        documentation of the implementation.}
+00698 \textcolor{stringliteral}{}
+00699 \textcolor{stringliteral}{        Parameters}
+00700 \textcolor{stringliteral}{        ----------}
+00701 \textcolor{stringliteral}{        x : array\_like, shape (M,)}
+00702 \textcolor{stringliteral}{            x-coordinates of the M sample points ``(x[i], y[i])``.}
+00703 \textcolor{stringliteral}{        y : array\_like, shape (M,) or (M, K)}
+00704 \textcolor{stringliteral}{            y-coordinates of the sample points. Several data sets of sample}
+00705 \textcolor{stringliteral}{            points sharing the same x-coordinates can be fitted at once by}
+00706 \textcolor{stringliteral}{            passing in a 2D-array that contains one dataset per column.}
+00707 \textcolor{stringliteral}{        deg : int}
+00708 \textcolor{stringliteral}{            Degree of the fitting polynomial.}
+00709 \textcolor{stringliteral}{        domain : \{None, [beg, end], []\}, optional}
+00710 \textcolor{stringliteral}{            Domain to use for the returned $name instance. If ``None``,}
+00711 \textcolor{stringliteral}{            then a minimal domain that covers the points `x` is chosen.  If}
+00712 \textcolor{stringliteral}{            ``[]`` the default domain ``$domain`` is used. The default}
+00713 \textcolor{stringliteral}{            value is $domain in numpy 1.4.x and ``None`` in later versions.}
+00714 \textcolor{stringliteral}{            The ``'[]`` value was added in numpy 1.5.0.}
+00715 \textcolor{stringliteral}{        rcond : float, optional}
+00716 \textcolor{stringliteral}{            Relative condition number of the fit. Singular values smaller}
+00717 \textcolor{stringliteral}{            than this relative to the largest singular value will be}
+00718 \textcolor{stringliteral}{            ignored. The default value is len(x)*eps, where eps is the}
+00719 \textcolor{stringliteral}{            relative precision of the float type, about 2e-16 in most}
+00720 \textcolor{stringliteral}{            cases.}
+00721 \textcolor{stringliteral}{        full : bool, optional}
+00722 \textcolor{stringliteral}{            Switch determining nature of return value. When it is False}
+00723 \textcolor{stringliteral}{            (the default) just the coefficients are returned, when True}
+00724 \textcolor{stringliteral}{            diagnostic information from the singular value decomposition is}
+00725 \textcolor{stringliteral}{            also returned.}
+00726 \textcolor{stringliteral}{        w : array\_like, shape (M,), optional}
+00727 \textcolor{stringliteral}{            Weights. If not None the contribution of each point}
+00728 \textcolor{stringliteral}{            ``(x[i],y[i])`` to the fit is weighted by `w[i]`. Ideally the}
+00729 \textcolor{stringliteral}{            weights are chosen so that the errors of the products}
+00730 \textcolor{stringliteral}{            ``w[i]*y[i]`` all have the same variance.  The default value is}
+00731 \textcolor{stringliteral}{            None.}
+00732 \textcolor{stringliteral}{            .. versionadded:: 1.5.0}
+00733 \textcolor{stringliteral}{        window : \{[beg, end]\}, optional}
+00734 \textcolor{stringliteral}{            Window to use for the returned $name instance. The default}
+00735 \textcolor{stringliteral}{            value is ``$domain``}
+00736 \textcolor{stringliteral}{            .. versionadded:: 1.6.0}
+00737 \textcolor{stringliteral}{}
+00738 \textcolor{stringliteral}{        Returns}
+00739 \textcolor{stringliteral}{        -------}
+00740 \textcolor{stringliteral}{        least\_squares\_fit : instance of $name}
+00741 \textcolor{stringliteral}{            The $name instance is the least squares fit to the data and}
+00742 \textcolor{stringliteral}{            has the domain specified in the call.}
+00743 \textcolor{stringliteral}{}
+00744 \textcolor{stringliteral}{        [residuals, rank, singular\_values, rcond] : only if `full` = True}
+00745 \textcolor{stringliteral}{            Residuals of the least-squares fit, the effective rank of the}
+00746 \textcolor{stringliteral}{            scaled Vandermonde matrix and its singular values, and the}
+00747 \textcolor{stringliteral}{            specified value of `rcond`. For more details, see}
+00748 \textcolor{stringliteral}{            `linalg.lstsq`.}
+00749 \textcolor{stringliteral}{}
+00750 \textcolor{stringliteral}{        See Also}
+00751 \textcolor{stringliteral}{        --------}
+00752 \textcolor{stringliteral}{        $\{nick\}fit : similar function}
+00753 \textcolor{stringliteral}{}
+00754 \textcolor{stringliteral}{        """}
+00755 \textcolor{stringliteral}{        if domain is None:}
+00756 \textcolor{stringliteral}{            domain = pu.getdomain(x)}
+00757 \textcolor{stringliteral}{        elif domain == []:}
+00758 \textcolor{stringliteral}{            domain = $domain}
+00759 \textcolor{stringliteral}{}
+00760 \textcolor{stringliteral}{        if window == []:}
+00761 \textcolor{stringliteral}{            window = $domain}
+00762 \textcolor{stringliteral}{}
+00763 \textcolor{stringliteral}{        xnew = pu.mapdomain(x, domain, window)}
+00764 \textcolor{stringliteral}{        res = $\{nick\}fit(xnew, y, deg, w=w, rcond=rcond, full=full)}
+00765 \textcolor{stringliteral}{        if full :}
+00766 \textcolor{stringliteral}{            [coef, status] = res}
+00767 \textcolor{stringliteral}{            return $name(coef, domain=domain, window=window), status}
+00768 \textcolor{stringliteral}{        else :}
+00769 \textcolor{stringliteral}{            coef = res}
+00770 \textcolor{stringliteral}{            return $name(coef, domain=domain, window=window)}
+00771 \textcolor{stringliteral}{}
+00772 \textcolor{stringliteral}{    @staticmethod}
+00773 \textcolor{stringliteral}{    def fromroots(roots, domain=$domain, window=$domain) :}
+00774 \textcolor{stringliteral}{        """Return $name instance with specified roots.}
+00775 \textcolor{stringliteral}{}
+00776 \textcolor{stringliteral}{        Returns an instance of $name representing the product}
+00777 \textcolor{stringliteral}{        ``(x - r[0])*(x - r[1])*...*(x - r[n-1])``, where ``r`` is the}
+00778 \textcolor{stringliteral}{        list of roots.}
+00779 \textcolor{stringliteral}{}
+00780 \textcolor{stringliteral}{        Parameters}
+00781 \textcolor{stringliteral}{        ----------}
+00782 \textcolor{stringliteral}{        roots : array\_like}
+00783 \textcolor{stringliteral}{            List of roots.}
+00784 \textcolor{stringliteral}{}
+00785 \textcolor{stringliteral}{        Returns}
+00786 \textcolor{stringliteral}{        -------}
+00787 \textcolor{stringliteral}{        object : $name}
+00788 \textcolor{stringliteral}{            Series with the specified roots.}
+00789 \textcolor{stringliteral}{}
+00790 \textcolor{stringliteral}{        See Also}
+00791 \textcolor{stringliteral}{        --------}
+00792 \textcolor{stringliteral}{        $\{nick\}fromroots : equivalent function}
+00793 \textcolor{stringliteral}{}
+00794 \textcolor{stringliteral}{        """}
+00795 \textcolor{stringliteral}{        if domain is None :}
+00796 \textcolor{stringliteral}{            domain = pu.getdomain(roots)}
+00797 \textcolor{stringliteral}{        rnew = pu.mapdomain(roots, domain, window)}
+00798 \textcolor{stringliteral}{        coef = $\{nick\}fromroots(rnew)}
+00799 \textcolor{stringliteral}{        return $name(coef, domain=domain, window=window)}
+00800 \textcolor{stringliteral}{}
+00801 \textcolor{stringliteral}{    @staticmethod}
+00802 \textcolor{stringliteral}{    def identity(domain=$domain, window=$domain) :}
+00803 \textcolor{stringliteral}{        """Identity function.}
+00804 \textcolor{stringliteral}{}
+00805 \textcolor{stringliteral}{        If ``p`` is the returned $name object, then ``p(x) == x`` for all}
+00806 \textcolor{stringliteral}{        values of x.}
+00807 \textcolor{stringliteral}{}
+00808 \textcolor{stringliteral}{        Parameters}
+00809 \textcolor{stringliteral}{        ----------}
+00810 \textcolor{stringliteral}{        domain : array\_like}
+00811 \textcolor{stringliteral}{            The resulting array must be if the form ``[beg, end]``, where}
+00812 \textcolor{stringliteral}{            ``beg`` and ``end`` are the endpoints of the domain.}
+00813 \textcolor{stringliteral}{        window : array\_like}
+00814 \textcolor{stringliteral}{            The resulting array must be if the form ``[beg, end]``, where}
+00815 \textcolor{stringliteral}{            ``beg`` and ``end`` are the endpoints of the window.}
+00816 \textcolor{stringliteral}{}
+00817 \textcolor{stringliteral}{        Returns}
+00818 \textcolor{stringliteral}{        -------}
+00819 \textcolor{stringliteral}{        identity : $name object}
+00820 \textcolor{stringliteral}{}
+00821 \textcolor{stringliteral}{        """}
+00822 \textcolor{stringliteral}{        off, scl = pu.mapparms(window, domain)}
+00823 \textcolor{stringliteral}{        coef = $\{nick\}line(off, scl)}
+00824 \textcolor{stringliteral}{        return $name(coef, domain, window)}
+00825 \textcolor{stringliteral}{'''}.replace(\textcolor{stringliteral}{'REL\_IMPORT'}, rel\_import))
+\end{DoxyCode}

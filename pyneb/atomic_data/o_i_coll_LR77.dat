@@ -1,0 +1,14 @@
+0 0 50   100  150  200  250  300  350  400  450  500   600   700   800   900   1000
+1 2  0   0.56 1.66 2.98 4.37 5.74 7.06 8.33 9.54 10.69 12.80 14.80 16.60 18.30 19.90
+1 3  0   0    0.13 0.29 0.49 0.71 0.94 1.18 1.42 1.66  2.13  2.57  3.00  3.41  3.80
+2 3 0.39 1.33 2.13 2.81 3.39 3.92 4.40 4.85 5.28 5.69  6.48  7.21  7.91  8.58  9.22
+*** O I IR rate coefficients for excitation
+*** ATOM oxygen
+*** SPECTRUM 1
+*** N_LEVELS 3
+*** T_UNIT K
+*** O_UNIT RATE COEFF
+*** COEFF 1e-11
+*** SOURCE1  Launay and Roueff 1977, AAP 56
+*** NOTE1    excitation rate coefficients with H
+*** GSCONFIG p4

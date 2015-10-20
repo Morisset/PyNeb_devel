@@ -1,0 +1,158 @@
+\hypertarget{_config_8py_source}{}\section{Config.\+py}
+\label{_config_8py_source}\index{pyneb/utils/\+Config.\+py@{pyneb/utils/\+Config.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{_config_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1_config}{00001} \textcolor{keyword}{import} os
+00002 \textcolor{keyword}{from} misc \textcolor{keyword}{import} execution\_path
+00003 \textcolor{keyword}{from} logging \textcolor{keyword}{import} my\_logging
+00004 
+\hypertarget{_config_8py_source_l00005}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config}{00005} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config}{\_Config}(object):
+00006     \textcolor{stringliteral}{"""}
+00007 \textcolor{stringliteral}{    This is the place where to put stuff that any module may need, a kind of COMMON.}
+00008 \textcolor{stringliteral}{    An instantiation is done in the main \_\_init\_\_ file using the "config" name.}
+00009 \textcolor{stringliteral}{}
+00010 \textcolor{stringliteral}{    """}
+00011 
+00012 
+\hypertarget{_config_8py_source_l00013}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_aa11fc0ec5216188162c802fbe5815fc2}{00013}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_aa11fc0ec5216188162c802fbe5815fc2}{\_\_init\_\_}(self):
+00014         \textcolor{stringliteral}{"""}
+00015 \textcolor{stringliteral}{        Define variables that will be known from everywhere:}
+00016 \textcolor{stringliteral}{        - INSTALLED: a dictionary whose keys are the libraries that PyNeb may need}
+00017 \textcolor{stringliteral}{            e.g. 'plt' for matplotlib.pyplot, 'scipy' for scipy.interpolate. and whose values}
+00018 \textcolor{stringliteral}{            are Boolean}
+00019 \textcolor{stringliteral}{        }
+00020 \textcolor{stringliteral}{        - Datafile: a dictionary holding the HI atom, which can be used intensively in Atom.getIonAbundance}
+00021 \textcolor{stringliteral}{        }
+00022 \textcolor{stringliteral}{        - pypic\_path: This is only set when needed (basically by getEmisGridDict).}
+00023 \textcolor{stringliteral}{            The default value for the pypic\_path parameter of getEmisGridDict().}
+00024 \textcolor{stringliteral}{            The first try is ./.pypics: if it cannot be created, or it exists but it is not writable, }
+00025 \textcolor{stringliteral}{            /tmp/pypics is tried; if it cannot be created, or it exists but it is not writable, the path}
+00026 \textcolor{stringliteral}{            is set to None and a pypic\_path value shall be provided to getEmisGridDict().}
+00027 \textcolor{stringliteral}{        }
+00028 \textcolor{stringliteral}{        Parameters: none}
+00029 \textcolor{stringliteral}{        }
+00030 \textcolor{stringliteral}{        """}
+\hypertarget{_config_8py_source_l00031}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a8304de6467642234fcf5a7ae1e7a16bd}{00031}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a8304de6467642234fcf5a7ae1e7a16bd}{log\_} = my\_logging()
+\hypertarget{_config_8py_source_l00032}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{00032}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling} = \textcolor{stringliteral}{'\_Config'}
+00033         
+\hypertarget{_config_8py_source_l00034}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{00034}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED} = \{\}
+00035         \textcolor{keywordflow}{try}:
+00036             \textcolor{keyword}{import} matplotlib.pyplot \textcolor{keyword}{as} plt
+00037             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'plt'}] = \textcolor{keyword}{True}
+00038         \textcolor{keywordflow}{except}:
+00039             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'plt'}] = \textcolor{keyword}{False}
+00040             self.log\_.message(\textcolor{stringliteral}{'matplotlib not available'}, calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00041         \textcolor{keywordflow}{try}:     
+00042             \textcolor{keyword}{from} scipy \textcolor{keyword}{import} interpolate
+00043             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'scipy'}] = \textcolor{keyword}{True}
+00044         \textcolor{keywordflow}{except}:
+00045             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'scipy'}] = \textcolor{keyword}{False}
+00046             self.log\_.message(\textcolor{stringliteral}{'scipy not available or interpolate not in scipy'}, calling=self.
+      \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00047         \textcolor{keywordflow}{try}:
+00048             \textcolor{keyword}{import} multiprocessing \textcolor{keyword}{as} mp
+00049             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'mp'}] = \textcolor{keyword}{True}
+\hypertarget{_config_8py_source_l00050}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_af47651c816db6a79ea1ba34e1594e2d4}{00050}             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_af47651c816db6a79ea1ba34e1594e2d4}{Nprocs} = mp.cpu\_count()
+00051         \textcolor{keywordflow}{except}:
+00052             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'mp'}] = \textcolor{keyword}{False}
+00053             self.log\_.message(\textcolor{stringliteral}{'multiprocessing not available'}, calling=self.
+      \hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00054             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_af47651c816db6a79ea1ba34e1594e2d4}{Nprocs} = 1
+00055         \textcolor{keywordflow}{if} \textcolor{stringliteral}{'XUVTOP'} \textcolor{keywordflow}{in} os.environ:
+00056             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'Chianti'}] = \textcolor{keyword}{True}
+00057         \textcolor{keywordflow}{else}:
+00058             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'Chianti'}] = \textcolor{keyword}{False}
+00059         \textcolor{keywordflow}{try}:
+00060             \textcolor{keyword}{import} pyfits
+00061             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'pyfits'}] = \textcolor{keyword}{True}
+00062             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'pyfits from astropy'}] = \textcolor{keyword}{False}
+00063         \textcolor{keywordflow}{except}:
+00064             self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'pyfits'}] = \textcolor{keyword}{False}
+00065             \textcolor{keywordflow}{try}:
+00066                 \textcolor{keyword}{import} astropy.io.fits \textcolor{keyword}{as} pyfits
+00067                 self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'pyfits from astropy'}] = \textcolor{keyword}{True}
+00068             \textcolor{keywordflow}{except}:
+00069                 self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ae07a752629612175b8000d374904b22a}{INSTALLED}[\textcolor{stringliteral}{'pyfits from astropy'}] = \textcolor{keyword}{False}
+00070         
+\hypertarget{_config_8py_source_l00071}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ab6b6d2b4a7046e65edca2cf9f92be911}{00071}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_ab6b6d2b4a7046e65edca2cf9f92be911}{DataFiles} = \{\}
+00072             
+00073         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_aab9d7c77b65287b8823f3d448bef3580}{unuse\_multiprocs}()
+00074         
+\hypertarget{_config_8py_source_l00075}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a753691b738e636f400f909260d23c6eb}{00075}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a753691b738e636f400f909260d23c6eb}{kappa} = \textcolor{keywordtype}{None}
+00076         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a53f88ffa40d5212d3f88a585e3c3d595}{set\_noExtrapol}(\textcolor{keyword}{False})
+00077                     
+\hypertarget{_config_8py_source_l00078}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{00078}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{\_\_pypic\_path} = \textcolor{keywordtype}{None}
+00079                 
+\hypertarget{_config_8py_source_l00080}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a53f88ffa40d5212d3f88a585e3c3d595}{00080}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a53f88ffa40d5212d3f88a585e3c3d595}{set\_noExtrapol}(self, value):
+\hypertarget{_config_8py_source_l00081}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a0fd9f60b73f8af4fda56fed8c6683a1c}{00081}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a0fd9f60b73f8af4fda56fed8c6683a1c}{\_noExtrapol} = bool(value)
+00082         
+\hypertarget{_config_8py_source_l00083}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a2ab4cc94c90b0c726876cf355d795396}{00083}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a2ab4cc94c90b0c726876cf355d795396}{get\_noExtrapol}(self):
+00084         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a0fd9f60b73f8af4fda56fed8c6683a1c}{\_noExtrapol}
+00085         
+\hypertarget{_config_8py_source_l00086}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a949b65b35f3bf0e60390e28460818aba}{00086}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a949b65b35f3bf0e60390e28460818aba}{\_get\_PypicPath}(self):
+00087         pypic\_path = self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{\_\_pypic\_path}
+00088         \textcolor{keywordflow}{if} pypic\_path \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00089             pypic\_path = \textcolor{stringliteral}{'./pypics/'}
+00090             \textcolor{keywordflow}{if} os.path.exists(pypic\_path):
+00091                 \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.access(pypic\_path, os.W\_OK):
+00092                     self.log\_.warn(\textcolor{stringliteral}{'Directory \{0\} not writable'}.format(pypic\_path),
+00093                                       calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00094                     pypic\_path = \textcolor{keywordtype}{None}
+00095             \textcolor{keywordflow}{else}:
+00096                 \textcolor{keywordflow}{try}:
+00097                     os.makedirs(pypic\_path)
+00098                     self.log\_.message(\textcolor{stringliteral}{'Directory \{0\} created'}.format(pypic\_path),
+00099                                       calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00100                 \textcolor{keywordflow}{except}:
+00101                     pypic\_path = \textcolor{keywordtype}{None}
+00102             \textcolor{keywordflow}{if} pypic\_path \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00103                 pypic\_path = \textcolor{stringliteral}{'/tmp/pypics/'}
+00104                 \textcolor{keywordflow}{if} os.path.exists(pypic\_path):
+00105                     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.access(pypic\_path, os.W\_OK):
+00106                         self.log\_.warn(\textcolor{stringliteral}{'Directory \{0\} not writable'}.format(pypic\_path),
+00107                                           calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})                                   
+00108                         pypic\_path = \textcolor{keywordtype}{None} 
+00109                 \textcolor{keywordflow}{else}:
+00110                     \textcolor{keywordflow}{try}:
+00111                         os.makedirs(pypic\_path)
+00112                         self.log\_.message(\textcolor{stringliteral}{'Directory \{0\} created'}.format(pypic\_path),
+00113                                           calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00114                     \textcolor{keywordflow}{except}:
+00115                         pypic\_path = \textcolor{keywordtype}{None}
+00116         \textcolor{keywordflow}{else}:
+00117             \textcolor{keywordflow}{if} os.path.exists(pypic\_path):
+00118                 \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.access(pypic\_path, os.W\_OK):
+00119                     self.log\_.warn(\textcolor{stringliteral}{'Directory \{0\} not writable'}.format(pypic\_path),
+00120                                       calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00121                     pypic\_path = \textcolor{keywordtype}{None}
+00122             \textcolor{keywordflow}{else}:
+00123                 \textcolor{keywordflow}{try}:
+00124                     os.makedirs(pypic\_path)
+00125                     self.log\_.message(\textcolor{stringliteral}{'Directory \{0\} created'}.format(pypic\_path),
+00126                                       calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00127                 \textcolor{keywordflow}{except}:
+00128                     self.log\_.warn(\textcolor{stringliteral}{'Unable to create directory \{0\}'}.format(pypic\_path),
+00129                                       calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00130                     
+00131                     pypic\_path = \textcolor{keywordtype}{None}
+00132             
+00133         self.log\_.message(\textcolor{stringliteral}{'pypic\_path set to \{0\}'}.format(pypic\_path),
+00134                                           calling=self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_abf04542e5670abea107260ca7a6baf6d}{calling})
+00135         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{\_\_pypic\_path} = pypic\_path
+00136         
+00137         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{\_\_pypic\_path}
+00138     
+\hypertarget{_config_8py_source_l00139}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a6d13ed9c4ac0d9fee12cc38de10fe9d2}{00139}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a6d13ed9c4ac0d9fee12cc38de10fe9d2}{\_set\_PypicPath}(self, value):            
+00140         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a1c122165aa8885ce11f9bf86d08c40cd}{\_\_pypic\_path} = value
+00141         test = self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a5276927da3588ffb009fd79f282c6d3c}{pypic\_path}
+00142         
+\hypertarget{_config_8py_source_l00143}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a5276927da3588ffb009fd79f282c6d3c}{00143}     pypic\_path = property(\_get\_PypicPath, \_set\_PypicPath, \textcolor{keywordtype}{None}, \textcolor{keywordtype}{None})
+00144             
+\hypertarget{_config_8py_source_l00145}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a3254e6ea5ec1809863595645515288c8}{00145}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a3254e6ea5ec1809863595645515288c8}{use\_multiprocs}(self):
+\hypertarget{_config_8py_source_l00146}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a29aefac8a5bc01cb564c9fc12755fe7c}{00146}         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a29aefac8a5bc01cb564c9fc12755fe7c}{\_use\_mp} = \textcolor{keyword}{True}
+00147     
+\hypertarget{_config_8py_source_l00148}{}\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_aab9d7c77b65287b8823f3d448bef3580}{00148}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_aab9d7c77b65287b8823f3d448bef3580}{unuse\_multiprocs}(self):
+00149         self.\hyperlink{classpyneb_1_1utils_1_1_config_1_1___config_a29aefac8a5bc01cb564c9fc12755fe7c}{\_use\_mp} = \textcolor{keyword}{False}    
+00150         
+00151     
+\end{DoxyCode}

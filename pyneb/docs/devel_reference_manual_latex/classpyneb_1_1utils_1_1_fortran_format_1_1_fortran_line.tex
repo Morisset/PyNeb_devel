@@ -1,0 +1,451 @@
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{}\section{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line Class Reference}
+\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}\index{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line@{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a292ba8e3d93bd751d6d13fdc1671ccb2}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ac8b694644f83c524f84a3f093c5309e3}{\+\_\+\+\_\+len\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a1fc8a0bef1841d12d258cff06e2c5c4d}{\+\_\+\+\_\+getitem\+\_\+\+\_\+} (self, i)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a623c152bf4892c671290b6f9dcb0fee4}{\+\_\+\+\_\+getslice\+\_\+\+\_\+} (self, i, j)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a02ccdba49c33daca4eb4187d3aa23057}{\+\_\+\+\_\+str\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_aaa590d7811b69dd963ffdc5510787101}{is\+Blank} (self)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{format}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{length}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}{\+\_\+input} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}{\+\_\+output} (self)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Fortran-style record in formatted files
+
+FortranLine objects represent the content of one record of a
+Fortran-style formatted file. Indexing yields the contents as
+Python objects, whereas transformation to a string (using the
+built-in function 'str') yields the text representation.
+
+Restrictions:
+
+  1. Only A, D, E, F, G, I, and X formats are supported (plus string
+     constants for output).
+
+  2. No direct support for complex numbers; they must be split into
+     real and imaginary parts before output.
+
+  3. No overflow check. If an output field gets too large, it will
+     take more space, instead of being replaced by stars according
+     to Fortran conventions.
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00062}{62} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a292ba8e3d93bd751d6d13fdc1671ccb2}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{line, }
+\item[{}]{format, }
+\item[{}]{length = {\ttfamily 80}}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a292ba8e3d93bd751d6d13fdc1671ccb2}
+\begin{DoxyVerb}@param data: either a sequence of Python objects, or a string
+     formatted according to Fortran rules
+
+@param format: either a Fortran-style format string, or a
+       L{FortranFormat} object. A FortranFormat should
+       be used when the same format string is used repeatedly,
+       because then the rather slow parsing of the string
+       is performed only once.
+
+@param length: the length of the Fortran record. This is relevant
+       only when data is a string; this string is then
+       extended by spaces to have the indicated length.
+       The default value of 80 is almost always correct.
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00084}{84} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00084}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a292ba8e3d93bd751d6d13fdc1671ccb2}{00084}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a292ba8e3d93bd751d6d13fdc1671ccb2}{\_\_init\_\_}(self, line, format, length = 80):
+00085         \textcolor{stringliteral}{"""}
+00086 \textcolor{stringliteral}{        @param data: either a sequence of Python objects, or a string}
+00087 \textcolor{stringliteral}{                     formatted according to Fortran rules}
+00088 \textcolor{stringliteral}{}
+00089 \textcolor{stringliteral}{        @param format: either a Fortran-style format string, or a}
+00090 \textcolor{stringliteral}{                       L\{FortranFormat\} object. A FortranFormat should}
+00091 \textcolor{stringliteral}{                       be used when the same format string is used repeatedly,}
+00092 \textcolor{stringliteral}{                       because then the rather slow parsing of the string}
+00093 \textcolor{stringliteral}{                       is performed only once.}
+00094 \textcolor{stringliteral}{}
+00095 \textcolor{stringliteral}{        @param length: the length of the Fortran record. This is relevant}
+00096 \textcolor{stringliteral}{                       only when data is a string; this string is then}
+00097 \textcolor{stringliteral}{                       extended by spaces to have the indicated length.}
+00098 \textcolor{stringliteral}{                       The default value of 80 is almost always correct.}
+00099 \textcolor{stringliteral}{        """}
+00100         \textcolor{keywordflow}{if} type(line) == type(\textcolor{stringliteral}{''}):
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00101}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{00101}             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = line
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00102}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{00102}             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data} = \textcolor{keywordtype}{None}
+00103         \textcolor{keywordflow}{else}:
+00104             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = \textcolor{keywordtype}{None}
+00105             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data} = line
+00106         \textcolor{keywordflow}{if} type(format) == type(\textcolor{stringliteral}{''}):
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00107}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{00107}             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{format} = \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(format)
+00108         \textcolor{keywordflow}{else}:
+00109             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{format} = format
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00110}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{00110}         self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{length} = length
+00111         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00112             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}{\_output}()
+00113         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data} \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00114             self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}{\_input}()
+00115 
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a1fc8a0bef1841d12d258cff06e2c5c4d}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+\+\_\+getitem\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+getitem\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{i}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a1fc8a0bef1841d12d258cff06e2c5c4d}
+\begin{DoxyVerb}@param i: index
+@type i: C{int}
+@returns: the ith data element
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00123}{123} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00102}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00123}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a1fc8a0bef1841d12d258cff06e2c5c4d}{00123}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a1fc8a0bef1841d12d258cff06e2c5c4d}{\_\_getitem\_\_}(self, i):
+00124         \textcolor{stringliteral}{"""}
+00125 \textcolor{stringliteral}{        @param i: index}
+00126 \textcolor{stringliteral}{        @type i: C\{int\}}
+00127 \textcolor{stringliteral}{        @returns: the ith data element}
+00128 \textcolor{stringliteral}{        """}
+00129         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data}[i]
+00130 
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a623c152bf4892c671290b6f9dcb0fee4}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+\+\_\+getslice\+\_\+\+\_\+@{\+\_\+\+\_\+getslice\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+getslice\+\_\+\+\_\+@{\+\_\+\+\_\+getslice\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+\+\_\+getslice\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+getslice\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{i, }
+\item[{}]{j}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a623c152bf4892c671290b6f9dcb0fee4}
+\begin{DoxyVerb}@param i: start index
+@type i: C{int}
+@param j: end index
+@type j: C{int}
+@returns: a list containing the ith to jth data elements
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00131}{131} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00102}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00131}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a623c152bf4892c671290b6f9dcb0fee4}{00131}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a623c152bf4892c671290b6f9dcb0fee4}{\_\_getslice\_\_}(self, i, j):
+00132         \textcolor{stringliteral}{"""}
+00133 \textcolor{stringliteral}{        @param i: start index}
+00134 \textcolor{stringliteral}{        @type i: C\{int\}}
+00135 \textcolor{stringliteral}{        @param j: end index}
+00136 \textcolor{stringliteral}{        @type j: C\{int\}}
+00137 \textcolor{stringliteral}{        @returns: a list containing the ith to jth data elements}
+00138 \textcolor{stringliteral}{        """}
+00139         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data}[i:j]
+00140 
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ac8b694644f83c524f84a3f093c5309e3}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+\+\_\+len\+\_\+\+\_\+@{\+\_\+\+\_\+len\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+len\+\_\+\+\_\+@{\+\_\+\+\_\+len\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+\+\_\+len\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+len\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ac8b694644f83c524f84a3f093c5309e3}
+\begin{DoxyVerb}@returns: the number of data elements in the record
+@rtype: C{int}
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00116}{116} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00102}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00116}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ac8b694644f83c524f84a3f093c5309e3}{00116}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ac8b694644f83c524f84a3f093c5309e3}{\_\_len\_\_}(self):
+00117         \textcolor{stringliteral}{"""}
+00118 \textcolor{stringliteral}{        @returns: the number of data elements in the record}
+00119 \textcolor{stringliteral}{        @rtype: C\{int\}}
+00120 \textcolor{stringliteral}{        """}
+00121         \textcolor{keywordflow}{return} len(self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data})
+00122 
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a02ccdba49c33daca4eb4187d3aa23057}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+\+\_\+str\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+str\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a02ccdba49c33daca4eb4187d3aa23057}
+\begin{DoxyVerb}@returns: a Fortran-formatted text representation of the data record
+@rtype: C{str}
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00141}{141} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00101}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+text}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00141}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a02ccdba49c33daca4eb4187d3aa23057}{00141}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a02ccdba49c33daca4eb4187d3aa23057}{\_\_str\_\_}(self):
+00142         \textcolor{stringliteral}{"""}
+00143 \textcolor{stringliteral}{        @returns: a Fortran-formatted text representation of the data record}
+00144 \textcolor{stringliteral}{        @rtype: C\{str\}}
+00145 \textcolor{stringliteral}{        """}
+00146         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text}
+00147 
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+input@{\+\_\+input}}
+\index{\+\_\+input@{\+\_\+input}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+input}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+input (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00155}{155} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00102}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}, \hyperlink{_fortran_format_8py_source_l00107}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+format}, \hyperlink{_fortran_format_8py_source_l00110}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+length}, and \hyperlink{_fortran_format_8py_source_l00101}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+text}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00155}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}{00155}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a578ada89c0a7d1e519ba15fca4888073}{\_input}(self):
+00156         text = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text}
+00157         \textcolor{keywordflow}{if} len(text) < self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{length}: text = text + (self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{length}-len(text))*\textcolor{stringliteral}{' '}
+00158         self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data} = []
+00159         \textcolor{keywordflow}{for} field \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{format}:
+00160             l = field[1]
+00161             s = text[:l]
+00162             text = text[l:]
+00163             type = field[0]
+00164             value = \textcolor{keywordtype}{None}
+00165             \textcolor{keywordflow}{if} type == \textcolor{stringliteral}{'A'}:
+00166                 value = s
+00167             \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'I'}:
+00168                 s = string.strip(s)
+00169                 \textcolor{keywordflow}{if} len(s) == 0:
+00170                     value = 0
+00171                 \textcolor{keywordflow}{else}:
+00172                     \textcolor{comment}{# by AP}
+00173                     \textcolor{comment}{# sometimes a line does not match to expected format,}
+00174                     \textcolor{comment}{# e.g.: pdb2myd.ent.Z chain: - model: 0 : CONECT*****}
+00175                     \textcolor{comment}{# catch this and set value to None}
+00176                     \textcolor{keywordflow}{try}:
+00177                         value = string.atoi(s)
+00178                     \textcolor{keywordflow}{except}:
+00179                         value = \textcolor{keywordtype}{None}
+00180             \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'D'} \textcolor{keywordflow}{or} type == \textcolor{stringliteral}{'E'} \textcolor{keywordflow}{or} type == \textcolor{stringliteral}{'F'} \textcolor{keywordflow}{or} type == \textcolor{stringliteral}{'G'}:
+00181                 s = string.lower(string.strip(s))
+00182                 n = string.find(s, \textcolor{stringliteral}{'d'})
+00183                 \textcolor{keywordflow}{if} n >= 0:
+00184                     s = s[:n] + \textcolor{stringliteral}{'e'} + s[n+1:]
+00185                 \textcolor{keywordflow}{if} len(s) == 0:
+00186                     value = 0.
+00187                 \textcolor{keywordflow}{else}:
+00188                     \textcolor{keywordflow}{try}:
+00189                         value = string.atof(s)
+00190                     \textcolor{keywordflow}{except}:
+00191                         value = \textcolor{keywordtype}{None}
+00192             \textcolor{keywordflow}{if} value \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00193                 self.data.append(value)
+00194 
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!\+\_\+output@{\+\_\+output}}
+\index{\+\_\+output@{\+\_\+output}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{\+\_\+output}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+output (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00195}{195} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00102}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}, \hyperlink{_fortran_format_8py_source_l00107}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+format}, and \hyperlink{_fortran_format_8py_source_l00101}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+text}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00195}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}{00195}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ad05b9dd81ba899bde2235ae9409a6f38}{\_output}(self):
+00196         data = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{data}
+00197         self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = \textcolor{stringliteral}{''}
+00198         \textcolor{keywordflow}{for} field \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{format}:
+00199             type = field[0]
+00200             \textcolor{keywordflow}{if} type == \textcolor{stringliteral}{"'"}:
+00201                 self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} + field[1]
+00202             \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'X'}:
+00203                 self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} + field[1]*\textcolor{stringliteral}{' '}
+00204             \textcolor{keywordflow}{else}: \textcolor{comment}{# fields that use input data}
+00205                 length = field[1]
+00206                 \textcolor{keywordflow}{if} len(field) > 2: fraction = field[2]
+00207                 value = data[0]
+00208                 data = data[1:]
+00209                 \textcolor{keywordflow}{if} type == \textcolor{stringliteral}{'A'}:
+00210                     self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} + (value+length*\textcolor{stringliteral}{' '})[:length]
+00211                 \textcolor{keywordflow}{else}: \textcolor{comment}{# numeric fields}
+00212                     \textcolor{keywordflow}{if} value \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00213                         s = \textcolor{stringliteral}{''}
+00214                     \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'I'}:
+00215                         s = repr(value)
+00216                     \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'D'}:
+00217                         s = (\textcolor{stringliteral}{'%'}+repr(length)+\textcolor{stringliteral}{'.'}+repr(fraction)+\textcolor{stringliteral}{'e'}) % value
+00218                         n = string.find(s, \textcolor{stringliteral}{'e'})
+00219                         s = s[:n] + \textcolor{stringliteral}{'D'} + s[n+1:]
+00220                     \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'E'}:
+00221                         s = (\textcolor{stringliteral}{'%'}+repr(length)+\textcolor{stringliteral}{'.'}+ repr(fraction)+\textcolor{stringliteral}{'e'}) % value
+00222                     \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'F'}:
+00223                         s = (\textcolor{stringliteral}{'%'}+repr(length)+\textcolor{stringliteral}{'.'}+repr(fraction)+\textcolor{stringliteral}{'f'}) % value
+00224                     \textcolor{keywordflow}{elif} type == \textcolor{stringliteral}{'G'}:
+00225                         s = (\textcolor{stringliteral}{'%'}+repr(length)+\textcolor{stringliteral}{'.'}+repr(fraction)+\textcolor{stringliteral}{'g'}) % value
+00226                     \textcolor{keywordflow}{else}:
+00227                         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{'Not yet implemented'})
+00228                     s = string.upper(s)
+00229                     self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} + ((length*\textcolor{stringliteral}{' '})+s)[-length:]
+00230         self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text} = string.rstrip(self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text})
+00231 
+00232 \textcolor{comment}{#}
+00233 \textcolor{comment}{# The class FortranFormat represents a format specification.}
+00234 \textcolor{comment}{# It ought to work for correct specifications, but there is}
+00235 \textcolor{comment}{# little error checking.}
+00236 \textcolor{comment}{#}
+\end{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_aaa590d7811b69dd963ffdc5510787101}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!is\+Blank@{is\+Blank}}
+\index{is\+Blank@{is\+Blank}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{is\+Blank}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+is\+Blank (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_aaa590d7811b69dd963ffdc5510787101}
+\begin{DoxyVerb}@returns: C{True} if the line contains only whitespace
+@rtype: C{bool}
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00148}{148} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+References \hyperlink{_fortran_format_8py_source_l00101}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+text}.
+
+
+\begin{DoxyCode}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_l00148}{}\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_aaa590d7811b69dd963ffdc5510787101}{00148}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_aaa590d7811b69dd963ffdc5510787101}{isBlank}(self):
+00149         \textcolor{stringliteral}{"""}
+00150 \textcolor{stringliteral}{        @returns: C\{True\} if the line contains only whitespace}
+00151 \textcolor{stringliteral}{        @rtype: C\{bool\}}
+00152 \textcolor{stringliteral}{        """}
+00153         \textcolor{keywordflow}{return} len(string.strip(self.\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{text})) == 0
+00154 
+\end{DoxyCode}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!data@{data}}
+\index{data@{data}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{data}]{\setlength{\rightskip}{0pt plus 5cm}pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+data}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a5976b8e1d4375a2ea62b9359bcf84697}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00102}{102} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+Referenced by \hyperlink{_fortran_format_8py_source_l00123}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+getitem\+\_\+\+\_\+()}, \hyperlink{_fortran_format_8py_source_l00131}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+getslice\+\_\+\+\_\+()}, \hyperlink{_fortran_format_8py_source_l00116}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+len\+\_\+\+\_\+()}, \hyperlink{_fortran_format_8py_source_l00155}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+input()}, and \hyperlink{_fortran_format_8py_source_l00195}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+output()}.
+
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!format@{format}}
+\index{format@{format}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{format}]{\setlength{\rightskip}{0pt plus 5cm}pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+format}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_ae97c8744bdb9817ec8a9c58b7a6bfe20}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00107}{107} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+Referenced by \hyperlink{_fortran_format_8py_source_l00155}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+input()}, and \hyperlink{_fortran_format_8py_source_l00195}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+output()}.
+
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!length@{length}}
+\index{length@{length}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{length}]{\setlength{\rightskip}{0pt plus 5cm}pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+length}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a4cd0f5ee28f8250f2c6fbbb9ff890e0a}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00110}{110} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+Referenced by \hyperlink{_fortran_format_8py_source_l00155}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+input()}.
+
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}!text@{text}}
+\index{text@{text}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Line}}
+\subsubsection[{text}]{\setlength{\rightskip}{0pt plus 5cm}pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+text}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line_a70d4893b8dd8ae61297b1d3e4b8bc612}
+
+
+Definition at line \hyperlink{_fortran_format_8py_source_l00101}{101} of file \hyperlink{_fortran_format_8py_source}{Fortran\+Format.\+py}.
+
+
+
+Referenced by \hyperlink{_fortran_format_8py_source_l00141}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+\+\_\+str\+\_\+\+\_\+()}, \hyperlink{_fortran_format_8py_source_l00155}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+input()}, \hyperlink{_fortran_format_8py_source_l00195}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+\_\+output()}, and \hyperlink{_fortran_format_8py_source_l00148}{pyneb.\+utils.\+Fortran\+Format.\+Fortran\+Line.\+is\+Blank()}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+pyneb/utils/\hyperlink{_fortran_format_8py}{Fortran\+Format.\+py}\end{DoxyCompactItemize}

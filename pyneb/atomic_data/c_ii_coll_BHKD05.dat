@@ -1,0 +1,12 @@
+0 0  20   40   60   80   100  120   140   160  180    200   300   400   600   800  1000  1500 2000
+1 2 0.16 1.75 3.96 5.97 7.67 9.09 10.29 11.33 12.24 13.04 16.04 18.09 20.92 22.93 24.51 27.45 29.63
+*** C II IR cooling data
+*** ATOM carbon
+*** SPECTRUM 2
+*** GSCONFIG p1
+*** N_LEVELS 2
+*** T_UNIT K
+*** O_UNIT COOLING
+*** COEFF 1e-24
+*** SOURCE1  'Barinovs, G., van Hemert, M. C., Krems, R., & Dalgarno, A. 2005, ApJ 620'
+*** NOTE1    'cooling rates'

@@ -1,0 +1,425 @@
+\hypertarget{emis_grid_8py_source}{}\section{emis\+Grid.\+py}
+\label{emis_grid_8py_source}\index{pyneb/core/emis\+Grid.\+py@{pyneb/core/emis\+Grid.\+py}}
+
+\begin{DoxyCode}
+\hypertarget{emis_grid_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1core_1_1emis_grid}{00001} \textcolor{keyword}{import} os
+00002 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
+00003 \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
+00004 \textcolor{keywordflow}{if} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00005     \textcolor{keyword}{import} matplotlib.pyplot \textcolor{keyword}{as} plt
+00006 \textcolor{keyword}{from} \hyperlink{namespacepyneb_1_1utils_1_1misc}{pyneb.utils.misc} \textcolor{keyword}{import} int\_to\_roman, parseAtom
+00007 
+\hypertarget{emis_grid_8py_source_l00008}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid}{00008} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid}{EmisGrid}(object):
+00009     \textcolor{stringliteral}{"""}
+00010 \textcolor{stringliteral}{    Instantiates an atom and compute the emissivities of all the atom lines for the (tem, den) }
+00011 \textcolor{stringliteral}{    values of a regularly spaced grid.}
+00012 \textcolor{stringliteral}{    Each line is represented in a 2D array, and there are as many arrays as transitions in the atom.}
+00013 \textcolor{stringliteral}{    The results can be saved for a later use in a cPickle file.}
+00014 \textcolor{stringliteral}{}
+00015 \textcolor{stringliteral}{    """}
+00016 
+00017     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a39c57fa6ec1619540d588cded7bbce9c}{\_\_init\_\_}(self, elem=None, spec=None, n\_tem=100, n\_den=100, tem\_min=5000., tem\_max=20000.,
+\hypertarget{emis_grid_8py_source_l00018}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a39c57fa6ec1619540d588cded7bbce9c}{00018}                  den\_min=10., den\_max=1.e8, restore\_file=\textcolor{keywordtype}{None}, atomObj=\textcolor{keywordtype}{None}, **kwargs):
+00019 
+00020         \textcolor{stringliteral}{"""}
+00021 \textcolor{stringliteral}{        Container for the emission line intensity grids depending on Te and Ne.}
+00022 \textcolor{stringliteral}{}
+00023 \textcolor{stringliteral}{        Usage:}
+00024 \textcolor{stringliteral}{            O3map = pn.EmisGrid('O', 3, n\_tem=30, n\_den=30)}
+00025 \textcolor{stringliteral}{            O3map = pn.EmisGrid(restore\_file='plot/O3\_10k.pypic') # Recovers the map from a previous
+       computation}
+00026 \textcolor{stringliteral}{}
+00027 \textcolor{stringliteral}{        Parameters:}
+00028 \textcolor{stringliteral}{            - elem               element (e.g. 'O')}
+00029 \textcolor{stringliteral}{            - spec               spectrum (e.g. 3)}
+00030 \textcolor{stringliteral}{            - n\_tem              number of points of the electron temperature sample}
+00031 \textcolor{stringliteral}{            - n\_den              number of points of the electron density sample}
+00032 \textcolor{stringliteral}{            - tem\_min, tem\_max   limits for the electron temperature}
+00033 \textcolor{stringliteral}{            - den\_min, den\_max   limits for the electron density}
+00034 \textcolor{stringliteral}{            - restore\_file       if set, the emissivities are loaded from this file, }
+00035 \textcolor{stringliteral}{                                 otherwise (None) it is computed}
+00036 \textcolor{stringliteral}{            - atomObj            an atom object. In this case, no need for elem and spec.}
+00037 \textcolor{stringliteral}{}
+00038 \textcolor{stringliteral}{        """}
+00039         \textcolor{comment}{#TODO Check the boundaries of the restored maps.}
+\hypertarget{emis_grid_8py_source_l00040}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a1a53003d1e4a12bbc4ff9233a3fcd54a}{00040}         self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a1a53003d1e4a12bbc4ff9233a3fcd54a}{log\_} = pn.log\_
+\hypertarget{emis_grid_8py_source_l00041}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{00041}         self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling} = \textcolor{stringliteral}{'EmisGrid'}
+00042 
+00043         \textcolor{keywordflow}{if} restore\_file \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00044             old = pn.restore(restore\_file)
+\hypertarget{emis_grid_8py_source_l00045}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{00045}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem} = old[\textcolor{stringliteral}{'elem'}]
+\hypertarget{emis_grid_8py_source_l00046}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{00046}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec} = old[\textcolor{stringliteral}{'spec'}]
+00047             \textcolor{keywordflow}{if} atomObj \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+\hypertarget{emis_grid_8py_source_l00048}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2492fc08e2beca6d49dc2f1c2829b5c8}{00048}                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2492fc08e2beca6d49dc2f1c2829b5c8}{atom} = pn.Atom(elem=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem}, spec=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec}, **kwargs)
+00049             \textcolor{keywordflow}{else}:
+00050                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2492fc08e2beca6d49dc2f1c2829b5c8}{atom} = atomObj
+00051             \textcolor{keywordflow}{if} self.atom.atomFitsFile != old[\textcolor{stringliteral}{'atomFitsFile'}]:
+00052                 self.log\_.error(\textcolor{stringliteral}{'You are using \{0\}, but restoring a file made with \{1\}'}.format(
+      self.atom.atomFitsFile, old[\textcolor{stringliteral}{'atomFitsFile'}]),
+00053                                 calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00054             \textcolor{keywordflow}{if} self.atom.collFitsFile != old[\textcolor{stringliteral}{'collFitsFile'}]:
+00055                 self.log\_.error(\textcolor{stringliteral}{'You are using \{0\}, but restoring a file made with \{1\}'}.format(
+      self.atom.collFitsFile, old[\textcolor{stringliteral}{'collFitsFile'}]),
+00056                                 calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+\hypertarget{emis_grid_8py_source_l00057}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{00057}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem} = old[\textcolor{stringliteral}{'tem'}]
+\hypertarget{emis_grid_8py_source_l00058}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{00058}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den} = old[\textcolor{stringliteral}{'den'}]
+\hypertarget{emis_grid_8py_source_l00059}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a7a86bfc0cd3ed0d14ccaf950fb183696}{00059}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a7a86bfc0cd3ed0d14ccaf950fb183696}{n\_tem} = self.tem.size
+\hypertarget{emis_grid_8py_source_l00060}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6e0bddbe2d14b13fe1270a74b5b9ac0c}{00060}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6e0bddbe2d14b13fe1270a74b5b9ac0c}{n\_den} = self.den.size
+\hypertarget{emis_grid_8py_source_l00061}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd8712ac536b051f866429da43f526de}{00061}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd8712ac536b051f866429da43f526de}{tem\_min} = min(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem})
+\hypertarget{emis_grid_8py_source_l00062}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2d0eacad9eb4fa87ef08d1f710cf2317}{00062}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2d0eacad9eb4fa87ef08d1f710cf2317}{tem\_max} = max(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem})
+\hypertarget{emis_grid_8py_source_l00063}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a15ba80aa398cebb3178d75c8dd5a7e32}{00063}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a15ba80aa398cebb3178d75c8dd5a7e32}{den\_min} = min(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den})
+\hypertarget{emis_grid_8py_source_l00064}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd2b718af1e50d5c640e5fbb881c02f9}{00064}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd2b718af1e50d5c640e5fbb881c02f9}{den\_max} = max(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den})
+\hypertarget{emis_grid_8py_source_l00065}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6fd6b209384aaa2cd4ba5051477e4ecb}{00065}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6fd6b209384aaa2cd4ba5051477e4ecb}{emis\_grid} = old[\textcolor{stringliteral}{'emis\_grid'}]
+00066         \textcolor{keywordflow}{else}:
+00067             \textcolor{keywordflow}{if} atomObj \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00068                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem} = elem
+00069                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec} = spec
+00070                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2492fc08e2beca6d49dc2f1c2829b5c8}{atom} = pn.Atom(elem, spec, **kwargs)
+00071             \textcolor{keywordflow}{else}:
+00072                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2492fc08e2beca6d49dc2f1c2829b5c8}{atom} = atomObj
+00073                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem} = self.atom.elem
+00074                 self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec} = self.atom.spec
+00075             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a7a86bfc0cd3ed0d14ccaf950fb183696}{n\_tem} = n\_tem
+00076             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6e0bddbe2d14b13fe1270a74b5b9ac0c}{n\_den} = n\_den
+00077             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd8712ac536b051f866429da43f526de}{tem\_min} = tem\_min
+00078             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a2d0eacad9eb4fa87ef08d1f710cf2317}{tem\_max} = tem\_max
+00079             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a15ba80aa398cebb3178d75c8dd5a7e32}{den\_min} = den\_min
+00080             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_abd2b718af1e50d5c640e5fbb881c02f9}{den\_max} = den\_max
+00081             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem} = 10 ** np.linspace(np.log10(tem\_min), np.log10(tem\_max), n\_tem)
+00082             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den} = 10 ** np.linspace(np.log10(den\_min), np.log10(den\_max), n\_den)
+\hypertarget{emis_grid_8py_source_l00083}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a5abe442aad7ee62b912ad97ec4d71d6c}{00083}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a5abe442aad7ee62b912ad97ec4d71d6c}{atomFitsFile} = self.atom.atomFitsFile
+\hypertarget{emis_grid_8py_source_l00084}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ad9f51a3439ea7455aaf790887fc78b3c}{00084}             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ad9f51a3439ea7455aaf790887fc78b3c}{collFitsFile} = self.atom.collFitsFile
+00085             self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6fd6b209384aaa2cd4ba5051477e4ecb}{emis\_grid} = self.atom.getEmissivity(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem}, self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den})
+00086             \textcolor{comment}{#self.emis\_grid = np.empty((self.atom.NLevels, self.atom.NLevels, n\_tem, n\_den))}
+00087         
+\hypertarget{emis_grid_8py_source_l00088}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{00088}         self.den2D, self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{tem2D} = np.meshgrid(self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den}, self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem})
+00089         
+00090 \textcolor{comment}{#    def computeEmis(self):}
+00091 \textcolor{comment}{#        """}
+00092 \textcolor{comment}{#        This is where the emissivities are computed, by calling a function from Atom.}
+00093 \textcolor{comment}{#        """}
+00094 \textcolor{comment}{#        self.emis\_grid = self.atom.getEmissivity(self.tem, self.den)}
+00095 
+\hypertarget{emis_grid_8py_source_l00096}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a72fa9f1f48e7f9de7f2ec196ce63cf3e}{00096}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a72fa9f1f48e7f9de7f2ec196ce63cf3e}{save}(self, file\_):
+00097         \textcolor{stringliteral}{"""}
+00098 \textcolor{stringliteral}{        Save results for a later use.}
+00099 \textcolor{stringliteral}{        }
+00100 \textcolor{stringliteral}{        Usage:}
+00101 \textcolor{stringliteral}{            O3map.save('plot/O3\_30by30.pypic')}
+00102 \textcolor{stringliteral}{        }
+00103 \textcolor{stringliteral}{        Parameter:}
+00104 \textcolor{stringliteral}{            file\_  the name of the file in which the emissivity grids are stored}
+00105 \textcolor{stringliteral}{}
+00106 \textcolor{stringliteral}{        """}
+00107         pn.save(file\_, emis\_grid=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6fd6b209384aaa2cd4ba5051477e4ecb}{emis\_grid}, tem=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac6e2be63ad3ea6c0d246d1c6d1afc54b}{tem}, den=self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ac393173ea0ffbfdffb4c095fa6acada1}{den}, elem=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem},
+00108              spec=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec}, atomFitsFile=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a5abe442aad7ee62b912ad97ec4d71d6c}{atomFitsFile}, collFitsFile=self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ad9f51a3439ea7455aaf790887fc78b3c}{collFitsFile})
+00109 
+00110 
+\hypertarget{emis_grid_8py_source_l00111}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{00111}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(self, lev\_i=None, lev\_j=None, wave= -1, to\_eval=None):
+00112         \textcolor{stringliteral}{"""}
+00113 \textcolor{stringliteral}{        2D array of a line emissivity for the (Te, Ne) values of a regularly spaced grid.}
+00114 \textcolor{stringliteral}{        The line is specified either as the wavelength or the levels. An expression can also be used, }
+00115 \textcolor{stringliteral}{        for example to\_eval = 'L(5007)/L(4959)'}
+00116 \textcolor{stringliteral}{        }
+00117 \textcolor{stringliteral}{        Parameters:}
+00118 \textcolor{stringliteral}{            - lev\_i, lev\_j   levels for the emission line}
+00119 \textcolor{stringliteral}{            - wave           wavelength}
+00120 \textcolor{stringliteral}{            - to\_eval        algebraic expression of the line combination to evaluate}
+00121 \textcolor{stringliteral}{        }
+00122 \textcolor{stringliteral}{        """}
+00123         \textcolor{keywordflow}{if} wave != -1:
+00124             lev\_i, lev\_j = self.atom.getTransition(wave)
+00125 
+00126         \textcolor{keywordflow}{if} to\_eval \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00127             to\_eval = \textcolor{stringliteral}{'I('} + str(lev\_i) + \textcolor{stringliteral}{','} + str(lev\_j) + \textcolor{stringliteral}{')'}
+00128             
+00129         \textcolor{keyword}{def }I(lev\_i, lev\_j):
+00130             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a6fd6b209384aaa2cd4ba5051477e4ecb}{emis\_grid}[lev\_i - 1, lev\_j - 1, :, :]
+00131         \textcolor{keyword}{def }L(wave):
+00132             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(wave=wave)
+00133         \textcolor{keywordflow}{return} eval(to\_eval)
+00134     
+00135     
+00136     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_acc7005176ce79eb13fdca3ff1607d6e8}{plotImage}(self, to\_eval=None, lev\_i1=None, lev\_j1=None, lev\_i2=None, lev\_j2=None,
+\hypertarget{emis_grid_8py_source_l00137}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_acc7005176ce79eb13fdca3ff1607d6e8}{00137}                   wave1= -1, wave2= -1, cblabel=\textcolor{stringliteral}{''}, **kwargs):
+00138         \textcolor{stringliteral}{"""}
+00139 \textcolor{stringliteral}{        Draw a contour plot of a line ratio. The contour is obtained by a horizontal cut in a
+       temden-emissivity array.}
+00140 \textcolor{stringliteral}{        More elaborated plots can be obtained with the Diagnostic object.}
+00141 \textcolor{stringliteral}{        }
+00142 \textcolor{stringliteral}{        Usage:}
+00143 \textcolor{stringliteral}{            O3map.plotImage('L(4363)/L(5007)')}
+00144 \textcolor{stringliteral}{            O3map.plotImage(wave1=4363, wave2=5007)}
+00145 \textcolor{stringliteral}{            }
+00146 \textcolor{stringliteral}{        Parameters:}
+00147 \textcolor{stringliteral}{            - to\_eval                         algebraic expression of the line combination to draw. May
+       combine L(lambda) and I(i,j).}
+00148 \textcolor{stringliteral}{            - lev\_i1, lev\_i2, lev\_j1, lev\_j2  levels of the a lines in case of simple line ratio plot.}
+00149 \textcolor{stringliteral}{            - wave1, wave2                    wavelengths of the two lines in case of simple line ratio
+       plot.}
+00150 \textcolor{stringliteral}{            - cblabel                         a title for the colorbar}
+00151 \textcolor{stringliteral}{            - **kwargs                        any other parameter will be sent to contourf and pcolor}
+00152 \textcolor{stringliteral}{}
+00153 \textcolor{stringliteral}{        """}
+00154         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00155             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not available'}, calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00156             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00157         L = \textcolor{keyword}{lambda} lam: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(wave=lam)
+00158         I = \textcolor{keyword}{lambda} i, j: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(i, j)
+00159         \textcolor{keywordflow}{if} to\_eval \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00160             \textcolor{keywordflow}{if} wave1 != -1:
+00161                 lev\_i1, lev\_j1 = self.atom.getTransition(wave1)
+00162             \textcolor{keywordflow}{if} wave2 != -1:
+00163                 lev\_i2, lev\_j2 = self.atom.getTransition(wave2)
+00164             to\_eval = \textcolor{stringliteral}{'I('} + str(lev\_i1) + \textcolor{stringliteral}{','} + str(lev\_j1) + \textcolor{stringliteral}{') / I('} + str(lev\_i2) + \textcolor{stringliteral}{','} + str(lev\_j2) +
+       \textcolor{stringliteral}{')'}
+00165         X = np.log10(self.den2D)
+00166         Y = self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{tem2D} / 1e4
+00167         Z = self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(to\_eval=to\_eval)
+00168         plt.contourf(X, Y, Z, **kwargs)
+00169         emap = plt.pcolor(X, Y, Z, **kwargs)
+00170         cbar = plt.colorbar(emap)
+00171         cbar.set\_label(cblabel)
+00172         \textcolor{comment}{# plt.clabel(contour, inline=1)}
+00173         plt.xlabel(\textcolor{stringliteral}{r'log Electron density (cm$^\{-3\}$)'})
+00174         plt.ylabel(\textcolor{stringliteral}{r'Electron temperature ($10^4$K)'})
+00175         plt.show()
+00176 
+00177 
+00178     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ad9b2a66903f1b2e6b711c7d6dbe37dba}{plotContours}(self, to\_eval, low\_level=None, high\_level=None, n\_levels=20,
+\hypertarget{emis_grid_8py_source_l00179}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ad9b2a66903f1b2e6b711c7d6dbe37dba}{00179}                       linestyles=\textcolor{stringliteral}{'-'}, clabels=\textcolor{keyword}{True}, log\_levels=\textcolor{keyword}{True}, title=\textcolor{keywordtype}{None}, ax=\textcolor{keywordtype}{None}, **kwargs):
+00180         \textcolor{stringliteral}{"""}
+00181 \textcolor{stringliteral}{        Plot a contour map of the diagnostic defined by to\_eval.}
+00182 \textcolor{stringliteral}{        }
+00183 \textcolor{stringliteral}{        Usage:}
+00184 \textcolor{stringliteral}{            O3map.plotContours('L(4363)/L(5007)')}
+00185 \textcolor{stringliteral}{        }
+00186 \textcolor{stringliteral}{        Parameters:}
+00187 \textcolor{stringliteral}{            - to\_eval                   algebraic definition of the line ratio to contour-plot}
+00188 \textcolor{stringliteral}{            - low\_levels, high\_levels   limit levels for the contour. If not set, the limit of the }
+00189 \textcolor{stringliteral}{                                        ratio values are used.}
+00190 \textcolor{stringliteral}{            - n\_levels                  number of levels (20 is the default)}
+00191 \textcolor{stringliteral}{            - linestyles                used for the contour lines (default: solid line)}
+00192 \textcolor{stringliteral}{            - clabels                   Boolean. Controls if line labels are printed (default: True)}
+00193 \textcolor{stringliteral}{            - log\_levels                Boolean. If True (default), the log of the line ratio is used.}
+00194 \textcolor{stringliteral}{            - title                     plot title}
+00195 \textcolor{stringliteral}{            - **kwargs                  sent to plt.contour}
+00196 \textcolor{stringliteral}{            }
+00197 \textcolor{stringliteral}{        """} 
+00198         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00199             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not available'}, calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00200             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00201         X = np.log10(self.den2D)
+00202         Y = self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{tem2D}
+00203         L = \textcolor{keyword}{lambda} lam: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(wave=lam)
+00204         I = \textcolor{keyword}{lambda} i, j: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(i, j)
+00205         \textcolor{keywordflow}{try}:
+00206             diag\_map = eval(to\_eval)
+00207         \textcolor{keywordflow}{except}:
+00208             self.log\_.warn(\textcolor{stringliteral}{'diag %s not found'} % to\_eval, calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00209             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00210         \textcolor{keywordflow}{if} low\_level \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00211             low\_level = np.min(np.log10(diag\_map))
+00212         \textcolor{keywordflow}{if} high\_level \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00213             high\_level = np.max(np.log10(diag\_map))
+00214         \textcolor{keywordflow}{if} log\_levels:
+00215             Z = np.log10(diag\_map)
+00216             levels = np.linspace(low\_level, high\_level, n\_levels)
+00217             \textcolor{keywordflow}{if} title \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00218                 title = \textcolor{stringliteral}{'[%s%s]: log(%s)'} % (self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec})), to\_eval)
+00219         \textcolor{keywordflow}{else}:
+00220             Z = diag\_map
+00221             levels = 10. ** (np.linspace(low\_level, high\_level, n\_levels))
+00222             \textcolor{keywordflow}{if} title \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00223                 title = \textcolor{stringliteral}{'[%s%s]: %s'} % (self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec})), to\_eval)
+00224         
+00225         \textcolor{keywordflow}{if} ax \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00226             f, ax = plt.subplots()
+00227         \textcolor{keywordflow}{else}:
+00228             f = plt.gcf()
+00229         CS = ax.contour(X, Y, Z, levels=levels, linestyles=linestyles, **kwargs)
+00230         \textcolor{keywordflow}{if} clabels:
+00231             ax.clabel(CS, CS.levels[::3], inline=\textcolor{keyword}{True}, fontsize=12, colors=\textcolor{stringliteral}{'black'})
+00232         ax.set\_xlabel(\textcolor{stringliteral}{r'log(n$\_\{\(\backslash\)rm e\}$) [cm$^\{-3\}$]'})
+00233         ax.set\_ylabel(\textcolor{stringliteral}{r'T$\_\{\(\backslash\)rm e\}$ [K]'})
+00234         ax.set\_title(title)
+00235 
+00236 
+00237     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a26aabc41fbb077d204e64f379e5ec5f7}{plotLineRatio}(self, to\_eval, par=None, par\_low=None, par\_high=None, n\_par=10,
+\hypertarget{emis_grid_8py_source_l00238}{}\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a26aabc41fbb077d204e64f379e5ec5f7}{00238}                       linestyles=\textcolor{stringliteral}{'-'}, title=\textcolor{keywordtype}{None}, legend=\textcolor{keyword}{True}, loc=2, **kwargs):
+00239         \textcolor{stringliteral}{"""}
+00240 \textcolor{stringliteral}{        Plot the diagnostic defined by to\_eval as a function of either Ne or Te, with the other}
+00241 \textcolor{stringliteral}{        variable as a parameter.}
+00242 \textcolor{stringliteral}{        }
+00243 \textcolor{stringliteral}{        Usage:}
+00244 \textcolor{stringliteral}{            o3grid.plotLineRatio('L(4363)/L(5007)', par='den')}
+00245 \textcolor{stringliteral}{            s2grid.plotLineRatio('I(2,1)/I(3,1)', par='tem', par\_low=5000, par\_high=20000, n\_par=4)}
+00246 \textcolor{stringliteral}{        }
+00247 \textcolor{stringliteral}{        Parameters:}
+00248 \textcolor{stringliteral}{            - to\_eval      algebraic definition of the line ratio to contour-plot}
+00249 \textcolor{stringliteral}{            - par          quantity to be used as a parameter (either 'den' or 'tem')}
+00250 \textcolor{stringliteral}{            - par\_low      lowest limit of the parameter range}
+00251 \textcolor{stringliteral}{            - par\_high     highest limit of the parameter range}
+00252 \textcolor{stringliteral}{            - n\_par        number of parameter's values (default: 10)}
+00253 \textcolor{stringliteral}{            - linestyles   used for the contour lines (default: solid)}
+00254 \textcolor{stringliteral}{            - title        plot title}
+00255 \textcolor{stringliteral}{            - legend       Boolean. If True, write legend title (default: True) }
+00256 \textcolor{stringliteral}{            - **kwargs     sent to plt.contour}
+00257 \textcolor{stringliteral}{            }
+00258 \textcolor{stringliteral}{        """} 
+00259         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00260             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not available'}, calling=self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00261             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00262 
+00263         L = \textcolor{keyword}{lambda} wav: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(wave=wav)
+00264         I = \textcolor{keyword}{lambda} i, j: self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_af9a9219e5ddfcfd53c52466e2c2deb44}{getGrid}(i, j)
+00265         
+00266         \textcolor{keywordflow}{if} par == \textcolor{stringliteral}{'tem'}:
+00267             X = np.log10(self.den2D)
+00268             Z = self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{tem2D}
+00269             leg\_format = \textcolor{stringliteral}{"\{0:.0f\} K"}
+00270             leg\_title = \textcolor{stringliteral}{r'Temperature'}
+00271             xlabel = \textcolor{stringliteral}{r'Log(N$\_\{\(\backslash\)rm e\}$) [cm$^\{-3\}$]'}
+00272         \textcolor{keywordflow}{elif} par == \textcolor{stringliteral}{'den'}:
+00273             X = self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_ae1904aecb62ca67772b3998cca09fabd}{tem2D}
+00274             Z = np.log10(self.den2D)
+00275             leg\_format = \textcolor{stringliteral}{"\{0:.2f\}"}
+00276             leg\_title = \textcolor{stringliteral}{r'Log(N$\_\{\(\backslash\)rm e\}$)'}
+00277             xlabel = \textcolor{stringliteral}{r'T$\_\{\(\backslash\)rm e\}$ [K]'}
+00278         \textcolor{keywordflow}{else}:
+00279             self.log\_.error(\textcolor{stringliteral}{'The parameter must be either den or tem (%s given)'} % par, calling=self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})
+00280 
+00281         \textcolor{keywordflow}{try}:
+00282             Y = eval(to\_eval)
+00283         \textcolor{keywordflow}{except}:
+00284             self.log\_.warn(\textcolor{stringliteral}{'Diagnostic %s not found'} % to\_eval, calling=self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a19820878261ee98513e0b755e688453f}{calling})            
+00285             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00286 
+00287         \textcolor{keywordflow}{if} par\_low \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00288             par\_low = np.min(Z)
+00289         \textcolor{keywordflow}{if} par\_high \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00290             par\_high = np.max(Z)
+00291         levels = np.linspace(par\_low, par\_high, n\_par)
+00292 
+00293         CS = plt.contour(X, Y, Z, levels=levels, linestyles=linestyles, **kwargs)
+00294         
+00295         \textcolor{keywordflow}{if} legend:
+00296             \textcolor{keywordflow}{for} i\_level \textcolor{keywordflow}{in} range(len(levels)):
+00297                 CS.collections[i\_level].set\_label(leg\_format.format(levels[i\_level]))
+00298                 plt.legend(title=leg\_title, loc=loc)
+00299 
+00300         \textcolor{keywordflow}{if} title \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00301             title = \textcolor{stringliteral}{'[%s%s]'} % (self.\hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a860a236b0e426b4671071e4bf492dee7}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.
+      \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid_a78618aff86ea296ecefddcc86d98b687}{spec})))
+00302 
+00303         plt.xlabel(xlabel)
+00304         plt.ylabel(to\_eval)
+00305         plt.title(title)
+00306     
+00307         plt.show()
+00308         
+00309 
+00310 \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1core_1_1emis_grid_a377d90568cd9c52e35ebae2ac9a3c386}{getEmisGridDict}(elem\_list=None, spec\_list=None, atom\_list=None, restore=True, 
+      pypic\_path=None,
+00311             n\_tem=100, n\_den=100, tem\_min=5000., tem\_max=20000., den\_min=10., den\_max=1e8, save=\textcolor{keyword}{True},
+\hypertarget{emis_grid_8py_source_l00312}{}\hyperlink{namespacepyneb_1_1core_1_1emis_grid_a377d90568cd9c52e35ebae2ac9a3c386}{00312}             atomDict=\textcolor{keywordtype}{None}, createPypicsDir=\textcolor{keyword}{True}, computeIfAbsent=\textcolor{keyword}{True}):
+00313     \textcolor{stringliteral}{"""}
+00314 \textcolor{stringliteral}{    Return a dictionary of EmisGrid objects referred to by their atom string (e.g. 'O3').}
+00315 \textcolor{stringliteral}{    }
+00316 \textcolor{stringliteral}{    Usage:}
+00317 \textcolor{stringliteral}{        emisgrids = pn.getEmisGridDict(['C', 'N', 'O'], [2, 3], save=True)}
+00318 \textcolor{stringliteral}{        emisgrids = pn.getEmisGridDict(atom\_list=['N2', 'O2', 'O3'], pypic\_path='/tmp/pypics/',}
+00319 \textcolor{stringliteral}{                        den\_max = 1e6)}
+00320 \textcolor{stringliteral}{        emisgrids = pn.getEmisGridDict(atomDict=diags.atomDict)}
+00321 \textcolor{stringliteral}{}
+00322 \textcolor{stringliteral}{    Parameters:}
+00323 \textcolor{stringliteral}{        - elem\_list         list of elements}
+00324 \textcolor{stringliteral}{        - spec\_list         list of spectrum values (integers)}
+00325 \textcolor{stringliteral}{        - atom\_list         list of atoms (e.g. ['N2', 'O3'])}
+00326 \textcolor{stringliteral}{        - restore           Boolean. If True (default), the program will search for a previously computed
+       grid.}
+00327 \textcolor{stringliteral}{                            If not found, it will compute the EmisGrid (unless computeIfAbsent is set to
+       False)}
+00328 \textcolor{stringliteral}{        - pypic\_path        directory where to look for the pypic emissivity files. It defaults to
+       pn.config.pypic\_path, }
+00329 \textcolor{stringliteral}{                            which is defined when the PyNeb session begins and corresponds to $HOME/.pypics
+       if}
+00330 \textcolor{stringliteral}{                            the ENVIRONMENT variable HOME is accessible or to /tmp/pypics otherwise}
+00331 \textcolor{stringliteral}{        - n\_tem, n\_den      number of points in the Te and Ne samples resp. }
+00332 \textcolor{stringliteral}{        - tem\_min, tem\_max, den\_min, den\_max    limits for Te and Ne}
+00333 \textcolor{stringliteral}{        - save              Boolean. If True (default), the emissivity grid will be saved. It has no effect
+       if the }
+00334 \textcolor{stringliteral}{                            EmisGrid has just been restored.}
+00335 \textcolor{stringliteral}{        - atomDict          dictionary of Atom objects}
+00336 \textcolor{stringliteral}{        - computeIfAbsent   If the file to restore is absent and this parameter is True (default), the }
+00337 \textcolor{stringliteral}{                            EmisGrid is computed}
+00338 \textcolor{stringliteral}{            }
+00339 \textcolor{stringliteral}{    """}
+00340     \textcolor{keywordflow}{if} pypic\_path \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00341         pypic\_path = pn.config.pypic\_path
+00342     \textcolor{keywordflow}{else}:
+00343         pn.config.pypic\_path = pypic\_path
+00344     calling = \textcolor{stringliteral}{'getEmisGridDict'}
+00345     \textcolor{keywordflow}{if} pypic\_path \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00346         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00347     emis\_grids = \{\}
+00348     atoms = []
+00349     \textcolor{keywordflow}{if} atomDict \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00350         atoms = atomDict.keys()
+00351     \textcolor{keywordflow}{else}:
+00352         \textcolor{keywordflow}{if} atom\_list \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00353             atoms = atom\_list
+00354         \textcolor{keywordflow}{else}:
+00355 \textcolor{comment}{# VL Removed 13 March 2015 because it made the code ignore the elem keyword             }
+00356 \textcolor{comment}{#            atoms = pn.atomicData.getAllAtoms()}
+00357             \textcolor{keywordflow}{if} (elem\_list \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (spec\_list \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
+00358                 atoms = pn.atomicData.getAllAtoms()
+00359             \textcolor{keywordflow}{else}:
+00360                 \textcolor{keywordflow}{for} elem \textcolor{keywordflow}{in} elem\_list:
+00361                     \textcolor{keywordflow}{for} spec \textcolor{keywordflow}{in} spec\_list:
+00362                         atoms.append(elem + str(spec)) 
+00363     \textcolor{keywordflow}{for} atom \textcolor{keywordflow}{in} atoms:
+00364         elem, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)
+00365         file\_ = \textcolor{stringliteral}{'\{0\}/emis\_\{1\}\{2\}.pypic'}.format(pypic\_path, elem, spec)
+00366         \textcolor{keywordflow}{if} atomDict \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00367             atomObj = atomDict[atom]
+00368         \textcolor{keywordflow}{else}:
+00369             atomObj = \textcolor{keywordtype}{None}
+00370         \textcolor{keywordflow}{if} restore:
+00371             \textcolor{keywordflow}{if} os.path.exists(file\_):
+00372                 \textcolor{keywordflow}{try}:
+00373                     emis\_grids[elem + spec] = \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid}{EmisGrid}(restore\_file=file\_, atomObj=atomObj)
+00374                     pn.log\_.message(\textcolor{stringliteral}{'Read %s'} % file\_, calling=calling)
+00375                     compute\_this = \textcolor{keyword}{False}
+00376                 \textcolor{keywordflow}{except}:
+00377                     \textcolor{keywordflow}{if} computeIfAbsent:
+00378                         pn.log\_.warn(\textcolor{stringliteral}{'Wrong emission map: \{0\}, creating it'}.format(file\_), calling=calling)
+00379                         compute\_this = \textcolor{keyword}{True}
+00380                     \textcolor{keywordflow}{else}:
+00381                         pn.log\_.error(\textcolor{stringliteral}{'Wrong emission map: \{0\}'}.format(file\_), calling=calling)
+00382                         compute\_this = \textcolor{keyword}{False}
+00383             \textcolor{keywordflow}{else}:
+00384                 pn.log\_.warn(\textcolor{stringliteral}{'Emission map not found: \{0\}'}.format(file\_), calling=calling)
+00385                 \textcolor{keywordflow}{if} computeIfAbsent:
+00386                     compute\_this = \textcolor{keyword}{True}
+00387         \textcolor{keywordflow}{else}:
+00388             compute\_this = \textcolor{keyword}{True}
+00389         \textcolor{keywordflow}{if} compute\_this:
+00390             \textcolor{keywordflow}{try}:
+00391                 emis\_grids[atom] = \hyperlink{classpyneb_1_1core_1_1emis_grid_1_1_emis_grid}{EmisGrid}(elem, spec, n\_tem=n\_tem, n\_den=n\_den, tem\_min=tem\_min, 
+      tem\_max=tem\_max,
+00392                                               den\_min=den\_min, den\_max=den\_max, atomObj=atomObj)
+00393                 \textcolor{keywordflow}{if} save:
+00394                     emis\_grids[atom].\hyperlink{namespacepyneb_1_1utils_1_1saverestore_a9af489d3adae16abe18013129170baeb}{save}(file\_)
+00395                     pn.log\_.message(\textcolor{stringliteral}{'%s saved to %s'} % ((atom), file\_), calling=calling)
+00396             \textcolor{keywordflow}{except}:
+00397                 pn.log\_.warn(\textcolor{stringliteral}{'No %s EmisGrid'} % (atom), calling=calling)
+00398     \textcolor{keywordflow}{return} emis\_grids
+\end{DoxyCode}

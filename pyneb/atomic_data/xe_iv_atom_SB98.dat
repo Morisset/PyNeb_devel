@@ -1,0 +1,12 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+2.10E+01  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+2.59E+00  6.35E-01  0.00E+00  0.00E+00  0.00E+00
+5.19E+01  8.93E+00  1.19E-01  6.31E-01  0.00E+00
+3.93E+01  8.18E+01  2.29E+01  2.91E+00  0.00E+00
+*** Xe IV energy and Aij data
+*** N_LEVELS 5
+*** GSCONFIG p3
+*** SOURCE1	'Schoning & Butler 1998, A&AS,128,581' 
+*** NOTE1	        'Transition Probabilities, A' 

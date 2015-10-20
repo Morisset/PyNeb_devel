@@ -1,0 +1,14 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+7.43E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+3.93E-01  1.46E-01  0.00E+00  0.00E+00  0.00E+00
+2.51E+01  9.56E+00  1.54E-01  0.00E+00  0.00E+00
+4.25E+01  2.85E+01  1.14E+01  3.92E-01  0.00E+00
+*** Rb IV transition probabilities
+*** ATOM rubidium
+*** SPECTRUM 5
+*** N_LEVELS 5
+*** GSCONFIG p3
+*** SOURCE1	Biemont & Hansen 1986, Phys. Scr., 33,117
+*** NOTE1	A-values

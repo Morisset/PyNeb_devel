@@ -1,0 +1,198 @@
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line}{}\section{Emission\+Line Class Reference}
+\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line}\index{Emission\+Line@{Emission\+Line}}
+
+
+Inherits object.
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ac775ee34451fdfa742b318538164070e}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a3385d0660407ddbdbc78b2ab44c9e25e}{correct\+Intens}
+\item 
+def \hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ada122b7940c9876783a28ae85efb978b}{add\+Obs}
+\item 
+def \hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_af69f5ecca873fc4e737d0186c6aa64ac}{print\+Line} (self)
+\item 
+def \hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a9a47563093dfc5ba12274b66e368920c}{\+\_\+\+\_\+repr\+\_\+\+\_\+} (self)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_afd87151907f32bc0dc45f0171b61374e}{log\+\_\+}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab25fa7ebe84b603684dee62410c1e34c}{calling}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a439dda562826dd28b863fff170a5beb3}{corrected}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a62e73dc66c7aff7941c5ce94e808c23a}{elem}
+\begin{DoxyCompactList}\small\item\em Symbol of the element. \end{DoxyCompactList}\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_adaf1b66faf18504ec4b5c8c0b7f6763b}{spec}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a0c5c7091b1d8a95d9bee2744d713f5c9}{atom}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_acb3ac767ec1048cf315487da2b577ca4}{wave}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_aba3dbc23ce309f8ab48290a9232be787}{blend}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a22f45a3cb4f074e609f58ebaeef0ecf9}{label}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a7c5345734d9b0a7289df334ae93f6565}{is\+\_\+valid}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab3b859c04a15df9a9c16d8f4622a24e0}{to\+\_\+eval}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8b62e7c5b8f2f39828049cfa53cdd5ca}{obs\+Intens}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a295147b0b6550e8b23a5ada251304bb6}{corr\+Intens}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8a4e82aa96cd6be9b1d02f127c03ebab}{obs\+Error}
+\item 
+\hyperlink{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a1b165e597d8aedc43848d4f14644687e}{corr\+Error}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Define the emission line object, which is defined by the line parameters and the intensity 
+    parameters.
+The line parameters define the emitting ion, the wavelength or the transition, the label 
+    in PyNeb format, and a flag defining whether the line is a blend or a single transition. 
+The intensity parameters describe the observed intensity, the observed uncertainty and 
+    the corrected uncertainty
+    
+Usage:
+    line = pn.EmissionLine('O', 3, 5007, obsIntens=[1.4, 1.3])
+    line = pn.EmissionLine(label = 'O3_5007A', obsIntens=320, corrected = True)
+
+Parameters:
+    - elem        symbol of the selected element
+    - spec        ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+    - wave        wavelength of the line
+    - blend       blend flag (boolean)
+    - to_eval     algebraic expression describing the emission line in terms of single transitions
+    - label       line label in the standard PyNeb format
+    - obsIntens   observed intensity
+    - obsError    uncertainty on the observed intensity\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ac775ee34451fdfa742b318538164070e}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{elem = {\ttfamily None}, }
+\item[{}]{spec = {\ttfamily None}, }
+\item[{}]{wave = {\ttfamily None}, }
+\item[{}]{blend = {\ttfamily False}, }
+\item[{}]{to\+\_\+eval = {\ttfamily None}, }
+\item[{}]{label = {\ttfamily None}, }
+\item[{}]{obs\+Intens = {\ttfamily None}, }
+\item[{}]{obs\+Error = {\ttfamily None}, }
+\item[{}]{corrected = {\ttfamily False}, }
+\item[{}]{\+\_\+unit = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ac775ee34451fdfa742b318538164070e}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a9a47563093dfc5ba12274b66e368920c}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!\+\_\+\+\_\+repr\+\_\+\+\_\+@{\+\_\+\+\_\+repr\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+repr\+\_\+\+\_\+@{\+\_\+\+\_\+repr\+\_\+\+\_\+}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{\+\_\+\+\_\+repr\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+repr\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a9a47563093dfc5ba12274b66e368920c}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ada122b7940c9876783a28ae85efb978b}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!add\+Obs@{add\+Obs}}
+\index{add\+Obs@{add\+Obs}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{add\+Obs}]{\setlength{\rightskip}{0pt plus 5cm}def add\+Obs (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{new\+Obs\+Intens, }
+\item[{}]{new\+Obs\+Error = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ada122b7940c9876783a28ae85efb978b}
+\begin{DoxyVerb}Add observed values to an existing line. 
+
+Parameters:
+    - newObsIntens    observed intensity of the line
+    - newObsError     error on the observed intensity (optional)\end{DoxyVerb}
+ \hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a3385d0660407ddbdbc78b2ab44c9e25e}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!correct\+Intens@{correct\+Intens}}
+\index{correct\+Intens@{correct\+Intens}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{correct\+Intens}]{\setlength{\rightskip}{0pt plus 5cm}def correct\+Intens (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{R\+C, }
+\item[{}]{norm\+Wave = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a3385d0660407ddbdbc78b2ab44c9e25e}
+\begin{DoxyVerb}Correct from extinction. The corrIntens and corrError values of the line 
+are updated according to the RedCorr object
+
+
+Parameters:
+    - RC        an instantiation of the pn.RedCorr class 
+    - normWave  a wavelength for the normalisation of the correction, e.g. 4861.  \end{DoxyVerb}
+ \hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_af69f5ecca873fc4e737d0186c6aa64ac}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!print\+Line@{print\+Line}}
+\index{print\+Line@{print\+Line}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{print\+Line}]{\setlength{\rightskip}{0pt plus 5cm}def print\+Line (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_af69f5ecca873fc4e737d0186c6aa64ac}
+\begin{DoxyVerb}Provide information on the line: atom, label, to_eval, as well as the intensities and errors
+
+Usage:
+    line.printLine()\end{DoxyVerb}
+ 
+
+\subsection{Member Data Documentation}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a0c5c7091b1d8a95d9bee2744d713f5c9}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!atom@{atom}}
+\index{atom@{atom}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{atom}]{\setlength{\rightskip}{0pt plus 5cm}atom}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a0c5c7091b1d8a95d9bee2744d713f5c9}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_aba3dbc23ce309f8ab48290a9232be787}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!blend@{blend}}
+\index{blend@{blend}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{blend}]{\setlength{\rightskip}{0pt plus 5cm}blend}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_aba3dbc23ce309f8ab48290a9232be787}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab25fa7ebe84b603684dee62410c1e34c}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!calling@{calling}}
+\index{calling@{calling}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{calling}]{\setlength{\rightskip}{0pt plus 5cm}calling}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab25fa7ebe84b603684dee62410c1e34c}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a439dda562826dd28b863fff170a5beb3}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!corrected@{corrected}}
+\index{corrected@{corrected}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{corrected}]{\setlength{\rightskip}{0pt plus 5cm}corrected}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a439dda562826dd28b863fff170a5beb3}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a1b165e597d8aedc43848d4f14644687e}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!corr\+Error@{corr\+Error}}
+\index{corr\+Error@{corr\+Error}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{corr\+Error}]{\setlength{\rightskip}{0pt plus 5cm}corr\+Error}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a1b165e597d8aedc43848d4f14644687e}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a295147b0b6550e8b23a5ada251304bb6}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!corr\+Intens@{corr\+Intens}}
+\index{corr\+Intens@{corr\+Intens}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{corr\+Intens}]{\setlength{\rightskip}{0pt plus 5cm}corr\+Intens}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a295147b0b6550e8b23a5ada251304bb6}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a62e73dc66c7aff7941c5ce94e808c23a}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!elem@{elem}}
+\index{elem@{elem}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{elem}]{\setlength{\rightskip}{0pt plus 5cm}elem}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a62e73dc66c7aff7941c5ce94e808c23a}
+
+
+Symbol of the element. 
+
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a7c5345734d9b0a7289df334ae93f6565}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!is\+\_\+valid@{is\+\_\+valid}}
+\index{is\+\_\+valid@{is\+\_\+valid}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{is\+\_\+valid}]{\setlength{\rightskip}{0pt plus 5cm}is\+\_\+valid}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a7c5345734d9b0a7289df334ae93f6565}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a22f45a3cb4f074e609f58ebaeef0ecf9}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!label@{label}}
+\index{label@{label}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{label}]{\setlength{\rightskip}{0pt plus 5cm}label}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a22f45a3cb4f074e609f58ebaeef0ecf9}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_afd87151907f32bc0dc45f0171b61374e}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!log\+\_\+@{log\+\_\+}}
+\index{log\+\_\+@{log\+\_\+}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{log\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}log\+\_\+}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_afd87151907f32bc0dc45f0171b61374e}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8a4e82aa96cd6be9b1d02f127c03ebab}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!obs\+Error@{obs\+Error}}
+\index{obs\+Error@{obs\+Error}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{obs\+Error}]{\setlength{\rightskip}{0pt plus 5cm}obs\+Error}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8a4e82aa96cd6be9b1d02f127c03ebab}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8b62e7c5b8f2f39828049cfa53cdd5ca}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!obs\+Intens@{obs\+Intens}}
+\index{obs\+Intens@{obs\+Intens}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{obs\+Intens}]{\setlength{\rightskip}{0pt plus 5cm}obs\+Intens}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_a8b62e7c5b8f2f39828049cfa53cdd5ca}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_adaf1b66faf18504ec4b5c8c0b7f6763b}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!spec@{spec}}
+\index{spec@{spec}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{spec}]{\setlength{\rightskip}{0pt plus 5cm}spec}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_adaf1b66faf18504ec4b5c8c0b7f6763b}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab3b859c04a15df9a9c16d8f4622a24e0}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!to\+\_\+eval@{to\+\_\+eval}}
+\index{to\+\_\+eval@{to\+\_\+eval}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{to\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}to\+\_\+eval}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_ab3b859c04a15df9a9c16d8f4622a24e0}
+\hypertarget{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_acb3ac767ec1048cf315487da2b577ca4}{}\index{pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}!wave@{wave}}
+\index{wave@{wave}!pyneb\+::core\+::pynebcore\+::\+Emission\+Line@{pyneb\+::core\+::pynebcore\+::\+Emission\+Line}}
+\subsubsection[{wave}]{\setlength{\rightskip}{0pt plus 5cm}wave}\label{classpyneb_1_1core_1_1pynebcore_1_1_emission_line_acb3ac767ec1048cf315487da2b577ca4}

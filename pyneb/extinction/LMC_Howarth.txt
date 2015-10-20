@@ -1,0 +1,13 @@
+#LMC_Howarth
+# A(x)/E(B-V) for x = 1/wave(in microns), from Howarth (1983, MNRAS, 203, 301)
+# Average LMC, for wavelengths longward of the V bandbass only. 
+#1/um	A_um/E_BmV
+1.e-9	0.00	
+0.21	0.11	
+0.29	0.17	
+0.45	0.32	
+0.61	0.56	
+0.80	0.85	
+1.11	1.49	
+1.43	2.30	
+1.83	3.10	

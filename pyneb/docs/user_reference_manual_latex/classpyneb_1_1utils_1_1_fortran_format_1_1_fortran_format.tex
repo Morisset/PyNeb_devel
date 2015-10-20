@@ -1,0 +1,71 @@
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{}\section{Fortran\+Format Class Reference}
+\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}\index{Fortran\+Format@{Fortran\+Format}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_ac775ee34451fdfa742b318538164070e}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a810fdc262754b6d21f5acd0e280d4daf}{\+\_\+\+\_\+len\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_af2c6b7930c773edecd6d320e4c263421}{\+\_\+\+\_\+getitem\+\_\+\+\_\+} (self, i)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a0ac22a12ba104aaad1f7652877543f3b}{fields}
+\item 
+\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a9428b74721f542f400b0c97507688556}{rest}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Parsed Fortran-style format string
+
+FortranFormat objects can be used as arguments when constructing
+FortranLine objects instead of the plain format string. If a
+format string is used more than once, embedding it into a FortranFormat
+object has the advantage that the format string is parsed only once.
+\end{DoxyVerb}
+ 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_ac775ee34451fdfa742b318538164070e}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{format, }
+\item[{}]{nested = {\ttfamily False}}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_ac775ee34451fdfa742b318538164070e}
+\begin{DoxyVerb}@param format: a Fortran format specification
+@type format: C{str}
+@param nested: I{for internal use}
+\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_af2c6b7930c773edecd6d320e4c263421}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}!\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}}
+\subsubsection[{\+\_\+\+\_\+getitem\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+getitem\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{i}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_af2c6b7930c773edecd6d320e4c263421}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a810fdc262754b6d21f5acd0e280d4daf}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}!\+\_\+\+\_\+len\+\_\+\+\_\+@{\+\_\+\+\_\+len\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+len\+\_\+\+\_\+@{\+\_\+\+\_\+len\+\_\+\+\_\+}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}}
+\subsubsection[{\+\_\+\+\_\+len\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def \+\_\+\+\_\+len\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a810fdc262754b6d21f5acd0e280d4daf}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a0ac22a12ba104aaad1f7652877543f3b}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}!fields@{fields}}
+\index{fields@{fields}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}}
+\subsubsection[{fields}]{\setlength{\rightskip}{0pt plus 5cm}fields}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a0ac22a12ba104aaad1f7652877543f3b}
+\hypertarget{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a9428b74721f542f400b0c97507688556}{}\index{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}!rest@{rest}}
+\index{rest@{rest}!pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format@{pyneb\+::utils\+::\+Fortran\+Format\+::\+Fortran\+Format}}
+\subsubsection[{rest}]{\setlength{\rightskip}{0pt plus 5cm}rest}\label{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format_a9428b74721f542f400b0c97507688556}

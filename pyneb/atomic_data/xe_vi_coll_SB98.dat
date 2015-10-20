@@ -1,0 +1,9 @@
+*** XeVI collision strengths data
+0 0 2.000e-01 4.000e-01 6.000e-01 8.000e-01 1.000e+00 1.200e+00 1.400e+00 1.600e+00 1.800e+00 2.000e+00 5.000e+00
+1 2 3.680e+00 3.544e+00 3.865e+00 4.307e+00 4.738e+00 5.121e+00 5.449e+00 5.726e+00 5.960e+00 6.157e+00 7.039e+00
+*** T_UNIT K/10000
+*** ATOM xenon
+*** SPECTRUM 6
+*** GSCONFIG p1
+*** SOURCE1 Schoning & Butler 1998, Astron. Astrophys. Suppl. Ser. 128, 581-588
+*** NOTE1 Collision strengths

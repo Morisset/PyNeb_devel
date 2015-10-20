@@ -1,0 +1,7 @@
+The main change is that Atom is not anymore in charge of reading the atomic data files. It only calls AtomDataFits and CollDataFits (in the present case, but later will be able to call ascii parser, or Chianti, or other). 
+This change if transparent for the user, as all the useful methods of Atom are preserved by pointing to the corresponding methods in one of the two classes.
+
+* The scan_orders keyword in plotData is deprecated.
+* a new format "lines_in_cols2" in Observation is added, to be tested and further replace the "lines_in_cols". It uses the np.genfromtxt function.
+* Extrapolation of CollData when using Chebichev method is now copying the last element, and not using anymore te Chebichev extrapolation. Interpolation is kept the same. 
+* Fixing a bug that occurred when the number of levels in the transition probabilities table is greater than the number of levels in the collision strengths table.

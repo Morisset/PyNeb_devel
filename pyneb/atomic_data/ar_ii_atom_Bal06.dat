@@ -1,0 +1,11 @@
+Aij
+1/s 1/s 
+0.0000000e+00 0.0000000e+00 
+5.2700002e-02 0.0000000e+00 
+*** Ar II transition probabilities
+*** ATOM argon
+*** SPECTRUM 2
+*** GSCONFIG p5
+*** N_LEVELS 2
+*** SOURCE Badnell, N.R., et al. 2006, IAUS 234, 211
+*** NOTE A-value of 2-1

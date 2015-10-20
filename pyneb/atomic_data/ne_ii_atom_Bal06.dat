@@ -1,0 +1,11 @@
+Aij
+1/s 1/s 
+0.0000000e+00 0.0000000e+00 
+8.5199997e-03 0.0000000e+00 
+*** Ne II transition probabilities
+*** ATOM neon
+*** SPECTRUM 2
+*** N_LEVELS 2
+*** SOURCE2 Badnell, N.R., et al. 2006, IAUS 234, 211
+*** NOTE2 A(2->1)
+*** GSCONFIG p5

@@ -1,0 +1,13 @@
+Aij
+1/s   1/s   1/s   1/s   1/s   1/s     1/s 
+0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+3.080E-2 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+2.370E-6 5.170E-2 0.00e+00 0.00e+00 0.00e+00
+3.140E-1 8.230E-2 2.210E-5 0.00e+00 0.00e+00
+4.170E-2 3.910E+0 0.00e+00 2.590E+0 0.00E+00 
+*** Ar III transition probabilities
+*** ATOM argon
+*** SPECTRUM 3
+*** N_LEVELS 5
+*** SOURCE1 Munoz Burgos, J. M.; Loch, S. D.; Ballance, C. P.; Boivin, R. F. 2009, A&A, 500, 1253
+*** NOTE1 Transition Probabilities, A

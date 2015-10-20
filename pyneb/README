@@ -1,0 +1,4 @@
+To install this package without root access, do from a shell:
+python setup.py install --user
+
+

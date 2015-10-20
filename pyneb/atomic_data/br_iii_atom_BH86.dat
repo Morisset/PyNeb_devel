@@ -1,0 +1,14 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+1.15E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+5.48E-02  1.30E-02  0.00E+00  0.00E+00  0.00E+00
+5.72E+00  2.71E+00  1.16E-01  0.00E+00  0.00E+00
+1.16E+01  5.77E+00  2.84E+00  2.48E-02  0.00E+00
+*** Br III  Transition probabilities
+*** ATOM bromine
+*** SPECTRUM 3
+*** GSCONFIG p3
+*** N_LEVELS 5
+*** SOURCE1	Biemont & Hansen 1986, Phys. Scr., 33, 117 
+*** NOTE1 All A-values

@@ -1,0 +1,312 @@
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti}{}\section{pyneb.\+utils.\+pn\+\_\+chianti Namespace Reference}
+\label{namespacepyneb_1_1utils_1_1pn__chianti}\index{pyneb.\+utils.\+pn\+\_\+chianti@{pyneb.\+utils.\+pn\+\_\+chianti}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti}{\+\_\+\+Atom\+Chianti}
+\item 
+class \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti}{\+\_\+\+Coll\+Chianti}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{Chianti\+\_\+get\+A} (ion\+\_\+chianti)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\+\_\+get\+E} (ion\+\_\+chianti)
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\+\_\+levs\+\_\+order}
+\item 
+def \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\+\_\+get\+Omega}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{}\index{pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}!Chianti\+\_\+get\+A@{Chianti\+\_\+get\+A}}
+\index{Chianti\+\_\+get\+A@{Chianti\+\_\+get\+A}!pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}}
+\subsubsection[{Chianti\+\_\+get\+A}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+pn\+\_\+chianti.\+Chianti\+\_\+get\+A (
+\begin{DoxyParamCaption}
+\item[{}]{ion\+\_\+chianti}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}
+\begin{DoxyVerb}Return As from Chianti database.
+Usage:
+    As_O3 = Chianti_getA('o_3')
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{pn__chianti_8py_source_l00012}{12} of file \hyperlink{pn__chianti_8py_source}{pn\+\_\+chianti.\+py}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_l00012}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{00012} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{Chianti\_getA}(ion\_chianti):
+00013     \textcolor{stringliteral}{"""}
+00014 \textcolor{stringliteral}{    Return As from Chianti database.}
+00015 \textcolor{stringliteral}{    Usage:}
+00016 \textcolor{stringliteral}{        As\_O3 = Chianti\_getA('o\_3')}
+00017 \textcolor{stringliteral}{    """}
+00018     wgfa = \_chianti\_tools.wgfaRead(ion\_chianti)
+00019     NLevels = np.max(wgfa[\textcolor{stringliteral}{'lvl2'}])
+00020     As = np.zeros((NLevels, NLevels))
+00021     \textcolor{keywordflow}{for} i, j, a \textcolor{keywordflow}{in} zip(wgfa[\textcolor{stringliteral}{'lvl2'}], wgfa[\textcolor{stringliteral}{'lvl1'}], wgfa[\textcolor{stringliteral}{'avalue'}]):
+00022         As[i-1, j-1] = a
+00023     \textcolor{keywordflow}{return} As
+00024 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{}\index{pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}!Chianti\+\_\+get\+E@{Chianti\+\_\+get\+E}}
+\index{Chianti\+\_\+get\+E@{Chianti\+\_\+get\+E}!pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}}
+\subsubsection[{Chianti\+\_\+get\+E}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+pn\+\_\+chianti.\+Chianti\+\_\+get\+E (
+\begin{DoxyParamCaption}
+\item[{}]{ion\+\_\+chianti}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}
+\begin{DoxyVerb}Return energies from the Chianti database
+Usage:
+    E_O3 = Chianti_getE('o_3')
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{pn__chianti_8py_source_l00025}{25} of file \hyperlink{pn__chianti_8py_source}{pn\+\_\+chianti.\+py}.
+
+
+
+Referenced by \hyperlink{pn__chianti_8py_source_l00043}{pyneb.\+utils.\+pn\+\_\+chianti.\+get\+\_\+levs\+\_\+order()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_l00025}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{00025} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\_getE}(ion\_chianti):
+00026     \textcolor{stringliteral}{"""}
+00027 \textcolor{stringliteral}{    Return energies from the Chianti database}
+00028 \textcolor{stringliteral}{    Usage:}
+00029 \textcolor{stringliteral}{        E\_O3 = Chianti\_getE('o\_3')}
+00030 \textcolor{stringliteral}{    """}
+00031     Es = \_chianti\_tools.elvlcRead(ion\_chianti)
+00032     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} \textcolor{stringliteral}{'j'} \textcolor{keywordflow}{in} Es:
+00033         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00034     dtype = [(\textcolor{stringliteral}{'ecmth'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'ionS'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'term'}, \textcolor{stringliteral}{'S20'}),  (\textcolor{stringliteral}{'pretty'}, \textcolor{stringliteral}{'S30'}), 
+00035              (\textcolor{stringliteral}{'spd'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'ecm'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'j'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'l'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'erydth'}, \textcolor{stringliteral}{'<f8'}), 
+00036              (\textcolor{stringliteral}{'conf'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'lvl'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'spin'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'eryd'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'mult'}, \textcolor{stringliteral}{'<i8'})]
+00037     arr = np.recarray((len(Es[\textcolor{stringliteral}{'j'}]),), dtype=dtype)
+00038     \textcolor{keywordflow}{for} k \textcolor{keywordflow}{in} Es.keys():
+00039         \textcolor{keywordflow}{if} k \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} (\textcolor{stringliteral}{'status'}, \textcolor{stringliteral}{'ref'}):
+00040             arr[k] = Es[k]
+00041     \textcolor{keywordflow}{return} arr
+00042 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{}\index{pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}!Chianti\+\_\+get\+Omega@{Chianti\+\_\+get\+Omega}}
+\index{Chianti\+\_\+get\+Omega@{Chianti\+\_\+get\+Omega}!pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}}
+\subsubsection[{Chianti\+\_\+get\+Omega}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+pn\+\_\+chianti.\+Chianti\+\_\+get\+Omega (
+\begin{DoxyParamCaption}
+\item[{}]{ion\+\_\+chianti, }
+\item[{}]{tem, }
+\item[{}]{lev1 = {\ttfamily None}, }
+\item[{}]{lev2 = {\ttfamily None}, }
+\item[{}]{Splups = {\ttfamily None}, }
+\item[{}]{N\+Levels\+Max = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}
+\begin{DoxyVerb}Return the values of Upsilon at a given temperature (may be a table)
+Usage:
+    Chianti_getOmega('o_3', 10000)
+    Chianti_getOmega('o_3', np.linspace(5000, 20000, 20))
+lower and upper levels can be given as lev1 and lev2. If not, full table is return
+Splups is the result of _chianti_tools.splupsRead(ion_chianti), can be passed to avoid reloading it
+NLevelsMax reduce the number of levels considered.
+\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{pn__chianti_8py_source_l00107}{107} of file \hyperlink{pn__chianti_8py_source}{pn\+\_\+chianti.\+py}.
+
+
+
+Referenced by \hyperlink{pn__chianti_8py_source_l00484}{pyneb.\+utils.\+pn\+\_\+chianti.\+\_\+\+Coll\+Chianti.\+get\+Omega()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_l00107}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{00107} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(ion\_chianti, tem, lev1=None, lev2=None, Splups=None, NLevelsMax=None):
+00108     \textcolor{stringliteral}{"""}
+00109 \textcolor{stringliteral}{    Return the values of Upsilon at a given temperature (may be a table)}
+00110 \textcolor{stringliteral}{    Usage:}
+00111 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', 10000)}
+00112 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', np.linspace(5000, 20000, 20))}
+00113 \textcolor{stringliteral}{    lower and upper levels can be given as lev1 and lev2. If not, full table is return}
+00114 \textcolor{stringliteral}{    Splups is the result of \_chianti\_tools.splupsRead(ion\_chianti), can be passed to avoid reloading it}
+00115 \textcolor{stringliteral}{    NLevelsMax reduce the number of levels considered.}
+00116 \textcolor{stringliteral}{    """}
+00117     temp=np.asarray(tem)
+00118     \textcolor{keywordflow}{if} Splups \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00119         Splups = \_chianti\_tools.splupsRead(ion\_chianti)
+00120     \textcolor{keywordflow}{if} NLevelsMax \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00121         nsplups = len(Splups[\textcolor{stringliteral}{"lvl1"}])
+00122         nlevels = np.max(Splups[\textcolor{stringliteral}{"lvl2"}])
+00123     \textcolor{keywordflow}{else}:
+00124         nsplups = np.min((len(Splups[\textcolor{stringliteral}{"lvl1"}]), NLevelsMax))
+00125         nlevels = np.min((np.max(Splups[\textcolor{stringliteral}{"lvl2"}]), NLevelsMax))
+00126     ntemp=temp.size
+00127     \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
+00128         Omega = np.zeros((nlevels, nlevels, ntemp))
+00129     \textcolor{keywordflow}{else}:
+00130         Omega = np.zeros(ntemp)
+00131     lvl1 = np.array(Splups[\textcolor{stringliteral}{"lvl1"}])
+00132     lvl2 = np.array(Splups[\textcolor{stringliteral}{"lvl2"}])
+00133     \textcolor{keywordflow}{if} lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00134         range1 = np.arange(nlevels)
+00135     \textcolor{keywordflow}{else}:
+00136         range1 = np.array([lev1-1])
+00137     \textcolor{keywordflow}{if} lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00138         range2 = np.arange(nlevels)
+00139     \textcolor{keywordflow}{else}:
+00140         range2 = np.array([lev2-1])
+00141     \textcolor{keywordflow}{for} l1 \textcolor{keywordflow}{in} range1:
+00142         \textcolor{keywordflow}{for} l2 \textcolor{keywordflow}{in} range2:
+00143             isplups = np.where(((lvl1 == (l1+1)) & (lvl2 == (l2+1))))
+00144             \textcolor{keywordflow}{if} type(isplups) == type(()):
+00145                 isplups = isplups[0]                
+00146             \textcolor{keywordflow}{if} len(isplups) == 0:
+00147                 ups = np.zeros(ntemp)
+00148             \textcolor{keywordflow}{else}:
+00149                 ttype=Splups[\textcolor{stringliteral}{"ttype"}][isplups]
+00150                 cups=Splups[\textcolor{stringliteral}{"cups"}][isplups]
+00151                 nspl=Splups[\textcolor{stringliteral}{"nspl"}][isplups]
+00152                 dx=1./(float(nspl)-1.)
+00153                 splups=Splups[\textcolor{stringliteral}{"splups"}][isplups]
+00154                 de=Splups[\textcolor{stringliteral}{'de'}][isplups]
+00155                 kte = const.boltzmann*temp/(de*const.ryd2erg)
+00156                 der=0
+00157                 \textcolor{keywordflow}{if} ttype == 1:
+00158                     st=1.-np.log(cups)/np.log(kte+cups)
+00159                     xs=dx*np.arange(nspl)
+00160                     y2=interpolate.splrep(xs,splups,s=0)
+00161                     sups=interpolate.splev(st,y2,der=der)
+00162                     ups=sups*np.log(kte+np.exp(1.))
+00163                 \textcolor{keywordflow}{elif} ttype == 2:
+00164                     st=kte/(kte+cups)
+00165                     xs=dx*np.arange(nspl)
+00166                     y2=interpolate.splrep(xs,splups,s=0)
+00167                     sups=interpolate.splev(st,y2,der=der)
+00168                     ups=sups
+00169                 \textcolor{keywordflow}{elif} ttype == 3:
+00170                     st=kte/(kte+cups)
+00171                     xs=dx*np.arange(nspl)
+00172                     y2=interpolate.splrep(xs,splups,s=0)
+00173                     sups=interpolate.splev(st,y2,der=der)
+00174                     ups=sups/(kte+1.)
+00175                 \textcolor{keywordflow}{elif} ttype == 4:
+00176                     st=1.-np.log(cups)/np.log(kte+cups)
+00177                     xs=dx*np.arange(nspl)
+00178                     y2=interpolate.splrep(xs,splups,s=0)
+00179                     sups=interpolate.splev(st,y2,der=der)
+00180                     ups=sups*np.log(kte+cups)
+00181                 \textcolor{keywordflow}{elif} ttype == 5:
+00182                     \textcolor{comment}{# dielectronic rates}
+00183                     st=kte/(kte+cups)
+00184                     xs=dx*np.arange(nspl)
+00185                     y2=interpolate.splrep(xs,splups,s=0)
+00186                     sups=interpolate.splev(st,y2,der=der)
+00187                     ups=sups/(kte+0.)
+00188                 \textcolor{keywordflow}{elif} ttype == 6:
+00189                     st=kte/(kte+cups)
+00190                     xs=dx*np.arange(nspl)
+00191                     y2=interpolate.splrep(xs,splups,s=0)
+00192                     sups=interpolate.splev(st,y2,der=der)
+00193                     ups=10.**sups
+00194                 \textcolor{keywordflow}{elif} ttype > 6:
+00195                     pn.log\_.warning(\textcolor{stringliteral}{' t\_type ne 1,2,3,4,5=\{\} \{\} \{\}'}.format(ttype,l1,l2), calling=\textcolor{stringliteral}{'
+      pn.chianti.Chianti\_getOmega'})
+00196             \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
+00197                 Omega[l2, l1, :] = ups
+00198             \textcolor{keywordflow}{else}:
+00199                 Omega = ups
+00200 
+00201     Omega = np.where(Omega > 0.,Omega,0.)
+00202     \textcolor{keywordflow}{return} Omega
+00203 
+\end{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{}\index{pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}!get\+\_\+levs\+\_\+order@{get\+\_\+levs\+\_\+order}}
+\index{get\+\_\+levs\+\_\+order@{get\+\_\+levs\+\_\+order}!pyneb\+::utils\+::pn\+\_\+chianti@{pyneb\+::utils\+::pn\+\_\+chianti}}
+\subsubsection[{get\+\_\+levs\+\_\+order}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+pn\+\_\+chianti.\+get\+\_\+levs\+\_\+order (
+\begin{DoxyParamCaption}
+\item[{}]{atom, }
+\item[{}]{nmax = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}
+\begin{DoxyVerb}Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.\end{DoxyVerb}
+ 
+
+Definition at line \hyperlink{pn__chianti_8py_source_l00043}{43} of file \hyperlink{pn__chianti_8py_source}{pn\+\_\+chianti.\+py}.
+
+
+
+References \hyperlink{manage__atomic__data_8py_source_l00009}{pyneb.\+utils.\+manage\+\_\+atomic\+\_\+data.\+atom2chianti()}, \hyperlink{pn__chianti_8py_source_l00025}{pyneb.\+utils.\+pn\+\_\+chianti.\+Chianti\+\_\+get\+E()}, and \hyperlink{manage__atomic__data_8py_source_l00602}{pyneb.\+utils.\+manage\+\_\+atomic\+\_\+data.\+get\+Levels\+N\+I\+S\+T()}.
+
+
+
+Referenced by \hyperlink{pn__chianti_8py_source_l00484}{pyneb.\+utils.\+pn\+\_\+chianti.\+\_\+\+Coll\+Chianti.\+get\+Omega()}.
+
+
+\begin{DoxyCode}
+\hypertarget{namespacepyneb_1_1utils_1_1pn__chianti_l00043}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{00043} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(atom, nmax=None):
+00044     \textcolor{stringliteral}{"""}
+00045 \textcolor{stringliteral}{    Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.}
+00046 \textcolor{stringliteral}{    }
+00047 \textcolor{stringliteral}{    """}
+00048     E\_chianti = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\_getE}(\hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a9c992b2ae01f2e369be5d539172f78a0}{atom2chianti}(atom))
+00049     \textcolor{keywordflow}{if} E\_chianti \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00050         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00051     E\_NIST = \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_ad09376e8676854d44680ae14210b5589}{getLevelsNIST}(atom)
+00052     \textcolor{keywordflow}{if} E\_NIST \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00053         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00054     \textcolor{comment}{# Here follow a list of filter to try to find coincidence between the configuration used in Chanti and
+       in NIST}
+00055     remove\_stars = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\)*'},\textcolor{stringliteral}{''}, str)
+00056     remove\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{r'\(\backslash\)([^)]*\(\backslash\))'},\textcolor{stringliteral}{''}, str)
+00057     change\_2pto1p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{'.'}, str)
+00058     change\_2pto0p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{''}, str)
+00059     remove\_point\_before\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\)('}, \textcolor{stringliteral}{'('}, str)
+00060     remove\_before\_firstp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'^[^.]*.'}, \textcolor{stringliteral}{''}, str)
+00061     change\_ptpsp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).'}, \textcolor{stringliteral}{' '}, str)
+00062     \textcolor{comment}{# Define the Dictionary}
+00063     Chianti2NIST = \{\}
+00064     \textcolor{keywordflow}{for} i\_N, E \textcolor{keywordflow}{in} enumerate(E\_NIST):
+00065         \textcolor{keywordflow}{if} i\_N >= len(E\_chianti):
+00066             \textcolor{keywordflow}{break}
+00067         \textcolor{keywordflow}{if} nmax \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None} \textcolor{keywordflow}{and} i\_N > nmax:
+00068             \textcolor{keywordflow}{break}
+00069         
+00070         term = remove\_stars(E[\textcolor{stringliteral}{'term'}])
+00071 
+00072         c1 = remove\_stars(E[\textcolor{stringliteral}{'conf'}])
+00073         
+00074         c12 = remove\_par(c1)
+00075         c123 = change\_2pto1p(c12)
+00076         c124 = change\_2pto0p(c12)
+00077         
+00078         c15 = remove\_point\_before\_par(c1) 
+00079         
+00080         c16 = remove\_before\_firstp(c1)
+00081         c126 = remove\_before\_firstp(c12)
+00082         c1236 = remove\_before\_firstp(c123)
+00083         c1246 = remove\_before\_firstp(c124)
+00084         c156 = remove\_before\_firstp(c15)
+00085         
+00086         c17 = change\_ptpsp(c1)
+00087         c127 = change\_ptpsp(c12)
+00088         c1237 = change\_ptpsp(c123)
+00089         c1247 = change\_ptpsp(c124)
+00090         c157 = change\_ptpsp(c15)
+00091         c167 = change\_ptpsp(c16)
+00092         c1267 = change\_ptpsp(c126)
+00093         c12367 = change\_ptpsp(c1236)
+00094         c12467 = change\_ptpsp(c1246)
+00095         c1567 = change\_ptpsp(c156)
+00096        
+00097         confs = (c1, c12, c123, c124, c15, c16, c126, c1236, c1246, c156,
+00098                  c17, c127, c1237, c1247, c157, c167, c1267, c12367, c12467, c1567)
+00099         \textcolor{keywordflow}{for} conf \textcolor{keywordflow}{in} confs:   
+00100             pretty = \textcolor{stringliteral}{'\{0\} \{1\}\{2\}'}.format(conf, term, E[\textcolor{stringliteral}{'J'}])
+00101             i\_Ch = np.where(E\_chianti[\textcolor{stringliteral}{'pretty'}] == pretty)[0]
+00102             \textcolor{keywordflow}{if} len(i\_Ch) == 1:
+00103                 Chianti2NIST[i\_N] = i\_Ch[0]
+00104                         
+00105     \textcolor{keywordflow}{return} Chianti2NIST
+00106         
+\end{DoxyCode}
