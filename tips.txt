@@ -5,3 +5,6 @@ svn ci -m 'This is the version N.M.P'
 upload the documentation to the pipy site
 Change the version to N.M.P+1rc
 
+
+git clone https://github.com/cmorisset/PyNeb_devel
+
