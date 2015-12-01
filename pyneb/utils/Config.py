@@ -80,6 +80,11 @@ class _Config(object):
                 self.INSTALLED['pyfits from astropy'] = True
             except:
                 self.INSTALLED['pyfits from astropy'] = False
+        try:
+            import h5py
+            self.INSTALLED['h5py'] = True
+        except:
+            self.INSTALLED['h5py'] = False
         
         self.DataFiles = {}
             

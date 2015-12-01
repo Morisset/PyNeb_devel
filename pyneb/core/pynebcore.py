@@ -33,6 +33,9 @@ if pn.config.INSTALLED['pyfits']:
     import pyfits
 elif pn.config.INSTALLED['pyfits from astropy']:
     import astropy.io.fits as pyfits
+if pn.config.INSTALLED['h5py']:
+    import h5py
+
 
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
@@ -2571,8 +2574,13 @@ class RecAtom(object):
         self.name = sym2name[self.elem]
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making rec-atom object for {0} {1:d}'.format(self.elem, self.spec), calling=self.calling)
-                
-        self._loadFit()
+        
+        self.recFitsFile = pn.atomicData.getDataFile(self.atom, 'rec')
+        file_type = self.recFitsFile.split('.')[-1]
+        if file_type == 'fits':
+            self._loadFit()
+        elif file_type == 'hdf5':
+            self._loadHDF5()
         
         if 'trc' in pn.atomicData.getDataFile()[self.atom].keys():
             self._loadTotRecombination()
@@ -2635,6 +2643,46 @@ class RecAtom(object):
         self._test_lev(lev_j)
         return(self.wave_Ang[lev_i-1, lev_j-1])
         
+    def _loadHDF5(self):
+        """
+        Method to read the atomic data hdf5 file and store the data
+        Called by __init__
+        """
+        
+        if not pn.config.INSTALLED['h5py']:
+            pn.log_.error('You need to install h5py', calling=self.calling)
+        self.recFitsFile = pn.atomicData.getDataFile(self.atom, 'rec')
+        if self.recFitsFile is None:
+            pn.log_.error('No hdf5 data for atom: {0}'.format(self.atom), calling=self.calling)
+            return None
+        self.recFitsFullPath = pn.atomicData.getDataFullPath(self.atom, 'rec')
+        try:
+            hf5 = h5py.File(self.recFitsFullPath, 'r')
+        except:
+            pn.log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+        self._RecombData = hf5['updated_data'].value
+        hf5.close()
+        if self.atom in pn.config.DataFiles:
+            if self.recFitsFile not in pn.config.DataFiles[self.atom]:
+                pn.config.DataFiles[self.atom].append(self.recFitsFile)
+        else:
+            pn.config.DataFiles[self.atom] = [self.recFitsFile]
+        try:
+            self.temp = self._RecombData['TEMP']
+        except:
+            pn.log_.error('No TEMP field in {0}'.format(self.recFitsFile))
+        try:
+            self.log_dens = self._RecombData['DENS']
+        except:
+            pn.log_.error('No DENS field in {0}'.format(self.recFitsFile))
+        self.labels = self._RecombData.dtype.names
+        self.labels = tuple([l for l in self.labels if l not in ('TEMP', 'DENS')])
+        if '_' in self._RecombData.dtype.names[0]:
+            self.label_type = 'transitions'
+        else:
+            self.label_type = 'wavelengths'
+        pn.log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
+       
     def _loadFit(self):
         """
         Method to read the atomic data fits file and store the data
