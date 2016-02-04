@@ -2899,7 +2899,7 @@ class RecAtom(object):
             return False
    
             
-    def _getLabelStr(self, label):
+    def _getLabelStr(self, label, warn=True):
         """
         Returns a string containing the label. 
         If label is a float, it is transormed into a string .
@@ -2911,7 +2911,8 @@ class RecAtom(object):
         else:
             label_str = str(label)
         if label_str not in self.labels:
-            pn.log_.warn('Label {0} not in {1}.'.format(label_str, self.recFitsFile), calling=self.calling)
+            if warn:
+                pn.log_.warn('Label {0} not in {1}.'.format(label_str, self.recFitsFile), calling=self.calling)
             return None
         else:
             return label_str
@@ -2975,12 +2976,13 @@ class RecAtom(object):
             label = '{0}_{1}'.format(lev_i, lev_j)
         if wave is not None:
             label = '{0:.1f}'.format(wave)
-            label_str = self._getLabelStr(label)
+            label_str = self._getLabelStr(label, warn=False)
             if label_str is None:
                 ij = self.getTransition(wave)
                 label = '{}_{}'.format(ij[0], ij[1])
-        label_str = self._getLabelStr(label)
+        label_str = self._getLabelStr(label, warn=False)
         if label_str is None:
+            pn.log_.warn('Wrong label {0}'.format(label), calling=self.calling)
             return None
         if not self._checkLabel(label_str):
             pn.log_.warn('Wrong label {0}'.format(label_str), calling=self.calling)
