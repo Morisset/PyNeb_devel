@@ -1,9 +1,12 @@
 import os
 import numpy as np
-import pyneb as pn
-if pn.config.INSTALLED['plt']:
+
+from pyneb import config, log_, atomicData
+if config.INSTALLED['plt']:
     import matplotlib.pyplot as plt
 from ..utils.misc import int_to_roman, parseAtom
+from ..core.pynebcore import Atom
+from ..utils.saverestore import save, restore
 
 class EmisGrid(object):
     """
@@ -37,15 +40,15 @@ class EmisGrid(object):
 
         """
         #TODO Check the boundaries of the restored maps.
-        self.log_ = pn.log_
+        self.log_ = log_
         self.calling = 'EmisGrid'
 
         if restore_file is not None:
-            old = pn.restore(restore_file)
+            old = restore(restore_file)
             self.elem = old['elem']
             self.spec = old['spec']
             if atomObj is None:
-                self.atom = pn.Atom(elem=self.elem, spec=self.spec, **kwargs)
+                self.atom = Atom(elem=self.elem, spec=self.spec, **kwargs)
             else:
                 self.atom = atomObj
             if self.atom.atomFitsFile != old['atomFitsFile']:
@@ -67,7 +70,7 @@ class EmisGrid(object):
             if atomObj is None:
                 self.elem = elem
                 self.spec = spec
-                self.atom = pn.Atom(elem, spec, **kwargs)
+                self.atom = Atom(elem, spec, **kwargs)
             else:
                 self.atom = atomObj
                 self.elem = self.atom.elem
@@ -104,7 +107,7 @@ class EmisGrid(object):
             file_  the name of the file in which the emissivity grids are stored
 
         """
-        pn.save(file_, emis_grid=self.emis_grid, tem=self.tem, den=self.den, elem=self.elem,
+        save(file_, emis_grid=self.emis_grid, tem=self.tem, den=self.den, elem=self.elem,
              spec=self.spec, atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile)
 
 
@@ -151,8 +154,8 @@ class EmisGrid(object):
             - **kwargs                        any other parameter will be sent to contourf and pcolor
 
         """
-        if not pn.config.INSTALLED['plt']:
-            pn.log_.error('Matplotlib not available', calling=self.calling)
+        if not config.INSTALLED['plt']:
+            log_.error('Matplotlib not available', calling=self.calling)
             return None
         L = lambda lam: self.getGrid(wave=lam)
         I = lambda i, j: self.getGrid(i, j)
@@ -195,8 +198,8 @@ class EmisGrid(object):
             - **kwargs                  sent to plt.contour
             
         """ 
-        if not pn.config.INSTALLED['plt']:
-            pn.log_.error('Matplotlib not available', calling=self.calling)
+        if not config.INSTALLED['plt']:
+            log_.error('Matplotlib not available', calling=self.calling)
             return None
         X = np.log10(self.den2D)
         Y = self.tem2D
@@ -256,8 +259,8 @@ class EmisGrid(object):
             - **kwargs     sent to plt.contour
             
         """ 
-        if not pn.config.INSTALLED['plt']:
-            pn.log_.error('Matplotlib not available', calling=self.calling)
+        if not config.INSTALLED['plt']:
+            log_.error('Matplotlib not available', calling=self.calling)
             return None
 
         L = lambda wav: self.getGrid(wave=wav)
@@ -338,9 +341,9 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
             
     """
     if pypic_path is None:
-        pypic_path = pn.config.pypic_path
+        pypic_path = config.pypic_path
     else:
-        pn.config.pypic_path = pypic_path
+        config.pypic_path = pypic_path
     calling = 'getEmisGridDict'
     if pypic_path is None:
         return None
@@ -353,9 +356,9 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
             atoms = atom_list
         else:
 # VL Removed 13 March 2015 because it made the code ignore the elem keyword             
-#            atoms = pn.atomicData.getAllAtoms()
+#            atoms = atomicData.getAllAtoms()
             if (elem_list is None) and (spec_list is None):
-                atoms = pn.atomicData.getAllAtoms()
+                atoms = atomicData.getAllAtoms()
             else:
                 for elem in elem_list:
                     for spec in spec_list:
@@ -371,17 +374,17 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
             if os.path.exists(file_):
                 try:
                     emis_grids[elem + spec] = EmisGrid(restore_file=file_, atomObj=atomObj)
-                    pn.log_.message('Read %s' % file_, calling=calling)
+                    log_.message('Read %s' % file_, calling=calling)
                     compute_this = False
                 except:
                     if computeIfAbsent:
-                        pn.log_.warn('Wrong emission map: {0}, creating it'.format(file_), calling=calling)
+                        log_.warn('Wrong emission map: {0}, creating it'.format(file_), calling=calling)
                         compute_this = True
                     else:
-                        pn.log_.error('Wrong emission map: {0}'.format(file_), calling=calling)
+                        log_.error('Wrong emission map: {0}'.format(file_), calling=calling)
                         compute_this = False
             else:
-                pn.log_.warn('Emission map not found: {0}'.format(file_), calling=calling)
+                log_.warn('Emission map not found: {0}'.format(file_), calling=calling)
                 if computeIfAbsent:
                     compute_this = True
         else:
@@ -392,7 +395,7 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
                                               den_min=den_min, den_max=den_max, atomObj=atomObj)
                 if save:
                     emis_grids[atom].save(file_)
-                    pn.log_.message('%s saved to %s' % ((atom), file_), calling=calling)
+                    log_.message('%s saved to %s' % ((atom), file_), calling=calling)
             except:
-                pn.log_.warn('No %s EmisGrid' % (atom), calling=calling)
+                log_.warn('No %s EmisGrid' % (atom), calling=calling)
     return emis_grids

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-import pyneb
+from pyneb.version import __verion__
 
 setup(name='PyNeb', 
-      version=pyneb.__version__,
+      version=__version__,
       description='Nebular tools',
       author='Christophe Morisset, Valentina Luridiana',
       author_email='pynebular@gmail.com',

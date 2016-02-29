@@ -3,7 +3,7 @@ PyNeb - python package for the analysis of emission lines
 """
 
 __all__ = []
-__version__ = '1.0.14b'
+from .version import __version__
 
 import sys
 from numpy.version import version as numpy_version
