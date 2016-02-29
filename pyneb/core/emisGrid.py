@@ -3,7 +3,7 @@ import numpy as np
 import pyneb as pn
 if pn.config.INSTALLED['plt']:
     import matplotlib.pyplot as plt
-from pyneb.utils.misc import int_to_roman, parseAtom
+from ..utils.misc import int_to_roman, parseAtom
 
 class EmisGrid(object):
     """
