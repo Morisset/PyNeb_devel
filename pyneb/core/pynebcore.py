@@ -1285,12 +1285,15 @@ class Atom(object):
         """
         """
         
+        
+        
         if wave != -1:
             lev_i, lev_j = self.getTransition(wave)
         kappa = config.kappa 
         if kappa is None:
             to_return = self.CollData.getOmega(tem, lev_i, lev_j)
         else:
+            #ToDo The Kappa correction should come AFTER the transformation into CS unit
             if (lev_i == -1) and (lev_j == -1):
                 tem = np.asarray(tem)
                 res_shape = [self.collNLevels, self.collNLevels]

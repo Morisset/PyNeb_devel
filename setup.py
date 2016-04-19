@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from pyneb.version import __verion__
+from pyneb.version import __version__
 
 setup(name='PyNeb', 
       version=__version__,

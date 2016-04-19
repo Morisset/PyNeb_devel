@@ -66,6 +66,7 @@ class DataPlot(object):
             if type_ in ['atom', 'coll']:
                 data_list = type_ + '_data'
                 vars()[data_list].append({'ID': ID, 'file_': file_, 'type': type_, 'color': colors[i_colors % len(colors)]})
+                print('Adding {} {} {}'.format(ID, file_, type_))
                 i_colors += 1
                 
         self.atom_data = atom_data
@@ -84,12 +85,13 @@ class DataPlot(object):
         for data in coll_data_temp:
             pn.atomicData.setDataFile(data['file_'])
             atom = pn.Atom(self.elem, self.spec, OmegaInterp=OmegaInterp)
+            """
             try:
-                if ('COEFF' in atom.CollData.comments.keys()) or ('O_UNIT' in atom.CollData.comments.keys()):
+                if 'O_UNIT' in atom.CollData.comments.keys():
                     self.coll_data.remove(data)
             except:
                 pass
-
+            """
         # For each data set, an atom is built. 
         del(atom)
         for data in self.atom_data + self.coll_data:
@@ -407,6 +409,10 @@ class DataPlot(object):
             tem_funct = np.linspace(tem_min, tem_max, self.n_tem_points)
             x_dots = np.log10(tem_points)
             x_lines = np.log10(tem_funct)
+            if 'COEFF' in data['atom'].CollData.comments.keys():
+                coeff = float(data['atom'].CollData.comments['COEFF'])
+            else:
+                coeff = 1.0
             # Loops over all levels
             for i in range(1, coll_n_max+1):
                 for j in range(i + 1, coll_n_max+1):                
@@ -417,8 +423,15 @@ class DataPlot(object):
                                          (coll_n_max-1) * (j - 2) + i,
                                          axisbg='#FFFFE0')
                         if (i <= data['atom'].collNLevels) and (j <= data['atom'].collNLevels):
+                            y_dots = data['atom'].getOmega(tem_points, j, i)
                             try:
-                                y_dots = data['atom'].getOmegaArray(j, i)
+                                if 'O_UNIT' not in data['atom'].CollData.comments:
+                                    y_dots = coeff * data['atom'].getOmegaArray(j, i)
+                                    if y_dots.sum() > 0.0:
+                                        ax.plot(x_dots, y_dots, color=data['color'],
+                                                marker='*', linestyle='None', label='_nolegend_', markersize=10)
+                                    
+                                y_dots = data['atom'].getOmega(tem_points, j, i)
                                 if y_dots.sum() > 0.0:
                                     ax.plot(x_dots, y_dots, color=data['color'],
                                             marker='o', linestyle='None', label='_nolegend_')
@@ -452,8 +465,10 @@ class DataPlot(object):
         fig.text(.05, .5, "$\Omega$", va='center', fontsize=20, rotation=90)
         fig.text(.5, .95, "[%s %s] collision strengths" % (self.elem, int_to_roman(int(self.spec))), 
                  color="#191970", fontsize=16, ha='center')
+#        plt.legend(legend_lines, legend_text, loc='upper right', borderpad=1, 
+#                   labelspacing=1, bbox_to_anchor=(1, 1 * coll_n_max))
         plt.legend(legend_lines, legend_text, loc='upper right', borderpad=1, 
-                   labelspacing=1, bbox_to_anchor=(1, 1 * coll_n_max))
+                   labelspacing=1, bbox_to_anchor=(1, coll_n_max - 1))
         #plt.tight_layout()
         if save:
             plt.savefig(self.atom_rom + "_CS.pdf")
