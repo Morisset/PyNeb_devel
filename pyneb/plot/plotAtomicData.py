@@ -66,7 +66,6 @@ class DataPlot(object):
             if type_ in ['atom', 'coll']:
                 data_list = type_ + '_data'
                 vars()[data_list].append({'ID': ID, 'file_': file_, 'type': type_, 'color': colors[i_colors % len(colors)]})
-                print('Adding {} {} {}'.format(ID, file_, type_))
                 i_colors += 1
                 
         self.atom_data = atom_data
