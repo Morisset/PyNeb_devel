@@ -105,7 +105,8 @@ def get_levs_order(atom, nmax=None):
             i_Ch = np.where(E_chianti['pretty'] == pretty)[0]
             if len(i_Ch) == 1:
                 Chianti2NIST[i_N] = i_Ch[0]
-                        
+    if len(Chianti2NIST) == 0:
+        Chianti2NIST = None
     return Chianti2NIST
         
 def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevelsMax=None):
@@ -527,8 +528,15 @@ class _CollChianti(object):
         else:
             Chianti2NIST = get_levs_order(self.atom)
             if Chianti2NIST is not None:
-                Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=Chianti2NIST[lev_j-1]+1, lev2=Chianti2NIST[lev_i-1]+1, 
+                try:
+                    Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=Chianti2NIST[lev_j-1]+1, lev2=Chianti2NIST[lev_i-1]+1, 
+                                             Splups=self.Splups, NLevelsMax=NLevelsMax)
+                except:
+                    Omega = 0.
+            else:
+                Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=lev_j, lev2=lev_i, 
                              Splups=self.Splups, NLevelsMax=NLevelsMax)
+                
         return np.squeeze(Omega)
 
     def getTemArray(self, keep_unit=True):
