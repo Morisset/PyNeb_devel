@@ -555,6 +555,11 @@ class _AtomDataAscii(object):
         else:
             return self._Energy[level-1] * unit_dict[unit]
         
+
+class _AtomDataStout(object):
+    
+    def __init__(self):
+        pass
         
 class _CollDataFits(object):
     
@@ -1134,6 +1139,41 @@ class _CollDataAscii(object):
                     return self._TemArray
 
 
+class _CollDataStout(object):
+    
+    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False, 
+                 NLevelsMax=None):
+        self.log_ = log_
+        self.calling = '_CollDataStout'
+        if not config.INSTALLED['Stout']:
+            log_.error('The STOUT_DIR environment variable is not defined', calling=self.calling)
+            return None
+        
+        if atom is not None:
+            self.atom = atom
+            self.elem = parseAtom(atom)[0]
+            self.spec = int(parseAtom(atom)[1])
+        else:
+            self.elem = elem
+            self.spec = int(spec)
+            self.atom = elem + str(self.spec)
+        self.name = sym2name[self.elem]
+        self.noExtrapol = noExtrapol
+        
+        if OmegaInterp != 'Linear':
+            self.log_.error('Stout files does not support other interpolation than Linear', 
+                            calling = self.calling)
+        
+        self._loadStout()
+    
+    def _loadStout(self):
+        st_ion = '{}_{}'.format(self.atom.lower(), self.spec)
+        self.fullFileName = '{0}/{1}/{1}.coll'.format(config.Stout_dir, st_ion)
+        
+        self.collFile = self.fullFileName.split('/')[-1]
+        self.collPath = self.fullFileName[:-len(self.collFile)]
+        
+        
 
 class Atom(object):
     """
@@ -1191,6 +1231,8 @@ class Atom(object):
             self.AtomData = _AtomDataAscii(elem=self.elem, spec=self.spec, atom=self.atom)
         elif self.atomFileType == 'chianti':
             self.AtomData = _AtomChianti(elem=self.elem, spec=self.spec, atom=self.atom)
+        elif self.atomFileType == 'stout':
+            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom)
         elif self.atomFileType is None:
             self.AtomData = _AtomDataNone()
         else:
@@ -1241,6 +1283,8 @@ class Atom(object):
                                           OmegaInterp='Linear', noExtrapol = noExtrapol)
         elif self.collFileType == 'chianti':
             self.CollData = _CollChianti(elem=self.elem, spec=self.spec, atom=self.atom)
+        elif self.collFileType == 'stout':
+            self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom)            
         elif self.collFileType is None:
             self.CollData = _CollDataNone()
         try:

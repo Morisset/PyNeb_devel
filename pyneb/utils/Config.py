@@ -69,6 +69,12 @@ class _Config(object):
             self.INSTALLED['Chianti'] = False
             self.Chianti_version = None
             self.Chianti_version_main = None
+        if 'STOUT_DIR' in os.environ:
+            self.INSTALLED['Stout'] = True
+            self.Stout_dir = os.environ['STOUT_DIR']
+        else:
+            self.INSTALLED['Stout'] = False
+            self.Stout_dir = None
         try:
             import pyfits
             self.INSTALLED['pyfits'] = True
