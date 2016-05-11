@@ -6,7 +6,6 @@ __all__ = []
 from .version import __version__
 
 import sys
-from numpy.version import version as numpy_version
 
 from utils.Config import _Config
 config = _Config()
@@ -16,6 +15,7 @@ log_.message('Starting PyNeb version %s' % __version__, calling='PyNeb')
 if sys.version_info[0:2] < (2, 6):
     log_.warn('Python version >= 2.6 needed, seems you have {0}'.format(sys.version_info), calling='PyNeb')
 try:
+    from numpy.version import version as numpy_version    
     if [int(n) for n in (numpy_version.split('.')[:3])] < [1, 5, 1] :
         log_.warn('Numpy version >= 1.5.1 needed, seems you have {0}'.format(numpy_version), calling='PyNeb')
 except:
