@@ -1,6 +1,6 @@
 import os
-from misc import execution_path
-from logging import my_logging
+from .misc import execution_path
+from .logging import my_logging
 
 class _Config(object):
     """

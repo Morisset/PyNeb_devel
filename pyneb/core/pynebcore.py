@@ -204,7 +204,7 @@ class _AtomDataFits(object):
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)    
 
     
     def getA(self, lev_i= -1, lev_j= -1):
@@ -475,7 +475,7 @@ class _AtomDataAscii(object):
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)    
     
     def getA(self, lev_i= -1, lev_j= -1):
         """
@@ -699,7 +699,7 @@ class _CollDataFits(object):
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)    
     
     def getChebOrder(self, lev_i= -1, lev_j= -1):
         """
@@ -1031,7 +1031,7 @@ class _CollDataAscii(object):
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)
 
     def _test_lev(self, level):
         """
@@ -1488,16 +1488,16 @@ class Atom(object):
         """
         closestTransition = self._Transition(wave)
         relativeError = closestTransition[3] / closestTransition[2] - 1
-        print 'Input wave: {0:.1F}'.format(closestTransition[3])
-        print 'Closest wave found: {0:.1F}'.format(closestTransition[2])
-        print 'Relative error: {0:.0E} '.format(relativeError)
-        print 'Transition: {0[0]} -> {0[1]}'.format(closestTransition)
+        print('Input wave: {0:.1F}'.format(closestTransition[3]))
+        print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
+        print('Relative error: {0:.0E} '.format(relativeError))
+        print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
         return
     
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)    
     
     def getSources(self):
         sources = []
@@ -2239,13 +2239,13 @@ class Atom(object):
             - printCrit    also print critical densities (needs tem)
 
         """
-        print 'elem = %s' % self.elem
-        print 'spec = %i' % self.spec
+        print('elem = %s' % self.elem)
+        print('spec = %i' % self.spec)
         if tem is not None:
-            print 'temperature = %6.1f K' % tem
+            print('temperature = %6.1f K' % tem)
         if den is not None:
-            print 'density = %6.1f cm-3' % den
-        print ""
+            print('density = %6.1f cm-3' % den)
+        print("")
         if printPop and ((tem is None) or (den is None)):
             log_.warn('Cannot print populations as tem or den is missing', calling=self.calling)
             printPop = False
@@ -2276,27 +2276,27 @@ class Atom(object):
             if printA:
                 for j in range(i):
                     to_print = "{0:.3E}   ".format(np.float(self.getA(i + 1, j + 1)))
-                    print to_print,
-                print ""
+                    print(to_print,)
+                print("")
             for j in range(i):
                 if self.wave_Ang[i, j] > 10000.:
                     to_print = "%10.2fm " % (self.wave_Ang[i, j] / 1e4)
                 else:
                     to_print = "%10.2fA " % self.wave_Ang[i, j]
-                print to_print,
-            print ""
+                print(to_print,)
+            print("")
             for j in range(i):
-                print "    (%1i-->%1i) " % (i + 1, j + 1),
-            print ""
+                print("    (%1i-->%1i) " % (i + 1, j + 1),)
+            print("")
             if (tem is not None) and (den is not None):
                 for j in range(i):
-                    print "  %.3E " % self.getEmissivity(tem, den, lev_i=i + 1, lev_j=j + 1),
-            print "\n"
+                    print("  %.3E " % self.getEmissivity(tem, den, lev_i=i + 1, lev_j=j + 1),)
+            print("\n")
         if (tem is not None) and (den is not None):
             try:
                 H1 = RecAtom('H', 1)
-                print "# H-beta volume emissivity:"
-                print "%.3E N(H+) * N(e-)  (erg/s)" % H1.getEmissivity(tem, den, 4, 2)
+                print("# H-beta volume emissivity:")
+                print("%.3E N(H+) * N(e-)  (erg/s)" % H1.getEmissivity(tem, den, 4, 2))
             except:
                 pass
 
@@ -2348,16 +2348,16 @@ class Atom(object):
         result = self.getTemDen(int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
                                 wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
                                 end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
-        print 'Ion = %s' % self.elem + " " + int_to_roman(self.spec)
-        print 'Option = %s' % option
-        print 'Assumed %s = %.0f %s' % (assume_str, assume, assume_unit)
+        print('Ion = %s' % self.elem + " " + int_to_roman(self.spec))
+        print('Option = %s' % option)
+        print('Assumed %s = %.0f %s' % (assume_str, assume, assume_unit))
         if to_eval is None:
-            print 'Assumed I(%i)/I(%i) ratio = %.0f' % (wave1, wave2, int_ratio)
+            print('Assumed I(%i)/I(%i) ratio = %.0f' % (wave1, wave2, int_ratio))
         else:
-            print 'Assumed %s = %.0f' % (to_eval, int_ratio)
+            print('Assumed %s = %.0f' % (to_eval, int_ratio))
 #        print 'method = %s' % method
 #        print 'maxError on ratio %f' % maxError
-        print 'Calculated %s = %.0f %s' % (option, result, unit)
+        print('Calculated %s = %.0f %s' % (option, result, unit))
 
 
     def plotEmiss(self, tem_min=1000, tem_max=30000, ionic_abund=1.0, den=1e3, style='-',
@@ -2883,10 +2883,10 @@ class RecAtom(object):
         """
         closestTransition = self._Transition(wave)
         relativeError = closestTransition[3] / closestTransition[2] - 1
-        print 'Input wave: {0:.1F}'.format(closestTransition[3])
-        print 'Closest wave found: {0:.1F}'.format(closestTransition[2])
-        print 'Relative error: {0:.0E} '.format(relativeError)
-        print 'Transition: {0[0]} -> {0[1]}'.format(closestTransition)
+        print('Input wave: {0:.1F}'.format(closestTransition[3]))
+        print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
+        print('Relative error: {0:.0E} '.format(relativeError))
+        print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
         return
     
               
@@ -2900,9 +2900,9 @@ class RecAtom(object):
             if 'SOURCE' in record[0]:
                 number = record[0].lstrip('SOURCE')
                 try:
-                    print self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number))
+                    print(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
                 except:
-                    print self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number))
+                    print(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
 
 
     def getEnergy(self, level= -1, unit='1/Ang'):
@@ -3792,13 +3792,13 @@ class Observation(object):
                             line2add = EmissionLine(label=label, obsIntens=intens, obsError=error)
                         except:
                             self.log_.warn('unkown line label {0}'.format(label), calling=self.calling)
-                            print label, intens, error 
+                            print(label, intens, error)
                         try:
                             self.addLine(line2add)
                             self.log_.message('adding line {0}'.format(label), calling=self.calling)
                         except:
                             self.log_.warn('Impossible to add line'.format(label), calling=self.calling)
-                            print label, intens, error
+                            print(label, intens, error)
                     else:
                         self.log_.warn('Skipped {0}'.format(label), calling=self.calling)
             
@@ -3832,13 +3832,13 @@ class Observation(object):
                         line2add = EmissionLine(label=label, obsIntens=intens, obsError=error)
                     except:
                         self.log_.warn('unkown line label {0}'.format(label), calling=self.calling)
-                        print label, intens, error 
+                        print(label, intens, error)
                     try:
                         self.addLine(line2add)
                         self.log_.message('adding line {0}'.format(label), calling=self.calling)
                     except:
                         self.log_.warn('Impossible to add line'.format(label), calling=self.calling)
-                        print label, intens, error
+                        print(label, intens, error)
                         
         elif fileFormat == 'lines_in_rows_err_cols':
             
@@ -3869,13 +3869,13 @@ class Observation(object):
                         line2add = EmissionLine(label=label, obsIntens=intens, obsError=error)
                     except:
                         self.log_.warn('unkown line label {0}'.format(label), calling=self.calling)
-                        print label, intens, error 
+                        print(label, intens, error)
                     try:
                         self.addLine(line2add)
                         self.log_.message('adding line {0}'.format(label), calling=self.calling)
                     except:
                         self.log_.warn('Impossible to add line'.format(label), calling=self.calling)
-                        print label, intens, error
+                        print(label, intens, error)
         
             
         if corrected:

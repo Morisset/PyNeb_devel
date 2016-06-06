@@ -86,11 +86,11 @@ __all__ = ['chebzero', 'chebone', 'chebx', 'chebdomain', 'chebline',
 
 import numpy as np
 import numpy.linalg as la
-import polyutils as pu
 import warnings
-from polytemplate import polytemplate
+from .polytemplate import polytemplate
+from .polyutils import trimcoef, as_series, RankWarning, trimseq
 
-chebtrim = pu.trimcoef
+chebtrim = trimcoef
 
 #
 # A collection of functions for manipulating z-series. These are private
@@ -348,7 +348,7 @@ def poly2cheb(pol) :
     array([ 1.  ,  3.25,  1.  ,  0.75])
 
     """
-    [pol] = pu.as_series([pol])
+    [pol] = as_series([pol])
     deg = len(pol) - 1
     res = 0
     for i in range(deg, -1, -1) :
@@ -402,7 +402,7 @@ def cheb2poly(cs) :
     """
     from polynomial import polyadd, polysub, polymulx
 
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     n = len(cs)
     if n < 3:
         return cs
@@ -524,7 +524,7 @@ def chebfromroots(roots) :
     if len(roots) == 0 :
         return np.ones(1)
     else :
-        [roots] = pu.as_series([roots], trim=False)
+        [roots] = as_series([roots], trim=False)
         prd = np.array([1], dtype=roots.dtype)
         for r in roots:
             prd = chebsub(chebmulx(prd), r*prd)
@@ -571,14 +571,14 @@ def chebadd(c1, c2):
 
     """
     # c1, c2 are trimmed copies
-    [c1, c2] = pu.as_series([c1, c2])
+    [c1, c2] = as_series([c1, c2])
     if len(c1) > len(c2) :
         c1[:c2.size] += c2
         ret = c1
     else :
         c2[:c1.size] += c1
         ret = c2
-    return pu.trimseq(ret)
+    return trimseq(ret)
 
 
 def chebsub(c1, c2):
@@ -623,7 +623,7 @@ def chebsub(c1, c2):
 
     """
     # c1, c2 are trimmed copies
-    [c1, c2] = pu.as_series([c1, c2])
+    [c1, c2] = as_series([c1, c2])
     if len(c1) > len(c2) :
         c1[:c2.size] -= c2
         ret = c1
@@ -631,7 +631,7 @@ def chebsub(c1, c2):
         c2 = -c2
         c2[:c1.size] += c1
         ret = c2
-    return pu.trimseq(ret)
+    return trimseq(ret)
 
 
 def chebmulx(cs):
@@ -658,7 +658,7 @@ def chebmulx(cs):
 
     """
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     # The zero series needs special treatment
     if len(cs) == 1 and cs[0] == 0:
         return cs
@@ -714,12 +714,12 @@ def chebmul(c1, c2):
 
     """
     # c1, c2 are trimmed copies
-    [c1, c2] = pu.as_series([c1, c2])
+    [c1, c2] = as_series([c1, c2])
     z1 = _cseries_to_zseries(c1)
     z2 = _cseries_to_zseries(c2)
     prd = _zseries_mul(z1, z2)
     ret = _zseries_to_cseries(prd)
-    return pu.trimseq(ret)
+    return trimseq(ret)
 
 
 def chebdiv(c1, c2):
@@ -769,7 +769,7 @@ def chebdiv(c1, c2):
 
     """
     # c1, c2 are trimmed copies
-    [c1, c2] = pu.as_series([c1, c2])
+    [c1, c2] = as_series([c1, c2])
     if c2[-1] == 0 :
         raise ZeroDivisionError()
 
@@ -783,8 +783,8 @@ def chebdiv(c1, c2):
         z1 = _cseries_to_zseries(c1)
         z2 = _cseries_to_zseries(c2)
         quo, rem = _zseries_div(z1, z2)
-        quo = pu.trimseq(_zseries_to_cseries(quo))
-        rem = pu.trimseq(_zseries_to_cseries(rem))
+        quo = trimseq(_zseries_to_cseries(quo))
+        rem = trimseq(_zseries_to_cseries(rem))
         return quo, rem
 
 def chebpow(cs, pow, maxpower=16) :
@@ -819,7 +819,7 @@ def chebpow(cs, pow, maxpower=16) :
 
     """
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     power = int(pow)
     if power != pow or power < 0 :
         raise ValueError("Power must be a non-negative integer.")
@@ -892,12 +892,12 @@ def chebder(cs, m=1, scl=1) :
     cnt = int(m)
 
     if cnt != m:
-        raise ValueError, "The order of derivation must be integer"
+        raise ValueError("The order of derivation must be integer")
     if cnt < 0 :
-        raise ValueError, "The order of derivation must be non-negative"
+        raise ValueError("The order of derivation must be non-negative")
 
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     if cnt == 0:
         return cs
     elif cnt >= len(cs):
@@ -991,14 +991,14 @@ def chebint(cs, m=1, k=[], lbnd=0, scl=1):
         k = [k]
 
     if cnt != m:
-        raise ValueError, "The order of integration must be integer"
+        raise ValueError("The order of integration must be integer")
     if cnt < 0 :
-        raise ValueError, "The order of integration must be non-negative"
+        raise ValueError("The order of integration must be non-negative")
     if len(k) > cnt :
-        raise ValueError, "Too many integration constants"
+        raise ValueError("Too many integration constants")
 
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     if cnt == 0:
         return cs
 
@@ -1055,7 +1055,7 @@ def chebval(x, cs):
 
     """
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     if isinstance(x, tuple) or isinstance(x, list) :
         x = np.asarray(x)
 
@@ -1226,15 +1226,15 @@ def chebfit(x, y, deg, rcond=None, full=False, w=None):
 
     # check arguments.
     if deg < 0 :
-        raise ValueError, "expected deg >= 0"
+        raise ValueError("expected deg >= 0")
     if x.ndim != 1:
-        raise TypeError, "expected 1D vector for x"
+        raise TypeError("expected 1D vector for x")
     if x.size == 0:
-        raise TypeError, "expected non-empty vector for x"
+        raise TypeError("expected non-empty vector for x")
     if y.ndim < 1 or y.ndim > 2 :
-        raise TypeError, "expected 1D or 2D array for y"
+        raise TypeError("expected 1D or 2D array for y")
     if len(x) != len(y):
-        raise TypeError, "expected x and y to have same length"
+        raise TypeError("expected x and y to have same length")
 
     # set up the least squares matrices
     lhs = chebvander(x, deg)
@@ -1242,9 +1242,9 @@ def chebfit(x, y, deg, rcond=None, full=False, w=None):
     if w is not None:
         w = np.asarray(w) + 0.0
         if w.ndim != 1:
-            raise TypeError, "expected 1D vector for w"
+            raise TypeError("expected 1D vector for w")
         if len(x) != len(w):
-            raise TypeError, "expected x and w to have same length"
+            raise TypeError("expected x and w to have same length")
         # apply weights
         if rhs.ndim == 2:
             lhs *= w[:, np.newaxis]
@@ -1265,7 +1265,7 @@ def chebfit(x, y, deg, rcond=None, full=False, w=None):
     # warn on rank reduction
     if rank != order and not full:
         msg = "The fit may be poorly conditioned"
-        warnings.warn(msg, pu.RankWarning)
+        warnings.warn(msg, RankWarning)
 
     if full :
         return c, [resids, rank, s, rcond]
@@ -1316,7 +1316,7 @@ def chebroots(cs):
 
     """
     # cs is a trimmed copy
-    [cs] = pu.as_series([cs])
+    [cs] = as_series([cs])
     if len(cs) <= 1 :
         return np.array([], dtype=cs.dtype)
     if len(cs) == 2 :
@@ -1403,4 +1403,4 @@ def chebpts2(npts):
 # Chebyshev series class
 #
 
-exec polytemplate.substitute(name='Chebyshev', nick='cheb', domain='[-1,1]')
+exec(polytemplate.substitute(name='Chebyshev', nick='cheb', domain='[-1,1]'))

@@ -4,6 +4,15 @@ import sys
 import traceback
 import pyneb as pn
 
+
+def b(x):
+
+    if sys.version_info.major < 3:
+        return x
+    else:
+        import codecs
+        return codecs.latin_1_encode(x)[0]
+
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
 

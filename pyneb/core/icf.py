@@ -865,14 +865,14 @@ class ICF(object):
         """        
         for item in self.all_icfs:
             if (label in item):
-                print '------------------------------------------------------------------------'
-                if ('l' in filter): print 'Label:', item
-                if ('e' in filter): print 'Element:', self.all_icfs[item]['elem']
-                if ('r' in filter): print 'Required ions:', self._getAtomExp(item)
-                if ('i' in filter): print 'ICF expression:', self._getIcfExp(item)
-                if ('o' in filter): print 'Object class:', self.all_icfs[item]['type']
-                if ('c' in filter): print 'Comments:', self.all_icfs[item]['comment']
-                if ('s' in filter): print 'Source:', self.getReference(item)
+                print('------------------------------------------------------------------------')
+                if ('l' in filter): print('Label:', item)
+                if ('e' in filter): print('Element:', self.all_icfs[item]['elem'])
+                if ('r' in filter): print('Required ions:', self._getAtomExp(item))
+                if ('i' in filter): print('ICF expression:', self._getIcfExp(item))
+                if ('o' in filter): print('Object class:', self.all_icfs[item]['type'])
+                if ('c' in filter): print('Comments:', self.all_icfs[item]['comment'])
+                if ('s' in filter): print('Source:', self.getReference(item))
    
     
     def getReference(self, label): 
@@ -1120,22 +1120,22 @@ class ICF(object):
         label2 = 'TPP77_14'
         label3 = 'KH01_4b'
         label4 = 'PHCD07_13'
-        print 'All the available ICFs, listed by element:'   
-        print self.getAvailableICFs()
-        print '\nAll the available ICFs, with some detail:'   
-        print self.printAllICFs()
-        print '\nAll the available ICFs for S and Ne:'   
-        print self.getAvailableICFs(['S', 'Ne'])
-        print '\nAnalytical expression for ' + label1 + ':'
-        print self.getExpression(label1)
-        print '\nBibliographic reference for ' + label2 + ':'
-        print self.getReference(label2)
-        print '\nURL for ' + label3 + ':'
-        print self.getURL(label3)
-        print '\nType of object to which ' + label4 + ' can be applied:'
-        print self.getType(label4)
-        print '\nAdditional details of ' + label4 + ':'
-        print self.getComment(label4) 
+        print('All the available ICFs, listed by element:')
+        print(self.getAvailableICFs())
+        print('\nAll the available ICFs, with some detail:')
+        print(self.printAllICFs())
+        print('\nAll the available ICFs for S and Ne:' )  
+        print(self.getAvailableICFs(['S', 'Ne']))
+        print('\nAnalytical expression for ' + label1 + ':')
+        print(self.getExpression(label1))
+        print('\nBibliographic reference for ' + label2 + ':')
+        print(self.getReference(label2))
+        print('\nURL for ' + label3 + ':')
+        print(self.getURL(label3))
+        print('\nType of object to which ' + label4 + ' can be applied:')
+        print(self.getType(label4))
+        print('\nAdditional details of ' + label4 + ':')
+        print(self.getComment(label4) )
 
         atom_abun = {}
         atom_abun['O2'] = 0.001
