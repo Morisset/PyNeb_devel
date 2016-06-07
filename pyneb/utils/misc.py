@@ -5,14 +5,16 @@ import traceback
 import pyneb as pn
 
 
-def b(x):
-
-    if sys.version_info.major < 3:
+if sys.version_info.major < 3:
+    def bs(x):
         return x
-    else:
-        import codecs
-        return codecs.latin_1_encode(x)[0]
-
+else:
+    def bs(x):
+        if type(x) is bytes or type(x) is np.bytes_:
+            return x.decode(encoding='UTF-8')
+        elif type(x) is str or type(x) is np.str_:
+            return x.encode(encoding='UTF-8')
+            
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
 

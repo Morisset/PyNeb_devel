@@ -2,7 +2,7 @@ import os
 import pyneb as pn
 import numpy as np
 import re
-from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract, b
+from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract, bs
 from .init import ELEM_LIST, SPEC_LIST
 from .physics import _predefinedDataFileDict
 
@@ -543,7 +543,7 @@ def extract_flt(str_):
     extract_flt('123.00?') -> 123.00
     """
     res = ''
-    for l in b(str_):
+    for l in bs(str_):
         if l.isdigit() or l == '.':
             res += l
         else:
@@ -560,7 +560,7 @@ def readNIST(NISTfile):
         http://physics.nist.gov/PhysRefData/ASD/levels_form.html
     with the following options:
         Level Units: cm-1
-        Format output: ASCII
+        Format output: ASCIIda
         Display output: in its entirely
         Energy ordered
         Level Information: Principal configuration, Principal term, Level, J
@@ -569,7 +569,7 @@ def readNIST(NISTfile):
     data = np.genfromtxt(NISTfile, comments = '-', 
                     delimiter = '|', names = 'conf, term, J, energy, ref', 
                     dtype=('a23', 'a9', 'a4', 'float', 'a10'), autostrip=True,
-                    converters = {'energy':extract_flt})
+                    converters = {'energy':extract_flt, 'J':bs, 'conf':bs, 'term': bs, 'ref':bs})
     data = data[data['J'] != '']
     previous_ref = ''
     previous_conf = ''
