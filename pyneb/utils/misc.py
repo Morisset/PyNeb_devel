@@ -3,7 +3,28 @@ import os
 import sys
 import traceback
 import pyneb as pn
+from scipy.linalg import solve as solve_sc
+from numpy.linalg import solve as solve_np
+"""
+from scipy.sparse.linalg import spsolve as solve_sp
 
+try:
+    from numba import double
+    from numba.decorators import jit, autojit
+except:
+    pass
+
+
+try:
+    import rpy2.robjects.numpy2ri
+    from rpy2.robjects.packages import importr
+    rpy2.robjects.numpy2ri.activate()
+    base     = importr('base')
+    rpy_ok = True
+except:
+    rpy_ok = False
+"""
+    
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
 
@@ -401,7 +422,26 @@ def addRand(N, list_, list_errors=None, lowlim=None):
         new_list.extend(to_extend)
     return new_list
 
+def solve_r(a, b):
+    if rpy_ok:
+        return base.solve(a, b)
+    else:
+        return None
+    
+def solve_lapack(a, b):
+    from numpy.linalg import lapack_lite
+
+    n_eq = a.shape[0]
+    n_rhs = b.shape[0]
+
+    pivots = np.zeros(n_eq, np.intc)
+    results = lapack_lite.dgesv(n_eq, n_rhs, a, n_eq, pivots, b, n_eq, 0)
+    return results  
+  
     
     
+@profile    
+def solve(a, b):
+    return solve_np(a, b)
     
     

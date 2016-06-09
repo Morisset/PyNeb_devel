@@ -12,7 +12,7 @@ import warnings
 import os
 
 from pyneb import config, log_, atomicData
-from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone
+from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve
 from ..utils import chebyshev
 from ..utils.init import LINE_LABEL_LIST, BLEND_LIST, SPEC_LIST, label2levelDict
 from ..utils.physics import sym2name, gsDict, gsLevelDict, gsFromAtom, vactoair, CST
@@ -41,6 +41,7 @@ if config.INSTALLED['h5py']:
 
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
+#profiler = 'cpu'
 if profiler == 'mem':
     try:
         from memory_profiler import profile
@@ -1620,7 +1621,7 @@ class Atom(object):
             for i_tem in range(n_tem):
                 for i_den in range(n_den):
                     try:
-                        pop_result[:, i_tem, i_den] = np.linalg.solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
+                        pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
                     except np.linalg.LinAlgError:
                         pop_result[:, i_tem, i_den] = np.nan
                     except:
@@ -1670,7 +1671,7 @@ class Atom(object):
             
             for i in range(tem.size):
                 try:
-                    pop_result[:, i] = np.linalg.solve(np.squeeze(coeff_matrix[:, :, i]), vect)
+                    pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
                 except np.linalg.LinAlgError:
                     pop_result[:, i] = np.nan
                 except:
