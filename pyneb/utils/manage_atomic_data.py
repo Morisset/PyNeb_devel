@@ -2,9 +2,9 @@ import os
 import pyneb as pn
 import numpy as np
 import re
-from misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract
-from init import ELEM_LIST, SPEC_LIST
-from physics import _predefinedDataFileDict
+from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract, bs
+from .init import ELEM_LIST, SPEC_LIST
+from .physics import _predefinedDataFileDict
 
 def atom2chianti(atom):
     elem = parseAtom(atom)[0]
@@ -269,8 +269,8 @@ class _ManageAtomicData(object):
                                 pass
         coll_atom_list = list(set(atom_dict['atom']) & set(atom_dict['coll']))
         rec_atom_list = list(set(atom_dict['rec']))
-        print 'Data for the following collisional atoms exist:', coll_atom_list
-        print 'Data for the following recombination atoms exist:', rec_atom_list
+        print('Data for the following collisional atoms exist:', coll_atom_list)
+        print('Data for the following recombination atoms exist:', rec_atom_list)
         return [coll_atom_list, rec_atom_list] 
         
     
@@ -510,27 +510,24 @@ class _ManageAtomicData(object):
  
         """
         if (yr == 96):
-            print "********************************************"
-            print ""
-            print "We have used a near limitless data source,"
-            print "It is the Opacity Project, of course."
-            print "Its results are certainly fine"
-            print "For most any LS-coupled line."        
-            print ""
-            print "            (Wiese, Fuhr & Deters 1996)"
-            print ""
-            print "********************************************"
+            print("""********************************************
+            
+We have used a near limitless data source,
+It is the Opacity Project, of course.
+Its results are certainly fine
+For most any LS-coupled line.
+
+
+(Wiese, Fuhr & Deters 1996)""")            
         elif (yr == 66):
-            print "********************************************"
-            print ""
-            print "If there is no other data source"
-            print "Use the Coulomb approximation, of course."    
-            print "The results should be certainly fine"
-            print "For any moderately or highly excited line."
-            print ""
-            print "            (Wiese, Smith & Glennon 1966)" 
-            print ""
-            print "********************************************"
+            print("""********************************************
+
+If there is no other data source            
+Use the Coulomb approximation, of course.
+The results should be certainly fine
+For any moderately or highly excited line.
+
+(Wiese, Smith & Glennon 1966)""")
         else:
             rnd = np.random.rand()
             if (rnd < 0.5):
@@ -546,7 +543,7 @@ def extract_flt(str_):
     extract_flt('123.00?') -> 123.00
     """
     res = ''
-    for l in str_:
+    for l in bs(str_):
         if l.isdigit() or l == '.':
             res += l
         else:
@@ -563,7 +560,7 @@ def readNIST(NISTfile):
         http://physics.nist.gov/PhysRefData/ASD/levels_form.html
     with the following options:
         Level Units: cm-1
-        Format output: ASCII
+        Format output: ASCIIda
         Display output: in its entirely
         Energy ordered
         Level Information: Principal configuration, Principal term, Level, J
@@ -572,7 +569,7 @@ def readNIST(NISTfile):
     data = np.genfromtxt(NISTfile, comments = '-', 
                     delimiter = '|', names = 'conf, term, J, energy, ref', 
                     dtype=('a23', 'a9', 'a4', 'float', 'a10'), autostrip=True,
-                    converters = {'energy':extract_flt})
+                    converters = {'energy':extract_flt, 'J':bs, 'conf':bs, 'term': bs, 'ref':bs})
     data = data[data['J'] != '']
     previous_ref = ''
     previous_conf = ''

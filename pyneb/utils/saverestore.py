@@ -1,4 +1,4 @@
-import cPickle
+import pickle
 
 def save(file_, *args, **kwargs):
     """
@@ -10,7 +10,7 @@ def save(file_, *args, **kwargs):
     dict = kwargs
     for name in args:
         dict[name] = eval(name)
-    cPickle.dump(dict, f, protocol=2)
+    pickle.dump(dict, f, protocol=2)
     f.close
 
 def restore(file_):
@@ -20,6 +20,6 @@ def restore(file_):
 
     """
     f=open(file_, "rb")
-    result = cPickle.load(f)
+    result = pickle.load(f)
     f.close
     return result

@@ -52,9 +52,9 @@ class my_logging(object):
         if calling is None:
             calling = self.calling
         if self.print_time:
-            print '{0} {1} @ {2}: {3}'.format(mess_type, calling, str(datetime.now()), message)
+            print('{0} {1} @ {2}: {3}'.format(mess_type, calling, str(datetime.now()), message))
         else:
-            print '{0} {1}: {2}'.format(mess_type, calling, message)
+            print('{0} {1}: {2}'.format(mess_type, calling, message))
         
     def _add2log(self, mess_type, message, calling=None):
         if calling is None:
@@ -124,7 +124,7 @@ class my_logging(object):
             calling = self.calling
         delta_t = str((time() - self.__start))
         if not quiet:
-            print '   {0}: {1} in {2}'.format(calling, message, delta_t)
+            print('   {0}: {1} in {2}'.format(calling, message, delta_t))
         self.log_['timer'].append((calling, delta_t, message))
         if self._to_file:
             self._file_out.write("timer - {0} @ {1}: {2} \n".format(calling, delta_t, message))
@@ -166,7 +166,7 @@ class my_logging(object):
         """
         print the timer messages.
         """
-        print self.log_['timer']
+        print(self.log_['timer'])
         
     def open_file(self, file_):
         """

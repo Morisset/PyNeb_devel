@@ -9,13 +9,13 @@ that is found in the LICENSE file
 '''
 import os, fnmatch
 from types import *
-from ConfigParser import *
+#from ConfigParser import *
 import pickle
 from datetime import date
 import numpy as np
 from scipy import interpolate
-from FortranFormat import *
-import _chianti_constants as const
+from .FortranFormat import *
+from . import _chianti_constants as const
 #
 #
 def between(array,limits):
@@ -470,7 +470,7 @@ def elvlcRead(ions, filename = None, verbose=0,  useTh=1):
         bname = os.path.basename(filename)
         ions = bname.split('.')[0]
     if not os.path.isfile(elvlname):
-        print ' elvlc file does not exist:  ',elvlname
+        print(' elvlc file does not exist:  ',elvlname)
         return {'status':0}
     status = 1
     input=open(elvlname,'r')
@@ -485,7 +485,7 @@ def elvlcRead(ions, filename = None, verbose=0,  useTh=1):
         nlvls=nlvls+1
     nlvls-=1
     if verbose:
-        print ' nlvls = ', nlvls
+        print(' nlvls = ', nlvls)
     lvl=[0]*nlvls
     conf=[0]*nlvls
     term=[0]*nlvls
@@ -501,7 +501,7 @@ def elvlcRead(ions, filename = None, verbose=0,  useTh=1):
     pretty=[0]*nlvls
     for i in range(0,nlvls):
         if verbose:
-            print s1[i][0:115]
+            print(s1[i][0:115])
         inpt=FortranLine(s1[i][0:115],elvlcFormat)
         lvl[i]=inpt[0]
         conf[i]=inpt[1]
@@ -549,7 +549,7 @@ def elvlcWrite(info):
     ref, the references in the literature to the data in the input info'''
     gname = info['ionS']
     elvlcname = gname + '.elvlc'
-    print ' elvlc file name = ', elvlcname
+    print(' elvlc file name = ', elvlcname)
     out = open(elvlcname, 'w')
     for i,  conf in enumerate(info['conf']):
         mult = int(2.*info['j'][i]+1.)

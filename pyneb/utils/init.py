@@ -12,7 +12,7 @@ def _print_LINE_LABEL_LIST(*args, **kwargs):
     ##
     # @todo we have to check what are the differences in LINE_LABEL_LIST when changing the fits files
     all_atoms = pn.getAtomDict(*args, **kwargs)
-    print "LINE_LABEL_LIST = {}"
+    print("LINE_LABEL_LIST = {}")
     for atom in np.sort(all_atoms.keys()):
         wave = all_atoms[atom].lineList
         opt = (wave < 10000.)
@@ -20,7 +20,7 @@ def _print_LINE_LABEL_LIST(*args, **kwargs):
         lines_opt = ["'%.0fA'" % line for line in np.sort(wave[opt])]
         lines_ir = ["'%.1fm'" % line for line in np.sort(wave[ir]) / 1.e4]
         lines = lines_opt + lines_ir
-        print "LINE_LABEL_LIST['" + atom + "'] = [" + ', '.join(lines) + "]"
+        print("LINE_LABEL_LIST['" + atom + "'] = [" + ', '.join(lines) + "]")
 
 def _check_line_label_list(maxErrorA = 5.e-3, maxErrorm = 5.e-2):
     for ion in LINE_LABEL_LIST:

@@ -3,6 +3,7 @@ import os
 import sys
 import traceback
 import pyneb as pn
+
 from scipy.linalg import solve as solve_sc
 from numpy.linalg import solve as solve_np
 """
@@ -25,6 +26,17 @@ except:
     rpy_ok = False
 """
     
+
+if sys.version_info.major < 3:
+    def bs(x):
+        return x
+else:
+    def bs(x):
+        if type(x) is bytes or type(x) is np.bytes_:
+            return x.decode(encoding='UTF-8')
+        elif type(x) is str or type(x) is np.str_:
+            return x.encode(encoding='UTF-8')
+            
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
 

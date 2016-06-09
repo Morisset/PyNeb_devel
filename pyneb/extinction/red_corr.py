@@ -141,7 +141,7 @@ class RedCorr(object):
                 doc = self._laws_dict[law].__doc__
             except:
                 doc = ''
-            print "'{0}': {1}".format(law, doc)
+            print("'{0}': {1}".format(law, doc))
                          
     def _get_e_bv(self):
         return self.__E_BV

@@ -4,13 +4,13 @@ import os
 import re
 import pyneb as pn
 if pn.config.Chianti_version_main == '8':
-    import _chianti_tools_8 as _chianti_tools
+    from . import _chianti_tools_8 as _chianti_tools
 elif pn.config.Chianti_version_main == '7':
-    import _chianti_tools
-import _chianti_constants as const
-from physics import sym2name, vactoair
-from manage_atomic_data import getLevelsNIST, atom2chianti
-from misc import parseAtom
+    from . import _chianti_tools
+from . import _chianti_constants as const
+from .physics import sym2name, vactoair
+from .manage_atomic_data import getLevelsNIST, atom2chianti
+from .misc import parseAtom
 
 def Chianti_getA(ion_chianti):
     """
@@ -123,7 +123,7 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
     if Splups is None:
         if pn.config.Chianti_version_main == '8':
             Splups = _chianti_tools.scupsRead(ion_chianti)
-            print Splups.keys()
+            print(Splups.keys())
         elif pn.config.Chianti_version_main == '7':
             Splups = _chianti_tools.splupsRead(ion_chianti)
     if NLevelsMax is None:
@@ -572,5 +572,5 @@ class _CollChianti(object):
     def printSources(self):
         
         for source in self.getSources():
-            print source    
+            print(source)    
         

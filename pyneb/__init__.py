@@ -7,7 +7,7 @@ from .version import __version__
 
 import sys
 
-from utils.Config import _Config
+from .utils.Config import _Config
 config = _Config()
 log_ = config.log_
 log_.message('Starting PyNeb version %s' % __version__, calling='PyNeb')
@@ -21,23 +21,23 @@ try:
 except:
     log_.warn('I do not understand what is your version of numpy: {0}, report this to PyNeb group'.format(numpy_version), calling='PyNeb')
 
-from utils.manage_atomic_data import _ManageAtomicData
+from .utils.manage_atomic_data import _ManageAtomicData
 atomicData = _ManageAtomicData()
 
 atomicData.defaultDict = 'PYNEB_14_03'
 atomicData.resetDataFileDict()
 
-from core.pynebcore import Atom, RecAtom, getAtomDict, getRecEmissivity, EmissionLine, Observation, \
+from .core.pynebcore import Atom, RecAtom, getAtomDict, getRecEmissivity, EmissionLine, Observation, \
     parseLineLabel, isValid
-from core.icf import ICF 
-from core.diags import Diagnostics, diags_dict
-from core.emisGrid import EmisGrid, getEmisGridDict
-from plot.plotAtomicData import DataPlot
-from utils.physics import CST
-from utils.saverestore import save, restore
-from utils.init import LINE_LABEL_LIST, BLEND_LIST
-from utils.manage_atomic_data import getLevelsNIST
-from extinction.red_corr import RedCorr
+from .core.icf import ICF 
+from .core.diags import Diagnostics, diags_dict
+from .core.emisGrid import EmisGrid, getEmisGridDict
+from .plot.plotAtomicData import DataPlot
+from .utils.physics import CST
+from .utils.saverestore import save, restore
+from .utils.init import LINE_LABEL_LIST, BLEND_LIST
+from .utils.manage_atomic_data import getLevelsNIST
+from .extinction.red_corr import RedCorr
 
 log_.message('PyNeb ready.', calling='PyNeb')
 log_.timer('Starting PyNeb version %s' % __version__, quiet=True, calling='PyNeb')
