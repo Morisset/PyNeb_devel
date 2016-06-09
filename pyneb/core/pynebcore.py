@@ -3143,7 +3143,7 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
     More possibilities are obtained using the RecAtom class.
 
     Usage:
-        print getRecEmissivity(1e4, 1e3, 3, 2, atom='H1') / getRecEmissivity(1e4, 1e3, 4, 2, atom='H1')  
+        print(getRecEmissivity(1e4, 1e3, 3, 2, atom='H1') / getRecEmissivity(1e4, 1e3, 4, 2, atom='H1')) 
             # return Ha/Hb 
 
     Parameters:
@@ -3200,7 +3200,7 @@ def getAtomDict(atom_list=None, elem_list=None, spec_list=None, **kwargs):
 
     Usage:
         all = pn.getAtomDict()
-        print all['S2'].name
+        print(all['S2'].name)
         some = pn.getAtomDict(elem_list=['C', 'N', 'O'])
         some = pn.getAtomDict(atom_list=['O2', 'O3', 'Ar3'])
     
