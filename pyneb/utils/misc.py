@@ -7,12 +7,14 @@ import pyneb as pn
 #from scipy.linalg import solve as solve_sc
 from numpy.linalg import solve as solve_np
 
+
 try:
     import cvxopt
     cvxopt_ok = True
     
 except:
     cvxopt_ok = False
+
 """
 from scipy.sparse.linalg import spsolve as solve_sp
 
@@ -462,7 +464,7 @@ def solve_lapack(a, b):
 def solve_cvxopt(a, b):
     A = cvxopt.matrix(a)
     B = cvxopt.matrix(b)
-    
+
     return cvxopt.lapack.gesv(A, B)    
     
 """
