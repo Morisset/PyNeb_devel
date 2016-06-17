@@ -91,6 +91,11 @@ class _Config(object):
             self.INSTALLED['h5py'] = True
         except:
             self.INSTALLED['h5py'] = False
+        try:
+            import cvxopt
+            self.INSTALLED['cvxopt'] = True
+        except:
+            self.INSTALLED['cvxopt'] = False
         
         self.DataFiles = {}
             

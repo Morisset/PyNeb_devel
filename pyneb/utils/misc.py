@@ -4,8 +4,15 @@ import sys
 import traceback
 import pyneb as pn
 
-from scipy.linalg import solve as solve_sc
+#from scipy.linalg import solve as solve_sc
 from numpy.linalg import solve as solve_np
+
+try:
+    import cvxopt
+    cvxopt_ok = True
+    
+except:
+    cvxopt_ok = False
 """
 from scipy.sparse.linalg import spsolve as solve_sp
 
@@ -434,6 +441,7 @@ def addRand(N, list_, list_errors=None, lowlim=None):
         new_list.extend(to_extend)
     return new_list
 
+"""
 def solve_r(a, b):
     if rpy_ok:
         return base.solve(a, b)
@@ -449,11 +457,26 @@ def solve_lapack(a, b):
     pivots = np.zeros(n_eq, np.intc)
     results = lapack_lite.dgesv(n_eq, n_rhs, a, n_eq, pivots, b, n_eq, 0)
     return results  
-  
+"""
+
+def solve_cvxopt(a, b):
+    A = cvxopt.matrix(a)
+    B = cvxopt.matrix(b)
     
+    return cvxopt.lapack.gesv(A, B)    
     
-#@profile    
+"""
+# @profile
+if cvxopt_ok:
+    @profile
+    def solve(a, b):
+        return solve_cvxopt(a, b)
+else:
+    @profile
+    def solve(a, b):
+        return solve_np(a,b)
+"""
+@profile
 def solve(a, b):
-    return solve_np(a, b)
-    
-    
+    return solve_np(a,b)
+
