@@ -461,11 +461,11 @@ def solve_lapack(a, b):
     return results  
 """
 
-def solve_cvxopt(a, b):
-    A = cvxopt.matrix(a)
-    B = cvxopt.matrix(b)
-
-    return cvxopt.lapack.gesv(A, B)    
+if cvxopt_ok:
+    def solve_cvxopt(a, b):
+        A = cvxopt.matrix(a)
+        B = cvxopt.matrix(b)
+        return cvxopt.lapack.gesv(A, B)    
     
 """
 # @profile
