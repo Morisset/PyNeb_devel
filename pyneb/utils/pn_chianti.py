@@ -12,7 +12,7 @@ from .physics import sym2name, vactoair
 from .manage_atomic_data import getLevelsNIST, atom2chianti
 from .misc import parseAtom
 
-def Chianti_getA(ion_chianti):
+def Chianti_getA(ion_chianti, NLevels=None):
     """
     Return As from Chianti database.
     Usage:
@@ -23,9 +23,11 @@ def Chianti_getA(ion_chianti):
     As = np.zeros((NLevels, NLevels))
     for i, j, a in zip(wgfa['lvl2'], wgfa['lvl1'], wgfa['avalue']):
         As[i-1, j-1] = a
+    if NLevels is not None:
+        As = As[0:NLevels, 0:NLevels]
     return As
 
-def Chianti_getE(ion_chianti):
+def Chianti_getE(ion_chianti, NLevels=None):
     """
     Return energies from the Chianti database
     Usage:
@@ -42,6 +44,8 @@ def Chianti_getE(ion_chianti):
     for k in Es.keys():
         if k not in ('status', 'ref', 'label', 'filename'):
             arr[k] = Es[k]
+    if NLevels is not None:
+        arr = arr[0:NLevels]
     return arr
 
 def get_levs_order(atom, nmax=None):
@@ -109,7 +113,7 @@ def get_levs_order(atom, nmax=None):
         Chianti2NIST = None
     return Chianti2NIST
         
-def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevelsMax=None):
+def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevels=None):
     """
     Return the values of Upsilon at a given temperature (may be a table)
     Usage:
@@ -126,12 +130,12 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
             print(Splups.keys())
         elif pn.config.Chianti_version_main == '7':
             Splups = _chianti_tools.splupsRead(ion_chianti)
-    if NLevelsMax is None:
+    if NLevels is None:
         nsplups = len(Splups["lvl1"])
         nlevels = np.max(Splups["lvl2"])
     else:
-        nsplups = np.min((len(Splups["lvl1"]), NLevelsMax))
-        nlevels = np.min((np.max(Splups["lvl2"]), NLevelsMax))
+        nsplups = np.min((len(Splups["lvl1"]), NLevels))
+        nlevels = np.min((np.max(Splups["lvl2"]), NLevels))
     ntemp=temp.size
     if (lev1 is None) and (lev2 is None):
         Omega = np.zeros((nlevels, nlevels, ntemp))
@@ -213,7 +217,7 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
 
 class _AtomChianti(object):
     
-    def __init__(self, elem=None, spec=None, atom=None):
+    def __init__(self, elem=None, spec=None, atom=None, NLevels=None):
         """
         Object dealing with As values from the Chianti database.
         The directory where to find the data must be given through the environment variable XUVTOP.
@@ -231,6 +235,8 @@ class _AtomChianti(object):
         self.name = sym2name[self.elem]
         self.ion_chianti =  atom2chianti(self.atom)
         self.calling = 'Atom {}'.format(self.atom)
+        self.Chianti2NIST = None
+        self.NLevels = NLevels
         self._loadChianti()
         self.initWaves()
         
@@ -246,8 +252,9 @@ class _AtomChianti(object):
         self.Chianti_version = self.atomPath.split('/')[-4]
         self.comments = {}
         
-        Chianti_A = Chianti_getA(self.ion_chianti)
-        self.Chianti2NIST = get_levs_order(self.atom)
+        Chianti_A = Chianti_getA(self.ion_chianti, NLevels=self.NLevels)
+        if self.Chianti2NIST is None:
+            self.Chianti2NIST = get_levs_order(self.atom)
         if self.Chianti2NIST is not None:
             Chianti_A_tmp = Chianti_A.copy()
             for i_chianti in self.Chianti2NIST:
@@ -255,10 +262,11 @@ class _AtomChianti(object):
                     Chianti_A[i_chianti,:] = Chianti_A_tmp[self.Chianti2NIST[i_chianti],:]
                     Chianti_A[:,i_chianti] = Chianti_A_tmp[:,self.Chianti2NIST[i_chianti]]
         self.log_.message('Reading atom data from Chianti {}'.format(self.atomFile), calling = self.calling)
-        self.Chianti_E = Chianti_getE(self.ion_chianti)
-        NLevels = len(self.Chianti_E)
-        self.NIST = getLevelsNIST(self.atom, NLevels)
-        NLevels = np.min((len(self.NIST), NLevels))
+        self.Chianti_E = Chianti_getE(self.ion_chianti, NLevels=self.NLevels)
+        if self.NLevels is None:
+            self.NLevels = len(self.Chianti_E)
+        self.NIST = getLevelsNIST(self.atom, self.NLevels)
+        self.NLevels = np.min((len(self.NIST), self.NLevels))
         need_NIST = True
         
         if self.NIST is not None:
@@ -274,8 +282,7 @@ class _AtomChianti(object):
         self._Energy = energy
         self._StatWeight = stat_weight
         self._A = Chianti_A
-        self.atomNLevels = NLevels
-        self.NLevels = self.atomNLevels
+        self.atomNLevels = self.NLevels
             
     def initWaves(self):
         """
@@ -402,7 +409,7 @@ class _AtomChianti(object):
                
 class _CollChianti(object):
     
-    def __init__(self, elem=None, spec=None, atom=None, NLevelsMax=None, TemArray=np.logspace(2, 5, 20)):
+    def __init__(self, elem=None, spec=None, atom=None, NLevels=None, TemArray=np.logspace(2, 5, 20)):
         """
         Object dealing with Upsilon values from the Chianti database.
         The directory where to find the data must be given through the environment variable XUVTOP.
@@ -422,7 +429,7 @@ class _CollChianti(object):
         self.name = sym2name[self.elem]
         self.ion_chianti =  atom2chianti(self.atom)
         self.calling = 'Atom ' + self.atom
-        self.NLevelsMax = NLevelsMax
+        self.NLevels = NLevels
         self.tem_units = 'K'
         self._TemArray = TemArray
         self._loadChianti()
@@ -445,7 +452,7 @@ class _CollChianti(object):
         elif pn.config.Chianti_version_main == '7':
             self.Splups = _chianti_tools.splupsRead(self.ion_chianti)
         self._CollArray = Chianti_getOmega(self.ion_chianti, tem=self._TemArray, 
-                                   Splups=self.Splups, NLevelsMax=self.NLevelsMax)
+                                   Splups=self.Splups, NLevels=self.NLevels)
         
         self.Chianti2NIST = get_levs_order(self.atom)
         if self.Chianti2NIST is not None:
@@ -456,8 +463,7 @@ class _CollChianti(object):
                     self._CollArray[:,i_chianti,:] = _CollArray_tmp[:,self.Chianti2NIST[i_chianti],:]
         
         self.log_.message('Reading coll data from Chianti {}'.format(self.collFile), calling = self.calling)
-        self.collNLevels = self._CollArray.shape[0]
-        self.NLevels = self.collNLevels
+        self.NLevels = self._CollArray.shape[0]
 
 
     def _test_lev(self, level):
@@ -495,7 +501,7 @@ class _CollChianti(object):
         else:
             return self._CollArray[lev_i-1, lev_j-1,:]
 
-    def getOmega(self, tem, lev_i= -1, lev_j= -1, NLevelsMax=None):
+    def getOmega(self, tem, lev_i= -1, lev_j= -1):
         """
         Return interpolated value of the collision strength value at the given temperature 
             for the complete array or a specified transition.
@@ -516,26 +522,26 @@ class _CollChianti(object):
         if (lev_i <= lev_j) and (lev_i != -1):
             self.log_.warn("wrong levels given {0} <= {1}".format(lev_i, lev_j), calling=self.calling)
             return None            
+        if self.Chianti2NIST is None:
+            self.Chianti2NIST = get_levs_order(self.atom)
         if (lev_i == -1) and (lev_j == -1):
-            Omega = Chianti_getOmega(self.ion_chianti, tem, Splups=self.Splups, NLevelsMax=NLevelsMax)
-            Chianti2NIST = get_levs_order(self.atom)
-            if Chianti2NIST is not None:
+            Omega = Chianti_getOmega(self.ion_chianti, tem, Splups=self.Splups, NLevels=self.NLevels)
+            if self.Chianti2NIST is not None:
                 Omega_tmp = Omega.copy()
-                for i_chianti in Chianti2NIST:
-                    if Chianti2NIST[i_chianti] != i_chianti:
-                        Omega[i_chianti,:,:] = Omega_tmp[Chianti2NIST[i_chianti],:,:]
-                        Omega[:,i_chianti,:] = Omega_tmp[:,Chianti2NIST[i_chianti],:]
+                for i_chianti in self.Chianti2NIST:
+                    if self.Chianti2NIST[i_chianti] != i_chianti:
+                        Omega[i_chianti,:,:] = Omega_tmp[self.Chianti2NIST[i_chianti],:,:]
+                        Omega[:,i_chianti,:] = Omega_tmp[:,self.Chianti2NIST[i_chianti],:]
         else:
-            Chianti2NIST = get_levs_order(self.atom)
-            if Chianti2NIST is not None:
+            if self.Chianti2NIST is not None:
                 try:
-                    Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=Chianti2NIST[lev_j-1]+1, lev2=Chianti2NIST[lev_i-1]+1, 
-                                             Splups=self.Splups, NLevelsMax=NLevelsMax)
+                    Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=self.Chianti2NIST[lev_j-1]+1, lev2=self.Chianti2NIST[lev_i-1]+1, 
+                                             Splups=self.Splups, NLevels=self.NLevels)
                 except:
                     Omega = 0.
             else:
                 Omega = Chianti_getOmega(self.ion_chianti, tem, lev1=lev_j, lev2=lev_i, 
-                             Splups=self.Splups, NLevelsMax=NLevelsMax)
+                             Splups=self.Splups, NLevels=self.NLevels)
                 
         return np.squeeze(Omega)
 

@@ -369,7 +369,7 @@ class DataPlot(object):
                 plt.show()      
 
 
-    def plotOmega(self, save=False, figsize=(18, 12), fignum=None, scan_orders=None, NLevels=None,
+    def plotOmega(self, save=False, figsize=(18, 12), fignum=1, scan_orders=None, NLevels=None,
                   fig=None):
         """
         Plot the tabulated collision strengths of each data set and the fit that is performed by PyNeb

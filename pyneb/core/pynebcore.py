@@ -82,7 +82,7 @@ class _CollDataNone(object):
 
 class _AtomDataFits(object):
     
-    def __init__(self, elem=None, spec=None, atom=None):
+    def __init__(self, elem=None, spec=None, atom=None, NLevels=None):
         self.log_ = log_
         if atom is not None:
             self.atom = atom
@@ -94,7 +94,7 @@ class _AtomDataFits(object):
             self.atom = elem + str(self.spec)
         self.name = sym2name[self.elem]
         self.calling = 'Atom ' + self.atom
-                
+        self.NLevels = NLevels
         self._loadFit()
         self._A = self.getA() # index = quantum number - 1
         self._Energy = self.getEnergy() #Angstrom^-1
@@ -303,7 +303,7 @@ class _AtomDataFits(object):
 
 class _AtomDataAscii(object):
     
-    def __init__(self, elem=None, spec=None, atom=None):
+    def __init__(self, elem=None, spec=None, atom=None, NLevels=None):
         self.log_ = log_
         if atom is not None:
             self.atom = atom
@@ -315,7 +315,7 @@ class _AtomDataAscii(object):
             self.atom = elem + str(self.spec)
         self.name = sym2name[self.elem]
         self.calling = 'Atom ' + self.atom
-                
+        self.NLevels = NLevels
         self._loadAscii()
         self.initWaves()
         
@@ -359,7 +359,10 @@ class _AtomDataAscii(object):
             A = at_data.copy()
             if A.shape[0] != A.shape[1]:
                 log_.error('Atomic data must be a NxN matrix', calling=self.calling) 
-            NLevels = A.shape[0]
+            if self.NLevels is not None:
+                A = A[0:self.NLevels, 0:self.NLevels]
+            else:
+                self.NLevels = A.shape[0]
         else:
             # This is the old format
             need_NIST = False
@@ -373,7 +376,10 @@ class _AtomDataAscii(object):
             
             # Read Es
             energy = at_data[:,0]
-            NLevels = len(energy)
+            if self.NLevels is not None:
+                energy = energy[0:self.NLevels]
+            else:
+                self.NLevels = len(energy)
             if units == 'eV': 
                 energy /= CST.RYD_EV * CST.RYD_ANG
             elif units == 'Rydberg':
@@ -384,11 +390,11 @@ class _AtomDataAscii(object):
             stat_weight = at_data[:,1]
             
             # Read As
-            A = np.zeros([NLevels, NLevels])
+            A = np.zeros([self.NLevels, self.NLevels])
             A[:,:] = at_data[:,2:]
 
         
-        self.NIST = getLevelsNIST(self.atom, NLevels)
+        self.NIST = getLevelsNIST(self.atom, self.NLevels)
         
         web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
         if self.NIST is not None:
@@ -406,8 +412,7 @@ class _AtomDataAscii(object):
         self._Energy = energy
         self._StatWeight = stat_weight
         self._A = A
-        self.atomNLevels = NLevels
-        self.NLevels = self.atomNLevels
+        self.atomNLevels = self.NLevels
         if 'GSCONFIG' in self.comments:
             self.gs = self.comments['GSCONFIG']
         else:
@@ -564,7 +569,7 @@ class _AtomDataStout(object):
         
 class _CollDataFits(object):
     
-    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Cheb', noExtrapol = False, NLevelsMax=None):
+    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Cheb', noExtrapol = False, NLevels=None):
         self.log_ = log_
         if atom is not None:
             self.atom = atom
@@ -577,7 +582,7 @@ class _CollDataFits(object):
         self.name = sym2name[self.elem]
         self.noExtrapol = noExtrapol
         self.calling = 'Atom ' + self.atom
-                
+        self.NLevels = NLevels
         self._loadFit()
         self.initOmegas(OmegaInterp=OmegaInterp)
         self.tem_units = self.CollHeader['TUNIT1']
@@ -643,11 +648,11 @@ class _CollDataFits(object):
                 
         #Read data
         self._CollData = CollExt.data
-
-        try:
-            self.NLevels = self.CollHeader['N_LEVELS']
-        except:
-            log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
+        if self.NLevels is None:
+            try:
+                self.NLevels = self.CollHeader['N_LEVELS']
+            except:
+                log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
             
         self.log_.message('NLevels of collisional data: {0}'.format(self.NLevels),
                           calling=self.calling)
@@ -913,7 +918,7 @@ class _CollDataFits(object):
 class _CollDataAscii(object):
 
     def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False, 
-                 NLevelsMax=None):
+                 NLevels=None):
         self.log_ = log_
         
         if atom is not None:
@@ -924,6 +929,7 @@ class _CollDataAscii(object):
             self.elem = elem
             self.spec = int(spec)
             self.atom = elem + str(self.spec)
+        self.NLevels = NLevels
         self.name = sym2name[self.elem]
         self.noExtrapol = noExtrapol
         self.calling = 'Atom ' + self.atom
@@ -991,17 +997,19 @@ class _CollDataAscii(object):
         self._lev_is = coll_data[:,0]
         self._lev_js = coll_data[:,1]
         self._TemArray = coll_data[0,2:]
-        if 'N_LEVELS' in self.comments:
-            self.NLevels = int(self.comments['N_LEVELS'])
-        else:
-            self.NLevels = int(np.max(self._lev_js))
+        if self.NLevels is None:
+            if 'N_LEVELS' in self.comments:
+                self.NLevels = int(self.comments['N_LEVELS'])
+            else:
+                self.NLevels = int(np.max(self._lev_js))
+
         self._CollArray = np.zeros((self.NLevels, self.NLevels, len(self._TemArray)))
         for i in range(len(self._lev_is)):
             lev_i = self._lev_is[i]
             lev_j = self._lev_js[i]
-            if (lev_i != 0) and (lev_j != 0):
+            if (lev_i != 0) and (lev_j != 0) and (lev_i <= self.NLevels) and (lev_j <= self.NLevels):
                 self._CollArray[lev_i-1, lev_j-1, :] = coll_data[i,2:]
-        
+           
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
                 log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFile, self.comments['SPECTRUM'],
@@ -1187,7 +1195,7 @@ class Atom(object):
     
     
     @profile
-    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False):
+    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False, NLevels=None):
         """
         Atom constructor
         
@@ -1220,20 +1228,20 @@ class Atom(object):
         self.name = sym2name[self.elem]
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making atom object for {0} {1}'.format(self.elem, self.spec), calling=self.calling)
-
+        self.NLevels = NLevels
         dataFile = atomicData.getDataFile(self.atom, data_type='atom')
         if dataFile is None:
             self.atomFileType = None
         else:
             self.atomFileType = dataFile.split('.')[-1]
         if self.atomFileType == 'fits':
-            self.AtomData = _AtomDataFits(elem=self.elem, spec=self.spec, atom=self.atom)
+            self.AtomData = _AtomDataFits(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType == 'dat':
-            self.AtomData = _AtomDataAscii(elem=self.elem, spec=self.spec, atom=self.atom)
+            self.AtomData = _AtomDataAscii(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType == 'chianti':
-            self.AtomData = _AtomChianti(elem=self.elem, spec=self.spec, atom=self.atom)
+            self.AtomData = _AtomChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType == 'stout':
-            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom)
+            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType is None:
             self.AtomData = _AtomDataNone()
         else:
@@ -1247,29 +1255,7 @@ class Atom(object):
         self.getStatWeight = self.AtomData.getStatWeight
         self.getEnergy = self.AtomData.getEnergy
         self.atomNLevels = self.AtomData.NLevels
-        try:
-            self.gs = self.AtomData.gs
-        except:
-            self.gs = gsFromAtom(self.atom)
-        try:
-            self.AtomHeader = self.AtomData.AtomHeader
-        except:
-            self.AtomHeader = None
-        try:
-            self.NIST = self.AtomData.NIST
-        except:
-            try:
-                self.NIST = getLevelsNIST(self.atom, self.atomNLevels)
-            except:
-                self.NIST = None
 
-        self.lineList = []
-        for i in np.arange(self.atomNLevels):
-            for j in np.arange(i):
-                self.lineList.append(self.wave_Ang[i][j])
-        self.lineList = np.array(self.lineList)
-        self.energy_Ryd = quiet_divide(CST.RYD_ANG, self.wave_Ang)
-        self.energy_eV = CST.RYD_EV * self.energy_Ryd
 
         dataFile = atomicData.getDataFile(self.atom, data_type='coll')
         if dataFile is None:
@@ -1278,14 +1264,14 @@ class Atom(object):
             self.collFileType = dataFile.split('.')[-1]
         if self.collFileType == 'fits':
             self.CollData = _CollDataFits(elem=self.elem, spec=self.spec, atom=self.atom, 
-                                         OmegaInterp=OmegaInterp, noExtrapol = noExtrapol)
+                                         OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels)
         elif self.collFileType == 'dat':
             self.CollData = _CollDataAscii(elem=self.elem, spec=self.spec, atom=self.atom, 
-                                          OmegaInterp='Linear', noExtrapol = noExtrapol)
+                                          OmegaInterp='Linear', noExtrapol = noExtrapol, NLevels=self.NLevels)
         elif self.collFileType == 'chianti':
-            self.CollData = _CollChianti(elem=self.elem, spec=self.spec, atom=self.atom)
+            self.CollData = _CollChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.collFileType == 'stout':
-            self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom)            
+            self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)            
         elif self.collFileType is None:
             self.CollData = _CollDataNone()
         try:
@@ -1303,11 +1289,37 @@ class Atom(object):
         self.collNLevels = self.CollData.NLevels
         self.tem_units = self.CollData.tem_units
 
+        if self.NLevels is None:
+            self.NLevels = np.min((self.atomNLevels, self.collNLevels))
+            
+        try:
+            self.gs = self.AtomData.gs
+        except:
+            self.gs = gsFromAtom(self.atom)
+        try:
+            self.AtomHeader = self.AtomData.AtomHeader
+        except:
+            self.AtomHeader = None
+        try:
+            self.NIST = self.AtomData.NIST
+        except:
+            try:
+                self.NIST = getLevelsNIST(self.atom, self.NLevels)
+            except:
+                self.NIST = None
+
+        self.lineList = []
+        for i in np.arange(self.NLevels):
+            for j in np.arange(i):
+                self.lineList.append(self.wave_Ang[i][j])
+        self.lineList = np.array(self.lineList)
+        self.energy_Ryd = quiet_divide(CST.RYD_ANG, self.wave_Ang)
+        self.energy_eV = CST.RYD_EV * self.energy_Ryd
+
         self._A = self.getA() # index = quantum number - 1
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()
         self.EnergyNLevels = len(self._Energy)
-        self.NLevels = np.min((self.atomNLevels, self.collNLevels, self.EnergyNLevels))
         
     def getOmega(self, tem, lev_i= -1, lev_j= -1, wave= -1):
         """
@@ -1399,6 +1411,7 @@ class Atom(object):
         for sh in tem.shape:
             res_shape.append(sh)
         resultArray = np.zeros(res_shape)
+        Omegas = self.getOmega(tem)
         for i in range(NLevels - 1):
             lev_i = i + 1
             j = i + 1
@@ -1408,7 +1421,7 @@ class Atom(object):
                 lev_j = j + 1 
                 energy_j = self._Energy[j]
                 stat_weight_j = self._StatWeight[j]
-                resultArray[j][i] = CST.KCOLLRATE / tem ** 0.5 / stat_weight_j * self.getOmega(tem, lev_j, lev_i)
+                resultArray[j][i] = CST.KCOLLRATE / tem ** 0.5 / stat_weight_j * Omegas[lev_j-1, lev_i-1]
                 resultArray[i][j] = ((stat_weight_j) / (stat_weight_i) * 
                                       np.exp((energy_i - energy_j) / (CST.BOLTZMANN_ANGK * tem)) * 
                                       resultArray[j][i])
@@ -1622,8 +1635,8 @@ class Atom(object):
                 for i_den in range(n_den):
                     try:
                         pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    except np.linalg.LinAlgError:
-                        pop_result[:, i_tem, i_den] = np.nan
+                    #except np.linalg.LinAlgError:
+                    #    pop_result[:, i_tem, i_den] = np.nan
                     except:
                         self.log_.error('Error solving population matrix', calling=self.calling)
             pop = np.squeeze(pop_result)
