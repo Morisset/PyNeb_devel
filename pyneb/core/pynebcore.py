@@ -361,8 +361,7 @@ class _AtomDataAscii(object):
                 log_.error('Atomic data must be a NxN matrix', calling=self.calling) 
             if self.NLevels is not None:
                 A = A[0:self.NLevels, 0:self.NLevels]
-            else:
-                self.NLevels = A.shape[0]
+            self.NLevels = A.shape[0]
         else:
             # This is the old format
             need_NIST = False
@@ -373,13 +372,13 @@ class _AtomDataAscii(object):
             for com in comments_tab:
                 key = com.split()[1]
                 self.comments[key] = com.split(key)[1].strip()
+            if self.NLevels is not None:
+                at_data = at_data[0:self.NLevels, 2:self.NLevels+2]
+            self.NLevels = A.shape[0]
+            
             
             # Read Es
             energy = at_data[:,0]
-            if self.NLevels is not None:
-                energy = energy[0:self.NLevels]
-            else:
-                self.NLevels = len(energy)
             if units == 'eV': 
                 energy /= CST.RYD_EV * CST.RYD_ANG
             elif units == 'Rydberg':
@@ -998,10 +997,9 @@ class _CollDataAscii(object):
         self._lev_js = coll_data[:,1]
         self._TemArray = coll_data[0,2:]
         if self.NLevels is None:
-            if 'N_LEVELS' in self.comments:
-                self.NLevels = int(self.comments['N_LEVELS'])
-            else:
-                self.NLevels = int(np.max(self._lev_js))
+            self.NLevels = int(np.max(self._lev_js))
+        else:
+            self.NLevels = np.min((self.NLevels, int(np.max(self._lev_js))))
 
         self._CollArray = np.zeros((self.NLevels, self.NLevels, len(self._TemArray)))
         for i in range(len(self._lev_is)):
@@ -1289,8 +1287,7 @@ class Atom(object):
         self.collNLevels = self.CollData.NLevels
         self.tem_units = self.CollData.tem_units
 
-        if self.NLevels is None:
-            self.NLevels = np.min((self.atomNLevels, self.collNLevels))
+        self.NLevels = np.min((self.atomNLevels, self.collNLevels))
             
         try:
             self.gs = self.AtomData.gs
@@ -1307,15 +1304,16 @@ class Atom(object):
                 self.NIST = getLevelsNIST(self.atom, self.NLevels)
             except:
                 self.NIST = None
-
+        
         self.lineList = []
         for i in np.arange(self.NLevels):
             for j in np.arange(i):
                 self.lineList.append(self.wave_Ang[i][j])
         self.lineList = np.array(self.lineList)
+        
         self.energy_Ryd = quiet_divide(CST.RYD_ANG, self.wave_Ang)
         self.energy_eV = CST.RYD_EV * self.energy_Ryd
-
+        
         self._A = self.getA() # index = quantum number - 1
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()

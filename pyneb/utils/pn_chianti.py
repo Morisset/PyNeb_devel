@@ -48,7 +48,7 @@ def Chianti_getE(ion_chianti, NLevels=None):
         arr = arr[0:NLevels]
     return arr
 
-def get_levs_order(atom, nmax=None):
+def get_levs_order(atom, NLevels=None):
     """
     Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.
     
@@ -72,7 +72,7 @@ def get_levs_order(atom, nmax=None):
     for i_N, E in enumerate(E_NIST):
         if i_N >= len(E_chianti):
             break
-        if nmax is not None and i_N > nmax:
+        if NLevels is not None and i_N > NLevels:
             break
         
         term = remove_stars(E['term'])
@@ -454,7 +454,7 @@ class _CollChianti(object):
         self._CollArray = Chianti_getOmega(self.ion_chianti, tem=self._TemArray, 
                                    Splups=self.Splups, NLevels=self.NLevels)
         
-        self.Chianti2NIST = get_levs_order(self.atom)
+        self.Chianti2NIST = get_levs_order(self.atom, NLevels=self.NLevels)
         if self.Chianti2NIST is not None:
             _CollArray_tmp = self._CollArray.copy()
             for i_chianti in self.Chianti2NIST:
