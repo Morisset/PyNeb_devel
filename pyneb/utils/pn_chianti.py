@@ -111,6 +111,7 @@ def get_levs_order(atom, NLevels=None):
                 Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
         Chianti2NIST = None
+        ### Il faut que ni i_N ni i_Ch depasse NLvels. Et il faut que NLevels soit diminue dansla cas contraire.
     return Chianti2NIST
         
 def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevels=None):

@@ -7,6 +7,7 @@ Tools to manage atoms, emission lines and observational data.
 @class Observation    observation object
 
 """
+from __future__ import print_function
 import numpy as np
 import warnings
 import os
@@ -2288,21 +2289,21 @@ class Atom(object):
             if printA:
                 for j in range(i):
                     to_print = "{0:.3E}   ".format(np.float(self.getA(i + 1, j + 1)))
-                    print(to_print,)
+                    print(to_print, end="")
                 print("")
             for j in range(i):
                 if self.wave_Ang[i, j] > 10000.:
                     to_print = "%10.2fm " % (self.wave_Ang[i, j] / 1e4)
                 else:
                     to_print = "%10.2fA " % self.wave_Ang[i, j]
-                print(to_print,)
+                print(to_print, end="")
             print("")
             for j in range(i):
-                print("    (%1i-->%1i) " % (i + 1, j + 1),)
+                print("    (%1i-->%1i) " % (i + 1, j + 1), end="")
             print("")
             if (tem is not None) and (den is not None):
                 for j in range(i):
-                    print("  %.3E " % self.getEmissivity(tem, den, lev_i=i + 1, lev_j=j + 1),)
+                    print("  %.3E " % self.getEmissivity(tem, den, lev_i=i + 1, lev_j=j + 1), end="")
             print("\n")
         if (tem is not None) and (den is not None):
             try:
