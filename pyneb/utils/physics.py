@@ -608,7 +608,7 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                            } 
 
 _predefinedDataFileDict['PYNEB_16_01'] = _predefinedDataFileDict['PYNEB_14_03']
-#_predefinedDataFileDict['PYNEB_16_01']['Fe2'] = {'atom': 'fe_ii_atom_NS88G62.dat', 'coll': 'fe_ii_coll_BP96ZP95.dat'}
+_predefinedDataFileDict['PYNEB_16_01']['Fe2'] = {'atom': 'fe_ii_atom_B15.dat', 'coll': 'fe_ii_coll_B15.dat'}
  
 def airtovac(wave):
     """
