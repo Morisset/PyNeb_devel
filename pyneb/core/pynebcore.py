@@ -2272,19 +2272,24 @@ class Atom(object):
             to_print += 'Critical densities'
         if to_print != '':
             print(to_print)
+        if printCrit:
+            critdens = self.getCritDensity(tem)
+        if printPop:
+            pop = self.getPopulations(tem, den)
         for i in range(0, self.NLevels):
             lev_i = i + 1
             to_print = 'Level %1i:  ' % (lev_i)
             if printPop:
-                pop = self.getPopulations(tem, den)
                 to_print += "%.3E  " % (pop[i])
             if printCrit:
-                to_print += "%.3E" % (self.getCritDensity(tem, lev_i))
+                to_print += "%.3E" % critdens[i]
             if printPop or printCrit:
                 print(to_print)
         if printPop or printCrit:
             print('')
-             
+            
+        if (tem is not None) and (den is not None):
+            emis = self.getEmissivity(tem, den)
         for i in range(1, self.NLevels):
             if printA:
                 for j in range(i):
@@ -2303,7 +2308,7 @@ class Atom(object):
             print("")
             if (tem is not None) and (den is not None):
                 for j in range(i):
-                    print("  %.3E " % self.getEmissivity(tem, den, lev_i=i + 1, lev_j=j + 1), end="")
+                    print("  %.3E " % emis[i,j], end="")
             print("\n")
         if (tem is not None) and (den is not None):
             try:
