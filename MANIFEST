@@ -56,7 +56,9 @@ pyneb/atomic_data/cl_iii_coll_BZ89.dat
 pyneb/atomic_data/cl_iii_coll_M83.dat
 pyneb/atomic_data/cl_iv_atom_KS86-MZ82-EM84.dat
 pyneb/atomic_data/cl_iv_coll_GMZ95.dat
+pyneb/atomic_data/fe_ii_atom_B15.dat
 pyneb/atomic_data/fe_ii_coll_B15.dat
+pyneb/atomic_data/fe_ii_coll_B15_old.dat
 pyneb/atomic_data/fe_iii_atom_BBQ10.dat
 pyneb/atomic_data/fe_iii_atom_NP96.dat
 pyneb/atomic_data/fe_iii_atom_Q96_J00.dat
@@ -588,7 +590,6 @@ pyneb/utils/_chianti_constants.py
 pyneb/utils/_chianti_tools.py
 pyneb/utils/_chianti_tools_8.py
 pyneb/utils/apap.py
-pyneb/utils/astro.py
 pyneb/utils/chebyshev.py
 pyneb/utils/fits.py
 pyneb/utils/init.py
