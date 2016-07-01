@@ -108,9 +108,11 @@ def get_levs_order(atom, NLevels=None):
             pretty = '{0} {1}{2}'.format(conf, term, E['J'])
             i_Ch = np.where(E_chianti['pretty'] == pretty)[0]
             if len(i_Ch) == 1:
-                Chianti2NIST[i_N] = i_Ch[0]
+                if NLevels is not None and i_Ch[0] <= NLevels:
+                    Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
         Chianti2NIST = None
+        
         ### Il faut que ni i_N ni i_Ch depasse NLvels. Et il faut que NLevels soit diminue dansla cas contraire.
     return Chianti2NIST
         
