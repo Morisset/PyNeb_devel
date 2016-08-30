@@ -478,7 +478,7 @@ else:
     def solve(a, b):
         return solve_np(a,b)
 """
-@profile
+#@profile
 def solve(a, b):
     return solve_np(a,b)
 
