@@ -554,7 +554,7 @@ def extract_flt(str_):
         return float(res)
 
 
-def readNIST(NISTfile):
+def readNIST(NISTfile,NLevels=None):
     """
     The NIST levels file must be obtained from this page:
         http://physics.nist.gov/PhysRefData/ASD/levels_form.html
@@ -598,10 +598,12 @@ def readNIST(NISTfile):
            
     data = data[data['energy'].argsort()]
     data = data.astype([('conf', 'a23'), ('term', 'a9'), ('J', 'float'), ('energy', 'float'), ('ref', 'a10')])
+    if NLevels is not None:
+        data = data[0:NLevels]
     return data
 
 
-def getLevelsNIST(atom, Nmax = None):
+def getLevelsNIST(atom, NLevels = None):
     """
     Return a numpy.array containing the NIST data related to the levels for the given atom
     The keys of the recarry are: conf, term, J, energy, ref
@@ -617,11 +619,8 @@ def getLevelsNIST(atom, Nmax = None):
     level_file = '{0}_levels.dat'.format(atom_str)
     file_ = execution_path('../atomic_data/levels/{0}'.format(level_file))
     if os.path.isfile(file_):
-        data = readNIST(file_)
+        data = readNIST(file_, NLevels=NLevels)
         pn.log_.message('Reading energies and stat weights from {0}'.format(level_file), calling='getLevelsNIST')
-        if Nmax is not None:
-            if Nmax < len(data):
-                data = data[0:Nmax]
         return data
     else:
         return None

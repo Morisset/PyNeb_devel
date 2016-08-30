@@ -19,7 +19,7 @@ class DataPlot(object):
     
     """
     def __init__(self, elem=None, spec=None, all_data=[], atom=None, n_tem_points=10000, 
-                 ref_tem=None, OmegaInterp='Cheb'):
+                 ref_tem=None, OmegaInterp='Cheb',NLevels=None):
         """
     Parameters:
         - elem         atomic elem 
@@ -83,7 +83,7 @@ class DataPlot(object):
             coll_data_temp.append(item)
         for data in coll_data_temp:
             pn.atomicData.setDataFile(data['file_'])
-            atom = pn.Atom(self.elem, self.spec, OmegaInterp=OmegaInterp)
+            atom = pn.Atom(self.elem, self.spec, OmegaInterp=OmegaInterp, NLevels=NLevels)
             """
             try:
                 if 'O_UNIT' in atom.CollData.comments.keys():
@@ -95,7 +95,7 @@ class DataPlot(object):
         del(atom)
         for data in self.atom_data + self.coll_data:
             pn.atomicData.setDataFile(data['file_'])
-            atom = pn.Atom(self.elem, self.spec, OmegaInterp=OmegaInterp)
+            atom = pn.Atom(self.elem, self.spec, OmegaInterp=OmegaInterp, NLevels=NLevels)
             data['atom'] = atom
         for data in old_data:
             if data is not None:
@@ -369,7 +369,7 @@ class DataPlot(object):
                 plt.show()      
 
 
-    def plotOmega(self, save=False, figsize=(18, 12), fignum=None, scan_orders=None, NLevels=None,
+    def plotOmega(self, save=False, figsize=(18, 12), fignum=1, scan_orders=None, NLevels=None,
                   fig=None):
         """
         Plot the tabulated collision strengths of each data set and the fit that is performed by PyNeb
