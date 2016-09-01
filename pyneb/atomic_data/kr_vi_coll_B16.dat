@@ -1,0 +1,9 @@
+0 0 3.301 3.602 3.778 3.903 4.0 4.079 4.146 4.204 4.255 4.301 4.699
+1 2 11.1 12.2 12.5 12.5 12.3 12.1 11.9 11.7 11.5 11.3 9.71
+*** Kr VI effective collision strengths data
+*** ATOM krypton
+*** SPECTRUM 6
+*** N_LEVELS 2
+*** T_UNIT	        log(K) 
+*** SOURCE1	Keith Butler 2016
+*** NOTE1 	Effective Collision Strengths Omega 

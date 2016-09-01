@@ -1,0 +1,10 @@
+Energy Stat_Weight Aij
+1/Ang none 1/s 1/s
+0.00000000    2  0.00E+00  0.00E+00
+0.00008110    4  4.82555   0.00E+00
+*** Kr VI energy and Aij data
+*** N_LEVELS 2
+*** SOURCE1	'Kelly 1987, J.Phys. Chem. Ref. Data, 16, Suppl. 1, 1'
+*** NOTE1  	'Energy levels, e'
+*** SOURCE2	'K. Butler 2005, private communication'
+*** NOTE2	        'Transition Probabilities, A'

@@ -1,0 +1,13 @@
+Energy Stat_Weight Aij
+1/Ang none 1/s 1/s 1/s 1/s 1/s 1/s 1/s
+     0.00000000    1  0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+     0.00000165    3  8.31E-05  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+     0.00000469    5  6.00E-09  3.78E-04  0.00E+00  0.00E+00  0.00E+00
+     0.00008882    5  1.85E-06  5.24E-03  1.43E-02  0.00E+00  0.00E+00
+     0.00021574    1  0.00E+00  1.99E-01  3.49E-03  1.64E+00  0.00E+00
+*** P II energy and Aij data
+*** N_LEVELS 5
+*** SOURCE1	'Martin et al. 1985, J.Phys. Chem. Ref. Data, 14, 751' 
+*** NOTE1 	'Energy levels, e' 
+*** SOURCE2	'Mendoza & Zeippen 1982, MNRAS, 199,1025' 
+*** NOTE2	'Transition Probabilities, A' 
