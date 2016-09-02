@@ -530,6 +530,7 @@ _predefinedDataFileDict['PYNEB_14_02']={
                              'Kr4': {'atom': 'kr_iv_atom_BH86.dat', 'coll': 'kr_iv_coll_S97.dat'},
                              'Kr5': {'atom': 'kr_v_atom_BH86.dat', 'coll': 'kr_v_coll_S97.dat'},
                              'Se3': {'atom': 'se_iii_atom_BH86.dat', 'coll': 'se_iii_coll_S97.dat'},
+                             'Se4': {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'},
                              'Br3': {'atom': 'br_iii_atom_BH86.dat', 'coll': 'br_iii_coll_S97.dat'},
                              'Br4': {'atom': 'br_iv_atom_BH86.dat', 'coll': 'br_iv_coll_S97.dat'},
                              'Rb4': {'atom': 'rb_iv_atom_BH86.dat', 'coll': 'rb_iv_coll_S97.dat'},
@@ -551,7 +552,6 @@ _predefinedDataFileDict['PYNEB_16_01']['P2'] = {'atom': 'p_ii_atom_MZ82.dat', 'c
 
 
 # Next release, check with JGR:
-# ['Se4'] = {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'}
 # ['Kr6'] = {'atom': 'kr_vi_atom_B05.dat', 'coll': 'kr_vi_coll_B16.dat'}
 # ['Se3']['coll'] = 'se_iii_coll_B16.dat'
 

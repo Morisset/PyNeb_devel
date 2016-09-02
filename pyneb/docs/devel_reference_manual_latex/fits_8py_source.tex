@@ -1,5 +1,6 @@
-\hypertarget{fits_8py_source}{}\section{fits.\+py}
-\label{fits_8py_source}\index{pyneb/utils/fits.\+py@{pyneb/utils/fits.\+py}}
+\hypertarget{fits_8py}{\section{fits.\-py}
+\label{fits_8py}\index{pyneb/utils/fits.\-py@{pyneb/utils/fits.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{fits_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1fits}{00001} \textcolor{keyword}{import} os, sys
@@ -16,7 +17,7 @@
 00012 \textcolor{keyword}{from} physics \textcolor{keyword}{import} sym2name, gsDict
 00013 
 00014     
-\hypertarget{fits_8py_source_l00015}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{00015} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, content, elem, spec):
+\hypertarget{fits_8py_source_l00015}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{00015} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{\_updateHeader}(hdu, input\_file, content, elem, spec):
 00016     \textcolor{stringliteral}{"""}
 00017 \textcolor{stringliteral}{    Update the header of the output fits file}
 00018 \textcolor{stringliteral}{}
@@ -31,8 +32,8 @@
 00027     hdu.header.update(\textcolor{stringliteral}{'ORIGIN'}, \textcolor{stringliteral}{'File \{0\}, PyNeb v\{1\}'}.format(input\_file, pn.\_\_version\_\_))
 00028     hdu.header.update(\textcolor{stringliteral}{'CONTENT'}, content)
 00029     hdu.header.update(\textcolor{stringliteral}{'ATOM'}, sym2name[elem.capitalize()])
-00030     hdu.header.update(\textcolor{stringliteral}{'SPECTRUM'}, \hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{roman\_to\_int}(spec))
-00031     atom = elem.capitalize() + str(\hyperlink{namespacepyneb_1_1utils_1_1misc_a97329c3ce57bd870421672b90e3e6541}{roman\_to\_int}(spec))
+00030     hdu.header.update(\textcolor{stringliteral}{'SPECTRUM'}, \hyperlink{namespacepyneb_1_1utils_1_1misc_ae67dbd6bb48d64216bc162ebdc25a183}{roman\_to\_int}(spec))
+00031     atom = elem.capitalize() + str(\hyperlink{namespacepyneb_1_1utils_1_1misc_ae67dbd6bb48d64216bc162ebdc25a183}{roman\_to\_int}(spec))
 00032     \textcolor{keywordflow}{for} key \textcolor{keywordflow}{in} gsDict.keys():
 00033         \textcolor{keywordflow}{if} (atom \textcolor{keywordflow}{in} gsDict[key]):
 00034             gs = key
@@ -41,7 +42,7 @@
 00037     hdu.header.update(\textcolor{stringliteral}{'GSCONFIG'}, gs)
 00038     
 00039 
-\hypertarget{fits_8py_source_l00040}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{00040} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a6f08de2b93e2ebc207309560746e9235}{writeAtom}(input\_file):
+\hypertarget{fits_8py_source_l00040}{}\hyperlink{namespacepyneb_1_1utils_1_1fits_a8055efc148e2aef26439d0a79a26549b}{00040} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1fits_a8055efc148e2aef26439d0a79a26549b}{writeAtom}(input\_file):
 00041     \textcolor{stringliteral}{""" }
 00042 \textcolor{stringliteral}{    Write the Es and As read from an ascii file into a fits file in PyNeb format.}
 00043 \textcolor{stringliteral}{    The bibliographic references are read from comment lines in the file.}
@@ -107,9 +108,9 @@
 00100             \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'SOURCE'} \textcolor{keywordflow}{in} text[0]) \textcolor{keywordflow}{or} (\textcolor{stringliteral}{'NOTE'} \textcolor{keywordflow}{in} text[0]):
 00101                 refs.append((text[0], text[1]))
 00102 
-00103     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(atom\_hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, 
+00103     \hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{\_updateHeader}(atom\_hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, 
       spec)
-00104     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, spec)
+00104     \hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Energy levels and transition probabilities'}, elem, spec)
 00105     atom\_hdu.header.update(\textcolor{stringliteral}{'N\_LEVELS'}, NLevels)
 00106     \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} refs:
 00107         atom\_hdu.header.update(item[0], item[1])
@@ -193,8 +194,8 @@
 00183             \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'SOURCE'} \textcolor{keywordflow}{in} text[0]) \textcolor{keywordflow}{or} (\textcolor{stringliteral}{'NOTE'} \textcolor{keywordflow}{in} text[0]):
 00184                 refs.append((text[0], text[1]))
 00185 
-00186     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(coll\_hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
-00187     \hyperlink{namespacepyneb_1_1utils_1_1fits_a2c9c6cf69be4278cdfb529f3a8f3dced}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
+00186     \hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{\_updateHeader}(coll\_hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
+00187     \hyperlink{namespacepyneb_1_1utils_1_1fits_a40031d2d7de219b95d7475243b3888eb}{\_updateHeader}(hdu, input\_file, \textcolor{stringliteral}{'Collision strengths'}, elem, spec)
 00188     coll\_hdu.header.update(\textcolor{stringliteral}{'N\_LEVELS'}, NLevels)
 00189     \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} refs:
 00190         coll\_hdu.header.update(item[0], item[1])
@@ -220,26 +221,26 @@
 00210 \textcolor{stringliteral}{        f.save}
 00211 \textcolor{stringliteral}{        }
 00212 \textcolor{stringliteral}{    """}    
-\hypertarget{fits_8py_source_l00213}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_aeddad5ffc5d8877569e445ca876e5654}{00213}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_aeddad5ffc5d8877569e445ca876e5654}{\_\_init\_\_}(self, fitsFile, ext):
+\hypertarget{fits_8py_source_l00213}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a154b37ae24e96d14ffff5e878fbb1760}{00213}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a154b37ae24e96d14ffff5e878fbb1760}{\_\_init\_\_}(self, fitsFile, ext):
 \hypertarget{fits_8py_source_l00214}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7c4dc491907edb52649262563df2e23c}{00214}         self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7c4dc491907edb52649262563df2e23c}{fitsFile} = fitsFile
 \hypertarget{fits_8py_source_l00215}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a23de98701ac30e7c56654f92d9956fca}{00215}         self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a23de98701ac30e7c56654f92d9956fca}{hdu} = pyfits.open(fitsFile, ignore\_missing\_end=\textcolor{keyword}{True})
 \hypertarget{fits_8py_source_l00216}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a1c2f102effab05a497e3a21ed3291359}{00216}         self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a1c2f102effab05a497e3a21ed3291359}{ext} = ext
 00217     
 00218 
-\hypertarget{fits_8py_source_l00219}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7dea491de86cd7fd74be3451369c690d}{00219}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7dea491de86cd7fd74be3451369c690d}{show}(self):
+\hypertarget{fits_8py_source_l00219}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a956d2cda7ca4e515f4a5dfaf0f6c465a}{00219}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a956d2cda7ca4e515f4a5dfaf0f6c465a}{show}(self):
 00220         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a23de98701ac30e7c56654f92d9956fca}{hdu}[self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a1c2f102effab05a497e3a21ed3291359}{ext}].header
 00221     
 00222 
-\hypertarget{fits_8py_source_l00223}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_aae5b01b9bc70e2787f31825ff63152a6}{00223}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_aae5b01b9bc70e2787f31825ff63152a6}{up}(self, key, value):
+\hypertarget{fits_8py_source_l00223}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a52ee04bb03279ed65bbd5412154d08e2}{00223}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a52ee04bb03279ed65bbd5412154d08e2}{up}(self, key, value):
 00224         \textcolor{stringliteral}{""" This will be changed to header.set at some point"""}
 00225         self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a23de98701ac30e7c56654f92d9956fca}{hdu}[self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a1c2f102effab05a497e3a21ed3291359}{ext}].header.update(key, value)
 00226         
 00227 
-\hypertarget{fits_8py_source_l00228}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a64e91aa976f1b312026927e9bef237a9}{00228}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a64e91aa976f1b312026927e9bef237a9}{delete}(self, key):
+\hypertarget{fits_8py_source_l00228}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_adffa3ce71f4ab2b1f0428a9fa6fee117}{00228}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_adffa3ce71f4ab2b1f0428a9fa6fee117}{delete}(self, key):
 00229         del self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a23de98701ac30e7c56654f92d9956fca}{hdu}[self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a1c2f102effab05a497e3a21ed3291359}{ext}].header[key]
 00230 
 00231 
-\hypertarget{fits_8py_source_l00232}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a8b3404b437c53986a68387da48a423f3}{00232}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a8b3404b437c53986a68387da48a423f3}{cheb}(self, orderFile):    
+\hypertarget{fits_8py_source_l00232}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ae3914322f5f8fa906d003987bb4dfb9a}{00232}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ae3914322f5f8fa906d003987bb4dfb9a}{cheb}(self, orderFile):    
 00233         \textcolor{stringliteral}{""" }
 00234 \textcolor{stringliteral}{        Update the Chebyshev order of a coll fits file.}
 00235 \textcolor{stringliteral}{        }
@@ -266,12 +267,12 @@
 00255                     lev\_i = field\_name.split(\textcolor{stringliteral}{'->'})[1].split(\textcolor{stringliteral}{')'})[0]
 00256                     j = int(lev\_j) - 1
 00257                     i = int(lev\_i) - 1
-00258                     self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_aae5b01b9bc70e2787f31825ff63152a6}{up}(unit, order\_array[j, i])
+00258                     self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a52ee04bb03279ed65bbd5412154d08e2}{up}(unit, order\_array[j, i])
 00259                 \textcolor{keywordflow}{except}:
 00260                     \textcolor{keywordflow}{pass}
 00261 
 00262 
-\hypertarget{fits_8py_source_l00263}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ae194eaf4a7c6a8aed7926ebad50d7901}{00263}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_ae194eaf4a7c6a8aed7926ebad50d7901}{save}(self):
+\hypertarget{fits_8py_source_l00263}{}\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a81eb3b4cdfcc302e40f447eb399a60e1}{00263}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a81eb3b4cdfcc302e40f447eb399a60e1}{save}(self):
 00264         self.hdu.writeto(self.\hyperlink{classpyneb_1_1utils_1_1fits_1_1_hdr_a7c4dc491907edb52649262563df2e23c}{fitsFile}, clobber=\textcolor{keyword}{True})
 00265 
 00266 \textcolor{comment}{# Test}

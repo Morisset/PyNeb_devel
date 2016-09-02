@@ -1,5 +1,6 @@
-\hypertarget{chebyshev_8py_source}{}\section{chebyshev.\+py}
-\label{chebyshev_8py_source}\index{pyneb/utils/chebyshev.\+py@{pyneb/utils/chebyshev.\+py}}
+\hypertarget{chebyshev_8py}{\section{chebyshev.\-py}
+\label{chebyshev_8py}\index{pyneb/utils/chebyshev.\-py@{pyneb/utils/chebyshev.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{chebyshev_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev}{00001} \textcolor{stringliteral}{"""}
@@ -90,18 +91,18 @@
 00086 
 00087 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
 00088 \textcolor{keyword}{import} numpy.linalg \textcolor{keyword}{as} la
-00089 \textcolor{keyword}{import} polyutils \textcolor{keyword}{as} pu
-00090 \textcolor{keyword}{import} warnings
-00091 \textcolor{keyword}{from} polytemplate \textcolor{keyword}{import} polytemplate
+00089 \textcolor{keyword}{import} warnings
+00090 \textcolor{keyword}{from} .polytemplate \textcolor{keyword}{import} polytemplate
+00091 \textcolor{keyword}{from} .polyutils \textcolor{keyword}{import} trimcoef, as\_series, RankWarning, trimseq
 00092 
-\hypertarget{chebyshev_8py_source_l00093}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a66b8c25023851573f25dc418071de82b}{00093} chebtrim = pu.trimcoef
+\hypertarget{chebyshev_8py_source_l00093}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a66b8c25023851573f25dc418071de82b}{00093} chebtrim = trimcoef
 00094 
 00095 \textcolor{comment}{#}
 00096 \textcolor{comment}{# A collection of functions for manipulating z-series. These are private}
 00097 \textcolor{comment}{# functions and do minimal error checking.}
 00098 \textcolor{comment}{#}
 00099 
-\hypertarget{chebyshev_8py_source_l00100}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{00100} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs) :
+\hypertarget{chebyshev_8py_source_l00100}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{00100} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(cs) :
 00101     \textcolor{stringliteral}{"""Covert Chebyshev series to z-series.}
 00102 \textcolor{stringliteral}{}
 00103 \textcolor{stringliteral}{    Covert a Chebyshev series to the equivalent z-series. The result is}
@@ -125,7 +126,7 @@
 00121     zs[n-1:] = cs/2
 00122     \textcolor{keywordflow}{return} zs + zs[::-1]
 00123 
-\hypertarget{chebyshev_8py_source_l00124}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{00124} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs) :
+\hypertarget{chebyshev_8py_source_l00124}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{00124} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(zs) :
 00125     \textcolor{stringliteral}{"""Covert z-series to a Chebyshev series.}
 00126 \textcolor{stringliteral}{}
 00127 \textcolor{stringliteral}{    Covert a z series to the equivalent Chebyshev series. The result is}
@@ -149,7 +150,7 @@
 00145     cs[1:n] *= 2
 00146     \textcolor{keywordflow}{return} cs
 00147 
-\hypertarget{chebyshev_8py_source_l00148}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{00148} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(z1, z2) :
+\hypertarget{chebyshev_8py_source_l00148}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac430f61f52899c1e2a276d8b76fa47d5}{00148} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac430f61f52899c1e2a276d8b76fa47d5}{\_zseries\_mul}(z1, z2) :
 00149     \textcolor{stringliteral}{"""Multiply two z-series.}
 00150 \textcolor{stringliteral}{}
 00151 \textcolor{stringliteral}{    Multiply two z-series to produce a z-series.}
@@ -175,7 +176,7 @@
 00171 \textcolor{stringliteral}{    """}
 00172     \textcolor{keywordflow}{return} np.convolve(z1, z2)
 00173 
-\hypertarget{chebyshev_8py_source_l00174}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{00174} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(z1, z2) :
+\hypertarget{chebyshev_8py_source_l00174}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a9ec3445ca77071adc655bacf9299c451}{00174} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a9ec3445ca77071adc655bacf9299c451}{\_zseries\_div}(z1, z2) :
 00175     \textcolor{stringliteral}{"""Divide the first z-series by the second.}
 00176 \textcolor{stringliteral}{}
 00177 \textcolor{stringliteral}{    Divide `z1` by `z2` and return the quotient and remainder as z-series.}
@@ -241,7 +242,7 @@
 00237         rem = z1[i+1:i-1+len2].copy()
 00238         \textcolor{keywordflow}{return} quo, rem
 00239 
-\hypertarget{chebyshev_8py_source_l00240}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{00240} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{\_zseries\_der}(zs) :
+\hypertarget{chebyshev_8py_source_l00240}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a82377769dc2ed2e38828ac99897ff554}{00240} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a82377769dc2ed2e38828ac99897ff554}{\_zseries\_der}(zs) :
 00241     \textcolor{stringliteral}{"""Differentiate a z-series.}
 00242 \textcolor{stringliteral}{}
 00243 \textcolor{stringliteral}{    The derivative is with respect to x, not z. This is achieved using the}
@@ -269,10 +270,10 @@
 00265     n = len(zs)//2
 00266     ns = np.array([-1, 0, 1], dtype=zs.dtype)
 00267     zs *= np.arange(-n, n+1)*2
-00268     d, r = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(zs, ns)
+00268     d, r = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a9ec3445ca77071adc655bacf9299c451}{\_zseries\_div}(zs, ns)
 00269     \textcolor{keywordflow}{return} d
 00270 
-\hypertarget{chebyshev_8py_source_l00271}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{00271} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{\_zseries\_int}(zs) :
+\hypertarget{chebyshev_8py_source_l00271}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac55f3063cff69831a2882a7a30b617d7}{00271} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac55f3063cff69831a2882a7a30b617d7}{\_zseries\_int}(zs) :
 00272     \textcolor{stringliteral}{"""Integrate a z-series.}
 00273 \textcolor{stringliteral}{}
 00274 \textcolor{stringliteral}{    The integral is with respect to x, not z. This is achieved by a change}
@@ -298,7 +299,7 @@
 00294 \textcolor{stringliteral}{    """}
 00295     n = 1 + len(zs)//2
 00296     ns = np.array([-1, 0, 1], dtype=zs.dtype)
-00297     zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(zs, ns)
+00297     zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac430f61f52899c1e2a276d8b76fa47d5}{\_zseries\_mul}(zs, ns)
 00298     div = np.arange(-n, n+1)*2
 00299     zs[:n] /= div[:n]
 00300     zs[n+1:] /= div[n+1:]
@@ -310,7 +311,7 @@
 00306 \textcolor{comment}{#}
 00307 
 00308 
-\hypertarget{chebyshev_8py_source_l00309}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1f91018c86380adf38318e4e224279e7}{00309} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1f91018c86380adf38318e4e224279e7}{poly2cheb}(pol) :
+\hypertarget{chebyshev_8py_source_l00309}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abd824b0c3e5e2cc0f9464a0986dc3819}{00309} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abd824b0c3e5e2cc0f9464a0986dc3819}{poly2cheb}(pol) :
 00310     \textcolor{stringliteral}{"""}
 00311 \textcolor{stringliteral}{    Convert a polynomial to a Chebyshev series.}
 00312 \textcolor{stringliteral}{}
@@ -352,15 +353,15 @@
 00348 \textcolor{stringliteral}{    array([ 1.  ,  3.25,  1.  ,  0.75])}
 00349 \textcolor{stringliteral}{}
 00350 \textcolor{stringliteral}{    """}
-00351     [pol] = pu.as\_series([pol])
+00351     [pol] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([pol])
 00352     deg = len(pol) - 1
 00353     res = 0
 00354     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(deg, -1, -1) :
-00355         res = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{chebadd}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(res), pol[i])
+00355         res = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aafceea7ad9a5a18707fcf493bcf70457}{chebadd}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a91d78fa31041dfe9ccf7bbc0891809b3}{chebmulx}(res), pol[i])
 00356     \textcolor{keywordflow}{return} res
 00357 
 00358 
-\hypertarget{chebyshev_8py_source_l00359}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a640344fc14aa36e14d0e93eba4411188}{00359} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a640344fc14aa36e14d0e93eba4411188}{cheb2poly}(cs) :
+\hypertarget{chebyshev_8py_source_l00359}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a0e43853c4c6b0f440005cc6b5124557e}{00359} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a0e43853c4c6b0f440005cc6b5124557e}{cheb2poly}(cs) :
 00360     \textcolor{stringliteral}{"""}
 00361 \textcolor{stringliteral}{    Convert a Chebyshev series to a polynomial.}
 00362 \textcolor{stringliteral}{}
@@ -406,7 +407,7 @@
 00402 \textcolor{stringliteral}{    """}
 00403     \textcolor{keyword}{from} polynomial \textcolor{keyword}{import} polyadd, polysub, polymulx
 00404 
-00405     [cs] = pu.as\_series([cs])
+00405     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 00406     n = len(cs)
 00407     \textcolor{keywordflow}{if} n < 3:
 00408         \textcolor{keywordflow}{return} cs
@@ -438,7 +439,7 @@
 00434 \textcolor{comment}{# Chebyshev coefficients representing the identity x.}
 \hypertarget{chebyshev_8py_source_l00435}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a00f984b78341cd7920c46d1a6acacc5f}{00435} chebx = np.array([0,1])
 00436 
-\hypertarget{chebyshev_8py_source_l00437}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad14ae6340a5a9e3c93c1bb720f4e5a04}{00437} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad14ae6340a5a9e3c93c1bb720f4e5a04}{chebline}(off, scl) :
+\hypertarget{chebyshev_8py_source_l00437}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab88a5c9a7faa4458231ddb2edc1aa860}{00437} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab88a5c9a7faa4458231ddb2edc1aa860}{chebline}(off, scl) :
 00438     \textcolor{stringliteral}{"""}
 00439 \textcolor{stringliteral}{    Chebyshev series whose graph is a straight line.}
 00440 \textcolor{stringliteral}{}
@@ -473,7 +474,7 @@
 00469     \textcolor{keywordflow}{else} :
 00470         \textcolor{keywordflow}{return} np.array([off])
 00471 
-\hypertarget{chebyshev_8py_source_l00472}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abedf5cf14ea9229321fc5e4043c42a0d}{00472} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_abedf5cf14ea9229321fc5e4043c42a0d}{chebfromroots}(roots) :
+\hypertarget{chebyshev_8py_source_l00472}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad3dc62fdecc545593e36509daa1c2632}{00472} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad3dc62fdecc545593e36509daa1c2632}{chebfromroots}(roots) :
 00473     \textcolor{stringliteral}{"""}
 00474 \textcolor{stringliteral}{    Generate a Chebyshev series with the given roots.}
 00475 \textcolor{stringliteral}{}
@@ -528,14 +529,14 @@
 00524     \textcolor{keywordflow}{if} len(roots) == 0 :
 00525         \textcolor{keywordflow}{return} np.ones(1)
 00526     \textcolor{keywordflow}{else} :
-00527         [roots] = pu.as\_series([roots], trim=\textcolor{keyword}{False})
+00527         [roots] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([roots], trim=\textcolor{keyword}{False})
 00528         prd = np.array([1], dtype=roots.dtype)
 00529         \textcolor{keywordflow}{for} r \textcolor{keywordflow}{in} roots:
-00530             prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{chebsub}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(prd), r*prd)
+00530             prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2ca3ca3bac02e30625edb4c48ada7ddf}{chebsub}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a91d78fa31041dfe9ccf7bbc0891809b3}{chebmulx}(prd), r*prd)
 00531         \textcolor{keywordflow}{return} prd
 00532 
 00533 
-\hypertarget{chebyshev_8py_source_l00534}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{00534} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a06a85eb72ae35925336a6b550dec3f02}{chebadd}(c1, c2):
+\hypertarget{chebyshev_8py_source_l00534}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aafceea7ad9a5a18707fcf493bcf70457}{00534} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aafceea7ad9a5a18707fcf493bcf70457}{chebadd}(c1, c2):
 00535     \textcolor{stringliteral}{"""}
 00536 \textcolor{stringliteral}{    Add one Chebyshev series to another.}
 00537 \textcolor{stringliteral}{}
@@ -575,17 +576,17 @@
 00571 \textcolor{stringliteral}{}
 00572 \textcolor{stringliteral}{    """}
 00573     \textcolor{comment}{# c1, c2 are trimmed copies}
-00574     [c1, c2] = pu.as\_series([c1, c2])
+00574     [c1, c2] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([c1, c2])
 00575     \textcolor{keywordflow}{if} len(c1) > len(c2) :
 00576         c1[:c2.size] += c2
 00577         ret = c1
 00578     \textcolor{keywordflow}{else} :
 00579         c2[:c1.size] += c1
 00580         ret = c2
-00581     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00581     \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(ret)
 00582 
 00583 
-\hypertarget{chebyshev_8py_source_l00584}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{00584} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac07c70b217882a8c0a731ce9fdf743f0}{chebsub}(c1, c2):
+\hypertarget{chebyshev_8py_source_l00584}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2ca3ca3bac02e30625edb4c48ada7ddf}{00584} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2ca3ca3bac02e30625edb4c48ada7ddf}{chebsub}(c1, c2):
 00585     \textcolor{stringliteral}{"""}
 00586 \textcolor{stringliteral}{    Subtract one Chebyshev series from another.}
 00587 \textcolor{stringliteral}{}
@@ -627,7 +628,7 @@
 00623 \textcolor{stringliteral}{}
 00624 \textcolor{stringliteral}{    """}
 00625     \textcolor{comment}{# c1, c2 are trimmed copies}
-00626     [c1, c2] = pu.as\_series([c1, c2])
+00626     [c1, c2] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([c1, c2])
 00627     \textcolor{keywordflow}{if} len(c1) > len(c2) :
 00628         c1[:c2.size] -= c2
 00629         ret = c1
@@ -635,10 +636,10 @@
 00631         c2 = -c2
 00632         c2[:c1.size] += c1
 00633         ret = c2
-00634     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00634     \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(ret)
 00635 
 00636 
-\hypertarget{chebyshev_8py_source_l00637}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{00637} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab09f8accee50bd964e03071a659a7b5f}{chebmulx}(cs):
+\hypertarget{chebyshev_8py_source_l00637}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a91d78fa31041dfe9ccf7bbc0891809b3}{00637} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a91d78fa31041dfe9ccf7bbc0891809b3}{chebmulx}(cs):
 00638     \textcolor{stringliteral}{"""Multiply a Chebyshev series by x.}
 00639 \textcolor{stringliteral}{}
 00640 \textcolor{stringliteral}{    Multiply the polynomial `cs` by x, where x is the independent}
@@ -662,7 +663,7 @@
 00658 \textcolor{stringliteral}{}
 00659 \textcolor{stringliteral}{    """}
 00660     \textcolor{comment}{# cs is a trimmed copy}
-00661     [cs] = pu.as\_series([cs])
+00661     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 00662     \textcolor{comment}{# The zero series needs special treatment}
 00663     \textcolor{keywordflow}{if} len(cs) == 1 \textcolor{keywordflow}{and} cs[0] == 0:
 00664         \textcolor{keywordflow}{return} cs
@@ -677,7 +678,7 @@
 00673     \textcolor{keywordflow}{return} prd
 00674 
 00675 
-\hypertarget{chebyshev_8py_source_l00676}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aca5aab8be2c47559d4489fd1dac11f75}{00676} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aca5aab8be2c47559d4489fd1dac11f75}{chebmul}(c1, c2):
+\hypertarget{chebyshev_8py_source_l00676}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a20beb101adf242958f21dff04591e1ca}{00676} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a20beb101adf242958f21dff04591e1ca}{chebmul}(c1, c2):
 00677     \textcolor{stringliteral}{"""}
 00678 \textcolor{stringliteral}{    Multiply one Chebyshev series by another.}
 00679 \textcolor{stringliteral}{}
@@ -718,15 +719,15 @@
 00714 \textcolor{stringliteral}{}
 00715 \textcolor{stringliteral}{    """}
 00716     \textcolor{comment}{# c1, c2 are trimmed copies}
-00717     [c1, c2] = pu.as\_series([c1, c2])
-00718     z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c1)
-00719     z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c2)
-00720     prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a46d958933482afac66ea41d143155dae}{\_zseries\_mul}(z1, z2)
-00721     ret = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(prd)
-00722     \textcolor{keywordflow}{return} pu.trimseq(ret)
+00717     [c1, c2] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([c1, c2])
+00718     z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(c1)
+00719     z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(c2)
+00720     prd = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac430f61f52899c1e2a276d8b76fa47d5}{\_zseries\_mul}(z1, z2)
+00721     ret = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(prd)
+00722     \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(ret)
 00723 
 00724 
-\hypertarget{chebyshev_8py_source_l00725}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa84df28815f29342a7cdce9b95470f02}{00725} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa84df28815f29342a7cdce9b95470f02}{chebdiv}(c1, c2):
+\hypertarget{chebyshev_8py_source_l00725}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5d4faaef412d6dfe502716e8e287d727}{00725} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5d4faaef412d6dfe502716e8e287d727}{chebdiv}(c1, c2):
 00726     \textcolor{stringliteral}{"""}
 00727 \textcolor{stringliteral}{    Divide one Chebyshev series by another.}
 00728 \textcolor{stringliteral}{}
@@ -773,7 +774,7 @@
 00769 \textcolor{stringliteral}{}
 00770 \textcolor{stringliteral}{    """}
 00771     \textcolor{comment}{# c1, c2 are trimmed copies}
-00772     [c1, c2] = pu.as\_series([c1, c2])
+00772     [c1, c2] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([c1, c2])
 00773     \textcolor{keywordflow}{if} c2[-1] == 0 :
 00774         \textcolor{keywordflow}{raise} ZeroDivisionError()
 00775 
@@ -784,11 +785,11 @@
 00780     \textcolor{keywordflow}{elif} lc2 == 1 :
 00781         \textcolor{keywordflow}{return} c1/c2[-1], c1[:1]*0
 00782     \textcolor{keywordflow}{else} :
-00783         z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c1)
-00784         z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(c2)
-00785         quo, rem = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ad00f2653194746fa98c3421eb7c26f2c}{\_zseries\_div}(z1, z2)
-00786         quo = pu.trimseq(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(quo))
-00787         rem = pu.trimseq(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(rem))
+00783         z1 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(c1)
+00784         z2 = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(c2)
+00785         quo, rem = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a9ec3445ca77071adc655bacf9299c451}{\_zseries\_div}(z1, z2)
+00786         quo = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(quo))
+00787         rem = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(rem))
 00788         \textcolor{keywordflow}{return} quo, rem
 00789 
 \hypertarget{chebyshev_8py_source_l00790}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab647ff3aa7750a09b934b98cddd4c90d}{00790} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ab647ff3aa7750a09b934b98cddd4c90d}{chebpow}(cs, pow, maxpower=16) :
@@ -823,7 +824,7 @@
 00819 \textcolor{stringliteral}{}
 00820 \textcolor{stringliteral}{    """}
 00821     \textcolor{comment}{# cs is a trimmed copy}
-00822     [cs] = pu.as\_series([cs])
+00822     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 00823     power = int(pow)
 00824     \textcolor{keywordflow}{if} power != pow \textcolor{keywordflow}{or} power < 0 :
 00825         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Power must be a non-negative integer."})
@@ -836,11 +837,11 @@
 00832     \textcolor{keywordflow}{else} :
 00833         \textcolor{comment}{# This can be made more efficient by using powers of two}
 00834         \textcolor{comment}{# in the usual way.}
-00835         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
+00835         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(cs)
 00836         prd = zs
 00837         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(2, power + 1) :
 00838             prd = np.convolve(prd, zs)
-00839         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(prd)
+00839         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(prd)
 00840 
 \hypertarget{chebyshev_8py_source_l00841}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1ed2b9248c247449584904025ec9d460}{00841} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a1ed2b9248c247449584904025ec9d460}{chebder}(cs, m=1, scl=1) :
 00842     \textcolor{stringliteral}{"""}
@@ -896,21 +897,21 @@
 00892     cnt = int(m)
 00893 
 00894     \textcolor{keywordflow}{if} cnt != m:
-00895         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of derivation must be integer"}
+00895         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"The order of derivation must be integer"})
 00896     \textcolor{keywordflow}{if} cnt < 0 :
-00897         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of derivation must be non-negative"}
+00897         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"The order of derivation must be non-negative"})
 00898 
 00899     \textcolor{comment}{# cs is a trimmed copy}
-00900     [cs] = pu.as\_series([cs])
+00900     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 00901     \textcolor{keywordflow}{if} cnt == 0:
 00902         \textcolor{keywordflow}{return} cs
 00903     \textcolor{keywordflow}{elif} cnt >= len(cs):
 00904         \textcolor{keywordflow}{return} cs[:1]*0
 00905     \textcolor{keywordflow}{else} :
-00906         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
+00906         zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(cs)
 00907         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(cnt):
-00908             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_adb39b6e9d3aba3bf3784a3364ec3e6ca}{\_zseries\_der}(zs)*scl
-00909         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs)
+00908             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a82377769dc2ed2e38828ac99897ff554}{\_zseries\_der}(zs)*scl
+00909         \textcolor{keywordflow}{return} \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(zs)
 00910 
 00911 
 \hypertarget{chebyshev_8py_source_l00912}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a233e686a07b9935c74ce1e053f0c5f5f}{00912} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a233e686a07b9935c74ce1e053f0c5f5f}{chebint}(cs, m=1, k=[], lbnd=0, scl=1):
@@ -995,14 +996,14 @@
 00991         k = [k]
 00992 
 00993     \textcolor{keywordflow}{if} cnt != m:
-00994         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of integration must be integer"}
+00994         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"The order of integration must be integer"})
 00995     \textcolor{keywordflow}{if} cnt < 0 :
-00996         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"The order of integration must be non-negative"}
+00996         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"The order of integration must be non-negative"})
 00997     \textcolor{keywordflow}{if} len(k) > cnt :
-00998         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"Too many integration constants"}
+00998         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Too many integration constants"})
 00999 
 01000     \textcolor{comment}{# cs is a trimmed copy}
-01001     [cs] = pu.as\_series([cs])
+01001     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 01002     \textcolor{keywordflow}{if} cnt == 0:
 01003         \textcolor{keywordflow}{return} cs
 01004 
@@ -1013,13 +1014,13 @@
 01009         \textcolor{keywordflow}{if} n == 1 \textcolor{keywordflow}{and} cs[0] == 0:
 01010             cs[0] += k[i]
 01011         \textcolor{keywordflow}{else}:
-01012             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a659e346f7cdd9fd058850b26f7e95b17}{\_cseries\_to\_zseries}(cs)
-01013             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a39d3ae73408fcde399d87f5cfd5e7c98}{\_zseries\_int}(zs)
-01014             cs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2a88474ce0ea12fb26f82b7116752dc1}{\_zseries\_to\_cseries}(zs)
-01015             cs[0] += k[i] - \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{chebval}(lbnd, cs)
+01012             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a3340d022485b954c9c722b6eaa456ebb}{\_cseries\_to\_zseries}(cs)
+01013             zs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_ac55f3063cff69831a2882a7a30b617d7}{\_zseries\_int}(zs)
+01014             cs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa21c9418f1740d12b80ab1563f49ce0b}{\_zseries\_to\_cseries}(zs)
+01015             cs[0] += k[i] - \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a44ae40c5b4cbdc3a230c014c834f5ce6}{chebval}(lbnd, cs)
 01016     \textcolor{keywordflow}{return} cs
 01017 
-\hypertarget{chebyshev_8py_source_l01018}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{01018} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a7f7442e9a3a00e1ca04a2283877b15a8}{chebval}(x, cs):
+\hypertarget{chebyshev_8py_source_l01018}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a44ae40c5b4cbdc3a230c014c834f5ce6}{01018} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a44ae40c5b4cbdc3a230c014c834f5ce6}{chebval}(x, cs):
 01019     \textcolor{stringliteral}{"""Evaluate a Chebyshev series.}
 01020 \textcolor{stringliteral}{}
 01021 \textcolor{stringliteral}{    If `cs` is of length `n`, this function returns :}
@@ -1059,7 +1060,7 @@
 01055 \textcolor{stringliteral}{}
 01056 \textcolor{stringliteral}{    """}
 01057     \textcolor{comment}{# cs is a trimmed copy}
-01058     [cs] = pu.as\_series([cs])
+01058     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 01059     \textcolor{keywordflow}{if} isinstance(x, tuple) \textcolor{keywordflow}{or} isinstance(x, list) :
 01060         x = np.asarray(x)
 01061 
@@ -1079,7 +1080,7 @@
 01075             c1 = tmp + c1*x2
 01076     \textcolor{keywordflow}{return} c0 + c1*x
 01077 
-\hypertarget{chebyshev_8py_source_l01078}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{01078} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{chebvander}(x, deg) :
+\hypertarget{chebyshev_8py_source_l01078}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a4a53ad781fcf149c5ab6ae5d021b0950}{01078} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a4a53ad781fcf149c5ab6ae5d021b0950}{chebvander}(x, deg) :
 01079     \textcolor{stringliteral}{"""Vandermonde matrix of given degree.}
 01080 \textcolor{stringliteral}{}
 01081 \textcolor{stringliteral}{    Returns the Vandermonde matrix of degree `deg` and sample points `x`.}
@@ -1230,25 +1231,25 @@
 01226 
 01227     \textcolor{comment}{# check arguments.}
 01228     \textcolor{keywordflow}{if} deg < 0 :
-01229         \textcolor{keywordflow}{raise} ValueError, \textcolor{stringliteral}{"expected deg >= 0"}
+01229         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"expected deg >= 0"})
 01230     \textcolor{keywordflow}{if} x.ndim != 1:
-01231         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D vector for x"}
+01231         \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected 1D vector for x"})
 01232     \textcolor{keywordflow}{if} x.size == 0:
-01233         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected non-empty vector for x"}
+01233         \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected non-empty vector for x"})
 01234     \textcolor{keywordflow}{if} y.ndim < 1 \textcolor{keywordflow}{or} y.ndim > 2 :
-01235         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D or 2D array for y"}
+01235         \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected 1D or 2D array for y"})
 01236     \textcolor{keywordflow}{if} len(x) != len(y):
-01237         \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected x and y to have same length"}
+01237         \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected x and y to have same length"})
 01238 
 01239     \textcolor{comment}{# set up the least squares matrices}
-01240     lhs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa9deae857486c8ee69362ded985b09d8}{chebvander}(x, deg)
+01240     lhs = \hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a4a53ad781fcf149c5ab6ae5d021b0950}{chebvander}(x, deg)
 01241     rhs = y
 01242     \textcolor{keywordflow}{if} w \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
 01243         w = np.asarray(w) + 0.0
 01244         \textcolor{keywordflow}{if} w.ndim != 1:
-01245             \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected 1D vector for w"}
+01245             \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected 1D vector for w"})
 01246         \textcolor{keywordflow}{if} len(x) != len(w):
-01247             \textcolor{keywordflow}{raise} TypeError, \textcolor{stringliteral}{"expected x and w to have same length"}
+01247             \textcolor{keywordflow}{raise} TypeError(\textcolor{stringliteral}{"expected x and w to have same length"})
 01248         \textcolor{comment}{# apply weights}
 01249         \textcolor{keywordflow}{if} rhs.ndim == 2:
 01250             lhs *= w[:, np.newaxis]
@@ -1269,7 +1270,7 @@
 01265     \textcolor{comment}{# warn on rank reduction}
 01266     \textcolor{keywordflow}{if} rank != order \textcolor{keywordflow}{and} \textcolor{keywordflow}{not} full:
 01267         msg = \textcolor{stringliteral}{"The fit may be poorly conditioned"}
-01268         warnings.warn(msg, pu.RankWarning)
+01268         warnings.warn(msg, RankWarning)
 01269 
 01270     \textcolor{keywordflow}{if} full :
 01271         \textcolor{keywordflow}{return} c, [resids, rank, s, rcond]
@@ -1277,7 +1278,7 @@
 01273         \textcolor{keywordflow}{return} c
 01274 
 01275 
-\hypertarget{chebyshev_8py_source_l01276}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2f01a14e36b415a2f3ebc67c95cceb26}{01276} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a2f01a14e36b415a2f3ebc67c95cceb26}{chebroots}(cs):
+\hypertarget{chebyshev_8py_source_l01276}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a63ef136648aeceebc5b0a0cfce98d49a}{01276} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a63ef136648aeceebc5b0a0cfce98d49a}{chebroots}(cs):
 01277     \textcolor{stringliteral}{"""}
 01278 \textcolor{stringliteral}{    Compute the roots of a Chebyshev series.}
 01279 \textcolor{stringliteral}{}
@@ -1320,7 +1321,7 @@
 01316 \textcolor{stringliteral}{}
 01317 \textcolor{stringliteral}{    """}
 01318     \textcolor{comment}{# cs is a trimmed copy}
-01319     [cs] = pu.as\_series([cs])
+01319     [cs] = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9c3751d438f0f75922155c7823fe2699}{as\_series}([cs])
 01320     \textcolor{keywordflow}{if} len(cs) <= 1 :
 01321         \textcolor{keywordflow}{return} np.array([], dtype=cs.dtype)
 01322     \textcolor{keywordflow}{if} len(cs) == 2 :
@@ -1341,7 +1342,7 @@
 01337     \textcolor{keywordflow}{return} roots
 01338 
 01339 
-\hypertarget{chebyshev_8py_source_l01340}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5ac57e95809a1f627400a7c3a34606f7}{01340} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a5ac57e95809a1f627400a7c3a34606f7}{chebpts1}(npts):
+\hypertarget{chebyshev_8py_source_l01340}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa5e7d5d318e547f5df15b55224524753}{01340} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_aa5e7d5d318e547f5df15b55224524753}{chebpts1}(npts):
 01341     \textcolor{stringliteral}{"""Chebyshev points of the first kind.}
 01342 \textcolor{stringliteral}{}
 01343 \textcolor{stringliteral}{    Chebyshev points of the first kind are the set ``\{cos(x\_k)\}``,}
@@ -1372,7 +1373,7 @@
 01368     \textcolor{keywordflow}{return} np.cos(x)
 01369 
 01370 
-\hypertarget{chebyshev_8py_source_l01371}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a224bc370de0cfa204c3ac15d626d13e3}{01371} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a224bc370de0cfa204c3ac15d626d13e3}{chebpts2}(npts):
+\hypertarget{chebyshev_8py_source_l01371}{}\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a375236ee9f8b4a3f0d7d099af19e7818}{01371} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1chebyshev_a375236ee9f8b4a3f0d7d099af19e7818}{chebpts2}(npts):
 01372     \textcolor{stringliteral}{"""Chebyshev points of the second kind.}
 01373 \textcolor{stringliteral}{}
 01374 \textcolor{stringliteral}{    Chebyshev points of the second kind are the set ``\{cos(x\_k)\}``,}
@@ -1407,5 +1408,5 @@
 01403 \textcolor{comment}{# Chebyshev series class}
 01404 \textcolor{comment}{#}
 01405 
-01406 exec polytemplate.substitute(name=\textcolor{stringliteral}{'Chebyshev'}, nick=\textcolor{stringliteral}{'cheb'}, domain=\textcolor{stringliteral}{'[-1,1]'})
+01406 exec(polytemplate.substitute(name=\textcolor{stringliteral}{'Chebyshev'}, nick=\textcolor{stringliteral}{'cheb'}, domain=\textcolor{stringliteral}{'[-1,1]'}))
 \end{DoxyCode}

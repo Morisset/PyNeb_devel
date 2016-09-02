@@ -1,5 +1,6 @@
-\hypertarget{icf_8py_source}{}\section{icf.\+py}
-\label{icf_8py_source}\index{pyneb/core/icf.\+py@{pyneb/core/icf.\+py}}
+\hypertarget{icf_8py}{\section{icf.\-py}
+\label{icf_8py}\index{pyneb/core/icf.\-py@{pyneb/core/icf.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{icf_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1core_1_1icf}{00001} \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
@@ -10,7 +11,7 @@
 00006 
 \hypertarget{icf_8py_source_l00007}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f}{00007} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f}{ICF}(object):
 00008 
-\hypertarget{icf_8py_source_l00009}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4128a511608f5e938e503b7789fd9331}{00009}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4128a511608f5e938e503b7789fd9331}{\_\_init\_\_}(self):
+\hypertarget{icf_8py_source_l00009}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a34b2e400d72f242fe19a26da72e9645b}{00009}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a34b2e400d72f242fe19a26da72e9645b}{\_\_init\_\_}(self):
 00010         \textcolor{stringliteral}{"""}
 00011 \textcolor{stringliteral}{        ICF tool.}
 00012 \textcolor{stringliteral}{        No parameters for the instantiation.}
@@ -19,10 +20,10 @@
 \hypertarget{icf_8py_source_l00015}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a50ae74d7192ec52a1249a675f963461e}{00015}         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a50ae74d7192ec52a1249a675f963461e}{log\_} = pn.log\_ 
 \hypertarget{icf_8py_source_l00016}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aaeb9b3827ef557a32b109baef31da77f}{00016}         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aaeb9b3827ef557a32b109baef31da77f}{calling} = \textcolor{stringliteral}{'ICF'}
 00017                 
-00018         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a109ccae36899c07ffd166b85fd3c0eb4}{\_init\_all\_icfs}()
+00018         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a876a93732ddd09b3551fd7a426b317d3}{\_init\_all\_icfs}()
 \hypertarget{icf_8py_source_l00019}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a994574a4b1fff9d0700fb483dabc8238}{00019}         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a994574a4b1fff9d0700fb483dabc8238}{\_max\_pass} = 3
 00020         
-\hypertarget{icf_8py_source_l00021}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a109ccae36899c07ffd166b85fd3c0eb4}{00021}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a109ccae36899c07ffd166b85fd3c0eb4}{\_init\_all\_icfs}(self):
+\hypertarget{icf_8py_source_l00021}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a876a93732ddd09b3551fd7a426b317d3}{00021}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a876a93732ddd09b3551fd7a426b317d3}{\_init\_all\_icfs}(self):
 00022         \textcolor{comment}{# Dictionary of ICF recipes}
 \hypertarget{icf_8py_source_l00023}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{00023}         self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs} = \{\textcolor{stringliteral}{'direct\_He.23'}:\{\textcolor{stringliteral}{'elem'}: \textcolor{stringliteral}{'He'},
 00024                                        \textcolor{stringliteral}{'atom'}: \textcolor{stringliteral}{'abun["He2"] + abun["He3"]'},
@@ -788,7 +789,7 @@
 00667         \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} Ial06:
 00668             key = \textcolor{stringliteral}{'Ial06\_'} + item[0]
 00669             atom = \textcolor{stringliteral}{'abun["'} + item[2] + \textcolor{stringliteral}{'"]'}
-00670             icf = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a985320521114915c449f464ee3c62ceb}{\_calcIal06}(item[3], item[4])
+00670             icf = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad5be47170b8a6f32e86d88499dba4803}{\_calcIal06}(item[3], item[4])
 00671             self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[key] = \{\textcolor{stringliteral}{'elem'}: item[1], \textcolor{stringliteral}{'atom'}: atom, \textcolor{stringliteral}{'icf'}: icf, \textcolor{stringliteral}{'type'}: \textcolor{stringliteral}{'HII'}, \textcolor{stringliteral}{'
       comment'}: item[5]\}
 00672 
@@ -836,7 +837,7 @@
 00713                                         \textcolor{stringliteral}{'url'}:\textcolor{stringliteral}{'http://arxiv.org/abs/1402.4852'}\}
 00714                              \}
 00715 
-\hypertarget{icf_8py_source_l00716}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a985320521114915c449f464ee3c62ceb}{00716}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a985320521114915c449f464ee3c62ceb}{\_calcIal06}(self, coeff, degree):
+\hypertarget{icf_8py_source_l00716}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad5be47170b8a6f32e86d88499dba4803}{00716}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad5be47170b8a6f32e86d88499dba4803}{\_calcIal06}(self, coeff, degree):
 00717         \textcolor{stringliteral}{"""}
 00718 \textcolor{stringliteral}{        Compute the analytical expressions of the Ial06 paper}
 00719 \textcolor{stringliteral}{        }
@@ -851,7 +852,7 @@
       k2 + \textcolor{stringliteral}{')'}
 00728 
 00729 
-\hypertarget{icf_8py_source_l00730}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6d82c58aa562e61e6074c6b8757583c4}{00730}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6d82c58aa562e61e6074c6b8757583c4}{\_getAtomExp}(self, label):
+\hypertarget{icf_8py_source_l00730}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a588c7f9f7fe76e06d5152b78788a6059}{00730}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a588c7f9f7fe76e06d5152b78788a6059}{\_getAtomExp}(self, label):
 00731         \textcolor{stringliteral}{"""}
 00732 \textcolor{stringliteral}{        Clean the ionic factor expressions for display purposes}
 00733 \textcolor{stringliteral}{        }
@@ -859,7 +860,7 @@
 00735         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'atom'}].replace(\textcolor{stringliteral}{'abun["'}, \textcolor{stringliteral}{''}).replace(\textcolor{stringliteral}{'"]'}, \textcolor{stringliteral}{''})
 00736 
 00737 
-\hypertarget{icf_8py_source_l00738}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa0ed356c2833c48010dfc7aa71a07419}{00738}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa0ed356c2833c48010dfc7aa71a07419}{\_getIcfExp}(self, label):
+\hypertarget{icf_8py_source_l00738}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a247f123a65d0150ba0de11e0a7756e4b}{00738}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a247f123a65d0150ba0de11e0a7756e4b}{\_getIcfExp}(self, label):
 00739         \textcolor{stringliteral}{"""}
 00740 \textcolor{stringliteral}{        Clean the icf expressions for display purposes}
 00741 \textcolor{stringliteral}{}
@@ -868,7 +869,7 @@
       (\textcolor{stringliteral}{'"]'}, \textcolor{stringliteral}{''})
 00744 
 00745     
-\hypertarget{icf_8py_source_l00746}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a45f65185e75b6f98d08656c918385b38}{00746}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a45f65185e75b6f98d08656c918385b38}{getAvailableICFs}(self, elem\_list=ELEM\_LIST, type\_=['HII', 'PNe', 'All']):
+\hypertarget{icf_8py_source_l00746}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4cacc6d494ce482990e513f4cf728e30}{00746}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4cacc6d494ce482990e513f4cf728e30}{getAvailableICFs}(self, elem\_list=ELEM\_LIST, type\_=['HII', 'PNe', 'All']):
 00747         \textcolor{stringliteral}{""" }
 00748 \textcolor{stringliteral}{        Get a list of all the available ICFs for the specified elements. }
 00749 \textcolor{stringliteral}{        Details can be obtained by invoking getReference('label') and getExpression('label') or
@@ -903,7 +904,7 @@
 00777         \textcolor{keywordflow}{return} icf\_dict
 00778    
 00779     
-\hypertarget{icf_8py_source_l00780}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3b52e8d7dd5bb7a5a667cba328d9af7f}{00780}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3b52e8d7dd5bb7a5a667cba328d9af7f}{printAllICFs}(self, type\_=['HII', 'PNe', 'All']):
+\hypertarget{icf_8py_source_l00780}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a49885ca930ec64edb2a9e972585cbb37}{00780}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a49885ca930ec64edb2a9e972585cbb37}{printAllICFs}(self, type\_=['HII', 'PNe', 'All']):
 00781         \textcolor{stringliteral}{""" }
 00782 \textcolor{stringliteral}{        Print a list of all the available ICFs. Details can be obtained by }
 00783 \textcolor{stringliteral}{            invoking getReference('label') and getExpression('label')}
@@ -917,7 +918,7 @@
 00791         \textcolor{keywordflow}{for} label \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}:
 00792             \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'type'}] \textcolor{keywordflow}{in} type\_:
 00793                 print(label + \textcolor{stringliteral}{': elem = '} + self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'elem'}] + \textcolor{stringliteral}{'; atom = '} + 
-00794                       self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6d82c58aa562e61e6074c6b8757583c4}{\_getAtomExp}(label) + \textcolor{stringliteral}{'; type = '} + self.
+00794                       self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a588c7f9f7fe76e06d5152b78788a6059}{\_getAtomExp}(label) + \textcolor{stringliteral}{'; type = '} + self.
       \hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'type'}])
 00795             
 00796    
@@ -965,7 +966,7 @@
 00835             self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a9777abc7cc843cd5c4d8c5810c1b2ed1}{all\_icf\_refs}[paper] = \{\textcolor{stringliteral}{'ref'}: ref, \textcolor{stringliteral}{'url'}: url\}
 00836     
 00837     
-\hypertarget{icf_8py_source_l00838}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a96966ef4b9dba4472c0d865b143b8240}{00838}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a96966ef4b9dba4472c0d865b143b8240}{delICF}(self, label):
+\hypertarget{icf_8py_source_l00838}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ac095f16b76f6f4f62f96465b01323f91}{00838}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ac095f16b76f6f4f62f96465b01323f91}{delICF}(self, label):
 00839         \textcolor{stringliteral}{"""}
 00840 \textcolor{stringliteral}{        Delete an existing icf (only for current session)}
 00841 \textcolor{stringliteral}{        }
@@ -995,17 +996,17 @@
 00865 \textcolor{stringliteral}{        """}        
 00866         \textcolor{keywordflow}{for} item \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}:
 00867             \textcolor{keywordflow}{if} (label \textcolor{keywordflow}{in} item):
-00868                 \textcolor{keywordflow}{print} \textcolor{stringliteral}{'------------------------------------------------------------------------'}
-00869                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'l'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'Label:'}, item
-00870                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'e'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'Element:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'elem'}]
-00871                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'}\textcolor{stringliteral}{r' in filter): print '}Required ions:', self.\_getAtomExp(item)
-00872                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'i'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'ICF expression:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa0ed356c2833c48010dfc7aa71a07419}{\_getIcfExp}(item)
-00873                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'o'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'Object class:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'type'}]
-00874                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'c'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'Comments:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'comment'}]
-00875                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'s'} \textcolor{keywordflow}{in} filter): \textcolor{keywordflow}{print} \textcolor{stringliteral}{'Source:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6dd48b2037e45deb624effc6ac91c841}{getReference}(item)
+00868                 print(\textcolor{stringliteral}{'------------------------------------------------------------------------'})
+00869                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'l'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'Label:'}, item)
+00870                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'e'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'Element:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'elem'}])
+00871                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'}\textcolor{stringliteral}{r' in filter): print('}Required ions:', self.\_getAtomExp(item))
+00872                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'i'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'ICF expression:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a247f123a65d0150ba0de11e0a7756e4b}{\_getIcfExp}(item))
+00873                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'o'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'Object class:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'type'}])
+00874                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'c'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'Comments:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[item][\textcolor{stringliteral}{'comment'}])
+00875                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'s'} \textcolor{keywordflow}{in} filter): print(\textcolor{stringliteral}{'Source:'}, self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a90b32c028a9e441aa3a80a215a4be58c}{getReference}(item))
 00876    
 00877     
-\hypertarget{icf_8py_source_l00878}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6dd48b2037e45deb624effc6ac91c841}{00878}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6dd48b2037e45deb624effc6ac91c841}{getReference}(self, label): 
+\hypertarget{icf_8py_source_l00878}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a90b32c028a9e441aa3a80a215a4be58c}{00878}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a90b32c028a9e441aa3a80a215a4be58c}{getReference}(self, label): 
 00879         \textcolor{stringliteral}{""" }
 00880 \textcolor{stringliteral}{        Return the reference of the selected ICF recipe }
 00881 \textcolor{stringliteral}{        }
@@ -1024,7 +1025,7 @@
 00893             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a9777abc7cc843cd5c4d8c5810c1b2ed1}{all\_icf\_refs}[paper][\textcolor{stringliteral}{'ref'}]
 00894    
 00895     
-\hypertarget{icf_8py_source_l00896}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a838ffba1ba395f7039a8f80eab6c46d2}{00896}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a838ffba1ba395f7039a8f80eab6c46d2}{getURL}(self, label): 
+\hypertarget{icf_8py_source_l00896}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_af27cec8e87d89720ee65fba6e28c2d9e}{00896}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_af27cec8e87d89720ee65fba6e28c2d9e}{getURL}(self, label): 
 00897         \textcolor{stringliteral}{""" }
 00898 \textcolor{stringliteral}{        Return the ADS URL of the selected ICF recipe }
 00899 \textcolor{stringliteral}{        }
@@ -1043,7 +1044,7 @@
 00911             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a9777abc7cc843cd5c4d8c5810c1b2ed1}{all\_icf\_refs}[paper][\textcolor{stringliteral}{'url'}]
 00912    
 00913     
-\hypertarget{icf_8py_source_l00914}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad620cb1c02943f4be858ca9f3d3d8300}{00914}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad620cb1c02943f4be858ca9f3d3d8300}{getExpression}(self, label): 
+\hypertarget{icf_8py_source_l00914}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad9e5250afc13ea42c6eedbc1bc0b860c}{00914}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad9e5250afc13ea42c6eedbc1bc0b860c}{getExpression}(self, label): 
 00915         \textcolor{stringliteral}{""" }
 00916 \textcolor{stringliteral}{        Return the analytical expression of the selected ICF }
 00917 \textcolor{stringliteral}{        }
@@ -1053,15 +1054,15 @@
 00921 \textcolor{stringliteral}{        """}
 00922         
 00923         elem = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'elem'}]
-00924         atom = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6d82c58aa562e61e6074c6b8757583c4}{\_getAtomExp}(label)
-00925         icf\_factor = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa0ed356c2833c48010dfc7aa71a07419}{\_getIcfExp}(label)
+00924         atom = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a588c7f9f7fe76e06d5152b78788a6059}{\_getAtomExp}(label)
+00925         icf\_factor = self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a247f123a65d0150ba0de11e0a7756e4b}{\_getIcfExp}(label)
 00926         \textcolor{keywordflow}{if} icf\_factor != \textcolor{stringliteral}{'1'}:
 00927             \textcolor{keywordflow}{return} elem + \textcolor{stringliteral}{" = ("} + atom + \textcolor{stringliteral}{") * "} + icf\_factor
 00928         \textcolor{keywordflow}{else}:
 00929             \textcolor{keywordflow}{return} elem + \textcolor{stringliteral}{" = "} + atom
 00930      
 00931              
-\hypertarget{icf_8py_source_l00932}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aac6e143db503b68856b979c07f770b81}{00932}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aac6e143db503b68856b979c07f770b81}{getType}(self, label): 
+\hypertarget{icf_8py_source_l00932}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a96c632a868e90cdd20ba7a091aa73207}{00932}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a96c632a868e90cdd20ba7a091aa73207}{getType}(self, label): 
 00933         \textcolor{stringliteral}{""" }
 00934 \textcolor{stringliteral}{        Return the kind of object for which the selected ICF is suitable. }
 00935 \textcolor{stringliteral}{        }
@@ -1072,7 +1073,7 @@
 00940         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a854ee87a53feb102e429e902227ce88b}{all\_icfs}[label][\textcolor{stringliteral}{'type'}]
 00941         
 00942 
-\hypertarget{icf_8py_source_l00943}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a0a07d882935f470f4c51af82ed785217}{00943}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a0a07d882935f470f4c51af82ed785217}{getComment}(self, label): 
+\hypertarget{icf_8py_source_l00943}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3bf3857377fc4d8b7609423a2ff26345}{00943}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3bf3857377fc4d8b7609423a2ff26345}{getComment}(self, label): 
 00944         \textcolor{stringliteral}{""" }
 00945 \textcolor{stringliteral}{        Return the comment associated to the selected ICF. }
 00946 \textcolor{stringliteral}{        }
@@ -1126,12 +1127,12 @@
             }
 00989             \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{in} atom\_abun:
 00990                 \textcolor{keywordflow}{if} atom[-1] == \textcolor{stringliteral}{'}\textcolor{stringliteral}{r':}
-00991 \textcolor{stringliteral}{                    elem, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom[:-1])}
+00991 \textcolor{stringliteral}{                    elem, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom[:-1])}
 00992 \textcolor{stringliteral}{                    atomc = elem + str(int(spec)+1)}
 00993 \textcolor{stringliteral}{                    }\textcolor{keywordflow}{if} (\textcolor{keywordflow}{not} use\_coll) \textcolor{keywordflow}{or} (atomc \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} atom\_abun):
 00994                         abun[atomc] = atom\_abun[atom]
 00995                 \textcolor{keywordflow}{else}:
-00996                     elem, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)
+00996                     elem, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)
 00997                     atomr = elem + str(int(spec)-1) + \textcolor{stringliteral}{'}\textcolor{stringliteral}{r'}
 00998 \textcolor{stringliteral}{                    }\textcolor{keywordflow}{if} use\_coll \textcolor{keywordflow}{or} (atomr \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} atom\_abun):
 00999                         abun[atom] = atom\_abun[atom]
@@ -1214,7 +1215,7 @@
 01072         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a59ea6760bd6a09a66dc47b47bcec55c0}{elem\_abun}
 01073 \textcolor{comment}{#            elem\_abun[icf.all\_icfs[icf\_ref]['elem']] = np.log10(elem\_abun\_dic[icf\_ref])+12}
 01074 
-\hypertarget{icf_8py_source_l01075}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad5ac374b51b72067f8be614aa31b73e2}{01075}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad5ac374b51b72067f8be614aa31b73e2}{\_\_getElemAbundanceFromStategy}(self, atom\_abun, strategy):
+\hypertarget{icf_8py_source_l01075}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_adb36fd35be4adf2410376f184449fcdb}{01075}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_adb36fd35be4adf2410376f184449fcdb}{\_\_getElemAbundanceFromStategy}(self, atom\_abun, strategy):
 01076         \textcolor{stringliteral}{"""}
 01077 \textcolor{stringliteral}{        Return the elemental abundances in a dictionary, computed by applying a given strategy.}
 01078 \textcolor{stringliteral}{        }
@@ -1254,7 +1255,7 @@
 01111         \textcolor{keywordflow}{return} elemAbund
 01112 
 01113 
-\hypertarget{icf_8py_source_l01114}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa86aa126db5e94b56ccf995465858f72}{01114}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aa86aa126db5e94b56ccf995465858f72}{test}(self):
+\hypertarget{icf_8py_source_l01114}{}\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3f8b36c58faee2f30bbb12d761451a77}{01114}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3f8b36c58faee2f30bbb12d761451a77}{test}(self):
 01115         \textcolor{stringliteral}{""" }
 01116 \textcolor{stringliteral}{        Test function for the ICF class }
 01117 \textcolor{stringliteral}{}
@@ -1263,22 +1264,22 @@
 01120         label2 = \textcolor{stringliteral}{'TPP77\_14'}
 01121         label3 = \textcolor{stringliteral}{'KH01\_4b'}
 01122         label4 = \textcolor{stringliteral}{'PHCD07\_13'}
-01123         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'All the available ICFs, listed by element:'}   
-01124         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a45f65185e75b6f98d08656c918385b38}{getAvailableICFs}()
-01125         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nAll the available ICFs, with some detail:'}   
-01126         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3b52e8d7dd5bb7a5a667cba328d9af7f}{printAllICFs}()
-01127         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nAll the available ICFs for S and Ne:'}   
-01128         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a45f65185e75b6f98d08656c918385b38}{getAvailableICFs}([\textcolor{stringliteral}{'S'}, \textcolor{stringliteral}{'Ne'}])
-01129         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nAnalytical expression for '} + label1 + \textcolor{stringliteral}{':'}
-01130         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad620cb1c02943f4be858ca9f3d3d8300}{getExpression}(label1)
-01131         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nBibliographic reference for '} + label2 + \textcolor{stringliteral}{':'}
-01132         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a6dd48b2037e45deb624effc6ac91c841}{getReference}(label2)
-01133         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nURL for '} + label3 + \textcolor{stringliteral}{':'}
-01134         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a838ffba1ba395f7039a8f80eab6c46d2}{getURL}(label3)
-01135         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nType of object to which '} + label4 + \textcolor{stringliteral}{' can be applied:'}
-01136         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_aac6e143db503b68856b979c07f770b81}{getType}(label4)
-01137         \textcolor{keywordflow}{print} \textcolor{stringliteral}{'\(\backslash\)nAdditional details of '} + label4 + \textcolor{stringliteral}{':'}
-01138         \textcolor{keywordflow}{print} self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a0a07d882935f470f4c51af82ed785217}{getComment}(label4) 
+01123         print(\textcolor{stringliteral}{'All the available ICFs, listed by element:'})
+01124         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4cacc6d494ce482990e513f4cf728e30}{getAvailableICFs}())
+01125         print(\textcolor{stringliteral}{'\(\backslash\)nAll the available ICFs, with some detail:'})
+01126         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a49885ca930ec64edb2a9e972585cbb37}{printAllICFs}())
+01127         print(\textcolor{stringliteral}{'\(\backslash\)nAll the available ICFs for S and Ne:'} )  
+01128         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a4cacc6d494ce482990e513f4cf728e30}{getAvailableICFs}([\textcolor{stringliteral}{'S'}, \textcolor{stringliteral}{'Ne'}]))
+01129         print(\textcolor{stringliteral}{'\(\backslash\)nAnalytical expression for '} + label1 + \textcolor{stringliteral}{':'})
+01130         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_ad9e5250afc13ea42c6eedbc1bc0b860c}{getExpression}(label1))
+01131         print(\textcolor{stringliteral}{'\(\backslash\)nBibliographic reference for '} + label2 + \textcolor{stringliteral}{':'})
+01132         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a90b32c028a9e441aa3a80a215a4be58c}{getReference}(label2))
+01133         print(\textcolor{stringliteral}{'\(\backslash\)nURL for '} + label3 + \textcolor{stringliteral}{':'})
+01134         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_af27cec8e87d89720ee65fba6e28c2d9e}{getURL}(label3))
+01135         print(\textcolor{stringliteral}{'\(\backslash\)nType of object to which '} + label4 + \textcolor{stringliteral}{' can be applied:'})
+01136         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a96c632a868e90cdd20ba7a091aa73207}{getType}(label4))
+01137         print(\textcolor{stringliteral}{'\(\backslash\)nAdditional details of '} + label4 + \textcolor{stringliteral}{':'})
+01138         print(self.\hyperlink{classpyneb_1_1core_1_1icf_1_1_i_c_f_a3bf3857377fc4d8b7609423a2ff26345}{getComment}(label4) )
 01139 
 01140         atom\_abun = \{\}
 01141         atom\_abun[\textcolor{stringliteral}{'O2'}] = 0.001

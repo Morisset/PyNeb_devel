@@ -1,11 +1,12 @@
-\hypertarget{multiprocs_8py_source}{}\section{multiprocs.\+py}
-\label{multiprocs_8py_source}\index{pyneb/utils/multiprocs.\+py@{pyneb/utils/multiprocs.\+py}}
+\hypertarget{multiprocs_8py}{\section{multiprocs.\-py}
+\label{multiprocs_8py}\index{pyneb/utils/multiprocs.\-py@{pyneb/utils/multiprocs.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{multiprocs_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1multiprocs}{00001} \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
 00002 
-00003 \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}{getTemDen\_helper}(inQ, outQ, atom, lev\_i1, lev\_j1, lev\_i2, lev\_j2,
-\hypertarget{multiprocs_8py_source_l00004}{}\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}{00004}          wave1, wave2, maxError, method, log, start\_x, end\_x, to\_eval, nCut, maxIter):
+00003 \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}{getTemDen\_helper}(inQ, outQ, atom, lev\_i1, lev\_j1, lev\_i2, lev\_j2,
+\hypertarget{multiprocs_8py_source_l00004}{}\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}{00004}          wave1, wave2, maxError, method, log, start\_x, end\_x, to\_eval, nCut, maxIter):
 00005     \textcolor{stringliteral}{''' multiprocessing helper for getTemDen'''}
 00006     thisAtom = pn.Atom(atom=atom)
 00007     \textcolor{keywordflow}{for} inputs \textcolor{keywordflow}{in} iter(inQ.get, \textcolor{stringliteral}{'STOP'}):

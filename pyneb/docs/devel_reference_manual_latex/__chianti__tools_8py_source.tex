@@ -1,5 +1,6 @@
-\hypertarget{__chianti__tools_8py_source}{}\section{\+\_\+chianti\+\_\+tools.\+py}
-\label{__chianti__tools_8py_source}\index{pyneb/utils/\+\_\+chianti\+\_\+tools.\+py@{pyneb/utils/\+\_\+chianti\+\_\+tools.\+py}}
+\hypertarget{__chianti__tools_8py}{\section{\-\_\-chianti\-\_\-tools.\-py}
+\label{__chianti__tools_8py}\index{pyneb/utils/\-\_\-chianti\-\_\-tools.\-py@{pyneb/utils/\-\_\-chianti\-\_\-tools.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{__chianti__tools_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools}{00001} \textcolor{stringliteral}{'''Utility functions, many for reading the CHIANTI database files.}
@@ -13,16 +14,16 @@
 00009 \textcolor{stringliteral}{'''}
 00010 \textcolor{keyword}{import} os, fnmatch
 00011 \textcolor{keyword}{from} types \textcolor{keyword}{import} *
-00012 \textcolor{keyword}{from} ConfigParser \textcolor{keyword}{import} *
+00012 \textcolor{comment}{#from ConfigParser import *}
 00013 \textcolor{keyword}{import} pickle
 00014 \textcolor{keyword}{from} datetime \textcolor{keyword}{import} date
 00015 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
 00016 \textcolor{keyword}{from} scipy \textcolor{keyword}{import} interpolate
-00017 \textcolor{keyword}{from} FortranFormat \textcolor{keyword}{import} *
-00018 \textcolor{keyword}{import} \_chianti\_constants \textcolor{keyword}{as} const
+00017 \textcolor{keyword}{from} .FortranFormat \textcolor{keyword}{import} *
+00018 \textcolor{keyword}{from} . \textcolor{keyword}{import} \_chianti\_constants \textcolor{keyword}{as} const
 00019 \textcolor{comment}{#}
 00020 \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00021}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a46b8e5a174144ca33b476e2ea883403a}{00021} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a46b8e5a174144ca33b476e2ea883403a}{between}(array,limits):
+\hypertarget{__chianti__tools_8py_source_l00021}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae0d64630471a208f147d1dded0d49e0a}{00021} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae0d64630471a208f147d1dded0d49e0a}{between}(array,limits):
 00022     \textcolor{stringliteral}{'''returns an index array of elements of array where the values lie}
 00023 \textcolor{stringliteral}{    between the limits given as a 2 element list or tuple'''}
 00024     array=np.asarray(array)
@@ -92,13 +93,13 @@
 00088         print((\textcolor{stringliteral}{' defaults = %s'}%(str(defaults))))
 00089         ioneqName = defaults[\textcolor{stringliteral}{'ioneqfile'}]
 00090         ioneq = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8b6257cfe133ac906966b20c8721f82a}{ioneqRead}(ioneqname = ioneqName)
-00091         masterList = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a1a4447320a9d614f994bc538890c32cd}{masterListRead}()
+00091         masterList = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab11f940d11d2b1118ffb581a39d7e42a}{masterListRead}()
 00092         masterListInfo = \{\}
 00093         haveZ = [0]*31
 00094         haveStage = np.zeros((31, 31), \textcolor{stringliteral}{'Int32'})
 00095         haveDielectronic = np.zeros((31, 31), \textcolor{stringliteral}{'Int32'})
 00096         \textcolor{keywordflow}{for} one \textcolor{keywordflow}{in} masterList:
-00097             ionInfo = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(one)
+00097             ionInfo = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(one)
 00098             z = ionInfo[\textcolor{stringliteral}{'Z'}]
 00099             stage = ionInfo[\textcolor{stringliteral}{'Ion'}]
 00100             haveZ[z] = 1
@@ -149,7 +150,7 @@
 00144         \textcolor{comment}{# will just make an inefficient, useless version}
 00145         masterListInfo = \{\}
 00146         \textcolor{keywordflow}{for} one \textcolor{keywordflow}{in} masterList:
-00147             ionInfo = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(one)
+00147             ionInfo = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(one)
 00148             z = ionInfo[\textcolor{stringliteral}{'Z'}]
 00149             stage = ionInfo[\textcolor{stringliteral}{'Ion'}]
 00150             dielectronic = ionInfo[\textcolor{stringliteral}{'Dielectronic'}]
@@ -171,7 +172,7 @@
 00166     \textcolor{comment}{#}
 00167     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00168     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00169}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a1a4447320a9d614f994bc538890c32cd}{00169} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a1a4447320a9d614f994bc538890c32cd}{masterListRead}():
+\hypertarget{__chianti__tools_8py_source_l00169}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab11f940d11d2b1118ffb581a39d7e42a}{00169} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab11f940d11d2b1118ffb581a39d7e42a}{masterListRead}():
 00170     \textcolor{stringliteral}{""" read a chianti masterlist file and return a list of files"""}
 00171     dir=os.environ[\textcolor{stringliteral}{"XUVTOP"}]
 00172     fname=os.path.join(dir,\textcolor{stringliteral}{'masterlist'},\textcolor{stringliteral}{'masterlist.ions'})
@@ -187,17 +188,17 @@
 00182     \textcolor{comment}{#}
 00183     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00184     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00185}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ac5c830808b3221d5f11b3e2d83b6140d}{00185} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ac5c830808b3221d5f11b3e2d83b6140d}{photoxRead}(ions):
+\hypertarget{__chianti__tools_8py_source_l00185}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a25b33696ac2b1d2f01e5789a70a234ec}{00185} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a25b33696ac2b1d2f01e5789a70a234ec}{photoxRead}(ions):
 00186     \textcolor{stringliteral}{"""read chianti photoionization .photox files and return}
 00187 \textcolor{stringliteral}{        \{"energy", "cross"\} where energy is in Rydbergs and the}
 00188 \textcolor{stringliteral}{        cross section is in cm^2  """}
 00189     \textcolor{comment}{#}
-00190     zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(ions)
+00190     zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(ions)
 00191     \textcolor{keywordflow}{if} zion[\textcolor{stringliteral}{'Z'}] < zion[\textcolor{stringliteral}{'Ion'}]:
 00192         print((\textcolor{stringliteral}{' this is a bare nucleus that has no ionization rate'}))
 00193         \textcolor{keywordflow}{return}
 00194     \textcolor{comment}{#}
-00195     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00195     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00196     paramname=fname+\textcolor{stringliteral}{'.photox'}
 00197     input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
 00198 \textcolor{stringliteral}{    lines = input.readlines()}
@@ -239,7 +240,7 @@
 00234     \textcolor{comment}{#}
 00235     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00236     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00237}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a552566dde90c6b3d2d8e934914d3ae76}{00237} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a552566dde90c6b3d2d8e934914d3ae76}{ionrecdatRead}(filename):
+\hypertarget{__chianti__tools_8py_source_l00237}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a12d45bcebd107c5fd133830132e8cd5e}{00237} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a12d45bcebd107c5fd133830132e8cd5e}{ionrecdatRead}(filename):
 00238     \textcolor{stringliteral}{""" read chianti ionxdat, ionizdat, recombdat files and return}
 00239 \textcolor{stringliteral}{    \{"ev":ev,"cross":cross,"crosserr":crosserr,"ref":ref\}  not tested """}
 00240     \textcolor{comment}{#}
@@ -284,7 +285,7 @@
 00279     \textcolor{comment}{#}
 00280     \textcolor{comment}{# --------------------------------------------------}
 00281     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00282}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a0e092ff402fc0287bcaaed67171934ea}{00282} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a0e092ff402fc0287bcaaed67171934ea}{z2element}(z):
+\hypertarget{__chianti__tools_8py_source_l00282}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a384f39b118999003fd2d0c54974a0aff}{00282} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a384f39b118999003fd2d0c54974a0aff}{z2element}(z):
 00283     \textcolor{stringliteral}{""" convert Z to element string """}
 00284     \textcolor{keywordflow}{if} z-1 < len(const.El):
 00285         thisel=const.El[z-1]
@@ -355,7 +356,7 @@
 00350     \textcolor{comment}{#}
 00351     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00352     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00353}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{00353} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(name):
+\hypertarget{__chianti__tools_8py_source_l00353}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{00353} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(name):
 00354     \textcolor{stringliteral}{""" convert ion name string to Z and Ion """}
 00355     s2=name.split(\textcolor{stringliteral}{'\_'})
 00356     els=s2[0].strip()
@@ -399,17 +400,17 @@
 00393     \textcolor{comment}{#}
 00394     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00395     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00396}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{00396} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions):
+\hypertarget{__chianti__tools_8py_source_l00396}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{00396} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions):
 00397     \textcolor{stringliteral}{""" convert ion string to generic file name string """}
 00398     dir=os.environ[\textcolor{stringliteral}{"XUVTOP"}]
-00399     zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(ions)
-00400     el=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a0e092ff402fc0287bcaaed67171934ea}{z2element}(zion[\textcolor{stringliteral}{'Z'}])
+00399     zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(ions)
+00400     el=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a384f39b118999003fd2d0c54974a0aff}{z2element}(zion[\textcolor{stringliteral}{'Z'}])
 00401     fname=os.path.join(dir,el,ions,ions)
 00402     \textcolor{keywordflow}{return} fname
 00403     \textcolor{comment}{#}
 00404     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00405     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00406}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a32ffd2ba65d19385acc6921d77da7976}{00406} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a32ffd2ba65d19385acc6921d77da7976}{el2z}(els):
+\hypertarget{__chianti__tools_8py_source_l00406}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ac3ff49dcedbe30c752e9f948e94f29bc}{00406} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ac3ff49dcedbe30c752e9f948e94f29bc}{el2z}(els):
 00407     \textcolor{stringliteral}{""" from an the name of the element (1-2 letter) return Z"""}
 00408     z=const.El.index(els.lower())+1
 00409     \textcolor{keywordflow}{return} z
@@ -423,7 +424,7 @@
 00417     \textcolor{comment}{#}
 00418     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00419     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00420}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_af9318412aecf0f6ac826b43796d594db}{00420} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_af9318412aecf0f6ac826b43796d594db}{qrp}(z,u):
+\hypertarget{__chianti__tools_8py_source_l00420}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a119759ed9bedb5fc1dd533b8a86e588c}{00420} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a119759ed9bedb5fc1dd533b8a86e588c}{qrp}(z,u):
 00421     \textcolor{stringliteral}{''' qrp(Z,u)  u = E/IP}
 00422 \textcolor{stringliteral}{    calculate Qr-prime (equ. 2.12) of Fontes, Sampson and Zhang 1999'''}
 00423     \textcolor{comment}{#}
@@ -467,17 +468,17 @@
 00460 \textcolor{stringliteral}{    """}
 00461     \textcolor{comment}{#}
 00462     fstring=\textcolor{stringliteral}{'i3,i6,a15,i3,i3,a3,f4.1,i3,4f15.2'}
-00463     elvlcFormat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(fstring)
+00463     elvlcFormat=FortranFormat(fstring)
 00464     \textcolor{comment}{#}
 00465     \textcolor{keywordflow}{if} type(filename) == NoneType:
-00466         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00466         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00467         elvlname=fname+\textcolor{stringliteral}{'.elvlc'}
 00468     \textcolor{keywordflow}{else}:
 00469         elvlname = filename
 00470         bname = os.path.basename(filename)
 00471         ions = bname.split(\textcolor{stringliteral}{'.'})[0]
 00472     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.isfile(elvlname):
-00473         \textcolor{keywordflow}{print} \textcolor{stringliteral}{' elvlc file does not exist:  '},elvlname
+00473         print(\textcolor{stringliteral}{' elvlc file does not exist:  '},elvlname)
 00474         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'status'}:0\}
 00475     status = 1
 00476     input=open(elvlname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
@@ -492,7 +493,7 @@
 00485         nlvls=nlvls+1
 00486     nlvls-=1
 00487     \textcolor{keywordflow}{if} verbose:
-00488         \textcolor{keywordflow}{print} \textcolor{stringliteral}{' nlvls = '}, nlvls
+00488         print(\textcolor{stringliteral}{' nlvls = '}, nlvls)
 00489     lvl=[0]*nlvls
 00490     conf=[0]*nlvls
 00491     term=[0]*nlvls
@@ -508,8 +509,8 @@
 00501     pretty=[0]*nlvls
 00502     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nlvls):
 00503         \textcolor{keywordflow}{if} verbose:
-00504             \textcolor{keywordflow}{print} s1[i][0:115]
-00505         inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i][0:115],elvlcFormat)
+00504             print(s1[i][0:115])
+00505         inpt=FortranLine(s1[i][0:115],elvlcFormat)
 00506         lvl[i]=inpt[0]
 00507         conf[i]=inpt[1]
 00508         term[i]=inpt[2].strip()
@@ -540,7 +541,7 @@
 00532     \textcolor{comment}{#}
 00533     \textcolor{comment}{# -------------------------------------------------------------------------------------}
 00534     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00535}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a279f0911664046ffd65c19571be8a84d}{00535} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a279f0911664046ffd65c19571be8a84d}{elvlcWrite}(info):
+\hypertarget{__chianti__tools_8py_source_l00535}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab6f19b7a8594fc425b55d7037d983641}{00535} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab6f19b7a8594fc425b55d7037d983641}{elvlcWrite}(info):
 00536     \textcolor{stringliteral}{''' creates a .elvlc in the current directory}
 00537 \textcolor{stringliteral}{    info is a dictionary that must contain the following keys}
 00538 \textcolor{stringliteral}{    ionS, the Chianti style name of the ion such as c\_4}
@@ -557,7 +558,7 @@
 00549 \textcolor{stringliteral}{    ref, the references in the literature to the data in the input info'''}
 00550     gname = info[\textcolor{stringliteral}{'ionS'}]
 00551     elvlcname = gname + \textcolor{stringliteral}{'.elvlc'}
-00552     \textcolor{keywordflow}{print} \textcolor{stringliteral}{' elvlc file name = '}, elvlcname
+00552     print(\textcolor{stringliteral}{' elvlc file name = '}, elvlcname)
 00553     out = open(elvlcname, \textcolor{stringliteral}{'w'})
 00554     \textcolor{keywordflow}{for} i,  conf \textcolor{keywordflow}{in} enumerate(info[\textcolor{stringliteral}{'conf'}]):
 00555         mult = int(2.*info[\textcolor{stringliteral}{'j'}][i]+1.)
@@ -592,7 +593,7 @@
 00581         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} filename:
 00582             elvlcname = os.path.splitext(wgfaname)[0] + \textcolor{stringliteral}{'.elvlc'}
 00583     \textcolor{keywordflow}{else}:
-00584         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00584         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00585         wgfaname=fname+\textcolor{stringliteral}{'.wgfa'}
 00586         elvlcname = fname + \textcolor{stringliteral}{'.elvlc'}
 00587     \textcolor{comment}{#}
@@ -622,7 +623,7 @@
 00611     \textcolor{comment}{#}
 00612     wgfaFormat=\textcolor{stringliteral}{'(2i5,f15.3,2e15.3)'}
 00613     \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(nwvl):
-00614         inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i],wgfaFormat)
+00614         inpt=FortranLine(s1[i],wgfaFormat)
 00615         lvl1[i]=inpt[0]
 00616         lvl2[i]=inpt[1]
 00617         wvl[i]=inpt[2]
@@ -724,12 +725,12 @@
 00709 \textcolor{stringliteral}{    currently only works for 5 point spline fit files"""}
 00710     \textcolor{comment}{#}
 00711     \textcolor{comment}{#}
-00712     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00712     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00713     omname=fname+extension
 00714     input=open(omname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
 00715 \textcolor{stringliteral}{    lines=input.readlines()}
 00716 \textcolor{stringliteral}{    input.close()}
-00717 \textcolor{stringliteral}{    format=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(}\textcolor{stringliteral}{'5i3,8e10.3'})
+00717 \textcolor{stringliteral}{    format=FortranFormat(}\textcolor{stringliteral}{'5i3,8e10.3'})
 00718     data=5
 00719     iline=0
 00720     lvl1=[]
@@ -740,7 +741,7 @@
 00725     om=[]
 00726     z=1
 00727     \textcolor{keywordflow}{while} z > 0:
-00728         omdat1=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[iline],format)
+00728         omdat1=FortranLine(lines[iline],format)
 00729         z=omdat1[0]
 00730         \textcolor{keywordflow}{if} z > 0:
 00731             l1=omdat1[2]
@@ -772,7 +773,7 @@
 00757     \textcolor{comment}{#}
 00758     \textcolor{comment}{#-----------------------------------------------------------}
 00759     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l00760}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a391eb09a09769234e5759d5544d0bcaf}{00760} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a391eb09a09769234e5759d5544d0bcaf}{splomDescale}(splom, energy):
+\hypertarget{__chianti__tools_8py_source_l00760}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a2cd45e7b512b31d25e92f3adf69b1914}{00760} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a2cd45e7b512b31d25e92f3adf69b1914}{splomDescale}(splom, energy):
 00761     \textcolor{stringliteral}{"""}
 00762 \textcolor{stringliteral}{    Calculates the collision strength}
 00763 \textcolor{stringliteral}{    for excitation-autoionization as a function of energy.}
@@ -846,7 +847,7 @@
 00831 \textcolor{stringliteral}{    """}
 00832     \textcolor{comment}{#}
 00833     \textcolor{keywordflow}{if} type(filename) == NoneType:
-00834         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00834         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00835         \textcolor{keywordflow}{if} ea:
 00836             splomname=fname+\textcolor{stringliteral}{'.easplom'}
 00837         \textcolor{keywordflow}{else}:
@@ -859,7 +860,7 @@
 00844     indices=line1[0:15]
 00845     remainder=line1[16:]
 00846     nom=remainder.split(\textcolor{stringliteral}{' '})
-00847     format=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'5i3,'}+str(len(nom))+\textcolor{stringliteral}{'E10.2'})
+00847     format=FortranFormat(\textcolor{stringliteral}{'5i3,'}+str(len(nom))+\textcolor{stringliteral}{'E10.2'})
 00848     \textcolor{comment}{#  go back to the beginning}
 00849     input.seek(0)
 00850     lines=input.readlines()
@@ -874,7 +875,7 @@
 00859     splom=[]
 00860     ntrans=0
 00861     \textcolor{keywordflow}{while} data > 1:
-00862         splomdat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[iline],format)
+00862         splomdat=FortranLine(lines[iline],format)
 00863         l1=splomdat[2]
 00864         l2=splomdat[3]
 00865         tt1=splomdat[4]
@@ -915,7 +916,7 @@
 00900     \textcolor{keywordflow}{if} filename:
 00901         splupsname = filename
 00902     \textcolor{keywordflow}{else}:
-00903         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00903         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00904         \textcolor{keywordflow}{if} prot:
 00905             splupsname=fname+\textcolor{stringliteral}{'.psplups'}
 00906         \textcolor{keywordflow}{elif} ci:
@@ -955,13 +956,13 @@
 00940         splups = [0.]*nsplups
 00941         \textcolor{keywordflow}{if} prot:
 00942 \textcolor{comment}{#            splupsFormat1 = FortranFormat('3i3,8e10.3')}
-00943             splupsFormat2 = \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'3i3,3e10.3'})
+00943             splupsFormat2 = FortranFormat(\textcolor{stringliteral}{'3i3,3e10.3'})
 00944         \textcolor{keywordflow}{else}:
 00945 \textcolor{comment}{#            splupsFormat1='(6x,3i3,8e10.3)'}
-00946             splupsFormat2 = \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'6x,3i3,3e10.3'})
+00946             splupsFormat2 = FortranFormat(\textcolor{stringliteral}{'6x,3i3,3e10.3'})
 00947         \textcolor{comment}{#}
 00948         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nsplups):
-00949             inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i],splupsFormat2)
+00949             inpt=FortranLine(s1[i],splupsFormat2)
 00950             lvl1[i]=inpt[0]
 00951             lvl2[i]=inpt[1]
 00952             ttype[i]=inpt[2]
@@ -973,9 +974,9 @@
 00958             \textcolor{keywordflow}{else}:
 00959                 as1 = s1[i][45:].rstrip()
 00960             nspl[i] = len(as1)/10
-00961             splupsFormat3 = \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(str(nspl[i])+\textcolor{stringliteral}{'E10.2'})
+00961             splupsFormat3 = FortranFormat(str(nspl[i])+\textcolor{stringliteral}{'E10.2'})
 00962 \textcolor{comment}{#            splupsFormat3 = '(' + str(nspl[i]) + 'e10.3' + ')'}
-00963             inpt = \hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(as1, splupsFormat3)
+00963             inpt = FortranLine(as1, splupsFormat3)
 00964             spl1 = np.asarray(inpt[:], \textcolor{stringliteral}{'float64'})
 00965             splups[i] = spl1
 00966         \textcolor{comment}{#}
@@ -1005,7 +1006,7 @@
 00990     \textcolor{keywordflow}{if} filename:
 00991         fname = filename
 00992     \textcolor{keywordflow}{else}:
-00993         fname = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
+00993         fname = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
 00994     \textcolor{keywordflow}{if} cilvl:
 00995         paramname=fname+\textcolor{stringliteral}{'.cilvl'}
 00996     \textcolor{keywordflow}{elif} reclvl:
@@ -1081,7 +1082,7 @@
 01065     \textcolor{comment}{#}
 01066     \textcolor{comment}{# ----------------------------------------------------------}
 01067     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01068}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5d55ad976e899b30719ac9b053e34ceb}{01068} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5d55ad976e899b30719ac9b053e34ceb}{dilute}(radius):
+\hypertarget{__chianti__tools_8py_source_l01068}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a2700fbbf2efe3b47f95b26958f6a1c4c}{01068} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a2700fbbf2efe3b47f95b26958f6a1c4c}{dilute}(radius):
 01069     \textcolor{stringliteral}{'''}
 01070 \textcolor{stringliteral}{    to calculate the dilution factor as a function distance from}
 01071 \textcolor{stringliteral}{    the center of a star in units of the stellar radius}
@@ -1096,712 +1097,641 @@
 01080     \textcolor{comment}{#}
 01081     \textcolor{comment}{# ------------------------------------------------------------------------------}
 01082     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01083}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a1d4803c6e3b7cbb996b9da3f763ab6ee}{01083} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a1d4803c6e3b7cbb996b9da3f763ab6ee}{diCross}(diParams, energy=0, verbose=0):
-01084     \textcolor{stringliteral}{'''}
-01085 \textcolor{stringliteral}{    Calculate the direct ionization cross section.}
-01086 \textcolor{stringliteral}{    diParams obtained by util.diRead with the following keys:}
-01087 \textcolor{stringliteral}{    ['info', 'ysplom', 'xsplom', 'btf', 'ev1', 'ref', 'eaev']}
-01088 \textcolor{stringliteral}{    Given as a function of the incident electron energy in eV}
-01089 \textcolor{stringliteral}{    returns a dictionary - \{'energy':energy, 'cross':cross\}}
-01090 \textcolor{stringliteral}{    '''}
-01091     iso=diParams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'iz'}] - diParams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'ion'}] + 1
-01092     energy = np.array(energy, \textcolor{stringliteral}{'float64'})
-01093     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} energy.any():
-01094         btenergy=0.1*np.arange(10)
-01095         btenergy[0]=0.01
-01096         dum=np.ones(len(btenergy))
-01097         [energy, dum] = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47075ba90f01cbd7a3dbd08115544214}{descale\_bti}(btenergy, dum, 2., diParams[\textcolor{stringliteral}{'ev1'}][0])
-01098         energy=np.asarray(energy, \textcolor{stringliteral}{'float64'})
-01099     \textcolor{comment}{#}
-01100     \textcolor{keywordflow}{if} iso == 1 \textcolor{keywordflow}{and} self.Z >= 6:
-01101         \textcolor{comment}{#  hydrogenic sequence}
-01102         ryd=27.2113845/2.
-01103         u=energy/self.Ip
-01104         ev1ryd=self.Ip/ryd
-01105         a0=0.5291772108e-8
-01106         a\_bohr=const.pi*a0**2   \textcolor{comment}{# area of bohr orbit}
-01107         \textcolor{keywordflow}{if} self.Z >= 20:
-01108             ff = (140.+(self.Z/20.)**3.2)/141.
-01109         \textcolor{keywordflow}{else}:
-01110             ff = 1.
-01111         qr = util.qrp(self.Z,u)*ff
-01112         bb = 1.  \textcolor{comment}{# hydrogenic}
-01113         qh = bb*a\_bohr*qr/ev1ryd**2
-01114         diCross = \{\textcolor{stringliteral}{'energy'}:energy, \textcolor{stringliteral}{'cross'}:qh\}
-01115     \textcolor{keywordflow}{elif} iso == 2 \textcolor{keywordflow}{and} self.Z >= 10:
-01116         \textcolor{comment}{#  use}
-01117         ryd=27.2113845/2.
-01118         u=energy/self.Ip
-01119         ev1ryd=self.Ip/ryd
-01120         a0=0.5291772108e-8
-01121         a\_bohr=const.pi*a0**2   \textcolor{comment}{# area of bohr orbit}
-01122         \textcolor{keywordflow}{if} self.Z >= 20:
-01123             ff=(140.+(self.Z/20.)**3.2)/141.
-01124         \textcolor{keywordflow}{else}:
-01125             ff=1.
-01126         qr=util.qrp(self.Z,u)*ff
-01127         bb=2.  \textcolor{comment}{# helium-like}
-01128         qh=bb*a\_bohr*qr/ev1ryd**2
-01129         diCross=\{\textcolor{stringliteral}{'energy'}:energy, \textcolor{stringliteral}{'cross'}:qh\}
-01130     \textcolor{keywordflow}{else}:
-01131         cross=np.zeros(len(energy), \textcolor{stringliteral}{'Float64'})
-01132 
-01133         \textcolor{keywordflow}{for} ifac \textcolor{keywordflow}{in} range(diParams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'nfac'}]):
-01134             \textcolor{comment}{# prob. better to do this with masked arrays}
-01135             goode=energy > diParams[\textcolor{stringliteral}{'ev1'}][ifac]
-01136             \textcolor{keywordflow}{if} goode.sum() > 0:
-01137                 dum=np.ones(len(energy))
-01138                 btenergy, btdum = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a71b9295157832135424ea7dc0138fcd4}{scale\_bti}(energy[goode],dum[goode], diParams[\textcolor{stringliteral}{'btf'}][ifac], 
-      diParams[\textcolor{stringliteral}{'ev1'}][ifac])
-01139                 \textcolor{comment}{# these interpolations were made with the scipy routine used here}
-01140                 y2=interpolate.splrep(diParams[\textcolor{stringliteral}{'xsplom'}][ifac], diParams[\textcolor{stringliteral}{'ysplom'}][ifac], s=0)
-01141                 btcross=interpolate.splev(btenergy, y2, der=0)
-01142                 energy1, cross1 = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47075ba90f01cbd7a3dbd08115544214}{descale\_bti}(btenergy, btcross, diParams[\textcolor{stringliteral}{'btf'}][ifac], diParams
-      [\textcolor{stringliteral}{'ev1'}][ifac] )
-01143                 offset=len(energy)-goode.sum()
-01144                 \textcolor{keywordflow}{if} verbose:
-01145                     pl.plot(diParams[\textcolor{stringliteral}{'xsplom'}][ifac], diParams[\textcolor{stringliteral}{'ysplom'}][ifac])
-01146                     pl.plot(btenergy, btcross)
-01147                 \textcolor{keywordflow}{if} offset > 0:
-01148                     seq=[np.zeros(offset, \textcolor{stringliteral}{'Float64'}), cross1]
-01149                     cross1=np.hstack(seq)
-01150                 cross+=cross1*1.e-14
-01151         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'energy'}:energy, \textcolor{stringliteral}{'cross'}:cross\}
-01152     \textcolor{comment}{#}
-01153     \textcolor{comment}{#-----------------------------------------------------------}
-01154     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01155}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a28552b5d18a1b604ed4512c435e648bc}{01155} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a28552b5d18a1b604ed4512c435e648bc}{diRead}(ions, filename=0):
-01156     \textcolor{stringliteral}{"""}
-01157 \textcolor{stringliteral}{    read chianti direct ionization .params files and return}
-01158 \textcolor{stringliteral}{        \{"info":info,"btf":btf,"ev1":ev1,"xsplom":xsplom,"ysplom":ysplom,"ref":hdr\}}
-01159 \textcolor{stringliteral}{        info=\{"iz":iz,"ion":ion,"nspl":nspl,"neaev":neaev\}}
-01160 \textcolor{stringliteral}{    """}
-01161     \textcolor{comment}{#}
-01162     \textcolor{keywordflow}{if} filename:
-01163         paramname = filename
-01164     \textcolor{keywordflow}{else}:
-01165         zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(ions)
-01166         \textcolor{keywordflow}{if} zion[\textcolor{stringliteral}{'Z'}] < zion[\textcolor{stringliteral}{'Ion'}]:
-01167             print(\textcolor{stringliteral}{' this is a bare nucleus that has no ionization rate'})
-01168             \textcolor{keywordflow}{return}
-01169         \textcolor{comment}{#}
-01170         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
-01171         paramname=fname+\textcolor{stringliteral}{'.diparams'}
-01172     \textcolor{comment}{#}
-01173     input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01174 \textcolor{stringliteral}{    }\textcolor{comment}{#  need to read first line and see how many elements}
-01175     line1=input.readline()
-01176     indices=line1.split()
-01177     iz=int(indices[0])
-01178     ion=int(indices[1])
-01179     nspl=indices[2]
-01180     nfac=int(indices[3])
-01181     neaev=int(indices[4])
-01182     nspl=int(nspl)
-01183     format=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(str(nspl+1)+\textcolor{stringliteral}{'E10.2'})
-01184     \textcolor{comment}{#}
-01185     ev1=np.zeros(nfac,\textcolor{stringliteral}{'Float64'})
-01186     btf=np.zeros(nfac,\textcolor{stringliteral}{'Float64'})
-01187     xsplom=np.zeros([nfac, nspl],\textcolor{stringliteral}{'Float64'})
-01188     ysplom=np.zeros([nfac, nspl],\textcolor{stringliteral}{'Float64'})
-01189     \textcolor{comment}{#}
-01190     \textcolor{keywordflow}{for} ifac \textcolor{keywordflow}{in} range(nfac):
-01191         line=input.readline()
-01192         paramdat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(line,format)
-01193         btf[ifac]=paramdat[0]
-01194         xsplom[ifac]=paramdat[1:]
-01195         line=input.readline()
-01196         paramdat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(line,format)
-01197         ev1[ifac]=paramdat[0]
-01198         ysplom[ifac]=paramdat[1:]
-01199     \textcolor{keywordflow}{if} neaev:
-01200         line=input.readline()
-01201         eacoef=line.split()
-01202 \textcolor{comment}{#            print ' eaev = ', type(eacoef), eacoef}
-01203         eaev=[float(avalue) \textcolor{keywordflow}{for} avalue \textcolor{keywordflow}{in} eacoef]
-01204 \textcolor{comment}{#            print ' eaev = ', type(eaev), eaev}
-01205 \textcolor{comment}{#            print ' eaev = ', type(eaev), eaev}
-01206 \textcolor{comment}{#            if len(eaev) == 1:}
-01207 \textcolor{comment}{#                eaev=float(eaev[0])}
-01208 \textcolor{comment}{#                eaev=np.asarray(eaev, 'float32')}
-01209 \textcolor{comment}{#            else:}
-01210 \textcolor{comment}{#                eaev=np.asarray(eaev, 'float32')}
-01211     \textcolor{keywordflow}{else}:
-01212         eaev=0.
-01213     hdr=input.readlines()
-01214     input.close()
-01215     info=\{\textcolor{stringliteral}{"iz"}:iz,\textcolor{stringliteral}{"ion"}:ion,\textcolor{stringliteral}{"nspl"}:nspl,\textcolor{stringliteral}{"neaev"}:neaev, \textcolor{stringliteral}{'nfac'}:nfac\}
-01216     \textcolor{keywordflow}{if} neaev:
-01217         info[\textcolor{stringliteral}{'eaev'}] = eaev
-01218     DiParams=\{\textcolor{stringliteral}{"info"}:info,\textcolor{stringliteral}{"btf"}:btf,\textcolor{stringliteral}{"ev1"}:ev1,\textcolor{stringliteral}{"xsplom"}:xsplom,\textcolor{stringliteral}{"ysplom"}:ysplom, \textcolor{stringliteral}{'eaev'}:eaev,\textcolor{stringliteral}{"ref"}:hdr\}
-01219     \textcolor{keywordflow}{return} DiParams
-01220     \textcolor{comment}{#}
-01221     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01222     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01223}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5c2be70e50273734d319a433bf39ce5b}{01223} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5c2be70e50273734d319a433bf39ce5b}{eaCross}(diparams, easplom, elvlc, energy=None, verbose=False):
-01224     \textcolor{stringliteral}{'''}
-01225 \textcolor{stringliteral}{    Provide the excitation-autoionization cross section.}
-01226 \textcolor{stringliteral}{}
-01227 \textcolor{stringliteral}{    Energy is given in eV.}
-01228 \textcolor{stringliteral}{    '''}
-01229     energy = np.asarray(energy, \textcolor{stringliteral}{'float64'})
-01230     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} energy.any():
-01231         btenergy=0.1*np.arange(10)
-01232         btenergy[0]=0.01
-01233         dum=np.ones(len(btenergy))
-01234         [energy, dum] = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47075ba90f01cbd7a3dbd08115544214}{descale\_bti}(btenergy, dum, 2., min(easplom[\textcolor{stringliteral}{'deryd'}]))
-01235         energy=np.asarray(energy, \textcolor{stringliteral}{'float64'})
-01236     \textcolor{comment}{#}
-01237     omega = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a391eb09a09769234e5759d5544d0bcaf}{splomDescale}(easplom, energy)
-01238     \textcolor{comment}{#}
-01239     \textcolor{comment}{#  need to replicate neaev}
-01240 
-01241     \textcolor{keywordflow}{if} diparams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'neaev'}] > 0:
-01242         f1 = np.ones(omega.shape[0])
-01243     \textcolor{keywordflow}{else}:
-01244         f1 = diparams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'eaev'}]
-01245 
-01246     totalCross = np.zeros\_like(energy)
-01247     ntrans = omega.shape[0]
-01248     \textcolor{keywordflow}{for} itrans \textcolor{keywordflow}{in} range(ntrans):
-01249         lvl1 = easplom[\textcolor{stringliteral}{'lvl1'}][itrans]
-01250         mult = 2.*elvlc[\textcolor{stringliteral}{'j'}][lvl1 - 1] + 1.
-01251         cross = f1[itrans]*const.bohrCross*omega[itrans]/(mult.energy/const.ryd2Ev)
-01252         totalCross += cross
-01253     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'energy'}:energy, \textcolor{stringliteral}{'cross'}:totalCross\}
-01254     \textcolor{comment}{#}
-01255     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01256     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01257}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab4f78a2584a1ddf189af644e961f0f83}{01257} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab4f78a2584a1ddf189af644e961f0f83}{eaRead}(ions, filename=0):
-01258     \textcolor{stringliteral}{'''}
-01259 \textcolor{stringliteral}{    read a chianti excitation-autoionization file and return the EA ionization rate data}
-01260 \textcolor{stringliteral}{    derived from splupsRead}
-01261 \textcolor{stringliteral}{    \{"lvl1":lvl1,"lvl2":lvl2,"ttype":ttype,"gf":gf,"de":de,"cups":cups,"bsplups":bsplups,"ref":ref\}}
-01262 \textcolor{stringliteral}{    '''}
-01263     \textcolor{keywordflow}{if} filename:
-01264         splupsname = filename
-01265     \textcolor{keywordflow}{else}:
-01266         zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a92cf299ad3407ee8923739e2761ab13f}{convertName}(ions)
-01267         \textcolor{keywordflow}{if} zion[\textcolor{stringliteral}{'Z'}] < zion[\textcolor{stringliteral}{'Ion'}]:
-01268             print(\textcolor{stringliteral}{' this is a bare nucleus that has no ionization rate'})
-01269             \textcolor{keywordflow}{return}
-01270         \textcolor{comment}{#}
-01271         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
-01272         splupsname=fname+\textcolor{stringliteral}{'.easplups'}
-01273     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(splupsname):
-01274         print((\textcolor{stringliteral}{' could not find file:  '}, splupsname))
-\hypertarget{__chianti__tools_8py_source_l01275}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae4b82a587c953b2207888a96d3364677}{01275}         self.Splups=\{\textcolor{stringliteral}{"lvl1"}:-1\}
-01276         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl1"}:-1\}
-01277     \textcolor{comment}{# there is splups/psplups data}
-01278     \textcolor{keywordflow}{else}:
-01279         input=open(splupsname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01280 \textcolor{stringliteral}{        s1=input.readlines()}
-01281 \textcolor{stringliteral}{        dum=input.close()}
-01282 \textcolor{stringliteral}{        nsplups=0}
-01283 \textcolor{stringliteral}{        ndata=2}
-01284 \textcolor{stringliteral}{        }\textcolor{keywordflow}{while} ndata > 1:
-01285             s1a=s1[nsplups][:]
-01286             s2=s1a.split()
-01287             ndata=len(s2)
-01288             nsplups=nsplups+1
-01289         nsplups=nsplups-1
-01290         lvl1=[0]*nsplups
-01291         lvl2=[0]*nsplups
-01292         ttype=[0]*nsplups
-01293         gf=[0.]*nsplups
-01294         de=[0.]*nsplups
-01295         cups=[0.]*nsplups
-01296         nspl=[0]*nsplups
-01297         splups=np.zeros((nsplups,9),\textcolor{stringliteral}{'Float64'})
-01298         splupsFormat1=\textcolor{stringliteral}{'(6x,3i3,8e10.0)'}
-01299         splupsFormat2=\textcolor{stringliteral}{'(6x,3i3,12e10.0)'}
-01300         \textcolor{comment}{#}
-01301         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nsplups):
-01302             \textcolor{keywordflow}{try}:
-01303                 inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i],splupsFormat1)
-01304             \textcolor{keywordflow}{except}:
-01305                 inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i],splupsFormat2)
-01306             lvl1[i]=inpt[0]
-01307             lvl2[i]=inpt[1]
-01308             ttype[i]=inpt[2]
-01309             gf[i]=inpt[3]
-01310             de[i]=inpt[4]
-01311             cups[i]=inpt[5]
-01312             \textcolor{keywordflow}{if} len(inpt)  > 13:
-01313                 nspl[i]=9
-01314                 splups[i].put(range(9),inpt[6:])
-01315             \textcolor{keywordflow}{else}:
-01316                 nspl[i]=5
-01317                 splups[i].put(range(5),inpt[6:])
-01318         \textcolor{comment}{#}
-01319         ref=[]
-01320         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(nsplups+1,len(s1)-1):
-01321             s1a=s1[i][:-1]
-01322             ref.append(s1a.strip())
-01323 \textcolor{comment}{#        self.EaParams=\{"lvl1":lvl1,"lvl2":lvl2,"ttype":ttype,"gf":gf,"de":de,"cups":cups}
-01324 \textcolor{comment}{#                ,"nspl":nspl,"splups":splups,"ref":ref\}}
-01325         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl1"}:lvl1,\textcolor{stringliteral}{"lvl2"}:lvl2,\textcolor{stringliteral}{"ttype"}:ttype,\textcolor{stringliteral}{"gf"}:gf,\textcolor{stringliteral}{"de"}:de,\textcolor{stringliteral}{"cups"}:cups
-01326                 ,\textcolor{stringliteral}{"nspl"}:nspl,\textcolor{stringliteral}{"splups"}:splups,\textcolor{stringliteral}{"ref"}:ref\}
-01327     \textcolor{comment}{#}
-01328     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01329     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01330}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a71865c846f3d3b1c9b1371c6779c8f3e}{01330} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a71865c846f3d3b1c9b1371c6779c8f3e}{rrRead}(ions):
-01331     \textcolor{stringliteral}{"""read chianti radiative recombination .rrparams files and return}
-01332 \textcolor{stringliteral}{        \{'rrtype','params','ref'\}"""}
+01083     \textcolor{comment}{#}
+01084     \textcolor{comment}{#-----------------------------------------------------------}
+01085     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01086}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a28552b5d18a1b604ed4512c435e648bc}{01086} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a28552b5d18a1b604ed4512c435e648bc}{diRead}(ions, filename=0):
+01087     \textcolor{stringliteral}{"""}
+01088 \textcolor{stringliteral}{    read chianti direct ionization .params files and return}
+01089 \textcolor{stringliteral}{        \{"info":info,"btf":btf,"ev1":ev1,"xsplom":xsplom,"ysplom":ysplom,"ref":hdr\}}
+01090 \textcolor{stringliteral}{        info=\{"iz":iz,"ion":ion,"nspl":nspl,"neaev":neaev\}}
+01091 \textcolor{stringliteral}{    """}
+01092     \textcolor{comment}{#}
+01093     \textcolor{keywordflow}{if} filename:
+01094         paramname = filename
+01095     \textcolor{keywordflow}{else}:
+01096         zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(ions)
+01097         \textcolor{keywordflow}{if} zion[\textcolor{stringliteral}{'Z'}] < zion[\textcolor{stringliteral}{'Ion'}]:
+01098             print(\textcolor{stringliteral}{' this is a bare nucleus that has no ionization rate'})
+01099             \textcolor{keywordflow}{return}
+01100         \textcolor{comment}{#}
+01101         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
+01102         paramname=fname+\textcolor{stringliteral}{'.diparams'}
+01103     \textcolor{comment}{#}
+01104     input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01105 \textcolor{stringliteral}{    }\textcolor{comment}{#  need to read first line and see how many elements}
+01106     line1=input.readline()
+01107     indices=line1.split()
+01108     iz=int(indices[0])
+01109     ion=int(indices[1])
+01110     nspl=indices[2]
+01111     nfac=int(indices[3])
+01112     neaev=int(indices[4])
+01113     nspl=int(nspl)
+01114     format=FortranFormat(str(nspl+1)+\textcolor{stringliteral}{'E10.2'})
+01115     \textcolor{comment}{#}
+01116     ev1=np.zeros(nfac,\textcolor{stringliteral}{'Float64'})
+01117     btf=np.zeros(nfac,\textcolor{stringliteral}{'Float64'})
+01118     xsplom=np.zeros([nfac, nspl],\textcolor{stringliteral}{'Float64'})
+01119     ysplom=np.zeros([nfac, nspl],\textcolor{stringliteral}{'Float64'})
+01120     \textcolor{comment}{#}
+01121     \textcolor{keywordflow}{for} ifac \textcolor{keywordflow}{in} range(nfac):
+01122         line=input.readline()
+01123         paramdat=FortranLine(line,format)
+01124         btf[ifac]=paramdat[0]
+01125         xsplom[ifac]=paramdat[1:]
+01126         line=input.readline()
+01127         paramdat=FortranLine(line,format)
+01128         ev1[ifac]=paramdat[0]
+01129         ysplom[ifac]=paramdat[1:]
+01130     \textcolor{keywordflow}{if} neaev:
+01131         line=input.readline()
+01132         eacoef=line.split()
+01133 \textcolor{comment}{#            print ' eaev = ', type(eacoef), eacoef}
+01134         eaev=[float(avalue) \textcolor{keywordflow}{for} avalue \textcolor{keywordflow}{in} eacoef]
+01135 \textcolor{comment}{#            print ' eaev = ', type(eaev), eaev}
+01136 \textcolor{comment}{#            print ' eaev = ', type(eaev), eaev}
+01137 \textcolor{comment}{#            if len(eaev) == 1:}
+01138 \textcolor{comment}{#                eaev=float(eaev[0])}
+01139 \textcolor{comment}{#                eaev=np.asarray(eaev, 'float32')}
+01140 \textcolor{comment}{#            else:}
+01141 \textcolor{comment}{#                eaev=np.asarray(eaev, 'float32')}
+01142     \textcolor{keywordflow}{else}:
+01143         eaev=0.
+01144     hdr=input.readlines()
+01145     input.close()
+01146     info=\{\textcolor{stringliteral}{"iz"}:iz,\textcolor{stringliteral}{"ion"}:ion,\textcolor{stringliteral}{"nspl"}:nspl,\textcolor{stringliteral}{"neaev"}:neaev, \textcolor{stringliteral}{'nfac'}:nfac\}
+01147     \textcolor{keywordflow}{if} neaev:
+01148         info[\textcolor{stringliteral}{'eaev'}] = eaev
+01149     DiParams=\{\textcolor{stringliteral}{"info"}:info,\textcolor{stringliteral}{"btf"}:btf,\textcolor{stringliteral}{"ev1"}:ev1,\textcolor{stringliteral}{"xsplom"}:xsplom,\textcolor{stringliteral}{"ysplom"}:ysplom, \textcolor{stringliteral}{'eaev'}:eaev,\textcolor{stringliteral}{"ref"}:hdr\}
+01150     \textcolor{keywordflow}{return} DiParams
+01151     \textcolor{comment}{#}
+01152     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01153     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01154}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5c2be70e50273734d319a433bf39ce5b}{01154} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a5c2be70e50273734d319a433bf39ce5b}{eaCross}(diparams, easplom, elvlc, energy=None, verbose=False):
+01155     \textcolor{stringliteral}{'''}
+01156 \textcolor{stringliteral}{    Provide the excitation-autoionization cross section.}
+01157 \textcolor{stringliteral}{}
+01158 \textcolor{stringliteral}{    Energy is given in eV.}
+01159 \textcolor{stringliteral}{    '''}
+01160     energy = np.asarray(energy, \textcolor{stringliteral}{'float64'})
+01161     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} energy.any():
+01162         btenergy=0.1*np.arange(10)
+01163         btenergy[0]=0.01
+01164         dum=np.ones(len(btenergy))
+01165         [energy, dum] = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a74378c74514f5b6d760d4384780fbf26}{descale\_bti}(btenergy, dum, 2., min(easplom[\textcolor{stringliteral}{'deryd'}]))
+01166         energy=np.asarray(energy, \textcolor{stringliteral}{'float64'})
+01167     \textcolor{comment}{#}
+01168     omega = \hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a2cd45e7b512b31d25e92f3adf69b1914}{splomDescale}(easplom, energy)
+01169     \textcolor{comment}{#}
+01170     \textcolor{comment}{#  need to replicate neaev}
+01171 
+01172     \textcolor{keywordflow}{if} diparams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'neaev'}] > 0:
+01173         f1 = np.ones(omega.shape[0])
+01174     \textcolor{keywordflow}{else}:
+01175         f1 = diparams[\textcolor{stringliteral}{'info'}][\textcolor{stringliteral}{'eaev'}]
+01176 
+01177     totalCross = np.zeros\_like(energy)
+01178     ntrans = omega.shape[0]
+01179     \textcolor{keywordflow}{for} itrans \textcolor{keywordflow}{in} range(ntrans):
+01180         lvl1 = easplom[\textcolor{stringliteral}{'lvl1'}][itrans]
+01181         mult = 2.*elvlc[\textcolor{stringliteral}{'j'}][lvl1 - 1] + 1.
+01182         cross = f1[itrans]*const.bohrCross*omega[itrans]/(mult.energy/const.ryd2Ev)
+01183         totalCross += cross
+01184     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'energy'}:energy, \textcolor{stringliteral}{'cross'}:totalCross\}
+01185     \textcolor{comment}{#}
+01186     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01187     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01188}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab4f78a2584a1ddf189af644e961f0f83}{01188} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ab4f78a2584a1ddf189af644e961f0f83}{eaRead}(ions, filename=0):
+01189     \textcolor{stringliteral}{'''}
+01190 \textcolor{stringliteral}{    read a chianti excitation-autoionization file and return the EA ionization rate data}
+01191 \textcolor{stringliteral}{    derived from splupsRead}
+01192 \textcolor{stringliteral}{    \{"lvl1":lvl1,"lvl2":lvl2,"ttype":ttype,"gf":gf,"de":de,"cups":cups,"bsplups":bsplups,"ref":ref\}}
+01193 \textcolor{stringliteral}{    '''}
+01194     \textcolor{keywordflow}{if} filename:
+01195         splupsname = filename
+01196     \textcolor{keywordflow}{else}:
+01197         zion=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8038874902563556b0a8b536f52d3194}{convertName}(ions)
+01198         \textcolor{keywordflow}{if} zion[\textcolor{stringliteral}{'Z'}] < zion[\textcolor{stringliteral}{'Ion'}]:
+01199             print(\textcolor{stringliteral}{' this is a bare nucleus that has no ionization rate'})
+01200             \textcolor{keywordflow}{return}
+01201         \textcolor{comment}{#}
+01202         fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
+01203         splupsname=fname+\textcolor{stringliteral}{'.easplups'}
+01204     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(splupsname):
+01205         print((\textcolor{stringliteral}{' could not find file:  '}, splupsname))
+01206         Splups=\{\textcolor{stringliteral}{"lvl1"}:-1\}
+01207         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl1"}:-1\}
+01208     \textcolor{comment}{# there is splups/psplups data}
+01209     \textcolor{keywordflow}{else}:
+01210         input=open(splupsname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01211 \textcolor{stringliteral}{        s1=input.readlines()}
+01212 \textcolor{stringliteral}{        dum=input.close()}
+01213 \textcolor{stringliteral}{        nsplups=0}
+01214 \textcolor{stringliteral}{        ndata=2}
+01215 \textcolor{stringliteral}{        }\textcolor{keywordflow}{while} ndata > 1:
+01216             s1a=s1[nsplups][:]
+01217             s2=s1a.split()
+01218             ndata=len(s2)
+01219             nsplups=nsplups+1
+01220         nsplups=nsplups-1
+01221         lvl1=[0]*nsplups
+01222         lvl2=[0]*nsplups
+01223         ttype=[0]*nsplups
+01224         gf=[0.]*nsplups
+01225         de=[0.]*nsplups
+01226         cups=[0.]*nsplups
+01227         nspl=[0]*nsplups
+01228         splups=np.zeros((nsplups,9),\textcolor{stringliteral}{'Float64'})
+01229         splupsFormat1=\textcolor{stringliteral}{'(6x,3i3,8e10.0)'}
+01230         splupsFormat2=\textcolor{stringliteral}{'(6x,3i3,12e10.0)'}
+01231         \textcolor{comment}{#}
+01232         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nsplups):
+01233             \textcolor{keywordflow}{try}:
+01234                 inpt=FortranLine(s1[i],splupsFormat1)
+01235             \textcolor{keywordflow}{except}:
+01236                 inpt=FortranLine(s1[i],splupsFormat2)
+01237             lvl1[i]=inpt[0]
+01238             lvl2[i]=inpt[1]
+01239             ttype[i]=inpt[2]
+01240             gf[i]=inpt[3]
+01241             de[i]=inpt[4]
+01242             cups[i]=inpt[5]
+01243             \textcolor{keywordflow}{if} len(inpt)  > 13:
+01244                 nspl[i]=9
+01245                 splups[i].put(range(9),inpt[6:])
+01246             \textcolor{keywordflow}{else}:
+01247                 nspl[i]=5
+01248                 splups[i].put(range(5),inpt[6:])
+01249         \textcolor{comment}{#}
+01250         ref=[]
+01251         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(nsplups+1,len(s1)-1):
+01252             s1a=s1[i][:-1]
+01253             ref.append(s1a.strip())
+01254 \textcolor{comment}{#        self.EaParams=\{"lvl1":lvl1,"lvl2":lvl2,"ttype":ttype,"gf":gf,"de":de,"cups":cups}
+01255 \textcolor{comment}{#                ,"nspl":nspl,"splups":splups,"ref":ref\}}
+01256         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl1"}:lvl1,\textcolor{stringliteral}{"lvl2"}:lvl2,\textcolor{stringliteral}{"ttype"}:ttype,\textcolor{stringliteral}{"gf"}:gf,\textcolor{stringliteral}{"de"}:de,\textcolor{stringliteral}{"cups"}:cups
+01257                 ,\textcolor{stringliteral}{"nspl"}:nspl,\textcolor{stringliteral}{"splups"}:splups,\textcolor{stringliteral}{"ref"}:ref\}
+01258     \textcolor{comment}{#}
+01259     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01260     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01261}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aaa4f9748029dedf2b12af0c6d8f765c7}{01261} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aaa4f9748029dedf2b12af0c6d8f765c7}{rrRead}(ions):
+01262     \textcolor{stringliteral}{"""read chianti radiative recombination .rrparams files and return}
+01263 \textcolor{stringliteral}{        \{'rrtype','params','ref'\}"""}
+01264     \textcolor{comment}{#}
+01265     \textcolor{comment}{#}
+01266     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
+01267     paramname=fname+\textcolor{stringliteral}{'.rrparams'}
+01268     \textcolor{keywordflow}{if} os.path.isfile(paramname):
+01269         input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01270 \textcolor{stringliteral}{        }\textcolor{comment}{#  need to read first line and see how many elements}
+01271         lines=input.readlines()
+01272         input.close()
+01273         rrtype=int(lines[0])
+01274         ref=lines[3:-2]
+01275         \textcolor{comment}{#}
+01276         \textcolor{keywordflow}{if} rrtype == 1:
+01277             \textcolor{comment}{# a Badnell type}
+01278             fmt=FortranFormat(\textcolor{stringliteral}{'3i5,e12.4,f10.5,2e12.4'})
+01279             params=FortranLine(lines[1],fmt)
+01280             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
+01281         \textcolor{keywordflow}{elif} rrtype == 2:
+01282             \textcolor{comment}{# a Badnell type}
+01283             fmt=FortranFormat(\textcolor{stringliteral}{'3i5,e12.4,f10.5,2e11.4,f10.5,e12.4'})
+01284             params=FortranLine(lines[1],fmt)
+01285             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
+01286         \textcolor{keywordflow}{elif} rrtype == 3:
+01287             \textcolor{comment}{# a Shull type}
+01288             fmt=FortranFormat(\textcolor{stringliteral}{'2i5,2e12.4'})
+01289             params=FortranLine(lines[1],fmt)
+01290             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
+01291         \textcolor{keywordflow}{else}:
+01292             RrParams=\textcolor{keywordtype}{None}
+01293             print((\textcolor{stringliteral}{' for ion %5s unknown RR type = %5i'} %(ions, rrtype)))
+01294         \textcolor{keywordflow}{return} RrParams
+01295     \textcolor{keywordflow}{else}:
+01296         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'rrtype'}:-1\}
+01297 
+01298     \textcolor{comment}{#}
+01299     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01300     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01301}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a14104e790cf31ef6c794dd09cd130797}{01301} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a14104e790cf31ef6c794dd09cd130797}{drRead}(ions):
+01302     \textcolor{stringliteral}{"""read chianti dielectronic recombination .drparams files and return}
+01303 \textcolor{stringliteral}{        \{'rrtype','params','ref'\}"""}
+01304     \textcolor{comment}{#}
+01305     \textcolor{comment}{#}
+01306     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a7748521ca99103785680d691667ce851}{ion2filename}(ions)
+01307     paramname=fname+\textcolor{stringliteral}{'.drparams'}
+01308     \textcolor{keywordflow}{if} os.path.isfile(paramname):
+01309         input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01310 \textcolor{stringliteral}{        }\textcolor{comment}{#  need to read first line and see how many elements}
+01311         lines=input.readlines()
+01312         input.close()
+01313         drtype=int(lines[0])
+01314         ref=lines[4:-1]
+01315         \textcolor{comment}{#}
+01316         \textcolor{keywordflow}{if} drtype == 1:
+01317             \textcolor{comment}{# a Badnell type}
+01318             fmt=FortranFormat(\textcolor{stringliteral}{'2i5,8e12.4'})
+01319             eparams=np.asarray(FortranLine(lines[1],fmt)[2:], \textcolor{stringliteral}{'float64'})
+01320             cparams=np.asarray(FortranLine(lines[2],fmt)[2:], \textcolor{stringliteral}{'float64'})
+01321             DrParams=\{\textcolor{stringliteral}{'drtype'}:drtype, \textcolor{stringliteral}{'eparams'}:eparams,\textcolor{stringliteral}{'cparams'}:cparams,  \textcolor{stringliteral}{'ref'}:ref\}
+01322         \textcolor{keywordflow}{elif} drtype == 2:
+01323             \textcolor{comment}{# shull type}
+01324             fmt=FortranFormat(\textcolor{stringliteral}{'2i5,4e12.4'})
+01325             params=np.asarray(FortranLine(lines[1],fmt)[2:], \textcolor{stringliteral}{'float64'})
+01326             DrParams=\{\textcolor{stringliteral}{'drtype'}:drtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
+01327         \textcolor{keywordflow}{else}:
+01328             DrParams = \textcolor{keywordtype}{None}
+01329             print((\textcolor{stringliteral}{' for ion %5s unknown DR type = %5i'} %(ions, drtype)))
+01330     \textcolor{keywordflow}{else}:
+01331         DrParams=\textcolor{keywordtype}{None}
+01332     \textcolor{keywordflow}{return} DrParams
 01333     \textcolor{comment}{#}
-01334     \textcolor{comment}{#}
-01335     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
-01336     paramname=fname+\textcolor{stringliteral}{'.rrparams'}
-01337     \textcolor{keywordflow}{if} os.path.isfile(paramname):
-01338         input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01339 \textcolor{stringliteral}{        }\textcolor{comment}{#  need to read first line and see how many elements}
-01340         lines=input.readlines()
-01341         input.close()
-01342         rrtype=int(lines[0])
-01343         ref=lines[3:-2]
-01344         \textcolor{comment}{#}
-01345         \textcolor{keywordflow}{if} rrtype == 1:
-01346             \textcolor{comment}{# a Badnell type}
-01347             fmt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'3i5,e12.4,f10.5,2e12.4'})
-01348             params=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[1],fmt)
-01349             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
-01350         \textcolor{keywordflow}{elif} rrtype == 2:
-01351             \textcolor{comment}{# a Badnell type}
-01352             fmt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'3i5,e12.4,f10.5,2e11.4,f10.5,e12.4'})
-01353             params=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[1],fmt)
-01354             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
-01355         \textcolor{keywordflow}{elif} rrtype == 3:
-01356             \textcolor{comment}{# a Shull type}
-01357             fmt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'2i5,2e12.4'})
-01358             params=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[1],fmt)
-01359             RrParams=\{\textcolor{stringliteral}{'rrtype'}:rrtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
-01360         \textcolor{keywordflow}{else}:
-01361             RrParams=\textcolor{keywordtype}{None}
-01362             print((\textcolor{stringliteral}{' for ion %5s unknown RR type = %5i'} %(ions, rrtype)))
-01363         \textcolor{keywordflow}{return} RrParams
-01364     \textcolor{keywordflow}{else}:
-01365         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'rrtype'}:-1\}
-01366 
-01367     \textcolor{comment}{#}
-01368     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01369     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01370}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa29da4afe4adccd8de62c0dd97799dcd}{01370} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa29da4afe4adccd8de62c0dd97799dcd}{drRead}(ions):
-01371     \textcolor{stringliteral}{"""read chianti dielectronic recombination .drparams files and return}
-01372 \textcolor{stringliteral}{        \{'rrtype','params','ref'\}"""}
-01373     \textcolor{comment}{#}
-01374     \textcolor{comment}{#}
-01375     fname=\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad4bc7b577fd4c3819ceb00b0a444351b}{ion2filename}(ions)
-01376     paramname=fname+\textcolor{stringliteral}{'.drparams'}
-01377     \textcolor{keywordflow}{if} os.path.isfile(paramname):
-01378         input=open(paramname,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01379 \textcolor{stringliteral}{        }\textcolor{comment}{#  need to read first line and see how many elements}
-01380         lines=input.readlines()
-01381         input.close()
-01382         drtype=int(lines[0])
-01383         ref=lines[4:-1]
-01384         \textcolor{comment}{#}
-01385         \textcolor{keywordflow}{if} drtype == 1:
-01386             \textcolor{comment}{# a Badnell type}
-01387             fmt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'2i5,8e12.4'})
-01388             eparams=np.asarray(\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[1],fmt)[2:], \textcolor{stringliteral}{'float64'})
-01389             cparams=np.asarray(\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[2],fmt)[2:], \textcolor{stringliteral}{'float64'})
-01390             DrParams=\{\textcolor{stringliteral}{'drtype'}:drtype, \textcolor{stringliteral}{'eparams'}:eparams,\textcolor{stringliteral}{'cparams'}:cparams,  \textcolor{stringliteral}{'ref'}:ref\}
-01391         \textcolor{keywordflow}{elif} drtype == 2:
-01392             \textcolor{comment}{# shull type}
-01393             fmt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(\textcolor{stringliteral}{'2i5,4e12.4'})
-01394             params=np.asarray(\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[1],fmt)[2:], \textcolor{stringliteral}{'float64'})
-01395             DrParams=\{\textcolor{stringliteral}{'drtype'}:drtype, \textcolor{stringliteral}{'params'}:params, \textcolor{stringliteral}{'ref'}:ref\}
-01396         \textcolor{keywordflow}{else}:
-01397             DrParams = \textcolor{keywordtype}{None}
-01398             print((\textcolor{stringliteral}{' for ion %5s unknown DR type = %5i'} %(ions, drtype)))
-01399     \textcolor{keywordflow}{else}:
-01400         DrParams=\textcolor{keywordtype}{None}
-01401     \textcolor{keywordflow}{return} DrParams
-01402     \textcolor{comment}{#}
-01403     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01404     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01405}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8b6257cfe133ac906966b20c8721f82a}{01405} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8b6257cfe133ac906966b20c8721f82a}{ioneqRead}(ioneqname='', verbose=0):
-01406     \textcolor{stringliteral}{"""}
-01407 \textcolor{stringliteral}{    reads an ioneq file and stores temperatures and ionization}
-01408 \textcolor{stringliteral}{    equilibrium values in self.IoneqTemperature and self.Ioneq and returns}
-01409 \textcolor{stringliteral}{    a dictionary containing these value and the reference to the literature}
-01410 \textcolor{stringliteral}{    """}
-01411     \textcolor{keywordflow}{pass}
-01412     \textcolor{comment}{#}
-01413     \textcolor{comment}{# -------------------------------------------------------------------------------------}
-01414     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01415}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_af524b50fae5a347eff4976b7ce895ab1}{01415} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_af524b50fae5a347eff4976b7ce895ab1}{gffRead}():
-01416     \textcolor{stringliteral}{'''to read the free-free gaunt factors of Sutherland, 1998, MNRAS, 300, 321.}
-01417 \textcolor{stringliteral}{    this function reads the file and reverses the values of g2 and u'''}
-01418     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01419     fileName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'},\textcolor{stringliteral}{'gffgu.dat'} )
-01420     input = open(fileName)
-01421     lines = input.readlines()
-01422     input.close()
-01423     \textcolor{comment}{#}
-01424     \textcolor{comment}{#  the 1d stuff below is to make it easy to use interp2d}
-01425     ngamma=41
-01426     nu=81
-01427     nvalues = ngamma*nu
-01428     g2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01429     g21d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
-01430     u = np.zeros(nu, \textcolor{stringliteral}{'float64'})
-01431     u1d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
-01432     gff = np.zeros((ngamma, nu), \textcolor{stringliteral}{'float64'})
-01433     gff1d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
-01434     \textcolor{comment}{#}
-01435     iline = 5
-01436     ivalue = 0
-01437     \textcolor{keywordflow}{for} ig2 \textcolor{keywordflow}{in} range(ngamma):
-01438         \textcolor{keywordflow}{for} iu \textcolor{keywordflow}{in} range(nu):
-01439             values = lines[iline].split()
-01440             u[iu] = float(values[1])
-01441             u1d[ivalue] = float(values[1])
-01442             g2[ig2] = float(values[0])
-01443             g21d[ivalue] = float(values[0])
-01444             gff[ig2, iu] = float(values[2])
-01445             gff1d[ivalue] = float(values[2])
-01446             iline+=1
-01447             ivalue += 1
-01448     \textcolor{comment}{#}
-01449     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'g2'}:g2, \textcolor{stringliteral}{'g21d'}:g21d,  \textcolor{stringliteral}{'}\textcolor{stringliteral}{u':u, '}u1d':u1d,  'gff':gff,  'gff1d':gff1d\}
-01450     \textcolor{comment}{#}
-01451     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
-01452     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01453}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a27deea720e4534912f04b54fe5c17b93}{01453} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a27deea720e4534912f04b54fe5c17b93}{gffintRead}():
-01454     \textcolor{stringliteral}{'''to read the integrated free-free gaunt factors of Sutherland, 1998, MNRAS, 300, 321.'''}
-01455     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01456     fileName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'},\textcolor{stringliteral}{'gffint.dat'} )
-01457     input = open(fileName)
-01458     lines = input.readlines()
-01459     input.close()
-01460     \textcolor{comment}{#}
-01461     ngamma=41
-01462     g2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01463     gffint = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01464     s1 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01465     s2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01466     s3 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
-01467     \textcolor{comment}{#}
-01468     ivalue = 0
-01469     start = 4
-01470     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(start,start+ngamma):
-01471         values = lines[iline].split()
-01472         g2[ivalue] = float(values[0])
-01473         gffint[ivalue] = float(values[1])
-01474         s1[ivalue] = float(values[2])
-01475         s2[ivalue] = float(values[3])
-01476         s3[ivalue] = float(values[4])
-01477         ivalue += 1
-01478     \textcolor{comment}{#}
-01479     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'g2'}:g2, \textcolor{stringliteral}{'gffint'}:gffint, \textcolor{stringliteral}{'s1'}:s1, \textcolor{stringliteral}{'s2'}:s2, \textcolor{stringliteral}{'s3'}:s3\}
-01480     \textcolor{comment}{#}
-01481     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
-01482     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01483}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a3dc5585b3508d8baf58ba62d0f728f16}{01483} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a3dc5585b3508d8baf58ba62d0f728f16}{itohRead}():
-01484     \textcolor{stringliteral}{'''to read in the free-free gaunt factors of Itoh et al. (ApJS 128, 125, 2000)'''}
-01485     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01486     itohName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'itoh.dat'})
-01487     input = open(itohName)
-01488     lines = input.readlines()
-01489     input.close()
-01490     gff = np.zeros((30, 121), \textcolor{stringliteral}{'float64'})
-01491     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(30):
-01492         gff[iline]= np.asarray(lines[iline].split(), \textcolor{stringliteral}{'float64'})
-01493     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'itohCoef'}:gff\}
-01494     \textcolor{comment}{#}
-01495     \textcolor{comment}{#}
-01496     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
-01497     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01498}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa4cdc5fd04cf99d7600e480f0dc95ae4}{01498} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa4cdc5fd04cf99d7600e480f0dc95ae4}{klgfbRead}():
-01499     \textcolor{stringliteral}{'''to read CHIANTI files file containing the free-bound gaunt factors for n=1-6 from Karzas and Latter,
+01334     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01335     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01336}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8b6257cfe133ac906966b20c8721f82a}{01336} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8b6257cfe133ac906966b20c8721f82a}{ioneqRead}(ioneqname='', verbose=0):
+01337     \textcolor{stringliteral}{"""}
+01338 \textcolor{stringliteral}{    reads an ioneq file and stores temperatures and ionization}
+01339 \textcolor{stringliteral}{    equilibrium values in self.IoneqTemperature and self.Ioneq and returns}
+01340 \textcolor{stringliteral}{    a dictionary containing these value and the reference to the literature}
+01341 \textcolor{stringliteral}{    """}
+01342     \textcolor{keywordflow}{pass}
+01343     \textcolor{comment}{#}
+01344     \textcolor{comment}{# -------------------------------------------------------------------------------------}
+01345     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01346}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a109ccb08244e615937df43b7a80a1625}{01346} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a109ccb08244e615937df43b7a80a1625}{gffRead}():
+01347     \textcolor{stringliteral}{'''to read the free-free gaunt factors of Sutherland, 1998, MNRAS, 300, 321.}
+01348 \textcolor{stringliteral}{    this function reads the file and reverses the values of g2 and u'''}
+01349     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01350     fileName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'},\textcolor{stringliteral}{'gffgu.dat'} )
+01351     input = open(fileName)
+01352     lines = input.readlines()
+01353     input.close()
+01354     \textcolor{comment}{#}
+01355     \textcolor{comment}{#  the 1d stuff below is to make it easy to use interp2d}
+01356     ngamma=41
+01357     nu=81
+01358     nvalues = ngamma*nu
+01359     g2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01360     g21d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
+01361     u = np.zeros(nu, \textcolor{stringliteral}{'float64'})
+01362     u1d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
+01363     gff = np.zeros((ngamma, nu), \textcolor{stringliteral}{'float64'})
+01364     gff1d = np.zeros(nvalues, \textcolor{stringliteral}{'float64'})
+01365     \textcolor{comment}{#}
+01366     iline = 5
+01367     ivalue = 0
+01368     \textcolor{keywordflow}{for} ig2 \textcolor{keywordflow}{in} range(ngamma):
+01369         \textcolor{keywordflow}{for} iu \textcolor{keywordflow}{in} range(nu):
+01370             values = lines[iline].split()
+01371             u[iu] = float(values[1])
+01372             u1d[ivalue] = float(values[1])
+01373             g2[ig2] = float(values[0])
+01374             g21d[ivalue] = float(values[0])
+01375             gff[ig2, iu] = float(values[2])
+01376             gff1d[ivalue] = float(values[2])
+01377             iline+=1
+01378             ivalue += 1
+01379     \textcolor{comment}{#}
+01380     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'g2'}:g2, \textcolor{stringliteral}{'g21d'}:g21d,  \textcolor{stringliteral}{'}\textcolor{stringliteral}{u':u, '}u1d':u1d,  'gff':gff,  'gff1d':gff1d\}
+01381     \textcolor{comment}{#}
+01382     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
+01383     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01384}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a9d97df13906f98a3d0fd3da3cc0cef0c}{01384} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a9d97df13906f98a3d0fd3da3cc0cef0c}{gffintRead}():
+01385     \textcolor{stringliteral}{'''to read the integrated free-free gaunt factors of Sutherland, 1998, MNRAS, 300, 321.'''}
+01386     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01387     fileName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'},\textcolor{stringliteral}{'gffint.dat'} )
+01388     input = open(fileName)
+01389     lines = input.readlines()
+01390     input.close()
+01391     \textcolor{comment}{#}
+01392     ngamma=41
+01393     g2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01394     gffint = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01395     s1 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01396     s2 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01397     s3 = np.zeros(ngamma, \textcolor{stringliteral}{'float64'})
+01398     \textcolor{comment}{#}
+01399     ivalue = 0
+01400     start = 4
+01401     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(start,start+ngamma):
+01402         values = lines[iline].split()
+01403         g2[ivalue] = float(values[0])
+01404         gffint[ivalue] = float(values[1])
+01405         s1[ivalue] = float(values[2])
+01406         s2[ivalue] = float(values[3])
+01407         s3[ivalue] = float(values[4])
+01408         ivalue += 1
+01409     \textcolor{comment}{#}
+01410     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'g2'}:g2, \textcolor{stringliteral}{'gffint'}:gffint, \textcolor{stringliteral}{'s1'}:s1, \textcolor{stringliteral}{'s2'}:s2, \textcolor{stringliteral}{'s3'}:s3\}
+01411     \textcolor{comment}{#}
+01412     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
+01413     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01414}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47e1912c817338c305e475dff092f44f}{01414} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47e1912c817338c305e475dff092f44f}{itohRead}():
+01415     \textcolor{stringliteral}{'''to read in the free-free gaunt factors of Itoh et al. (ApJS 128, 125, 2000)'''}
+01416     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01417     itohName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'itoh.dat'})
+01418     input = open(itohName)
+01419     lines = input.readlines()
+01420     input.close()
+01421     gff = np.zeros((30, 121), \textcolor{stringliteral}{'float64'})
+01422     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(30):
+01423         gff[iline]= np.asarray(lines[iline].split(), \textcolor{stringliteral}{'float64'})
+01424     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'itohCoef'}:gff\}
+01425     \textcolor{comment}{#}
+01426     \textcolor{comment}{#}
+01427     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
+01428     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01429}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a41cea295a441ff73fb246119479e373c}{01429} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a41cea295a441ff73fb246119479e373c}{klgfbRead}():
+01430     \textcolor{stringliteral}{'''to read CHIANTI files file containing the free-bound gaunt factors for n=1-6 from Karzas and Latter,
        1961, ApJSS, 6, 167}
-01500 \textcolor{stringliteral}{    returns \{pe, klgfb\}, the photon energy and the free-bound gaunt factors'''}
-01501     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01502     fname = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'klgfb.dat'})
-01503     input = open(fname)
-01504     lines = input.readlines()
-01505     input.close()
-01506     \textcolor{comment}{#}
-01507     ngfb = int(lines[0].split()[0])
-01508     nume = int(lines[0].split()[1])
-01509 
-01510     gfb = np.zeros((ngfb, ngfb, nume), \textcolor{stringliteral}{'float64'})
-01511     nlines = len(lines)
-01512 \textcolor{comment}{#        print 'nlines, nume, ngfb = ', nlines,  nume, ngfb}
-01513     pe = np.asarray(lines[1].split(), \textcolor{stringliteral}{'float64'})
-01514     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(2, nlines):
-01515         data = lines[iline].split()
-01516         n = int(data[0])
-01517         l = int(data[1])
-01518         gfb[n-1, l] = np.array(data[2:], \textcolor{stringliteral}{'float64'})
-01519     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'pe'}:pe, \textcolor{stringliteral}{'klgfb'}:gfb\}
-01520 \textcolor{comment}{#}
-01521 \textcolor{comment}{#  ---------------------------------------------------------}
-01522 \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01523}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a680536bf77d8f8baa8434c1bf84350a4}{01523} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a680536bf77d8f8baa8434c1bf84350a4}{listFiles}(path):
-01524     \textcolor{stringliteral}{'''}
-01525 \textcolor{stringliteral}{    walks the path and subdirectories to return a list of files}
-01526 \textcolor{stringliteral}{    '''}
-01527     alist=os.walk(path)
-01528     print(\textcolor{stringliteral}{' getting file list'})
-01529     listname=[]
-01530     \textcolor{keywordflow}{for} (dirpath,dirnames,filenames) \textcolor{keywordflow}{in} alist:
-01531         \textcolor{keywordflow}{if} len(dirnames) == 0:
-01532             \textcolor{keywordflow}{for} f \textcolor{keywordflow}{in} filenames:
-01533                 file=os.path.join(dirpath,f)
-01534                 \textcolor{keywordflow}{if} os.path.isfile(file):
-01535                     listname.append(file)
-01536         \textcolor{keywordflow}{else}:
-01537             \textcolor{keywordflow}{for} f \textcolor{keywordflow}{in} filenames:
-01538                 file=os.path.join(dirpath,f)
-01539                 \textcolor{keywordflow}{if} os.path.isfile(file):
-01540                     listname.append(file)
-01541     \textcolor{keywordflow}{return} listname
-01542     \textcolor{comment}{#}
-01543     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
-01544     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01545}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a63235035cef376c49a1f4e81933452a6}{01545} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a63235035cef376c49a1f4e81933452a6}{fblvlRead}(filename, verbose=False):
-01546     \textcolor{stringliteral}{""" read a chianti energy level file and returns}
-01547 \textcolor{stringliteral}{    \{"lvl":lvl,"conf":conf,"term":term,"spin":spin,"l":l,"spd":spd,"j":j}
-01548 \textcolor{stringliteral}{    ,"mult":mult,"ecm":ecm,"eryd":eryd,"ref":ref\}"""}
-01549 \textcolor{comment}{#        #  ,format='(i5,a20,2i5,a3,i5,2f20.3)'}
-01550     fstring=\textcolor{stringliteral}{'i5,a20,2i5,a3,i5,2f20.3'}
-01551     elvlcFormat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(fstring)
-01552     \textcolor{comment}{#}
-01553     \textcolor{keywordflow}{if} os.path.exists(filename):
-01554         input=open(filename,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01555 \textcolor{stringliteral}{        s1=input.readlines()}
-01556 \textcolor{stringliteral}{        input.close()}
-01557 \textcolor{stringliteral}{        nlvls=0}
-01558 \textcolor{stringliteral}{        ndata=2}
-01559 \textcolor{stringliteral}{        }\textcolor{keywordflow}{while} ndata > 1:
-01560             s1a=s1[nlvls][:-1]
-01561             s2=s1a.split()
-01562             ndata=len(s2)
-01563             nlvls=nlvls+1
-01564         nlvls-=1
-01565         \textcolor{keywordflow}{if} verbose:
-01566             print((\textcolor{stringliteral}{' nlvls = %5i'}%(nlvls)))
-01567         lvl=[0]*nlvls
-01568         conf=[0]*nlvls
-01569         pqn=[0]*nlvls
-01570         l=[0]*nlvls
-01571         spd=[0]*nlvls
-01572         mult=[0]*nlvls
-01573         ecm=[0]*nlvls
-01574         ecmth=[0]*nlvls
-01575         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nlvls):
-01576             \textcolor{keywordflow}{if} verbose:
-01577                 print((s1[i]))
-01578             inpt=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(s1[i],elvlcFormat)
-01579             lvl[i]=inpt[0]
-01580             conf[i]=inpt[1].strip()
-01581             pqn[i]=inpt[2]
-01582             l[i]=inpt[3]
-01583             spd[i]=inpt[4].strip()
-01584             mult[i]=inpt[5]
-01585             \textcolor{keywordflow}{if} inpt[6] == 0.:
-01586                 ecm[i]=inpt[7]
-01587             \textcolor{keywordflow}{else}:
-01588                 ecm[i]=inpt[6]
-01589                 ecmth[i]=inpt[7]
-01590         ref=[]
-01591         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(nlvls+1,len(s1)-1):
-01592             s1a=s1[i][:-1]
-01593             ref.append(s1a.strip())
-01594         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl"}:lvl,\textcolor{stringliteral}{"conf"}:conf,\textcolor{stringliteral}{'pqn'}:pqn,\textcolor{stringliteral}{"l"}:l,\textcolor{stringliteral}{"spd"}:spd,\textcolor{stringliteral}{"mult"}:mult,
-01595             \textcolor{stringliteral}{"ecm"}:ecm,\textcolor{stringliteral}{'ecmth'}:ecmth, \textcolor{stringliteral}{'ref'}:ref\}
-01596     \textcolor{keywordflow}{else}:
-01597         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'errorMessage'}:\textcolor{stringliteral}{' fblvl file does not exist'}\}
-01598     \textcolor{comment}{#}
-01599     \textcolor{comment}{# -----------------------------------------------------------------}
-01600     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01601}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_addacad8fe4cf3dff7f457b8b4a58054f}{01601} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_addacad8fe4cf3dff7f457b8b4a58054f}{vernerRead}():
-01602     \textcolor{stringliteral}{'''Reads the Verner & Yakovlev (A&AS 109, 125, 1995) photoionization cross-section data'''}
-01603     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01604     fname = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'verner\_short.txt'})
-01605     input = open(fname)
-01606     lines = input.readlines()
-01607     input.close()
-01608     \textcolor{comment}{#}
-01609     nlines=465
-01610     maxZ = 30+1
-01611     maxNel = 30 +1\textcolor{comment}{# also equal max(stage)}
-01612     \textcolor{comment}{#}
-01613     \textcolor{comment}{#z = np.array(nlines,'int32')}
-01614     \textcolor{comment}{#nel = np.array(nlines,'int32')}
-01615     pqn = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'int32'})
-01616     l = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'int32'})
-01617     eth = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01618     e0 = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01619     sig0 = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01620     ya = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01621     p = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01622     yw = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
-01623     \textcolor{comment}{#}
-01624     fstring=\textcolor{stringliteral}{'i2,i3,i2,i2,6f11.3'}
-01625     vernerFormat=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_format}{FortranFormat}(fstring)
-01626     \textcolor{comment}{#}
-01627     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(nlines):
-01628         out=\hyperlink{classpyneb_1_1utils_1_1_fortran_format_1_1_fortran_line}{FortranLine}(lines[iline],vernerFormat)
-01629         z = out[0]
-01630         nel = out[1]
-01631         stage = z - nel + 1
-01632         pqn[z,stage] = out[2]
-01633         l[z,stage] = out[3]
-01634         eth[z,stage] = out[4]
-01635         e0[z,stage] = out[5]
-01636         sig0[z,stage] = out[6]
-01637         ya[z,stage] = out[7]
-01638         p[z,stage] = out[8]
-01639         yw[z,stage] = out[9]
-01640     \textcolor{comment}{#}
-01641     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'pqn'}:pqn, \textcolor{stringliteral}{'l'}:l, \textcolor{stringliteral}{'eth'}:eth, \textcolor{stringliteral}{'e0'}:e0, \textcolor{stringliteral}{'sig0'}:sig0, \textcolor{stringliteral}{'ya'}:ya, \textcolor{stringliteral}{'p'}:p, \textcolor{stringliteral}{'yw'}:yw\}
-01642     \textcolor{comment}{#}
-01643     \textcolor{comment}{#-----------------------------------------------------------}
-01644     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01645}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae03bdc8f81142c34a58f9567f3359322}{01645} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae03bdc8f81142c34a58f9567f3359322}{twophotonHRead}():
-01646     \textcolor{stringliteral}{''' to read the two-photon A values and distribution function for the H seq'''}
-01647     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01648     fName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'hseq\_2photon.dat'})
-01649     dFile = open(fName, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01650 \textcolor{stringliteral}{    a = dFile.readline()}
-01651 \textcolor{stringliteral}{    y0 = np.asarray(a.split())}
-01652 \textcolor{stringliteral}{    a = dFile.readline()}
-01653 \textcolor{stringliteral}{    z0 = np.asarray(a.split())}
-01654 \textcolor{stringliteral}{    nz = 30}
-01655 \textcolor{stringliteral}{    avalue = np.zeros(nz, }\textcolor{stringliteral}{'float64'})
-01656     asum = np.zeros(nz, \textcolor{stringliteral}{'float64'})
-01657     psi0 = np.zeros((nz, 17), \textcolor{stringliteral}{'float64'})
-01658     \textcolor{keywordflow}{for} iz \textcolor{keywordflow}{in} range(nz):
-01659         a=dFile.readline().split()
-01660         avalue[iz] = float(a[1])
-01661         asum[iz] = float(a[2])
-01662         psi = np.asarray(a[3:])
-01663         psi0[iz] = psi
-01664     dFile.close()
-01665     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'y0'}:y0, \textcolor{stringliteral}{'z0'}:z0, \textcolor{stringliteral}{'avalue'}:avalue, \textcolor{stringliteral}{'asum'}:asum, \textcolor{stringliteral}{'psi0'}:psi0.reshape(30, 17)\}
-01666     \textcolor{comment}{#}
-01667     \textcolor{comment}{#-----------------------------------------------------------}
-01668     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01669}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a79401d478ca07c45f4546a82634e6eb9}{01669} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a79401d478ca07c45f4546a82634e6eb9}{twophotonHeRead}():
-01670     \textcolor{stringliteral}{''' to read the two-photon A values and distribution function for the He seq'''}
-01671     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01672     fName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'heseq\_2photon.dat'})
-01673     dFile = open(fName, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
-01674 \textcolor{stringliteral}{    a = dFile.readline()}
-01675 \textcolor{stringliteral}{    y0 = np.asarray(a.split())}
-01676 \textcolor{stringliteral}{    nz = 30}
-01677 \textcolor{stringliteral}{    avalue = np.zeros(nz, }\textcolor{stringliteral}{'float64'})
-01678     psi0 = np.zeros((nz, 41), \textcolor{stringliteral}{'float64'})
-01679     \textcolor{keywordflow}{for} iz \textcolor{keywordflow}{in} range(1, nz):
-01680         a=dFile.readline().split()
-01681         avalue[iz] = float(a[1])
-01682         psi = np.asarray(a[2:])
-01683         psi0[iz] = psi
-01684     dFile.close()
-01685     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'y0'}:y0, \textcolor{stringliteral}{'avalue'}:avalue, \textcolor{stringliteral}{'psi0'}:psi0.reshape(30, 41)\}
-01686     \textcolor{comment}{#}
-01687     \textcolor{comment}{#-----------------------------------------------------------}
-01688     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01689}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a4fab6d9973653d9ca82088006f2a12fe}{01689} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a4fab6d9973653d9ca82088006f2a12fe}{upsdatRead}(upsdatFileName):
-01690     \textcolor{stringliteral}{'''}
-01691 \textcolor{stringliteral}{    to read the standard Chianti upsdat file}
-01692 \textcolor{stringliteral}{    '''}
-01693     inpt = open(upsdatFileName)
-01694     lines = inpt.readlines()
-01695     inpt.close()
-01696     nTemp = int(lines[0].strip(\textcolor{stringliteral}{'\(\backslash\)n'}))
-01697     minusOne = 0
-01698     counter = 1
-01699     ll = lines[1].split()
-01700     temp = np.asarray(ll[3:], \textcolor{stringliteral}{'float64'})
-01701     \textcolor{keywordflow}{while} \textcolor{keywordflow}{not} minusOne:
-01702         \textcolor{keywordflow}{if} \textcolor{stringliteral}{'-1'} \textcolor{keywordflow}{in} lines[counter][:4]:
-01703             minusOne = 1
-01704         \textcolor{keywordflow}{else}:
-01705             counter += 1
-01706     ntrans = (counter)/2
-01707     lvl1 = []
-01708     lvl2 = []
-01709     de = []
-01710     gf = []
-01711     upsilon = []
-01712     counter = 1
-01713     \textcolor{keywordflow}{for} itrans \textcolor{keywordflow}{in} range(ntrans):
-01714         ll1 = lines[counter].split()
-01715         lvl1.append(int(ll1[0]))
-01716         lvl2.append(int(ll1[1]))
-01717         de.append(float(ll1[2]))
-01718         ll2 = lines[counter+1].split()
-01719 \textcolor{comment}{#        print ' ll2 = ', ll2}
-01720 \textcolor{comment}{#        print ' gf = ', ll2[2]}
-01721         gf.append(float(ll2[2]))
-01722         upsilon.append(np.asarray(ll2[3:], \textcolor{stringliteral}{'float64'}))
-01723         counter += 2
-01724     counter += 1
-01725     ref = []
-01726     \textcolor{keywordflow}{for} aline \textcolor{keywordflow}{in} lines[counter:-1]:
-01727         ref.append(aline.strip(\textcolor{stringliteral}{'\(\backslash\)n'}))
-01728     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'lvl1'}:lvl1, \textcolor{stringliteral}{'lvl2'}:lvl2, \textcolor{stringliteral}{'de'}:de, \textcolor{stringliteral}{'gf'}:gf, \textcolor{stringliteral}{'upsilon'}:upsilon, \textcolor{stringliteral}{'temperature'}:temp, \textcolor{stringliteral}{'ref'}:ref\}
-01729     \textcolor{comment}{#}
-01730     \textcolor{comment}{# -----------------------------------------------------}
-01731     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01732}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a349618b1b79ca902de8a030592d6d43a}{01732} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a349618b1b79ca902de8a030592d6d43a}{versionRead}():
-01733     \textcolor{stringliteral}{""" read the version number of the CHIANTI database"""}
-01734     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
-01735     vFileName = os.path.join(xuvtop, \textcolor{stringliteral}{'VERSION'})
-01736     vFile = open(vFileName)
-01737     versionStr = vFile.readline()
-01738     vFile.close()
-01739     \textcolor{keywordflow}{return} versionStr.strip()
-01740     \textcolor{comment}{#}
-01741     \textcolor{comment}{#-----------------------------------------------------------}
-01742     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01743}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a71b9295157832135424ea7dc0138fcd4}{01743} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a71b9295157832135424ea7dc0138fcd4}{scale\_bti}(evin,crossin,f,ev1):
-01744     \textcolor{stringliteral}{"""}
-01745 \textcolor{stringliteral}{    apply BT ionization scaling to (energy, cross-section)}
-01746 \textcolor{stringliteral}{    returns [bte,btx]}
-01747 \textcolor{stringliteral}{    """}
-01748     u=evin/ev1
-01749     bte=1.-np.log(f)/np.log(u-1.+f)
-01750     btx=u*crossin*(ev1**2)/(np.log(u)+1.)
-01751     \textcolor{keywordflow}{return} [bte,btx]
-01752     \textcolor{comment}{#}
-01753     \textcolor{comment}{#-----------------------------------------------------------}
-01754     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01755}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47075ba90f01cbd7a3dbd08115544214}{01755} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a47075ba90f01cbd7a3dbd08115544214}{descale\_bti}(bte,btx,f,ev1):
-01756     \textcolor{stringliteral}{"""}
-01757 \textcolor{stringliteral}{    descale BT ionization scaling}
-01758 \textcolor{stringliteral}{    returns [energy,cross-section]}
-01759 \textcolor{stringliteral}{    """}
-01760     u=1.-f+np.exp(np.log(f)/(1.-bte))
-01761     energy=u*ev1
-01762     cross=(np.log(u)+1.)*btx/(u*ev1**2)
-01763     \textcolor{keywordflow}{return} [energy,cross]
-01764     \textcolor{comment}{#}
-01765     \textcolor{comment}{#-----------------------------------------------------------}
-01766     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01767}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad34ed06dfc613c2f1ace88fab4ac4392}{01767} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ad34ed06dfc613c2f1ace88fab4ac4392}{descale\_bt}(bte,btomega,f,ev1):
-01768     \textcolor{stringliteral}{"""}
-01769 \textcolor{stringliteral}{    descale BT excitation scaling}
-01770 \textcolor{stringliteral}{    returns [energy,collision strength]}
-01771 \textcolor{stringliteral}{    """}
-01772     u=1.-f+np.exp(np.log(f)/(1.-bte))
-01773     energy=u*ev1
-01774     omega=(np.log(u)-1.+np.exp(1.))*btomega
-01775     \textcolor{keywordflow}{return} [energy,omega]
-01776     \textcolor{comment}{#}
-01777     \textcolor{comment}{#-----------------------------------------------------------}
-01778     \textcolor{comment}{#}
-\hypertarget{__chianti__tools_8py_source_l01779}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_abdf42d0f9176edb418859e7a12fa4bce}{01779} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_abdf42d0f9176edb418859e7a12fa4bce}{scale\_bt}(evin,omega,f,ev1):
-01780     \textcolor{stringliteral}{"""}
-01781 \textcolor{stringliteral}{    apply BT excitation scaling to (energy, collision strength)}
-01782 \textcolor{stringliteral}{    returns [bte,btomega]}
-01783 \textcolor{stringliteral}{    """}
-01784     u=evin/ev1
-01785     bte=1.-np.log(f)/np.log(u-1.+f)
-01786     btomega=omega/(np.log(u)-1.+np.exp(1.))
-01787     \textcolor{keywordflow}{return} [bte,btomega]
+01431 \textcolor{stringliteral}{    returns \{pe, klgfb\}, the photon energy and the free-bound gaunt factors'''}
+01432     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01433     fname = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'klgfb.dat'})
+01434     input = open(fname)
+01435     lines = input.readlines()
+01436     input.close()
+01437     \textcolor{comment}{#}
+01438     ngfb = int(lines[0].split()[0])
+01439     nume = int(lines[0].split()[1])
+01440 
+01441     gfb = np.zeros((ngfb, ngfb, nume), \textcolor{stringliteral}{'float64'})
+01442     nlines = len(lines)
+01443 \textcolor{comment}{#        print 'nlines, nume, ngfb = ', nlines,  nume, ngfb}
+01444     pe = np.asarray(lines[1].split(), \textcolor{stringliteral}{'float64'})
+01445     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(2, nlines):
+01446         data = lines[iline].split()
+01447         n = int(data[0])
+01448         l = int(data[1])
+01449         gfb[n-1, l] = np.array(data[2:], \textcolor{stringliteral}{'float64'})
+01450     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'pe'}:pe, \textcolor{stringliteral}{'klgfb'}:gfb\}
+01451 \textcolor{comment}{#}
+01452 \textcolor{comment}{#  ---------------------------------------------------------}
+01453 \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01454}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ace360314d9344971bd2ee9ea4f17992d}{01454} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ace360314d9344971bd2ee9ea4f17992d}{listFiles}(path):
+01455     \textcolor{stringliteral}{'''}
+01456 \textcolor{stringliteral}{    walks the path and subdirectories to return a list of files}
+01457 \textcolor{stringliteral}{    '''}
+01458     alist=os.walk(path)
+01459     print(\textcolor{stringliteral}{' getting file list'})
+01460     listname=[]
+01461     \textcolor{keywordflow}{for} (dirpath,dirnames,filenames) \textcolor{keywordflow}{in} alist:
+01462         \textcolor{keywordflow}{if} len(dirnames) == 0:
+01463             \textcolor{keywordflow}{for} f \textcolor{keywordflow}{in} filenames:
+01464                 file=os.path.join(dirpath,f)
+01465                 \textcolor{keywordflow}{if} os.path.isfile(file):
+01466                     listname.append(file)
+01467         \textcolor{keywordflow}{else}:
+01468             \textcolor{keywordflow}{for} f \textcolor{keywordflow}{in} filenames:
+01469                 file=os.path.join(dirpath,f)
+01470                 \textcolor{keywordflow}{if} os.path.isfile(file):
+01471                     listname.append(file)
+01472     \textcolor{keywordflow}{return} listname
+01473     \textcolor{comment}{#}
+01474     \textcolor{comment}{# ----------------------------------------------------------------------------------------}
+01475     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01476}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a63235035cef376c49a1f4e81933452a6}{01476} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a63235035cef376c49a1f4e81933452a6}{fblvlRead}(filename, verbose=False):
+01477     \textcolor{stringliteral}{""" read a chianti energy level file and returns}
+01478 \textcolor{stringliteral}{    \{"lvl":lvl,"conf":conf,"term":term,"spin":spin,"l":l,"spd":spd,"j":j}
+01479 \textcolor{stringliteral}{    ,"mult":mult,"ecm":ecm,"eryd":eryd,"ref":ref\}"""}
+01480 \textcolor{comment}{#        #  ,format='(i5,a20,2i5,a3,i5,2f20.3)'}
+01481     fstring=\textcolor{stringliteral}{'i5,a20,2i5,a3,i5,2f20.3'}
+01482     elvlcFormat=FortranFormat(fstring)
+01483     \textcolor{comment}{#}
+01484     \textcolor{keywordflow}{if} os.path.exists(filename):
+01485         input=open(filename,\textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01486 \textcolor{stringliteral}{        s1=input.readlines()}
+01487 \textcolor{stringliteral}{        input.close()}
+01488 \textcolor{stringliteral}{        nlvls=0}
+01489 \textcolor{stringliteral}{        ndata=2}
+01490 \textcolor{stringliteral}{        }\textcolor{keywordflow}{while} ndata > 1:
+01491             s1a=s1[nlvls][:-1]
+01492             s2=s1a.split()
+01493             ndata=len(s2)
+01494             nlvls=nlvls+1
+01495         nlvls-=1
+01496         \textcolor{keywordflow}{if} verbose:
+01497             print((\textcolor{stringliteral}{' nlvls = %5i'}%(nlvls)))
+01498         lvl=[0]*nlvls
+01499         conf=[0]*nlvls
+01500         pqn=[0]*nlvls
+01501         l=[0]*nlvls
+01502         spd=[0]*nlvls
+01503         mult=[0]*nlvls
+01504         ecm=[0]*nlvls
+01505         ecmth=[0]*nlvls
+01506         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(0,nlvls):
+01507             \textcolor{keywordflow}{if} verbose:
+01508                 print((s1[i]))
+01509             inpt=FortranLine(s1[i],elvlcFormat)
+01510             lvl[i]=inpt[0]
+01511             conf[i]=inpt[1].strip()
+01512             pqn[i]=inpt[2]
+01513             l[i]=inpt[3]
+01514             spd[i]=inpt[4].strip()
+01515             mult[i]=inpt[5]
+01516             \textcolor{keywordflow}{if} inpt[6] == 0.:
+01517                 ecm[i]=inpt[7]
+01518             \textcolor{keywordflow}{else}:
+01519                 ecm[i]=inpt[6]
+01520                 ecmth[i]=inpt[7]
+01521         ref=[]
+01522         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(nlvls+1,len(s1)-1):
+01523             s1a=s1[i][:-1]
+01524             ref.append(s1a.strip())
+01525         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{"lvl"}:lvl,\textcolor{stringliteral}{"conf"}:conf,\textcolor{stringliteral}{'pqn'}:pqn,\textcolor{stringliteral}{"l"}:l,\textcolor{stringliteral}{"spd"}:spd,\textcolor{stringliteral}{"mult"}:mult,
+01526             \textcolor{stringliteral}{"ecm"}:ecm,\textcolor{stringliteral}{'ecmth'}:ecmth, \textcolor{stringliteral}{'ref'}:ref\}
+01527     \textcolor{keywordflow}{else}:
+01528         \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'errorMessage'}:\textcolor{stringliteral}{' fblvl file does not exist'}\}
+01529     \textcolor{comment}{#}
+01530     \textcolor{comment}{# -----------------------------------------------------------------}
+01531     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01532}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a4777bd65c87b9fbd20a5b02185d9437c}{01532} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a4777bd65c87b9fbd20a5b02185d9437c}{vernerRead}():
+01533     \textcolor{stringliteral}{'''Reads the Verner & Yakovlev (A&AS 109, 125, 1995) photoionization cross-section data'''}
+01534     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01535     fname = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'verner\_short.txt'})
+01536     input = open(fname)
+01537     lines = input.readlines()
+01538     input.close()
+01539     \textcolor{comment}{#}
+01540     nlines=465
+01541     maxZ = 30+1
+01542     maxNel = 30 +1\textcolor{comment}{# also equal max(stage)}
+01543     \textcolor{comment}{#}
+01544     \textcolor{comment}{#z = np.array(nlines,'int32')}
+01545     \textcolor{comment}{#nel = np.array(nlines,'int32')}
+01546     pqn = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'int32'})
+01547     l = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'int32'})
+01548     eth = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01549     e0 = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01550     sig0 = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01551     ya = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01552     p = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01553     yw = np.zeros((maxZ,maxNel),\textcolor{stringliteral}{'float64'})
+01554     \textcolor{comment}{#}
+01555     fstring=\textcolor{stringliteral}{'i2,i3,i2,i2,6f11.3'}
+01556     vernerFormat=FortranFormat(fstring)
+01557     \textcolor{comment}{#}
+01558     \textcolor{keywordflow}{for} iline \textcolor{keywordflow}{in} range(nlines):
+01559         out=FortranLine(lines[iline],vernerFormat)
+01560         z = out[0]
+01561         nel = out[1]
+01562         stage = z - nel + 1
+01563         pqn[z,stage] = out[2]
+01564         l[z,stage] = out[3]
+01565         eth[z,stage] = out[4]
+01566         e0[z,stage] = out[5]
+01567         sig0[z,stage] = out[6]
+01568         ya[z,stage] = out[7]
+01569         p[z,stage] = out[8]
+01570         yw[z,stage] = out[9]
+01571     \textcolor{comment}{#}
+01572     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'pqn'}:pqn, \textcolor{stringliteral}{'l'}:l, \textcolor{stringliteral}{'eth'}:eth, \textcolor{stringliteral}{'e0'}:e0, \textcolor{stringliteral}{'sig0'}:sig0, \textcolor{stringliteral}{'ya'}:ya, \textcolor{stringliteral}{'p'}:p, \textcolor{stringliteral}{'yw'}:yw\}
+01573     \textcolor{comment}{#}
+01574     \textcolor{comment}{#-----------------------------------------------------------}
+01575     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01576}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a276c30e2ab1692a674ecc1a0e46b0694}{01576} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a276c30e2ab1692a674ecc1a0e46b0694}{twophotonHRead}():
+01577     \textcolor{stringliteral}{''' to read the two-photon A values and distribution function for the H seq'''}
+01578     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01579     fName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'hseq\_2photon.dat'})
+01580     dFile = open(fName, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01581 \textcolor{stringliteral}{    a = dFile.readline()}
+01582 \textcolor{stringliteral}{    y0 = np.asarray(a.split())}
+01583 \textcolor{stringliteral}{    a = dFile.readline()}
+01584 \textcolor{stringliteral}{    z0 = np.asarray(a.split())}
+01585 \textcolor{stringliteral}{    nz = 30}
+01586 \textcolor{stringliteral}{    avalue = np.zeros(nz, }\textcolor{stringliteral}{'float64'})
+01587     asum = np.zeros(nz, \textcolor{stringliteral}{'float64'})
+01588     psi0 = np.zeros((nz, 17), \textcolor{stringliteral}{'float64'})
+01589     \textcolor{keywordflow}{for} iz \textcolor{keywordflow}{in} range(nz):
+01590         a=dFile.readline().split()
+01591         avalue[iz] = float(a[1])
+01592         asum[iz] = float(a[2])
+01593         psi = np.asarray(a[3:])
+01594         psi0[iz] = psi
+01595     dFile.close()
+01596     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'y0'}:y0, \textcolor{stringliteral}{'z0'}:z0, \textcolor{stringliteral}{'avalue'}:avalue, \textcolor{stringliteral}{'asum'}:asum, \textcolor{stringliteral}{'psi0'}:psi0.reshape(30, 17)\}
+01597     \textcolor{comment}{#}
+01598     \textcolor{comment}{#-----------------------------------------------------------}
+01599     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01600}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a6bc4a22671cc24bfae42d3e24078708a}{01600} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a6bc4a22671cc24bfae42d3e24078708a}{twophotonHeRead}():
+01601     \textcolor{stringliteral}{''' to read the two-photon A values and distribution function for the He seq'''}
+01602     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01603     fName = os.path.join(xuvtop, \textcolor{stringliteral}{'continuum'}, \textcolor{stringliteral}{'heseq\_2photon.dat'})
+01604     dFile = open(fName, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r')}
+01605 \textcolor{stringliteral}{    a = dFile.readline()}
+01606 \textcolor{stringliteral}{    y0 = np.asarray(a.split())}
+01607 \textcolor{stringliteral}{    nz = 30}
+01608 \textcolor{stringliteral}{    avalue = np.zeros(nz, }\textcolor{stringliteral}{'float64'})
+01609     psi0 = np.zeros((nz, 41), \textcolor{stringliteral}{'float64'})
+01610     \textcolor{keywordflow}{for} iz \textcolor{keywordflow}{in} range(1, nz):
+01611         a=dFile.readline().split()
+01612         avalue[iz] = float(a[1])
+01613         psi = np.asarray(a[2:])
+01614         psi0[iz] = psi
+01615     dFile.close()
+01616     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'y0'}:y0, \textcolor{stringliteral}{'avalue'}:avalue, \textcolor{stringliteral}{'psi0'}:psi0.reshape(30, 41)\}
+01617     \textcolor{comment}{#}
+01618     \textcolor{comment}{#-----------------------------------------------------------}
+01619     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01620}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae590342dcbbea1f4552a401016c54480}{01620} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae590342dcbbea1f4552a401016c54480}{upsdatRead}(upsdatFileName):
+01621     \textcolor{stringliteral}{'''}
+01622 \textcolor{stringliteral}{    to read the standard Chianti upsdat file}
+01623 \textcolor{stringliteral}{    '''}
+01624     inpt = open(upsdatFileName)
+01625     lines = inpt.readlines()
+01626     inpt.close()
+01627     nTemp = int(lines[0].strip(\textcolor{stringliteral}{'\(\backslash\)n'}))
+01628     minusOne = 0
+01629     counter = 1
+01630     ll = lines[1].split()
+01631     temp = np.asarray(ll[3:], \textcolor{stringliteral}{'float64'})
+01632     \textcolor{keywordflow}{while} \textcolor{keywordflow}{not} minusOne:
+01633         \textcolor{keywordflow}{if} \textcolor{stringliteral}{'-1'} \textcolor{keywordflow}{in} lines[counter][:4]:
+01634             minusOne = 1
+01635         \textcolor{keywordflow}{else}:
+01636             counter += 1
+01637     ntrans = (counter)/2
+01638     lvl1 = []
+01639     lvl2 = []
+01640     de = []
+01641     gf = []
+01642     upsilon = []
+01643     counter = 1
+01644     \textcolor{keywordflow}{for} itrans \textcolor{keywordflow}{in} range(ntrans):
+01645         ll1 = lines[counter].split()
+01646         lvl1.append(int(ll1[0]))
+01647         lvl2.append(int(ll1[1]))
+01648         de.append(float(ll1[2]))
+01649         ll2 = lines[counter+1].split()
+01650 \textcolor{comment}{#        print ' ll2 = ', ll2}
+01651 \textcolor{comment}{#        print ' gf = ', ll2[2]}
+01652         gf.append(float(ll2[2]))
+01653         upsilon.append(np.asarray(ll2[3:], \textcolor{stringliteral}{'float64'}))
+01654         counter += 2
+01655     counter += 1
+01656     ref = []
+01657     \textcolor{keywordflow}{for} aline \textcolor{keywordflow}{in} lines[counter:-1]:
+01658         ref.append(aline.strip(\textcolor{stringliteral}{'\(\backslash\)n'}))
+01659     \textcolor{keywordflow}{return} \{\textcolor{stringliteral}{'lvl1'}:lvl1, \textcolor{stringliteral}{'lvl2'}:lvl2, \textcolor{stringliteral}{'de'}:de, \textcolor{stringliteral}{'gf'}:gf, \textcolor{stringliteral}{'upsilon'}:upsilon, \textcolor{stringliteral}{'temperature'}:temp, \textcolor{stringliteral}{'ref'}:ref\}
+01660     \textcolor{comment}{#}
+01661     \textcolor{comment}{# -----------------------------------------------------}
+01662     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01663}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8e52f3bde54d7fba55664fe4f9efceda}{01663} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a8e52f3bde54d7fba55664fe4f9efceda}{versionRead}():
+01664     \textcolor{stringliteral}{""" read the version number of the CHIANTI database"""}
+01665     xuvtop = os.environ[\textcolor{stringliteral}{'XUVTOP'}]
+01666     vFileName = os.path.join(xuvtop, \textcolor{stringliteral}{'VERSION'})
+01667     vFile = open(vFileName)
+01668     versionStr = vFile.readline()
+01669     vFile.close()
+01670     \textcolor{keywordflow}{return} versionStr.strip()
+01671     \textcolor{comment}{#}
+01672     \textcolor{comment}{#-----------------------------------------------------------}
+01673     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01674}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa0b66957b05220d53caa594b577edd3b}{01674} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_aa0b66957b05220d53caa594b577edd3b}{scale\_bti}(evin,crossin,f,ev1):
+01675     \textcolor{stringliteral}{"""}
+01676 \textcolor{stringliteral}{    apply BT ionization scaling to (energy, cross-section)}
+01677 \textcolor{stringliteral}{    returns [bte,btx]}
+01678 \textcolor{stringliteral}{    """}
+01679     u=evin/ev1
+01680     bte=1.-np.log(f)/np.log(u-1.+f)
+01681     btx=u*crossin*(ev1**2)/(np.log(u)+1.)
+01682     \textcolor{keywordflow}{return} [bte,btx]
+01683     \textcolor{comment}{#}
+01684     \textcolor{comment}{#-----------------------------------------------------------}
+01685     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01686}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a74378c74514f5b6d760d4384780fbf26}{01686} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a74378c74514f5b6d760d4384780fbf26}{descale\_bti}(bte,btx,f,ev1):
+01687     \textcolor{stringliteral}{"""}
+01688 \textcolor{stringliteral}{    descale BT ionization scaling}
+01689 \textcolor{stringliteral}{    returns [energy,cross-section]}
+01690 \textcolor{stringliteral}{    """}
+01691     u=1.-f+np.exp(np.log(f)/(1.-bte))
+01692     energy=u*ev1
+01693     cross=(np.log(u)+1.)*btx/(u*ev1**2)
+01694     \textcolor{keywordflow}{return} [energy,cross]
+01695     \textcolor{comment}{#}
+01696     \textcolor{comment}{#-----------------------------------------------------------}
+01697     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01698}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae88317fa471fbac39938c9702d011981}{01698} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_ae88317fa471fbac39938c9702d011981}{descale\_bt}(bte,btomega,f,ev1):
+01699     \textcolor{stringliteral}{"""}
+01700 \textcolor{stringliteral}{    descale BT excitation scaling}
+01701 \textcolor{stringliteral}{    returns [energy,collision strength]}
+01702 \textcolor{stringliteral}{    """}
+01703     u=1.-f+np.exp(np.log(f)/(1.-bte))
+01704     energy=u*ev1
+01705     omega=(np.log(u)-1.+np.exp(1.))*btomega
+01706     \textcolor{keywordflow}{return} [energy,omega]
+01707     \textcolor{comment}{#}
+01708     \textcolor{comment}{#-----------------------------------------------------------}
+01709     \textcolor{comment}{#}
+\hypertarget{__chianti__tools_8py_source_l01710}{}\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a6f52caaa5d922e5e747839ccea0dcdd3}{01710} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1__chianti__tools_a6f52caaa5d922e5e747839ccea0dcdd3}{scale\_bt}(evin,omega,f,ev1):
+01711     \textcolor{stringliteral}{"""}
+01712 \textcolor{stringliteral}{    apply BT excitation scaling to (energy, collision strength)}
+01713 \textcolor{stringliteral}{    returns [bte,btomega]}
+01714 \textcolor{stringliteral}{    """}
+01715     u=evin/ev1
+01716     bte=1.-np.log(f)/np.log(u-1.+f)
+01717     btomega=omega/(np.log(u)-1.+np.exp(1.))
+01718     \textcolor{keywordflow}{return} [bte,btomega]
 \end{DoxyCode}

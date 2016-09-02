@@ -1,5 +1,6 @@
-\hypertarget{stellar_8py_source}{}\section{stellar.\+py}
-\label{stellar_8py_source}\index{pyneb/utils/stellar.\+py@{pyneb/utils/stellar.\+py}}
+\hypertarget{stellar_8py}{\section{stellar.\-py}
+\label{stellar_8py}\index{pyneb/utils/stellar.\-py@{pyneb/utils/stellar.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{stellar_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar}{00001} \textcolor{comment}{#/opt/local/bin/python}
@@ -31,24 +32,24 @@
 00027 \textcolor{stringliteral}{    - no correction for interstellar extinction.}
 00028 \textcolor{stringliteral}{'''}
 00029 
-\hypertarget{stellar_8py_source_l00030}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_ac8707dcb0395c96cc4053e1f46f2c02f}{00030} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_ac8707dcb0395c96cc4053e1f46f2c02f}{logL}(V, D\_pc, T\_eff):
+\hypertarget{stellar_8py_source_l00030}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_a1028b99ddfc374c050254672a26abda9}{00030} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_a1028b99ddfc374c050254672a26abda9}{logL}(V, D\_pc, T\_eff):
 00031     \textcolor{stringliteral}{'''Calculate the stellar luminosity in Solar units, given an (unreddened) V }
 00032 \textcolor{stringliteral}{       apparent magnitude, a distance (pc), and the stellar temperature (K).}
 00033 \textcolor{stringliteral}{    '''}
-00034     \textcolor{keywordflow}{return} -0.4*(V - 2.5*np.log10(D\_pc) + \hyperlink{namespacepyneb_1_1utils_1_1stellar_a6a17bb8af2c6325b342af54c660d9aab}{BC}(T\_eff) - MBOL\_Sun)
+00034     \textcolor{keywordflow}{return} -0.4*(V - 2.5*np.log10(D\_pc) + \hyperlink{namespacepyneb_1_1utils_1_1stellar_adb31507adc6104012e696b5d0b28b2cc}{BC}(T\_eff) - MBOL\_Sun)
 00035 
 00036 
-\hypertarget{stellar_8py_source_l00037}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_a6a17bb8af2c6325b342af54c660d9aab}{00037} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_a6a17bb8af2c6325b342af54c660d9aab}{BC}(T\_eff):
+\hypertarget{stellar_8py_source_l00037}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_adb31507adc6104012e696b5d0b28b2cc}{00037} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_adb31507adc6104012e696b5d0b28b2cc}{BC}(T\_eff):
 00038     \textcolor{stringliteral}{'''Bolometric correction for very hot stars, from Vacca, Garmany & Shull,}
 00039 \textcolor{stringliteral}{       1996, ApJ, 460, 914.}
 00040 \textcolor{stringliteral}{    '''}
 00041     \textcolor{keywordflow}{return} 27.66 - 6.84*np.log10(T\_eff)
 00042 \textcolor{comment}{#    return 28.46 - 7.08*np.log10(T\_eff) + 0.08*log\_g  # Fit incl. gravity}
 00043 
-\hypertarget{stellar_8py_source_l00044}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_a46d2fd9e00f4e0605c2e8c72b904d532}{00044} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_a46d2fd9e00f4e0605c2e8c72b904d532}{integrand}(x):
+\hypertarget{stellar_8py_source_l00044}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_adf2a28268f7e69307f7b6c47920bcbb2}{00044} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_adf2a28268f7e69307f7b6c47920bcbb2}{integrand}(x):
 00045     \textcolor{keywordflow}{return} x**2/(np.exp(x)-1)
 00046 
-\hypertarget{stellar_8py_source_l00047}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_a8a89c2764d0517d414e8da6c2031d601}{00047} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_a8a89c2764d0517d414e8da6c2031d601}{G}(ion,T):
+\hypertarget{stellar_8py_source_l00047}{}\hyperlink{namespacepyneb_1_1utils_1_1stellar_ab168636a519c17879ce58df1188ddbe1}{00047} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1stellar_ab168636a519c17879ce58df1188ddbe1}{G}(ion,T):
 00048     \textcolor{stringliteral}{'''Compute integral over frequency for Planck function.}
 00049 \textcolor{stringliteral}{       ion - Reference Ion ("H | HE')}
 00050 \textcolor{stringliteral}{       T   - Stellar temperature (K)}
@@ -82,27 +83,27 @@
 00078             self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a8f04a2133b2acf4641a2ce08db7fc100}{ionScale} = 8.49e-11
 00079 
 00080 
-\hypertarget{stellar_8py_source_l00081}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a09b6512a0ca6dbab445c4bdab0b68061}{00081}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a09b6512a0ca6dbab445c4bdab0b68061}{z\_ratio}(self, T):
+\hypertarget{stellar_8py_source_l00081}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a33d4960cdb38f6a25972f20da8d146d1}{00081}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a33d4960cdb38f6a25972f20da8d146d1}{z\_ratio}(self, T):
 00082         \textcolor{stringliteral}{'''Compute the ratio of the flux in a nebular emission line to the stellar }
 00083 \textcolor{stringliteral}{           flux density for a given stellar (black-body) temperature T.}
 00084 \textcolor{stringliteral}{        '''}
 00085 
-00086         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a8f04a2133b2acf4641a2ce08db7fc100}{ionScale} * pow(T,3) * \hyperlink{namespacepyneb_1_1utils_1_1stellar_a8a89c2764d0517d414e8da6c2031d601}{G}(self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a48c1797d46d49841c8b3a9275679e3ae}{ion}, T) * (np.exp(2.665e+4/T) - 1)
+00086         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a8f04a2133b2acf4641a2ce08db7fc100}{ionScale} * pow(T,3) * \hyperlink{namespacepyneb_1_1utils_1_1stellar_ab168636a519c17879ce58df1188ddbe1}{G}(self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a48c1797d46d49841c8b3a9275679e3ae}{ion}, T) * (np.exp(2.665e+4/T) - 1)
 00087 
 00088 
-\hypertarget{stellar_8py_source_l00089}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a74a4559b439f0dd2c695138c030ab488}{00089}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a74a4559b439f0dd2c695138c030ab488}{Func}(self, T):
+\hypertarget{stellar_8py_source_l00089}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_abb29e7f875d83a00e081726574eae202}{00089}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_abb29e7f875d83a00e081726574eae202}{Func}(self, T):
 00090         \textcolor{stringliteral}{'''Return the discriminant of the stellar Zanstra temperature function.}
 00091 \textcolor{stringliteral}{            '''}
 00092 
 00093         r\_obs = pow(10,self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a8c4fddabe252ad4c539244ace4e79227}{logFlux}) / (FLUX\_MAG0 * pow(10,-self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_af635b1b8ca29b1b956b91e93f63fdf76}{magStar}/2.5))
-00094         \textcolor{keywordflow}{return} r\_obs - self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a09b6512a0ca6dbab445c4bdab0b68061}{z\_ratio}(T)
+00094         \textcolor{keywordflow}{return} r\_obs - self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a33d4960cdb38f6a25972f20da8d146d1}{z\_ratio}(T)
 00095 
 00096 
-\hypertarget{stellar_8py_source_l00097}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a7c532590e7e53350b75d5d1f624a92f6}{00097}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a7c532590e7e53350b75d5d1f624a92f6}{Solve}(self):
+\hypertarget{stellar_8py_source_l00097}{}\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_adbf52e2c709bd164b518256b61789840}{00097}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_adbf52e2c709bd164b518256b61789840}{Solve}(self):
 00098         \textcolor{stringliteral}{'''Determine the stellar Zanstra temperature from a nebular H or He }
 00099 \textcolor{stringliteral}{           emission line flux and the stellar flux density.}
 00100 \textcolor{stringliteral}{        '''}
 00101 
 00102         guess = 5.e+4
-00103         \textcolor{keywordflow}{return} op.broyden1(self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_a74a4559b439f0dd2c695138c030ab488}{Func}, guess)
+00103         \textcolor{keywordflow}{return} op.broyden1(self.\hyperlink{classpyneb_1_1utils_1_1stellar_1_1_zanstra_abb29e7f875d83a00e081726574eae202}{Func}, guess)
 \end{DoxyCode}

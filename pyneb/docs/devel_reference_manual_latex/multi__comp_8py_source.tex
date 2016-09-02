@@ -1,5 +1,6 @@
-\hypertarget{multi__comp_8py_source}{}\section{multi\+\_\+comp.\+py}
-\label{multi__comp_8py_source}\index{pyneb/test/multi\+\_\+comp.\+py@{pyneb/test/multi\+\_\+comp.\+py}}
+\hypertarget{multi__comp_8py}{\section{multi\-\_\-comp.\-py}
+\label{multi__comp_8py}\index{pyneb/test/multi\-\_\-comp.\-py@{pyneb/test/multi\-\_\-comp.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{multi__comp_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp}{00001} \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
@@ -96,7 +97,7 @@
 00087                                       emis3[\textcolor{stringliteral}{'SII\_6716'}]/emis3[\textcolor{stringliteral}{'SII\_6731'}], 
 00088                                       guess\_tem=10000, tol\_tem = 1., tol\_den = 1., max\_iter = 5)
 00089 
-\hypertarget{multi__comp_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(atom, line, wave):
+\hypertarget{multi__comp_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(atom, line, wave):
 00091     \textcolor{stringliteral}{"""}
 00092 \textcolor{stringliteral}{    this return ionic abundances in 5 cases: region 1, 2 and the sum of the 2 regions (using different Te
        and Ne)}
@@ -114,22 +115,22 @@
 00104     (temp\_1, temp\_2, temp\_3, temp\_4, temp\_5)
 00105 
 00106 \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} S2\_lambda:
-00107     ab\_Sp1, ab\_Sp2, ab\_Sp3, ab\_Sp4, ab\_Sp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(S2, \textcolor{stringliteral}{'SII\_'}+str(line), line)        
+00107     ab\_Sp1, ab\_Sp2, ab\_Sp3, ab\_Sp4, ab\_Sp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(S2, \textcolor{stringliteral}{'SII\_'}+str(line), line)        
 00108     \textcolor{keywordflow}{print} \textcolor{stringliteral}{' S+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
 00109         (line,ab\_Sp1-Sp, ab\_Sp2-Sp, ab\_Sp3-Sp, ab\_Sp4-Sp, ab\_Sp5-Sp)
 00110 
-00111 ab\_Np1, ab\_Np2, ab\_Np3, ab\_Np4, ab\_Np5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(N2, \textcolor{stringliteral}{'NII\_6583'}, 6583)  
+00111 ab\_Np1, ab\_Np2, ab\_Np3, ab\_Np4, ab\_Np5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(N2, \textcolor{stringliteral}{'NII\_6583'}, 6583)  
 00112 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' N+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
 00113         (6583,ab\_Np1-Np, ab\_Np2-Np, ab\_Np3-Np, ab\_Np4-Np, ab\_Np5-Np)
 00114 
-00115 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3726'}, 3726)  
+00115 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3726'}, 3726)  
 00116 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
 00117         (3726,ab\_Op1-Op, ab\_Op2-Op, ab\_Op3-Op, ab\_Op4-Op, ab\_Op5-Op)
-00118 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3729'}, 3729)  
+00118 ab\_Op1, ab\_Op2, ab\_Op3, ab\_Op4, ab\_Op5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(O2, \textcolor{stringliteral}{'OII\_3729'}, 3729)  
 00119 \textcolor{keywordflow}{print} \textcolor{stringliteral}{' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
 00120         (3729,ab\_Op1-Op, ab\_Op2-Op, ab\_Op3-Op, ab\_Op4-Op, ab\_Op5-Op)
 00121 
-00122 ab\_Opp1, ab\_Opp2, ab\_Opp3, ab\_Opp4, ab\_Opp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a0a9d531b17c5ee87e8657bdad8f8d715}{ab\_ion5}(O3, \textcolor{stringliteral}{'OIII\_5007'}, 5007)  
+00122 ab\_Opp1, ab\_Opp2, ab\_Opp3, ab\_Opp4, ab\_Opp5 = \hyperlink{namespacepyneb_1_1test_1_1multi__comp_a7030e84e6d88e5cf9f9fcdc4c9cb2a91}{ab\_ion5}(O3, \textcolor{stringliteral}{'OIII\_5007'}, 5007)  
 00123 \textcolor{keywordflow}{print} \textcolor{stringliteral}{'O++%i : %.2f          %.2f         %.2f            %.2f           %.2f'} % \(\backslash\)
 00124         (5007,ab\_Opp1-Opp, ab\_Opp2-Opp, ab\_Opp3-Opp, ab\_Opp4-Opp, ab\_Opp5-Opp)
 00125 

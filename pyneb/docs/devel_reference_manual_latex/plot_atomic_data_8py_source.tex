@@ -1,5 +1,6 @@
-\hypertarget{plot_atomic_data_8py_source}{}\section{plot\+Atomic\+Data.\+py}
-\label{plot_atomic_data_8py_source}\index{pyneb/plot/plot\+Atomic\+Data.\+py@{pyneb/plot/plot\+Atomic\+Data.\+py}}
+\hypertarget{plot_atomic_data_8py}{\section{plot\-Atomic\-Data.\-py}
+\label{plot_atomic_data_8py}\index{pyneb/plot/plot\-Atomic\-Data.\-py@{pyneb/plot/plot\-Atomic\-Data.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{plot_atomic_data_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1plot_1_1plot_atomic_data}{00001} \textcolor{stringliteral}{"""@module plotAtomicData}
@@ -23,7 +24,7 @@
 00019 \textcolor{stringliteral}{    }
 00020 \textcolor{stringliteral}{    """}
 00021     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af4b7b5510131c31e072909a6d20637c3}{\_\_init\_\_}(self, elem=None, spec=None, all\_data=[], atom=None, n\_tem\_points=10000, 
-\hypertarget{plot_atomic_data_8py_source_l00022}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af4b7b5510131c31e072909a6d20637c3}{00022}                  ref\_tem=\textcolor{keywordtype}{None}, OmegaInterp=\textcolor{stringliteral}{'Cheb'}):
+\hypertarget{plot_atomic_data_8py_source_l00022}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af4b7b5510131c31e072909a6d20637c3}{00022}                  ref\_tem=\textcolor{keywordtype}{None}, OmegaInterp=\textcolor{stringliteral}{'Cheb'},NLevels=\textcolor{keywordtype}{None}):
 00023         \textcolor{stringliteral}{"""}
 00024 \textcolor{stringliteral}{    Parameters:}
 00025 \textcolor{stringliteral}{        - elem         atomic elem }
@@ -46,8 +47,8 @@
 \hypertarget{plot_atomic_data_8py_source_l00042}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{00042}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling} = \textcolor{stringliteral}{'DataPlot'}
 00043         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
 \hypertarget{plot_atomic_data_8py_source_l00044}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{00044}             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{atom} = str.capitalize(atom)
-\hypertarget{plot_atomic_data_8py_source_l00045}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{00045}             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{atom})[0]
-\hypertarget{plot_atomic_data_8py_source_l00046}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{00046}             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{atom})[1])
+\hypertarget{plot_atomic_data_8py_source_l00045}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{00045}             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{atom})[0]
+\hypertarget{plot_atomic_data_8py_source_l00046}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{00046}             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_af5bbbf002544d1336f7f673a6e777f2e}{atom})[1])
 00047         \textcolor{keywordflow}{else}:
 00048             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem} = str.capitalize(elem)
 00049             self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec} = int(spec)
@@ -89,422 +90,436 @@
 00083             coll\_data\_temp.append(item)
 00084         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} coll\_data\_temp:
 00085             pn.atomicData.setDataFile(data[\textcolor{stringliteral}{'file\_'}])
-00086             atom = pn.Atom(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}, OmegaInterp=OmegaInterp)
-00087             \textcolor{keywordflow}{try}:
-00088                 \textcolor{keywordflow}{if} (\textcolor{stringliteral}{'COEFF'} \textcolor{keywordflow}{in} atom.CollData.comments.keys()) \textcolor{keywordflow}{or} (\textcolor{stringliteral}{'O\_UNIT'} \textcolor{keywordflow}{in} atom.CollData.comments.keys()
-      ):
-00089                     self.coll\_data.remove(data)
-00090             \textcolor{keywordflow}{except}:
-00091                 \textcolor{keywordflow}{pass}
-00092 
-00093         \textcolor{comment}{# For each data set, an atom is built. }
-00094         del(atom)
-00095         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data} + self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
-00096             pn.atomicData.setDataFile(data[\textcolor{stringliteral}{'file\_'}])
-00097             atom = pn.Atom(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}, OmegaInterp=OmegaInterp)
-00098             data[\textcolor{stringliteral}{'atom'}] = atom
-00099         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} old\_data:
-00100             \textcolor{keywordflow}{if} data \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00101                 pn.atomicData.setDataFile(data)
-\hypertarget{plot_atomic_data_8py_source_l00102}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{00102}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} = string.lower(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem} + \textcolor{stringliteral}{'\_'} + \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.
+00086             atom = pn.Atom(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}, OmegaInterp=OmegaInterp, NLevels=NLevels)
+00087             \textcolor{stringliteral}{"""}
+00088 \textcolor{stringliteral}{            try:}
+00089 \textcolor{stringliteral}{                if 'O\_UNIT' in atom.CollData.comments.keys():}
+00090 \textcolor{stringliteral}{                    self.coll\_data.remove(data)}
+00091 \textcolor{stringliteral}{            except:}
+00092 \textcolor{stringliteral}{                pass}
+00093 \textcolor{stringliteral}{            """}
+00094         \textcolor{comment}{# For each data set, an atom is built. }
+00095         del(atom)
+00096         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data} + self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
+00097             pn.atomicData.setDataFile(data[\textcolor{stringliteral}{'file\_'}])
+00098             atom = pn.Atom(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}, OmegaInterp=OmegaInterp, NLevels=NLevels)
+00099             data[\textcolor{stringliteral}{'atom'}] = atom
+00100         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} old\_data:
+00101             \textcolor{keywordflow}{if} data \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00102                 pn.atomicData.setDataFile(data)
+\hypertarget{plot_atomic_data_8py_source_l00103}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{00103}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} = string.lower(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem} + \textcolor{stringliteral}{'\_'} + \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(self.
       \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec})))
-\hypertarget{plot_atomic_data_8py_source_l00103}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{00103}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{n\_tem\_points} = n\_tem\_points
-00104 
-\hypertarget{plot_atomic_data_8py_source_l00105}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{00105}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max} = 0
-00106         \textcolor{keywordflow}{for} at \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
-00107             \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].atomFileType != \textcolor{stringliteral}{'chianti'}:
-00108                 \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].atomNLevels > self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}:
-00109                     self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max} = at[\textcolor{stringliteral}{'atom'}].atomNLevels
-\hypertarget{plot_atomic_data_8py_source_l00110}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{00110}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max} = 0
-00111         \textcolor{keywordflow}{for} at \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
-00112             \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].collFileType != \textcolor{stringliteral}{'chianti'}:
-00113                 \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].collNLevels > self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max}:
-00114                     self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max} = at[\textcolor{stringliteral}{'atom'}].collNLevels
-00115                                     
-\hypertarget{plot_atomic_data_8py_source_l00116}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a389e18b521d2052577494c8611cb5c80}{00116}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a389e18b521d2052577494c8611cb5c80}{plotA}(self, save=False, figsize=(18, 12), fignum=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None}):
-00117         \textcolor{stringliteral}{"""}
-00118 \textcolor{stringliteral}{        Plot the log of the A values of each data set }
-00119 \textcolor{stringliteral}{        }
-00120 \textcolor{stringliteral}{        Parameters:}
-00121 \textcolor{stringliteral}{            - save     if True, saves the plot in a file}
-00122 \textcolor{stringliteral}{            - figsize  figure size (default: [18, 12])}
-00123 \textcolor{stringliteral}{            - fignum    figure Number}
-00124 \textcolor{stringliteral}{}
-00125 \textcolor{stringliteral}{        """}
-00126         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00127             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
-00128         \textcolor{keywordflow}{else}:
-00129             atom\_n\_max = NLevels
-00130         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
-00131             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00132         plt.figure(fignum, figsize=figsize)
-00133         plt.clf()
-00134         ax = plt.subplot(111, axisbg=\textcolor{stringliteral}{'Ivory'})
-00135         x = np.arange(atom\_n\_max * (atom\_n\_max - 1) / 2.)
-00136         ticks = x
-00137         \textcolor{comment}{# Inventory of markers. Chosen to be distinguished even when overlapped}
-00138         mark = [\textcolor{stringliteral}{'<'}, (5, 1), \textcolor{stringliteral}{'>'}, \textcolor{stringliteral}{'o'}, \textcolor{stringliteral}{'|'}]
-00139         i\_marker = 0
-00140         \textcolor{comment}{# Background colors to distinguish lower levels }
-00141         bg\_color\_sequence = [\textcolor{stringliteral}{'g'}, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r', '}b', 'y', 'm', 'c']
-00142         \textcolor{comment}{# The following command replicates the string to allocate a sufficient number of colors}
-00143         bg\_color = bg\_color\_sequence * (int(atom\_n\_max - 2) / len(bg\_color\_sequence) + 1)
-00144         tick\_label = []
-00145         
-00146         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(atom\_n\_max - 1):
-00147             \textcolor{comment}{# x0, x1 are start and end points of each level}
-00148             x0 = i * (atom\_n\_max - 1) - i * (i - 1) / 2 - 0.5
-00149             width = atom\_n\_max - i - 1
-00150             x1 = x0 + width
-00151             plt.axvspan(x0, x1, facecolor=bg\_color[i], alpha=0.05)
-00152             \textcolor{comment}{# The x axis must stretch the maximum range (although some data set might have a lower n\_level)}
-00153             \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, atom\_n\_max):
-00154                 tick\_label.append(\textcolor{stringliteral}{'('} + str(j + 1) + \textcolor{stringliteral}{', '} + str(i + 1) + \textcolor{stringliteral}{')'})
-00155 
+\hypertarget{plot_atomic_data_8py_source_l00104}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{00104}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{n\_tem\_points} = n\_tem\_points
+00105 
+\hypertarget{plot_atomic_data_8py_source_l00106}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{00106}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max} = 0
+00107         \textcolor{keywordflow}{for} at \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
+00108             \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].atomFileType != \textcolor{stringliteral}{'chianti'}:
+00109                 \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].atomNLevels > self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}:
+00110                     self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max} = at[\textcolor{stringliteral}{'atom'}].atomNLevels
+\hypertarget{plot_atomic_data_8py_source_l00111}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{00111}         self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max} = 0
+00112         \textcolor{keywordflow}{for} at \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
+00113             \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].collFileType != \textcolor{stringliteral}{'chianti'}:
+00114                 \textcolor{keywordflow}{if} at[\textcolor{stringliteral}{'atom'}].collNLevels > self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max}:
+00115                     self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max} = at[\textcolor{stringliteral}{'atom'}].collNLevels
+00116                                     
+\hypertarget{plot_atomic_data_8py_source_l00117}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a389e18b521d2052577494c8611cb5c80}{00117}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a389e18b521d2052577494c8611cb5c80}{plotA}(self, save=False, figsize=(18, 12), fignum=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None}):
+00118         \textcolor{stringliteral}{"""}
+00119 \textcolor{stringliteral}{        Plot the log of the A values of each data set }
+00120 \textcolor{stringliteral}{        }
+00121 \textcolor{stringliteral}{        Parameters:}
+00122 \textcolor{stringliteral}{            - save     if True, saves the plot in a file}
+00123 \textcolor{stringliteral}{            - figsize  figure size (default: [18, 12])}
+00124 \textcolor{stringliteral}{            - fignum    figure Number}
+00125 \textcolor{stringliteral}{}
+00126 \textcolor{stringliteral}{        """}
+00127         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00128             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
+00129         \textcolor{keywordflow}{else}:
+00130             atom\_n\_max = NLevels
+00131         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00132             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
+00133         plt.figure(fignum, figsize=figsize)
+00134         plt.clf()
+00135         ax = plt.subplot(111, axisbg=\textcolor{stringliteral}{'Ivory'})
+00136         x = np.arange(atom\_n\_max * (atom\_n\_max - 1) / 2.)
+00137         ticks = x
+00138         \textcolor{comment}{# Inventory of markers. Chosen to be distinguished even when overlapped}
+00139         mark = [\textcolor{stringliteral}{'<'}, (5, 1), \textcolor{stringliteral}{'>'}, \textcolor{stringliteral}{'o'}, \textcolor{stringliteral}{'|'}]
+00140         i\_marker = 0
+00141         \textcolor{comment}{# Background colors to distinguish lower levels }
+00142         bg\_color\_sequence = [\textcolor{stringliteral}{'g'}, \textcolor{stringliteral}{'}\textcolor{stringliteral}{r', '}b', 'y', 'm', 'c']
+00143         \textcolor{comment}{# The following command replicates the string to allocate a sufficient number of colors}
+00144         bg\_color = bg\_color\_sequence * (int(atom\_n\_max - 2) / len(bg\_color\_sequence) + 1)
+00145         tick\_label = []
+00146         
+00147         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(atom\_n\_max - 1):
+00148             \textcolor{comment}{# x0, x1 are start and end points of each level}
+00149             x0 = i * (atom\_n\_max - 1) - i * (i - 1) / 2 - 0.5
+00150             width = atom\_n\_max - i - 1
+00151             x1 = x0 + width
+00152             plt.axvspan(x0, x1, facecolor=bg\_color[i], alpha=0.05)
+00153             \textcolor{comment}{# The x axis must stretch the maximum range (although some data set might have a lower n\_level)}
+00154             \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, atom\_n\_max):
+00155                 tick\_label.append(\textcolor{stringliteral}{'('} + str(j + 1) + \textcolor{stringliteral}{', '} + str(i + 1) + \textcolor{stringliteral}{')'})
 00156 
-00157         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
-00158             n\_levels = data[\textcolor{stringliteral}{'atom'}].atomNLevels
-00159             Ay = []
-00160             A = data[\textcolor{stringliteral}{'atom'}].getA()
-00161             color = data[\textcolor{stringliteral}{'color'}]
-00162             \textcolor{keywordflow}{try}:
-00163                 \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(n\_levels - 1):
-00164                     \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, n\_levels):
-00165                         \textcolor{keywordflow}{if} A[j, i] > 0:
-00166                             Ay.append(np.log10(A[j, i]))
-00167                         \textcolor{keywordflow}{else}:
-00168                             Ay.append(np.NaN)
-00169                 plt.scatter(x, Ay, marker=mark[i\_marker], s=300., c=color, alpha=0.35, linewidths=1, label=\textcolor{stringliteral}{
+00157 
+00158         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
+00159             n\_levels = data[\textcolor{stringliteral}{'atom'}].atomNLevels
+00160             Ay = []
+00161             A = data[\textcolor{stringliteral}{'atom'}].getA()
+00162             color = data[\textcolor{stringliteral}{'color'}]
+00163             \textcolor{keywordflow}{try}:
+00164                 \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(n\_levels - 1):
+00165                     \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, n\_levels):
+00166                         \textcolor{keywordflow}{if} A[j, i] > 0:
+00167                             Ay.append(np.log10(A[j, i]))
+00168                         \textcolor{keywordflow}{else}:
+00169                             Ay.append(np.NaN)
+00170                 plt.scatter(x, Ay, marker=mark[i\_marker], s=300., c=color, alpha=0.35, linewidths=1, label=\textcolor{stringliteral}{
       '%s'} % (data[\textcolor{stringliteral}{'ID'}]))
-00170                 ax.set\_xticks(ticks)
-00171             \textcolor{keywordflow}{except}:
-00172                 pn.log\_.warn(\textcolor{stringliteral}{'Problem in plotting A'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling} + \textcolor{stringliteral}{'.plotA'})
-00173             i\_marker += 1
-00174         ax.set\_xticklabels(tick\_label)
-00175 
-00176         \textcolor{comment}{# Plot features}
-00177         plt.xlabel(\textcolor{stringliteral}{'Transition'})
-00178         plt.ylabel(\textcolor{stringliteral}{'Log A(j, i)'})
-00179         plt.title(\textcolor{stringliteral}{'Transition probabilities for [%s %s]'} % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, 
-      \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}))))
-00180         plt.legend(loc=\textcolor{stringliteral}{'lower right'}, markerscale=1., scatterpoints=1, borderpad=1, labelspacing=1)
-00181         plt.show()      
-00182         \textcolor{keywordflow}{if} save:
-00183             plt.figure(figsize=[18, 12])
-00184             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{'\_'} + data[\textcolor{stringliteral}{'ID'}] + \textcolor{stringliteral}{"-"} + self.ref\_data + \textcolor{stringliteral}{"\_A.pdf"})
-00185 
+00171                 ax.set\_xticks(ticks)
+00172             \textcolor{keywordflow}{except}:
+00173                 pn.log\_.warn(\textcolor{stringliteral}{'Problem in plotting A'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling} + \textcolor{stringliteral}{'.plotA'})
+00174             i\_marker += 1
+00175         ax.set\_xticklabels(tick\_label)
+00176 
+00177         \textcolor{comment}{# Plot features}
+00178         plt.xlabel(\textcolor{stringliteral}{'Transition'})
+00179         plt.ylabel(\textcolor{stringliteral}{'Log A(j, i)'})
+00180         plt.title(\textcolor{stringliteral}{'Transition probabilities for [%s %s]'} % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, 
+      \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}))))
+00181         plt.legend(loc=\textcolor{stringliteral}{'lower right'}, markerscale=1., scatterpoints=1, borderpad=1, labelspacing=1)
+00182         plt.show()      
+00183         \textcolor{keywordflow}{if} save:
+00184             plt.figure(figsize=[18, 12])
+00185             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{'\_'} + data[\textcolor{stringliteral}{'ID'}] + \textcolor{stringliteral}{"-"} + self.ref\_data + \textcolor{stringliteral}{"\_A.pdf"})
 00186 
 00187 
-\hypertarget{plot_atomic_data_8py_source_l00188}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a0b245c7f8b97681b15beadcef38a0021}{00188}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a0b245c7f8b97681b15beadcef38a0021}{plotAllA}(self, save=False, figsize=(18, 12), fignum=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None}):
-00189         \textcolor{stringliteral}{"""}
-00190 \textcolor{stringliteral}{        Plot the log of the A values of each data set }
-00191 \textcolor{stringliteral}{        }
-00192 \textcolor{stringliteral}{        Parameters:}
-00193 \textcolor{stringliteral}{            - save     if True, saves the plot in a file}
-00194 \textcolor{stringliteral}{            - figsize  figure size (default: [18, 12])}
-00195 \textcolor{stringliteral}{            - fignum    figure Number}
-00196 \textcolor{stringliteral}{}
-00197 \textcolor{stringliteral}{        """}
-00198         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00199             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
-00200         \textcolor{keywordflow}{else}:
-00201             atom\_n\_max = NLevels
-00202         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
-00203             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00204         fig = plt.figure(fignum, figsize=figsize)
-00205         plt.clf()
-00206         max\_y\_ticks = 6
-00207         ticks = np.arange(len(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data})+1)[1:] 
-00208         
-00209         A = np.zeros([len(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}), atom\_n\_max, atom\_n\_max])
-00210         color=[]
-00211         \textcolor{keywordflow}{for} i, data \textcolor{keywordflow}{in} enumerate(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}):
-00212             A\_tmp = data[\textcolor{stringliteral}{'atom'}].getA()
-00213             \textcolor{keywordflow}{if} A\_tmp.shape[0] > atom\_n\_max:
-00214                 A[i, :] = A\_tmp[0:atom\_n\_max, 0:atom\_n\_max]
-00215             \textcolor{keywordflow}{else}:
-00216                 A[i, 0:A\_tmp.shape[0], 0:A\_tmp.shape[1]] = A\_tmp
-00217             color.append(data[\textcolor{stringliteral}{'color'}])
-00218         
-00219         A[np.where((A<=0))] = np.NaN
-00220         lgA = np.log10(A)
-00221         
-00222         x = ticks
-00223         color = np.array(color)
-00224         \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(2, atom\_n\_max+1):
-00225             \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, j):
-00226                 y = lgA[:, j-1, i-1]
-00227                 ax = plt.subplot(atom\_n\_max - 1, atom\_n\_max - 1, (atom\_n\_max-1)*(j-2) + i,
-00228                                  axisbg=\textcolor{stringliteral}{'#FFFFE0'})
-00229                 ax.set\_xticks(x)
-00230                 plt.xlim((min(x)-0.5, max(x)+0.5))
-00231                 ax.yaxis.set\_major\_locator(MaxNLocator(max\_y\_ticks-1))
-00232                 \textcolor{keywordflow}{try}:
-00233                     plt.scatter(x, y, c=color, label=\textcolor{stringliteral}{'\_nolegend\_'}, s=40)
-00234                     lbl = \textcolor{stringliteral}{'(\{0\} -> \{1\})'}.format(j,i)
-00235                     ax.text(0.95, 0.95, lbl, fontsize=10, color=\textcolor{stringliteral}{"#660066"}, transform=ax.transAxes, ha=\textcolor{stringliteral}{"
+00188 
+\hypertarget{plot_atomic_data_8py_source_l00189}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a0b245c7f8b97681b15beadcef38a0021}{00189}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a0b245c7f8b97681b15beadcef38a0021}{plotAllA}(self, save=False, figsize=(18, 12), fignum=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None}):
+00190         \textcolor{stringliteral}{"""}
+00191 \textcolor{stringliteral}{        Plot the log of the A values of each data set }
+00192 \textcolor{stringliteral}{        }
+00193 \textcolor{stringliteral}{        Parameters:}
+00194 \textcolor{stringliteral}{            - save     if True, saves the plot in a file}
+00195 \textcolor{stringliteral}{            - figsize  figure size (default: [18, 12])}
+00196 \textcolor{stringliteral}{            - fignum    figure Number}
+00197 \textcolor{stringliteral}{}
+00198 \textcolor{stringliteral}{        """}
+00199         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00200             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
+00201         \textcolor{keywordflow}{else}:
+00202             atom\_n\_max = NLevels
+00203         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00204             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
+00205         fig = plt.figure(fignum, figsize=figsize)
+00206         plt.clf()
+00207         max\_y\_ticks = 6
+00208         ticks = np.arange(len(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data})+1)[1:] 
+00209         
+00210         A = np.zeros([len(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}), atom\_n\_max, atom\_n\_max])
+00211         color=[]
+00212         \textcolor{keywordflow}{for} i, data \textcolor{keywordflow}{in} enumerate(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}):
+00213             A\_tmp = data[\textcolor{stringliteral}{'atom'}].getA()
+00214             \textcolor{keywordflow}{if} A\_tmp.shape[0] > atom\_n\_max:
+00215                 A[i, :] = A\_tmp[0:atom\_n\_max, 0:atom\_n\_max]
+00216             \textcolor{keywordflow}{else}:
+00217                 A[i, 0:A\_tmp.shape[0], 0:A\_tmp.shape[1]] = A\_tmp
+00218             color.append(data[\textcolor{stringliteral}{'color'}])
+00219         
+00220         A[np.where((A<=0))] = np.NaN
+00221         lgA = np.log10(A)
+00222         
+00223         x = ticks
+00224         color = np.array(color)
+00225         \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(2, atom\_n\_max+1):
+00226             \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, j):
+00227                 y = lgA[:, j-1, i-1]
+00228                 ax = plt.subplot(atom\_n\_max - 1, atom\_n\_max - 1, (atom\_n\_max-1)*(j-2) + i,
+00229                                  axisbg=\textcolor{stringliteral}{'#FFFFE0'})
+00230                 ax.set\_xticks(x)
+00231                 plt.xlim((min(x)-0.5, max(x)+0.5))
+00232                 ax.yaxis.set\_major\_locator(MaxNLocator(max\_y\_ticks-1))
+00233                 \textcolor{keywordflow}{try}:
+00234                     plt.scatter(x, y, c=color, label=\textcolor{stringliteral}{'\_nolegend\_'}, s=40)
+00235                     lbl = \textcolor{stringliteral}{'(\{0\} -> \{1\})'}.format(j,i)
+00236                     ax.text(0.95, 0.95, lbl, fontsize=10, color=\textcolor{stringliteral}{"#660066"}, transform=ax.transAxes, ha=\textcolor{stringliteral}{"
       right"}, va=\textcolor{stringliteral}{"top"})                                    
-00236                 \textcolor{keywordflow}{except}:
-00237                     pn.log\_.warn(\textcolor{stringliteral}{'Problem with plotting a subplot \{\} \{\}'}.format(i,j), calling=self.
+00237                 \textcolor{keywordflow}{except}:
+00238                     pn.log\_.warn(\textcolor{stringliteral}{'Problem with plotting a subplot \{\} \{\}'}.format(i,j), calling=self.
       \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00238                 \textcolor{keywordflow}{if} (j==atom\_n\_max) & (i==1):  
-00239                     plt.xlabel(\textcolor{stringliteral}{'Reference #'}, fontsize=8)
-00240                     plt.ylabel(\textcolor{stringliteral}{'Log(A$\_\{ji\}$)'}, fontsize=8)
-00241         plt.subplots\_adjust(left=0.15, right=0.95, top=0.95, bottom=0.12)
-00242         plt.gca().get\_yaxis().get\_major\_formatter().set\_useOffset(\textcolor{keyword}{False})
-00243         ax.set\_xticks(x)
-00244         
-00245         fig.text(.5, .05, \textcolor{stringliteral}{"i (lower level)"}, fontsize=12, ha=\textcolor{stringliteral}{'center'}, color=\textcolor{stringliteral}{"#660066"}, va=\textcolor{stringliteral}{'top'})
-00246         fig.text(.05, .5, \textcolor{stringliteral}{"j (upper level)"}, ha=\textcolor{stringliteral}{'left'}, va=\textcolor{stringliteral}{'center'}, fontsize=12, color=\textcolor{stringliteral}{"#660066"}, rotation
+00239                 \textcolor{keywordflow}{if} (j==atom\_n\_max) & (i==1):  
+00240                     plt.xlabel(\textcolor{stringliteral}{'Reference #'}, fontsize=8)
+00241                     plt.ylabel(\textcolor{stringliteral}{'Log(A$\_\{ji\}$)'}, fontsize=8)
+00242         plt.subplots\_adjust(left=0.15, right=0.95, top=0.95, bottom=0.12)
+00243         plt.gca().get\_yaxis().get\_major\_formatter().set\_useOffset(\textcolor{keyword}{False})
+00244         ax.set\_xticks(x)
+00245         
+00246         fig.text(.5, .05, \textcolor{stringliteral}{"i (lower level)"}, fontsize=12, ha=\textcolor{stringliteral}{'center'}, color=\textcolor{stringliteral}{"#660066"}, va=\textcolor{stringliteral}{'top'})
+00247         fig.text(.05, .5, \textcolor{stringliteral}{"j (upper level)"}, ha=\textcolor{stringliteral}{'left'}, va=\textcolor{stringliteral}{'center'}, fontsize=12, color=\textcolor{stringliteral}{"#660066"}, rotation
       =90)
-00247         title = \textcolor{stringliteral}{"Available transition probabilities for \{0\} \{1\}"}.format(self.
-      \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec})))
-00248         fig.text(.5, .95, title, color=\textcolor{stringliteral}{"#191970"}, fontsize=14, ha=\textcolor{stringliteral}{'center'})
-00249         \textcolor{keywordflow}{for} i, data \textcolor{keywordflow}{in} enumerate(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}):
-00250             x\_txt = .95
-00251             y\_txt = .85 - .04*i 
-00252             fig.text(x\_txt, y\_txt, \textcolor{stringliteral}{"Ref. %d: %s"} %(i+1, data[\textcolor{stringliteral}{'ID'}]), color=color[i], ha = \textcolor{stringliteral}{'right'}) 
-00253 
-00254         plt.tight\_layout(pad=0.1)
-00255         \textcolor{keywordflow}{if} save:
-00256             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{"\_all\_As.pdf"})
-00257     
-00258         plt.show()      
-00259         
-00260 
-\hypertarget{plot_atomic_data_8py_source_l00261}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9fc5e1df4de9471e26b20018ce89eb9d}{00261}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9fc5e1df4de9471e26b20018ce89eb9d}{plotRelA}(self, ref\_data=None, save=False, figsize=None, fignum=None, NLevels=None, fig=None
+00248         title = \textcolor{stringliteral}{"Available transition probabilities for \{0\} \{1\}"}.format(self.
+      \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec})))
+00249         fig.text(.5, .95, title, color=\textcolor{stringliteral}{"#191970"}, fontsize=14, ha=\textcolor{stringliteral}{'center'})
+00250         \textcolor{keywordflow}{for} i, data \textcolor{keywordflow}{in} enumerate(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}):
+00251             x\_txt = .95
+00252             y\_txt = .85 - .04*i 
+00253             fig.text(x\_txt, y\_txt, \textcolor{stringliteral}{"Ref. %d: %s"} %(i+1, data[\textcolor{stringliteral}{'ID'}]), color=color[i], ha = \textcolor{stringliteral}{'right'}) 
+00254 
+00255         plt.tight\_layout(pad=0.1)
+00256         \textcolor{keywordflow}{if} save:
+00257             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{"\_all\_As.pdf"})
+00258     
+00259         plt.show()      
+00260         
+00261 
+\hypertarget{plot_atomic_data_8py_source_l00262}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9fc5e1df4de9471e26b20018ce89eb9d}{00262}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9fc5e1df4de9471e26b20018ce89eb9d}{plotRelA}(self, ref\_data=None, save=False, figsize=None, fignum=None, NLevels=None, fig=None
       ):
-00262         \textcolor{stringliteral}{"""}
-00263 \textcolor{stringliteral}{        Plot the relative difference of the A of each data set with respect to the reference one}
-00264 \textcolor{stringliteral}{}
-00265 \textcolor{stringliteral}{        Parameters:}
-00266 \textcolor{stringliteral}{            - ref\_data       reference data set for comparing transition probabilities (default=first data
+00263         \textcolor{stringliteral}{"""}
+00264 \textcolor{stringliteral}{        Plot the relative difference of the A of each data set with respect to the reference one}
+00265 \textcolor{stringliteral}{}
+00266 \textcolor{stringliteral}{        Parameters:}
+00267 \textcolor{stringliteral}{            - ref\_data       reference data set for comparing transition probabilities (default=first data
        ID)}
-00267 \textcolor{stringliteral}{            - save           if True, save the plot in a file (default: False)}
-00268 \textcolor{stringliteral}{            - figsize        figure size (default: [18, 12])}
-00269 \textcolor{stringliteral}{            - fignum         figure number}
-00270 \textcolor{stringliteral}{}
-00271 \textcolor{stringliteral}{        """}
-00272         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00273             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
-00274         \textcolor{keywordflow}{else}:
-00275             atom\_n\_max = NLevels
-00276         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
-00277             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00278         \textcolor{comment}{# Commented out because it produced an extra, empty frame - VL 30 Jul 2015}
-00279         \textcolor{comment}{#if fig is None:}
-00280         \textcolor{comment}{#    fig = plt.figure(fignum, figsize=figsize)}
-00281         \textcolor{comment}{#plt.clf()}
-00282         ticks = range(atom\_n\_max + 1)[1:]
-00283 
-00284         \textcolor{comment}{# The As of the reference data set are stored}
-00285         \textcolor{keywordflow}{if} ref\_data \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00286             ref\_data = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}[0][\textcolor{stringliteral}{'ID'}]
-00287         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
-00288             \textcolor{keywordflow}{if} (data[\textcolor{stringliteral}{'ID'}] \textcolor{keywordflow}{is} ref\_data):
-00289                 ref\_A = data[\textcolor{stringliteral}{'atom'}].getA()
-00290                 \textcolor{comment}{# Only non-zero values are taken into account to prevent dividing by zero}
-00291                 nonzero\_ref\_A\_indexes = np.nonzero(ref\_A)
-00292 
-00293         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
-00294             \textcolor{keywordflow}{if} (data[\textcolor{stringliteral}{'ID'}] \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} ref\_data):
-00295                 A = data[\textcolor{stringliteral}{'atom'}].getA()
-00296                 \textcolor{keywordflow}{try}:
-00297                     \textcolor{comment}{# The data to be compared might have fewer levels than the reference one. Only the ones
+00268 \textcolor{stringliteral}{            - save           if True, save the plot in a file (default: False)}
+00269 \textcolor{stringliteral}{            - figsize        figure size (default: [18, 12])}
+00270 \textcolor{stringliteral}{            - fignum         figure number}
+00271 \textcolor{stringliteral}{}
+00272 \textcolor{stringliteral}{        """}
+00273         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00274             atom\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a668572cfe9a684e7195535d60d343938}{atom\_n\_max}
+00275         \textcolor{keywordflow}{else}:
+00276             atom\_n\_max = NLevels
+00277         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00278             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
+00279         \textcolor{comment}{# Commented out because it produced an extra, empty frame - VL 30 Jul 2015}
+00280         \textcolor{comment}{#if fig is None:}
+00281         \textcolor{comment}{#    fig = plt.figure(fignum, figsize=figsize)}
+00282         \textcolor{comment}{#plt.clf()}
+00283         ticks = range(atom\_n\_max + 1)[1:]
+00284 
+00285         \textcolor{comment}{# The As of the reference data set are stored}
+00286         \textcolor{keywordflow}{if} ref\_data \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00287             ref\_data = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}[0][\textcolor{stringliteral}{'ID'}]
+00288         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
+00289             \textcolor{keywordflow}{if} (data[\textcolor{stringliteral}{'ID'}] \textcolor{keywordflow}{is} ref\_data):
+00290                 ref\_A = data[\textcolor{stringliteral}{'atom'}].getA()
+00291                 \textcolor{comment}{# Only non-zero values are taken into account to prevent dividing by zero}
+00292                 nonzero\_ref\_A\_indexes = np.nonzero(ref\_A)
+00293 
+00294         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aee33ad460a38cb4293a5bd89cec12294}{atom\_data}:
+00295             \textcolor{keywordflow}{if} (data[\textcolor{stringliteral}{'ID'}] \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} ref\_data):
+00296                 A = data[\textcolor{stringliteral}{'atom'}].getA()
+00297                 \textcolor{keywordflow}{try}:
+00298                     \textcolor{comment}{# The data to be compared might have fewer levels than the reference one. Only the ones
        in common are considered.}
-00298                     tmp\_indexes = np.asarray(nonzero\_ref\_A\_indexes) 
-00299                     up\_indexes = tmp\_indexes[0][tmp\_indexes[0] < data[\textcolor{stringliteral}{'atom'}].atomNLevels]
-00300                     lo\_indexes = tmp\_indexes[1][tmp\_indexes[0] < data[\textcolor{stringliteral}{'atom'}].atomNLevels]
-00301                     \textcolor{comment}{# Indexes for which the reference data set is not zero}
-00302                     ref\_indexes = (up\_indexes, lo\_indexes)
-00303                     \textcolor{comment}{# Ratio of A/A\_ref for non-zero A\_ref values}
-00304                     A\_ratio = A[ref\_indexes] / ref\_A[ref\_indexes]
-00305                     nonzero\_A\_ratio\_indexes = np.nonzero(A\_ratio)
-00306                     rel\_A = np.log10(A\_ratio[nonzero\_A\_ratio\_indexes])
-00307                     \textcolor{comment}{# Plotting starts}
-00308                     \textcolor{comment}{#fig = plt.figure()}
-00309                     \textcolor{keywordflow}{if} fig \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00310                         fig = plt.figure(fignum, figsize=figsize)
-00311                     plt.clf()
-00312                     ax = plt.subplot(111, axisbg=\textcolor{stringliteral}{'#FFFFE0'})
-00313                     fig.subplots\_adjust(top=0.9)
-00314                     \textcolor{comment}{# Physical levels = array levels + 1}
-00315                     x = np.asarray(lo\_indexes) + 1
-00316                     y = np.asarray(up\_indexes) + 1
-00317                     \textcolor{comment}{# Size is proportional to difference between As}
-00318                     \textcolor{comment}{# Numerical value of size adjusted empirically, no particular meaning }
-00319                     size = np.multiply(10000., np.abs(rel\_A))
-00320                     \textcolor{comment}{# A different color is assigned to data points depending on whether they are smaller or
+00299                     tmp\_indexes = np.asarray(nonzero\_ref\_A\_indexes) 
+00300                     up\_indexes = tmp\_indexes[0][tmp\_indexes[0] < data[\textcolor{stringliteral}{'atom'}].atomNLevels]
+00301                     lo\_indexes = tmp\_indexes[1][tmp\_indexes[0] < data[\textcolor{stringliteral}{'atom'}].atomNLevels]
+00302                     \textcolor{comment}{# Indexes for which the reference data set is not zero}
+00303                     ref\_indexes = (up\_indexes, lo\_indexes)
+00304                     \textcolor{comment}{# Ratio of A/A\_ref for non-zero A\_ref values}
+00305                     A\_ratio = A[ref\_indexes] / ref\_A[ref\_indexes]
+00306                     nonzero\_A\_ratio\_indexes = np.nonzero(A\_ratio)
+00307                     rel\_A = np.log10(A\_ratio[nonzero\_A\_ratio\_indexes])
+00308                     \textcolor{comment}{# Plotting starts}
+00309                     \textcolor{comment}{#fig = plt.figure()}
+00310                     \textcolor{keywordflow}{if} fig \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00311                         fig = plt.figure(fignum, figsize=figsize)
+00312                     plt.clf()
+00313                     ax = plt.subplot(111, axisbg=\textcolor{stringliteral}{'#FFFFE0'})
+00314                     fig.subplots\_adjust(top=0.9)
+00315                     \textcolor{comment}{# Physical levels = array levels + 1}
+00316                     x = np.asarray(lo\_indexes) + 1
+00317                     y = np.asarray(up\_indexes) + 1
+00318                     \textcolor{comment}{# Size is proportional to difference between As}
+00319                     \textcolor{comment}{# Numerical value of size adjusted empirically, no particular meaning }
+00320                     size = np.multiply(10000., np.abs(rel\_A))
+00321                     \textcolor{comment}{# A different color is assigned to data points depending on whether they are smaller or
        larger}
-00321                     \textcolor{comment}{# than the reference data.}
-00322                     \textcolor{comment}{# The ratio is not compared to exactly one to include only truly different values  }
-00323                     index\_grt = np.where(rel\_A > 0.0000)
-00324                     color\_grt = np.array([\textcolor{stringliteral}{'#FF8C00'}]).repeat(x[index\_grt].size)
-00325                     index\_sml = np.where(rel\_A <= 0.0)
-00326                     color\_sml = np.array([\textcolor{stringliteral}{'#FF1480'}]).repeat(x[index\_sml].size)
-00327                     \textcolor{comment}{# The range is adjusted to include only values for which there is a difference}
-00328                     xmin = np.max([np.min(x[index\_sml]), np.min(x[index\_grt])])
-00329                     xmax = np.min([np.max(x[index\_sml]), np.max(x[index\_sml])])
-00330                     ax.set\_xticks(ticks)
-00331                     ax.set\_xlim((xmin - 0.25, xmax + 0.25)[:])
-00332                     \textcolor{comment}{# The x-axis is plotted on the top to mimic the data array in the fits file}
-00333                     \textcolor{keywordflow}{for} tick \textcolor{keywordflow}{in} ax.xaxis.get\_major\_ticks():
-00334                         tick.label1On = \textcolor{keyword}{False}
-00335                         tick.label2On = \textcolor{keyword}{True}
-00336                     ymin = np.min([np.min(y[index\_sml]), np.min(y[index\_grt])])
-00337                     ymax = np.max([np.max(y[index\_sml]), np.max(y[index\_sml])])
-00338                     ax.set\_yticks(ticks)
-00339                     \textcolor{comment}{# The y axis increases downward to mimic the data array in the fits file}
-00340                     ax.set\_ylim((ymin - 0.25, ymax + 0.25)[::-1])
-00341                     \textcolor{comment}{# Fake points, just to generate the labels (I don't know how to generate a reasonable
+00322                     \textcolor{comment}{# than the reference data.}
+00323                     \textcolor{comment}{# The ratio is not compared to exactly one to include only truly different values  }
+00324                     index\_grt = np.where(rel\_A > 0.0000)
+00325                     color\_grt = np.array([\textcolor{stringliteral}{'#FF8C00'}]).repeat(x[index\_grt].size)
+00326                     index\_sml = np.where(rel\_A <= 0.0)
+00327                     color\_sml = np.array([\textcolor{stringliteral}{'#FF1480'}]).repeat(x[index\_sml].size)
+00328                     \textcolor{comment}{# The range is adjusted to include only values for which there is a difference}
+00329                     xmin = np.max([np.min(x[index\_sml]), np.min(x[index\_grt])])
+00330                     xmax = np.min([np.max(x[index\_sml]), np.max(x[index\_sml])])
+00331                     ax.set\_xticks(ticks)
+00332                     ax.set\_xlim((xmin - 0.25, xmax + 0.25)[:])
+00333                     \textcolor{comment}{# The x-axis is plotted on the top to mimic the data array in the fits file}
+00334                     \textcolor{keywordflow}{for} tick \textcolor{keywordflow}{in} ax.xaxis.get\_major\_ticks():
+00335                         tick.label1On = \textcolor{keyword}{False}
+00336                         tick.label2On = \textcolor{keyword}{True}
+00337                     ymin = np.min([np.min(y[index\_sml]), np.min(y[index\_grt])])
+00338                     ymax = np.max([np.max(y[index\_sml]), np.max(y[index\_sml])])
+00339                     ax.set\_yticks(ticks)
+00340                     \textcolor{comment}{# The y axis increases downward to mimic the data array in the fits file}
+00341                     ax.set\_ylim((ymin - 0.25, ymax + 0.25)[::-1])
+00342                     \textcolor{comment}{# Fake points, just to generate the labels (I don't know how to generate a reasonable
        label}
-00342                     \textcolor{comment}{# for data points with markers of different size)}
-00343                     plt.scatter(x[index\_grt][0], y[index\_grt][0], marker=\textcolor{stringliteral}{'o'}, s=.0002, c=color\_grt[0],
-00344                                 label=\textcolor{stringliteral}{'Positive (max = %.2f)'} % (np.max(rel\_A)))
-00345                     plt.scatter(x[index\_grt][0], y[index\_grt][0], marker=\textcolor{stringliteral}{'o'}, s=.0002, c=color\_sml[0],
-00346                                 label=\textcolor{stringliteral}{'Negative (min = %.2f)'} % (np.min(rel\_A)))
-00347                     \textcolor{comment}{# True data; size reflects divergence from reference data, color whether positive or
+00343                     \textcolor{comment}{# for data points with markers of different size)}
+00344                     plt.scatter(x[index\_grt][0], y[index\_grt][0], marker=\textcolor{stringliteral}{'o'}, s=.0002, c=color\_grt[0],
+00345                                 label=\textcolor{stringliteral}{'Positive (max = %.2f)'} % (np.max(rel\_A)))
+00346                     plt.scatter(x[index\_grt][0], y[index\_grt][0], marker=\textcolor{stringliteral}{'o'}, s=.0002, c=color\_sml[0],
+00347                                 label=\textcolor{stringliteral}{'Negative (min = %.2f)'} % (np.min(rel\_A)))
+00348                     \textcolor{comment}{# True data; size reflects divergence from reference data, color whether positive or
        negative}
-00348                     plt.scatter(x[index\_grt], y[index\_grt], marker=\textcolor{stringliteral}{'o'}, s=size[index\_grt], c=np.asarray(
+00349                     plt.scatter(x[index\_grt], y[index\_grt], marker=\textcolor{stringliteral}{'o'}, s=size[index\_grt], c=np.asarray(
       color\_grt), alpha=1.0)
-00349                     plt.scatter(x[index\_sml], y[index\_sml], marker=\textcolor{stringliteral}{'o'}, s=size[index\_sml], c=np.asarray(
+00350                     plt.scatter(x[index\_sml], y[index\_sml], marker=\textcolor{stringliteral}{'o'}, s=size[index\_sml], c=np.asarray(
       color\_sml), alpha=1.0)
-00350                     \textcolor{comment}{# X-axis label }
-00351                     ax.text(.5, 1.05, \textcolor{stringliteral}{'$i$ (lower level)'}, transform=ax.transAxes, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'bottom'}
+00351                     \textcolor{comment}{# X-axis label }
+00352                     ax.text(.5, 1.05, \textcolor{stringliteral}{'$i$ (lower level)'}, transform=ax.transAxes, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'bottom'}
       )
-00352                     \textcolor{comment}{#plt.xlabel('$i$ (lower level)')}
-00353                     \textcolor{comment}{# Y-axis label}
-00354                     plt.ylabel(\textcolor{stringliteral}{'$j$ (upper level)'})
-00355                     \textcolor{comment}{# Legend}
-00356                     plt.legend(loc=\textcolor{stringliteral}{'upper right'}, markerscale=1000., scatterpoints=1, borderpad=1,
-00357                                labelspacing=1, prop=dict(size=12), title=\textcolor{stringliteral}{u'Log (%s / %s)'} % (data[\textcolor{stringliteral}{'ID'}], 
+00353                     \textcolor{comment}{#plt.xlabel('$i$ (lower level)')}
+00354                     \textcolor{comment}{# Y-axis label}
+00355                     plt.ylabel(\textcolor{stringliteral}{'$j$ (upper level)'})
+00356                     \textcolor{comment}{# Legend}
+00357                     plt.legend(loc=\textcolor{stringliteral}{'upper right'}, markerscale=1000., scatterpoints=1, borderpad=1,
+00358                                labelspacing=1, prop=dict(size=12), title=\textcolor{stringliteral}{u'Log (%s / %s)'} % (data[\textcolor{stringliteral}{'ID'}], 
       ref\_data))
-00358                     \textcolor{comment}{# Plot title}
-00359                     ax.text(.5, -.10, \textcolor{stringliteral}{"Relative difference between $A$s data for [%s %s]"} 
-00360                                 % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.
+00359                     \textcolor{comment}{# Plot title}
+00360                     ax.text(.5, -.10, \textcolor{stringliteral}{"Relative difference between $A$s data for [%s %s]"} 
+00361                                 % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(self.
       \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}))),
-00361                                 transform=ax.transAxes, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'bottom'}, color=\textcolor{stringliteral}{'#191970'}, size=12)
-00362                 \textcolor{keywordflow}{except}:
-00363                     pn.log\_.warn(\textcolor{stringliteral}{'Problem in plotting relA'}, calling=\textcolor{stringliteral}{'DatasetPlot'})
-00364 
-00365                 \textcolor{keywordflow}{if} save:
-00366                     plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{'\_'} + data[\textcolor{stringliteral}{'ID'}] + \textcolor{stringliteral}{"-"} + ref\_data + \textcolor{stringliteral}{"\_relA.pdf"})
-00367     
-00368                 plt.show()      
-00369 
+00362                                 transform=ax.transAxes, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'bottom'}, color=\textcolor{stringliteral}{'#191970'}, size=12)
+00363                 \textcolor{keywordflow}{except}:
+00364                     pn.log\_.warn(\textcolor{stringliteral}{'Problem in plotting relA'}, calling=\textcolor{stringliteral}{'DatasetPlot'})
+00365 
+00366                 \textcolor{keywordflow}{if} save:
+00367                     plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{'\_'} + data[\textcolor{stringliteral}{'ID'}] + \textcolor{stringliteral}{"-"} + ref\_data + \textcolor{stringliteral}{"\_relA.pdf"})
+00368     
+00369                 plt.show()      
 00370 
-00371     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a674c04e8512a9f5724c2af0df4e0a8fe}{plotOmega}(self, save=False, figsize=(18, 12), fignum=\textcolor{keywordtype}{None}, scan\_orders=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None},
-\hypertarget{plot_atomic_data_8py_source_l00372}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a674c04e8512a9f5724c2af0df4e0a8fe}{00372}                   fig=\textcolor{keywordtype}{None}):
-00373         \textcolor{stringliteral}{"""}
-00374 \textcolor{stringliteral}{        Plot the tabulated collision strengths of each data set and the fit that is performed by PyNeb}
-00375 \textcolor{stringliteral}{        }
-00376 \textcolor{stringliteral}{        Parameters:}
-00377 \textcolor{stringliteral}{            - save     Boolean. Determine if the plot is automatically saved in a file (default: False)}
-00378 \textcolor{stringliteral}{            - figsize  List. figure size in inches (default: [18, 12])}
-00379 \textcolor{stringliteral}{            - fignum   Figure Number}
-00380 \textcolor{stringliteral}{            - scan\_orders = None or (min\_order, max\_order) or (min\_order, -1) to go until the max.
+00371 
+00372     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a674c04e8512a9f5724c2af0df4e0a8fe}{plotOmega}(self, save=False, figsize=(18, 12), fignum=1, scan\_orders=\textcolor{keywordtype}{None}, NLevels=\textcolor{keywordtype}{None},
+\hypertarget{plot_atomic_data_8py_source_l00373}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a674c04e8512a9f5724c2af0df4e0a8fe}{00373}                   fig=\textcolor{keywordtype}{None}):
+00374         \textcolor{stringliteral}{"""}
+00375 \textcolor{stringliteral}{        Plot the tabulated collision strengths of each data set and the fit that is performed by PyNeb}
+00376 \textcolor{stringliteral}{        }
+00377 \textcolor{stringliteral}{        Parameters:}
+00378 \textcolor{stringliteral}{            - save     Boolean. Determine if the plot is automatically saved in a file (default: False)}
+00379 \textcolor{stringliteral}{            - figsize  List. figure size in inches (default: [18, 12])}
+00380 \textcolor{stringliteral}{            - fignum   Figure Number}
+00381 \textcolor{stringliteral}{            - scan\_orders = None or (min\_order, max\_order) or (min\_order, -1) to go until the max.
        DEPRECATED!!!}
-00381 \textcolor{stringliteral}{}
-00382 \textcolor{stringliteral}{        """}
-00383         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00384             coll\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max}
-00385         \textcolor{keywordflow}{else}:
-00386             coll\_n\_max = NLevels
-00387         \textcolor{comment}{# Plotting range somewhat larger than actual data range (less tight) }
-00388         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
-00389             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00390         \textcolor{keywordflow}{if} fig \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00391             fig = plt.figure(fignum, figsize=figsize)
-00392         plt.autoscale(tight=\textcolor{keyword}{False})
-00393         \textcolor{comment}{# I need two }
-00394         first = \textcolor{keyword}{True}
-00395         first\_done = \textcolor{keyword}{False}
-00396         plt.clf()
-00397         
-00398         legend\_text = []
-00399         legend\_lines = []
-00400 \textcolor{comment}{#        style\_dic = ['-', '--', '-.', ':'] * 10}
-00401         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
-00402             \textcolor{comment}{# tem\_points = tabulated temperature points (different for each data set)}
-00403             tem\_points = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a13bb54a69f98e9761bacb4b98f481619}{tem\_in\_K}(data[\textcolor{stringliteral}{'atom'}].tem\_units, data[\textcolor{stringliteral}{'atom'}].getTemArray())
-00404             tem\_min = min(tem\_points)
-00405             tem\_max = max(tem\_points)
-00406             \textcolor{comment}{# tem\_funct = array of temperature values for which the fit is evaluated}
-00407             tem\_funct = np.linspace(tem\_min, tem\_max, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{n\_tem\_points})
-00408             x\_dots = np.log10(tem\_points)
-00409             x\_lines = np.log10(tem\_funct)
-00410             \textcolor{comment}{# Loops over all levels}
-00411             \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, coll\_n\_max+1):
-00412                 \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, coll\_n\_max+1):                
-00413                         \textcolor{comment}{# N levels require an N-1 x N-1 array of plots}
-00414                         \textcolor{comment}{# The subplots are arranged in rows and columns according to the upper and lower
+00382 \textcolor{stringliteral}{}
+00383 \textcolor{stringliteral}{        """}
+00384         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00385             coll\_n\_max = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa15b01aa8da5eac903d797c2a1af3461}{coll\_n\_max}
+00386         \textcolor{keywordflow}{else}:
+00387             coll\_n\_max = NLevels
+00388         \textcolor{comment}{# Plotting range somewhat larger than actual data range (less tight) }
+00389         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} pn.config.INSTALLED[\textcolor{stringliteral}{'plt'}]:
+00390             pn.log\_.error(\textcolor{stringliteral}{'Matplotlib not installed!'}, calling=self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
+00391         \textcolor{keywordflow}{if} fig \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00392             fig = plt.figure(fignum, figsize=figsize)
+00393         plt.autoscale(tight=\textcolor{keyword}{False})
+00394         \textcolor{comment}{# I need two }
+00395         first = \textcolor{keyword}{True}
+00396         first\_done = \textcolor{keyword}{False}
+00397         plt.clf()
+00398         
+00399         legend\_text = []
+00400         legend\_lines = []
+00401 \textcolor{comment}{#        style\_dic = ['-', '--', '-.', ':'] * 10}
+00402         \textcolor{keywordflow}{for} data \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a50a9af3695633a64c66d082ed67d1bfb}{coll\_data}:
+00403             \textcolor{comment}{# tem\_points = tabulated temperature points (different for each data set)}
+00404             tem\_points = self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a44a19b283355d6c3ad1903e70009cfee}{tem\_in\_K}(data[\textcolor{stringliteral}{'atom'}].tem\_units, data[\textcolor{stringliteral}{'atom'}].getTemArray())
+00405             tem\_min = min(tem\_points)
+00406             tem\_max = max(tem\_points)
+00407             \textcolor{comment}{# tem\_funct = array of temperature values for which the fit is evaluated}
+00408             tem\_funct = np.linspace(tem\_min, tem\_max, self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a9f92ae121756c0e3d3624f11e3d2ae17}{n\_tem\_points})
+00409             x\_dots = np.log10(tem\_points)
+00410             x\_lines = np.log10(tem\_funct)
+00411             \textcolor{keywordflow}{if} \textcolor{stringliteral}{'COEFF'} \textcolor{keywordflow}{in} data[\textcolor{stringliteral}{'atom'}].CollData.comments.keys():
+00412                 coeff = float(data[\textcolor{stringliteral}{'atom'}].CollData.comments[\textcolor{stringliteral}{'COEFF'}])
+00413             \textcolor{keywordflow}{else}:
+00414                 coeff = 1.0
+00415             \textcolor{comment}{# Loops over all levels}
+00416             \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, coll\_n\_max+1):
+00417                 \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i + 1, coll\_n\_max+1):                
+00418                         \textcolor{comment}{# N levels require an N-1 x N-1 array of plots}
+00419                         \textcolor{comment}{# The subplots are arranged in rows and columns according to the upper and lower
        levels}
-00415  
-00416                         ax = plt.subplot(coll\_n\_max-1, coll\_n\_max-1, 
-00417                                          (coll\_n\_max-1) * (j - 2) + i,
-00418                                          axisbg=\textcolor{stringliteral}{'#FFFFE0'})
-00419                         \textcolor{keywordflow}{if} (i <= data[\textcolor{stringliteral}{'atom'}].collNLevels) \textcolor{keywordflow}{and} (j <= data[\textcolor{stringliteral}{'atom'}].collNLevels):
-00420                             \textcolor{keywordflow}{try}:
-00421                                 y\_dots = data[\textcolor{stringliteral}{'atom'}].getOmegaArray(j, i)
-00422                                 \textcolor{keywordflow}{if} y\_dots.sum() > 0.0:
-00423                                     ax.plot(x\_dots, y\_dots, color=data[\textcolor{stringliteral}{'color'}],
-00424                                             marker=\textcolor{stringliteral}{'o'}, linestyle=\textcolor{stringliteral}{'None'}, label=\textcolor{stringliteral}{'\_nolegend\_'})
-00425                                 y\_lines = data[\textcolor{stringliteral}{'atom'}].getOmega(tem\_funct, j, i)
-00426                                 \textcolor{keywordflow}{if} y\_lines.sum() > 0.:
-00427                                     ax.plot(x\_lines, y\_lines,
-00428                                             color=data[\textcolor{stringliteral}{'color'}], label=\textcolor{stringliteral}{'\_nolegend\_'})
-00429                             \textcolor{keywordflow}{except}:
-00430                                 pn.log\_.warn(\textcolor{stringliteral}{'Problem with plotting a data set'}, calling=self.
+00420  
+00421                         ax = plt.subplot(coll\_n\_max-1, coll\_n\_max-1, 
+00422                                          (coll\_n\_max-1) * (j - 2) + i,
+00423                                          axisbg=\textcolor{stringliteral}{'#FFFFE0'})
+00424                         \textcolor{keywordflow}{if} (i <= data[\textcolor{stringliteral}{'atom'}].collNLevels) \textcolor{keywordflow}{and} (j <= data[\textcolor{stringliteral}{'atom'}].collNLevels):
+00425                             y\_dots = data[\textcolor{stringliteral}{'atom'}].getOmega(tem\_points, j, i)
+00426                             \textcolor{keywordflow}{try}:
+00427                                 \textcolor{keywordflow}{if} \textcolor{stringliteral}{'O\_UNIT'} \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} data[\textcolor{stringliteral}{'atom'}].CollData.comments:
+00428                                     y\_dots = coeff * data[\textcolor{stringliteral}{'atom'}].getOmegaArray(j, i)
+00429                                     \textcolor{keywordflow}{if} y\_dots.sum() > 0.0:
+00430                                         ax.plot(x\_dots, y\_dots, color=data[\textcolor{stringliteral}{'color'}],
+00431                                                 marker=\textcolor{stringliteral}{'*'}, linestyle=\textcolor{stringliteral}{'None'}, label=\textcolor{stringliteral}{'\_nolegend\_'}, 
+      markersize=10)
+00432                                     
+00433                                 y\_dots = data[\textcolor{stringliteral}{'atom'}].getOmega(tem\_points, j, i)
+00434                                 \textcolor{keywordflow}{if} y\_dots.sum() > 0.0:
+00435                                     ax.plot(x\_dots, y\_dots, color=data[\textcolor{stringliteral}{'color'}],
+00436                                             marker=\textcolor{stringliteral}{'o'}, linestyle=\textcolor{stringliteral}{'None'}, label=\textcolor{stringliteral}{'\_nolegend\_'})
+00437                                 y\_lines = data[\textcolor{stringliteral}{'atom'}].getOmega(tem\_funct, j, i)
+00438                                 \textcolor{keywordflow}{if} y\_lines.sum() > 0.:
+00439                                     ax.plot(x\_lines, y\_lines,
+00440                                             color=data[\textcolor{stringliteral}{'color'}], label=\textcolor{stringliteral}{'\_nolegend\_'})
+00441                             \textcolor{keywordflow}{except}:
+00442                                 pn.log\_.warn(\textcolor{stringliteral}{'Problem with plotting a data set'}, calling=self.
       \hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a393a133b607541c57d5ebc5a34687e3f}{calling})
-00431 \textcolor{comment}{# Draws vertical lines at selected temperature values (only once for each subplot, hence "first") }
-00432                         \textcolor{keywordflow}{if} (first \textcolor{keywordflow}{and} (data[\textcolor{stringliteral}{'atom'}].collNLevels == coll\_n\_max)):
-00433                             \textcolor{keywordflow}{for} tem \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa260990b7c3556dc48741f6ae9516894}{ref\_tem}:
-00434                                 plt.axvline(tem, c=\textcolor{stringliteral}{'blue'}, alpha=0.4, ls=\textcolor{stringliteral}{':'})
-00435                             lbl = \textcolor{stringliteral}{"$\(\backslash\)Omega$"} + \textcolor{stringliteral}{"("} + str(j) + \textcolor{stringliteral}{","} + str(i) + \textcolor{stringliteral}{")"}
-00436                             ax.text(0.95, 0.95, lbl, transform=ax.transAxes, ha=\textcolor{stringliteral}{"right"}, va=\textcolor{stringliteral}{"top"})   
-00437                             first\_done = \textcolor{keyword}{True}                                 
-00438                         \textcolor{comment}{# Maximum number of ticks to avoid overcrowding}
-00439                         ax.xaxis.set\_major\_locator(MaxNLocator(4))
-00440                         ax.yaxis.set\_major\_locator(MaxNLocator(3))
-00441             \textcolor{comment}{# The line type and identifier of each data set are stored for the legend}
-00442             legend\_lines.append(mpl.lines.Line2D(tem\_funct, tem\_funct, color=data[\textcolor{stringliteral}{'color'}], linestyle=\textcolor{stringliteral}{'-'}))
-00443             legend\_text.append(data[\textcolor{stringliteral}{'ID'}])
-00444             \textcolor{keywordflow}{if} first\_done:
-00445                 first = \textcolor{keyword}{False}
-00446         \textcolor{comment}{# The label of the reference temperature values are only plotted above the last plot}
-00447         \textcolor{keywordflow}{for} tem \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa260990b7c3556dc48741f6ae9516894}{ref\_tem}:
-00448             ax.text(tem, ax.get\_ylim()[1], \textcolor{stringliteral}{' %0.0f K'} % (10 ** tem), ha=\textcolor{stringliteral}{"left"}, va=\textcolor{stringliteral}{"bottom"}, 
-00449                     rotation=65, fontsize=12, color=\textcolor{stringliteral}{'#FF0000'}, alpha=0.35)
-00450         \textcolor{comment}{# Axis labels, title and legend    }
-00451         fig.text(.5, .05, \textcolor{stringliteral}{"Log($T\_e/K$)"}, fontsize=16, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'top'})
-00452         fig.text(.05, .5, \textcolor{stringliteral}{"$\(\backslash\)Omega$"}, va=\textcolor{stringliteral}{'center'}, fontsize=20, rotation=90)
-00453         fig.text(.5, .95, \textcolor{stringliteral}{"[%s %s] collision strengths"} % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, 
-      \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}))), 
-00454                  color=\textcolor{stringliteral}{"#191970"}, fontsize=16, ha=\textcolor{stringliteral}{'center'})
-00455         plt.legend(legend\_lines, legend\_text, loc=\textcolor{stringliteral}{'upper right'}, borderpad=1, 
-00456                    labelspacing=1, bbox\_to\_anchor=(1, 1 * coll\_n\_max))
-00457         \textcolor{comment}{#plt.tight\_layout()}
-00458         \textcolor{keywordflow}{if} save:
-00459             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{"\_CS.pdf"})
-00460         
-00461         plt.show()
-00462 
-00463 
-\hypertarget{plot_atomic_data_8py_source_l00464}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a13bb54a69f98e9761bacb4b98f481619}{00464}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a13bb54a69f98e9761bacb4b98f481619}{tem\_in\_K}(self, tem\_units, tem):
-00465         \textcolor{stringliteral}{"""}
-00466 \textcolor{stringliteral}{        Convert the temperature from the unit of the fits file into K}
-00467 \textcolor{stringliteral}{}
-00468 \textcolor{stringliteral}{        Parameters:}
-00469 \textcolor{stringliteral}{            - tem\_units     'log(K)' or 'K/1000'}
-00470 \textcolor{stringliteral}{            - tem           temperature}
-00471 \textcolor{stringliteral}{        """}
-00472         
-00473         \textcolor{keywordflow}{if} (tem\_units == \textcolor{stringliteral}{"log(K)"}):
-00474             \textcolor{keywordflow}{return} np.power(10., tem)
-00475         \textcolor{keywordflow}{elif} (tem\_units == \textcolor{stringliteral}{"K/10000"}):
-00476             \textcolor{keywordflow}{return} np.multiply(tem, 1.e4)
-00477         \textcolor{keywordflow}{else}: \textcolor{comment}{#T in Kelvin in the fits file}
-00478             \textcolor{keywordflow}{return} tem
-00479                 
-00480     
+00443 \textcolor{comment}{# Draws vertical lines at selected temperature values (only once for each subplot, hence "first") }
+00444                         \textcolor{keywordflow}{if} (first \textcolor{keywordflow}{and} (data[\textcolor{stringliteral}{'atom'}].collNLevels == coll\_n\_max)):
+00445                             \textcolor{keywordflow}{for} tem \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa260990b7c3556dc48741f6ae9516894}{ref\_tem}:
+00446                                 plt.axvline(tem, c=\textcolor{stringliteral}{'blue'}, alpha=0.4, ls=\textcolor{stringliteral}{':'})
+00447                             lbl = \textcolor{stringliteral}{"$\(\backslash\)Omega$"} + \textcolor{stringliteral}{"("} + str(j) + \textcolor{stringliteral}{","} + str(i) + \textcolor{stringliteral}{")"}
+00448                             ax.text(0.95, 0.95, lbl, transform=ax.transAxes, ha=\textcolor{stringliteral}{"right"}, va=\textcolor{stringliteral}{"top"})   
+00449                             first\_done = \textcolor{keyword}{True}                                 
+00450                         \textcolor{comment}{# Maximum number of ticks to avoid overcrowding}
+00451                         ax.xaxis.set\_major\_locator(MaxNLocator(4))
+00452                         ax.yaxis.set\_major\_locator(MaxNLocator(3))
+00453             \textcolor{comment}{# The line type and identifier of each data set are stored for the legend}
+00454             legend\_lines.append(mpl.lines.Line2D(tem\_funct, tem\_funct, color=data[\textcolor{stringliteral}{'color'}], linestyle=\textcolor{stringliteral}{'-'}))
+00455             legend\_text.append(data[\textcolor{stringliteral}{'ID'}])
+00456             \textcolor{keywordflow}{if} first\_done:
+00457                 first = \textcolor{keyword}{False}
+00458         \textcolor{comment}{# The label of the reference temperature values are only plotted above the last plot}
+00459         \textcolor{keywordflow}{for} tem \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_aa260990b7c3556dc48741f6ae9516894}{ref\_tem}:
+00460             ax.text(tem, ax.get\_ylim()[1], \textcolor{stringliteral}{' %0.0f K'} % (10 ** tem), ha=\textcolor{stringliteral}{"left"}, va=\textcolor{stringliteral}{"bottom"}, 
+00461                     rotation=65, fontsize=12, color=\textcolor{stringliteral}{'#FF0000'}, alpha=0.35)
+00462         \textcolor{comment}{# Axis labels, title and legend    }
+00463         fig.text(.5, .05, \textcolor{stringliteral}{"Log($T\_e/K$)"}, fontsize=16, ha=\textcolor{stringliteral}{'center'}, va=\textcolor{stringliteral}{'top'})
+00464         fig.text(.05, .5, \textcolor{stringliteral}{"$\(\backslash\)Omega$"}, va=\textcolor{stringliteral}{'center'}, fontsize=20, rotation=90)
+00465         fig.text(.5, .95, \textcolor{stringliteral}{"[%s %s] collision strengths"} % (self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_ae936c57b93cc86a5cf28f8838164940a}{elem}, 
+      \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_acaaca83a6e12e99ebc1da72af5f8c60a}{spec}))), 
+00466                  color=\textcolor{stringliteral}{"#191970"}, fontsize=16, ha=\textcolor{stringliteral}{'center'})
+00467 \textcolor{comment}{#        plt.legend(legend\_lines, legend\_text, loc='upper right', borderpad=1, }
+00468 \textcolor{comment}{#                   labelspacing=1, bbox\_to\_anchor=(1, 1 * coll\_n\_max))}
+00469         plt.legend(legend\_lines, legend\_text, loc=\textcolor{stringliteral}{'upper right'}, borderpad=1, 
+00470                    labelspacing=1, bbox\_to\_anchor=(1, coll\_n\_max - 1))
+00471         \textcolor{comment}{#plt.tight\_layout()}
+00472         \textcolor{keywordflow}{if} save:
+00473             plt.savefig(self.\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a334c448311ed9dc8cd700af504e06254}{atom\_rom} + \textcolor{stringliteral}{"\_CS.pdf"})
+00474         
+00475         plt.show()
+00476 
+00477 
+\hypertarget{plot_atomic_data_8py_source_l00478}{}\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a44a19b283355d6c3ad1903e70009cfee}{00478}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1plot_1_1plot_atomic_data_1_1_data_plot_a44a19b283355d6c3ad1903e70009cfee}{tem\_in\_K}(self, tem\_units, tem):
+00479         \textcolor{stringliteral}{"""}
+00480 \textcolor{stringliteral}{        Convert the temperature from the unit of the fits file into K}
+00481 \textcolor{stringliteral}{}
+00482 \textcolor{stringliteral}{        Parameters:}
+00483 \textcolor{stringliteral}{            - tem\_units     'log(K)' or 'K/1000'}
+00484 \textcolor{stringliteral}{            - tem           temperature}
+00485 \textcolor{stringliteral}{        """}
+00486         
+00487         \textcolor{keywordflow}{if} (tem\_units == \textcolor{stringliteral}{"log(K)"}):
+00488             \textcolor{keywordflow}{return} np.power(10., tem)
+00489         \textcolor{keywordflow}{elif} (tem\_units == \textcolor{stringliteral}{"K/10000"}):
+00490             \textcolor{keywordflow}{return} np.multiply(tem, 1.e4)
+00491         \textcolor{keywordflow}{else}: \textcolor{comment}{#T in Kelvin in the fits file}
+00492             \textcolor{keywordflow}{return} tem
+00493                 
+00494     
 \end{DoxyCode}

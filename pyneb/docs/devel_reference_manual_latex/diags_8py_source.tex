@@ -1,5 +1,6 @@
-\hypertarget{diags_8py_source}{}\section{diags.\+py}
-\label{diags_8py_source}\index{pyneb/core/diags.\+py@{pyneb/core/diags.\+py}}
+\hypertarget{diags_8py}{\section{diags.\-py}
+\label{diags_8py}\index{pyneb/core/diags.\-py@{pyneb/core/diags.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{diags_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1core_1_1diags}{00001} \textcolor{stringliteral}{""" @module}
@@ -202,10 +203,10 @@
 00177         self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict} = \{\}
 00178         self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acfd0638b293790832bcee3cd9f3ec342}{OmegaInterp} = OmegaInterp
 00179         \textcolor{keywordflow}{if} addAll:
-00180             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_aab98440027bccb4e851da6803f0ee398}{addAll}()
+00180             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4061f4598d6e9e5a95a553a6bead8a4c}{addAll}()
 00181 
 00182 
-\hypertarget{diags_8py_source_l00183}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acf43d1129a2fbbdcecb4bbf1389872bc}{00183}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acf43d1129a2fbbdcecb4bbf1389872bc}{getDiagFromLabel}(self, label):
+\hypertarget{diags_8py_source_l00183}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a34bf325468c95ac151665f2602db8212}{00183}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a34bf325468c95ac151665f2602db8212}{getDiagFromLabel}(self, label):
 00184         \textcolor{stringliteral}{"""}
 00185 \textcolor{stringliteral}{        Return the definition of a diagnostic (the 3 or 4 elements tuple)}
 00186 \textcolor{stringliteral}{        }
@@ -224,17 +225,17 @@
 00198             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
 00199 
 00200         
-\hypertarget{diags_8py_source_l00201}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36b89ad0fa12a9406f7ad29f22a18799}{00201}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36b89ad0fa12a9406f7ad29f22a18799}{getDiags}(self):
+\hypertarget{diags_8py_source_l00201}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a18808ce820666aa8a7c2b8ad888b65c4}{00201}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a18808ce820666aa8a7c2b8ad888b65c4}{getDiags}(self):
 00202         \textcolor{stringliteral}{"""}
 00203 \textcolor{stringliteral}{        Return the definitions (tuples) of all the diagnostics defined in the Object.}
 00204 \textcolor{stringliteral}{        No parameter.}
 00205 \textcolor{stringliteral}{        }
 00206 \textcolor{stringliteral}{        """}
-00207         \textcolor{keywordflow}{return} [self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acf43d1129a2fbbdcecb4bbf1389872bc}{getDiagFromLabel}(label) \textcolor{keywordflow}{for} label \textcolor{keywordflow}{in} self.
+00207         \textcolor{keywordflow}{return} [self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a34bf325468c95ac151665f2602db8212}{getDiagFromLabel}(label) \textcolor{keywordflow}{for} label \textcolor{keywordflow}{in} self.
       \hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}]
 00208 
 00209             
-\hypertarget{diags_8py_source_l00210}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a74db66bd37fcea46097e4dfad4113b41}{00210}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a74db66bd37fcea46097e4dfad4113b41}{getDiagLabels}(self):
+\hypertarget{diags_8py_source_l00210}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a5591d13f519b0176320ee605be97cb54}{00210}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a5591d13f519b0176320ee605be97cb54}{getDiagLabels}(self):
 00211         \textcolor{stringliteral}{"""}
 00212 \textcolor{stringliteral}{        Return the labels of all the diagnostics defined in the Object}
 00213 \textcolor{stringliteral}{        No parameter.}
@@ -243,7 +244,7 @@
 00216         \textcolor{keywordflow}{return} self.diags.keys()    
 00217 
 00218     
-\hypertarget{diags_8py_source_l00219}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a7113a391e6899be51eb87c9194016d43}{00219}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a7113a391e6899be51eb87c9194016d43}{getAllDiags}(self):
+\hypertarget{diags_8py_source_l00219}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ad55f9fd79ee4e6c1992b6e46ba3ffa9e}{00219}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ad55f9fd79ee4e6c1992b6e46ba3ffa9e}{getAllDiags}(self):
 00220         \textcolor{stringliteral}{"""}
 00221 \textcolor{stringliteral}{        Return the definitions (tuples) of all the possible diagnostics.}
 00222 \textcolor{stringliteral}{        No parameter.}
@@ -252,7 +253,7 @@
 00225         \textcolor{keywordflow}{return} diags\_dict
 00226 
 00227             
-\hypertarget{diags_8py_source_l00228}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4c5666c3444b87d30e60da598d2642fd}{00228}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4c5666c3444b87d30e60da598d2642fd}{getAllDiagLabels}(self):
+\hypertarget{diags_8py_source_l00228}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0777b326e22cca0e8b581b5ae6bb29f0}{00228}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0777b326e22cca0e8b581b5ae6bb29f0}{getAllDiagLabels}(self):
 00229         \textcolor{stringliteral}{"""}
 00230 \textcolor{stringliteral}{        Return the labels of all the possible diagnostics.}
 00231 \textcolor{stringliteral}{        No parameter.}
@@ -261,7 +262,7 @@
 00234         \textcolor{keywordflow}{return} diags\_dict.keys()    
 00235 
 00236     
-\hypertarget{diags_8py_source_l00237}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a3eeb7d0c7e4c33831c0efd8f7a74e80c}{00237}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a3eeb7d0c7e4c33831c0efd8f7a74e80c}{getUniqueAtoms}(self):
+\hypertarget{diags_8py_source_l00237}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a44d4a10d700b48081fe18ef3a1a31832}{00237}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a44d4a10d700b48081fe18ef3a1a31832}{getUniqueAtoms}(self):
 00238         \textcolor{stringliteral}{"""}
 00239 \textcolor{stringliteral}{        Return a numpy.ndarray of the ions needed by the diagnostics. Unique is applied to the list before
        returning.}
@@ -361,11 +362,11 @@
        wave\_range=\{3\}'}.format(label, diag\_tuple, atom, wave\_range),
 00322                             calling=self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a07dce673fec8b2383ef411ab94b0b2fe}{calling} + \textcolor{stringliteral}{'.addDiag'})
 00323         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict} \textcolor{keywordflow}{and} (type(label) \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} list):
-00324             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}[atom] = pn.Atom(\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[0], 
-      \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[1])
+00324             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}[atom] = pn.Atom(\hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[0], 
+      \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[1])
 00325                
 00326                
-\hypertarget{diags_8py_source_l00327}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_aab98440027bccb4e851da6803f0ee398}{00327}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_aab98440027bccb4e851da6803f0ee398}{addAll}(self):
+\hypertarget{diags_8py_source_l00327}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4061f4598d6e9e5a95a553a6bead8a4c}{00327}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4061f4598d6e9e5a95a553a6bead8a4c}{addAll}(self):
 00328         \textcolor{stringliteral}{"""}
 00329 \textcolor{stringliteral}{        Insert all the possible diagnostics in the Object (no parameters)}
 00330 \textcolor{stringliteral}{        }
@@ -392,7 +393,7 @@
       \hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a07dce673fec8b2383ef411ab94b0b2fe}{calling})
 00351     
 00352     
-\hypertarget{diags_8py_source_l00353}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a226aecfddebb567e7fe55731363635fc}{00353}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a226aecfddebb567e7fe55731363635fc}{addDiagsFromObs}(self, obs):
+\hypertarget{diags_8py_source_l00353}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ab6641fba2aa36c483b751dd1b9621734}{00353}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ab6641fba2aa36c483b751dd1b9621734}{addDiagsFromObs}(self, obs):
 00354         \textcolor{stringliteral}{"""}
 00355 \textcolor{stringliteral}{        Add all the possible diagnostics that can be computed from an Observation object}
 00356 \textcolor{stringliteral}{        }
@@ -422,7 +423,7 @@
 00379         
 00380         \textcolor{keywordflow}{for} label \textcolor{keywordflow}{in} diags\_dict:
 00381             atom, diag\_expression, error = diags\_dict[label]
-00382             sym, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)
+00382             sym, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)
 00383             \textcolor{keywordflow}{try}:
 00384                 diag\_value = eval(diag\_expression)
 00385                 \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}:
@@ -433,7 +434,7 @@
 00390         pn.log\_.level = old\_level
 00391     
 00392     
-\hypertarget{diags_8py_source_l00393}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a01ad01e336115e86eada60350060bb9b}{00393}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a01ad01e336115e86eada60350060bb9b}{setAtoms}(self, atom\_dic):
+\hypertarget{diags_8py_source_l00393}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a7eb28ac8852ba834dd3d23cd6113d27a}{00393}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a7eb28ac8852ba834dd3d23cd6113d27a}{setAtoms}(self, atom\_dic):
 00394         \textcolor{stringliteral}{"""}
 00395 \textcolor{stringliteral}{        Define the dictionary containing the atoms used for the diagnostics.}
 00396 \textcolor{stringliteral}{        A dictionary of atom instantiations refereed by atom strings, for example:}
@@ -452,7 +453,7 @@
 \hypertarget{diags_8py_source_l00407}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{00407}         self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict} = atom\_dic
 00408     
 00409     
-\hypertarget{diags_8py_source_l00410}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4215075075b04c31b533a1a5c61ddd8b}{00410}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a4215075075b04c31b533a1a5c61ddd8b}{addClabel}(self, label, clabel):
+\hypertarget{diags_8py_source_l00410}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a8b13216132933723bbf334abefbf8a88}{00410}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a8b13216132933723bbf334abefbf8a88}{addClabel}(self, label, clabel):
 00411         \textcolor{stringliteral}{"""}
 00412 \textcolor{stringliteral}{        Add an alternative label to a diagnostic that can be used when plotting diagnostic diagrams.}
 00413 \textcolor{stringliteral}{        }
@@ -535,7 +536,7 @@
 00482                 self.log\_.warn(\textcolor{stringliteral}{'diag \{0\} \{1\} not used'}.format(diag[0], diag[1]), calling=self.
       \hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a07dce673fec8b2383ef411ab94b0b2fe}{calling})
 00483             \textcolor{keywordflow}{if} diag\_map \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00484                 sym, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)
+00484                 sym, spec = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)
 00485                 \textcolor{keyword}{def }I(i, j):
 00486                     wave = emis\_grids[atom].atom.wave\_Ang[i - 1, j - 1]
 00487                     corrIntens = obs.getLine(sym, spec, wave).corrIntens
@@ -557,7 +558,7 @@
 00503                     \textcolor{keywordflow}{else}:
 00504                         \textcolor{keywordflow}{return} corrIntens[i\_obs]
 00505                 \textcolor{keywordflow}{try}:
-00506                     diag\_value = eval(diag[1])
+00506                     diag\_value = eval(diag[1])[0]
 00507                 \textcolor{keywordflow}{except}:
 00508                     diag\_value = \textcolor{keywordtype}{None}
 00509                     self.log\_.warn(\textcolor{stringliteral}{'A line in diagnostic \{0\} of \{1\}\{2\} is missing'}.format(diag[1], sym, 
@@ -596,7 +597,7 @@
 00541                     \textcolor{keywordflow}{if} len(diag) >= 4:
 00542                         fmt = diag[3]
 00543                     \textcolor{keywordflow}{else}:
-00544                         fmt = \textcolor{stringliteral}{'[\{0\}\{1\}]'}.format(atom[0:-1], \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(int(atom[-1])))
+00544                         fmt = \textcolor{stringliteral}{'[\{0\}\{1\}]'}.format(atom[0:-1], \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(int(atom[-1])))
 00545                     ax.clabel(CS, inline=\textcolor{keyword}{True}, fmt=fmt, fontsize=15, colors=col)
 00546                     \textcolor{keywordflow}{if} type(diag\_value) \textcolor{keywordflow}{is} np.ndarray:
 00547                         diag\_value = diag\_value[0]
@@ -646,7 +647,7 @@
 00587         \textcolor{keywordflow}{if} diag\_tem \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}:
 00588             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a508fa9c5a2216f9eb4128338c33a6f75}{addDiag}(diag\_tem)
 00589         atom\_tem = self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}[diag\_tem][0]
-00590         elem\_tem, spec\_tem = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom\_tem)
+00590         elem\_tem, spec\_tem = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom\_tem)
 00591         \textcolor{keywordflow}{if} atom\_tem \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}:
 00592             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}[atom\_tem] = pn.Atom(elem\_tem, spec\_tem, self.
       \hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acfd0638b293790832bcee3cd9f3ec342}{OmegaInterp})
@@ -654,7 +655,7 @@
 00594         \textcolor{keywordflow}{if} diag\_den \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}:
 00595             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a508fa9c5a2216f9eb4128338c33a6f75}{addDiag}(diag\_den)
 00596         atom\_den = self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}[diag\_den][0]
-00597         elem\_den, spec\_den = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}[diag\_den][0])
+00597         elem\_den, spec\_den = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a0c0f7e36097677f61a6a14a0c3127b02}{diags}[diag\_den][0])
 00598         \textcolor{keywordflow}{if} (atom\_den) \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}:
 00599             self.\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a36301f268745b33abe6cfeb3e41a6356}{atomDict}[atom\_den] = pn.Atom(elem\_den, spec\_den, self.
       \hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_acfd0638b293790832bcee3cd9f3ec342}{OmegaInterp})
@@ -770,7 +771,7 @@
 00703             den[no\_conv] = np.nan
 00704         \textcolor{keywordflow}{return} tem, den
 00705     
-\hypertarget{diags_8py_source_l00706}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ab136b902dcdc56ce3372a85c1f6a7b44}{00706}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_ab136b902dcdc56ce3372a85c1f6a7b44}{getDiagLimits}(self, diag):
+\hypertarget{diags_8py_source_l00706}{}\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a644625a4450d607244b53d76fb49a03b}{00706}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1core_1_1diags_1_1_diagnostics_a644625a4450d607244b53d76fb49a03b}{getDiagLimits}(self, diag):
 00707         \textcolor{stringliteral}{"""}
 00708 \textcolor{stringliteral}{        Return the low and high density values for a given diagnostic}
 00709 \textcolor{stringliteral}{        """}

@@ -1,5 +1,6 @@
-\hypertarget{init_8py_source}{}\section{init.\+py}
-\label{init_8py_source}\index{pyneb/utils/init.\+py@{pyneb/utils/init.\+py}}
+\hypertarget{init_8py}{\section{init.\-py}
+\label{init_8py}\index{pyneb/utils/init.\-py@{pyneb/utils/init.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{init_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1init}{00001} \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
@@ -10,14 +11,14 @@
 00005              \textcolor{stringliteral}{'Kr'}, \textcolor{stringliteral}{'Mg'}, \textcolor{stringliteral}{'N'}, \textcolor{stringliteral}{'Na'}, \textcolor{stringliteral}{'Ne'}, \textcolor{stringliteral}{'Ni'}, \textcolor{stringliteral}{'O'}, \textcolor{stringliteral}{'P'}, \textcolor{stringliteral}{'S'}, \textcolor{stringliteral}{'Si'}, \textcolor{stringliteral}{'Xe'}, \textcolor{stringliteral}{'Zn'}, \textcolor{stringliteral}{'Se'}, \textcolor{stringliteral}{'Br'}, \textcolor{stringliteral}{'Rb'}, \textcolor{stringliteral}{'3He'}]
 \hypertarget{init_8py_source_l00006}{}\hyperlink{namespacepyneb_1_1utils_1_1init_afd0ab6834d14e36c7ba2bfa6fdfbd386}{00006} SPEC\_LIST = [\textcolor{stringliteral}{'1'}, \textcolor{stringliteral}{'2'}, \textcolor{stringliteral}{'3'}, \textcolor{stringliteral}{'4'}, \textcolor{stringliteral}{'5'}, \textcolor{stringliteral}{'6'}, \textcolor{stringliteral}{'7'}]
 00007 
-\hypertarget{init_8py_source_l00008}{}\hyperlink{namespacepyneb_1_1utils_1_1init_a1d1830a7176a3f6e31326855475849a1}{00008} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1init_a1d1830a7176a3f6e31326855475849a1}{\_print\_LINE\_LABEL\_LIST}(*args, **kwargs):
+\hypertarget{init_8py_source_l00008}{}\hyperlink{namespacepyneb_1_1utils_1_1init_adeccc39c0a14a054bc294f2c3ddf9b1c}{00008} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1init_adeccc39c0a14a054bc294f2c3ddf9b1c}{\_print\_LINE\_LABEL\_LIST}(*args, **kwargs):
 00009     \textcolor{stringliteral}{"""}
 00010 \textcolor{stringliteral}{    The parameters are passed to getAtomDict. May be the fits directory.}
 00011 \textcolor{stringliteral}{    """}
 00012     \textcolor{comment}{##}
 00013     \textcolor{comment}{# @todo we have to check what are the differences in LINE\_LABEL\_LIST when changing the fits files}
 00014     all\_atoms = pn.getAtomDict(*args, **kwargs)
-00015     \textcolor{keywordflow}{print} \textcolor{stringliteral}{"LINE\_LABEL\_LIST = \{\}"}
+00015     print(\textcolor{stringliteral}{"LINE\_LABEL\_LIST = \{\}"})
 00016     \textcolor{keywordflow}{for} atom \textcolor{keywordflow}{in} np.sort(all\_atoms.keys()):
 00017         wave = all\_atoms[atom].lineList
 00018         opt = (wave < 10000.)
@@ -25,7 +26,7 @@
 00020         lines\_opt = [\textcolor{stringliteral}{"'%.0fA'"} % line \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} np.sort(wave[opt])]
 00021         lines\_ir = [\textcolor{stringliteral}{"'%.1fm'"} % line \textcolor{keywordflow}{for} line \textcolor{keywordflow}{in} np.sort(wave[ir]) / 1.e4]
 00022         lines = lines\_opt + lines\_ir
-00023         \textcolor{keywordflow}{print} \textcolor{stringliteral}{"LINE\_LABEL\_LIST['"} + atom + \textcolor{stringliteral}{"'] = ["} + \textcolor{stringliteral}{', '}.join(lines) + \textcolor{stringliteral}{"]"}
+00023         print(\textcolor{stringliteral}{"LINE\_LABEL\_LIST['"} + atom + \textcolor{stringliteral}{"'] = ["} + \textcolor{stringliteral}{', '}.join(lines) + \textcolor{stringliteral}{"]"})
 00024 
 \hypertarget{init_8py_source_l00025}{}\hyperlink{namespacepyneb_1_1utils_1_1init_a1032ff20f913ca4a766e36da2140ee97}{00025} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1init_a1032ff20f913ca4a766e36da2140ee97}{\_check\_line\_label\_list}(maxErrorA = 5.e-3, maxErrorm = 5.e-2):
 00026     \textcolor{keywordflow}{for} ion \textcolor{keywordflow}{in} LINE\_LABEL\_LIST:
@@ -139,7 +140,7 @@
 00100 LINE\_LABEL\_LIST[\textcolor{stringliteral}{'Ni3'}] = [\textcolor{stringliteral}{'7890A'}, \textcolor{stringliteral}{'8500A'}, \textcolor{stringliteral}{'6000A'}, \textcolor{stringliteral}{'6401A'}, \textcolor{stringliteral}{'6534A'}, \textcolor{stringliteral}{'6682A'}, \textcolor{stringliteral}{'6797A'}, \textcolor{stringliteral}{'7125A'}, \textcolor{stringliteral}{'6946A'}]
 00101 LINE\_LABEL\_LIST[\textcolor{stringliteral}{'O1'}] = [\textcolor{stringliteral}{'6300A'}, \textcolor{stringliteral}{'6364A'}, \textcolor{stringliteral}{'6392A'}, \textcolor{stringliteral}{'2959A'}, \textcolor{stringliteral}{'2973A'}, \textcolor{stringliteral}{'2979A'}, \textcolor{stringliteral}{'5577A'}, \textcolor{stringliteral}{'63.2m'}, \textcolor{stringliteral}{'44.1m'}, \textcolor{stringliteral}{'
       145.5m'}]
-00102 LINE\_LABEL\_LIST[\textcolor{stringliteral}{'O2'}] = [\textcolor{stringliteral}{'3729A'}, \textcolor{stringliteral}{'3726A'}, \textcolor{stringliteral}{'2470A'}, \textcolor{stringliteral}{'7319A'}, \textcolor{stringliteral}{'7330A'}, \textcolor{stringliteral}{'2470A'}, \textcolor{stringliteral}{'7318A'}, \textcolor{stringliteral}{'7329A'}, \textcolor{stringliteral}{'834A'}, \textcolor{stringliteral}{'
+00102 LINE\_LABEL\_LIST[\textcolor{stringliteral}{'O2'}] = [\textcolor{stringliteral}{'3729A'}, \textcolor{stringliteral}{'3726A'}, \textcolor{stringliteral}{'2470A'}, \textcolor{stringliteral}{'7319A'},\textcolor{stringliteral}{'7320A'}, \textcolor{stringliteral}{'7330A'}, \textcolor{stringliteral}{'7331A'}, \textcolor{stringliteral}{'2470A'}, \textcolor{stringliteral}{'834A'}, \textcolor{stringliteral}{'
       1075A'}, 
 00103                          \textcolor{stringliteral}{'1260A'}, \textcolor{stringliteral}{'833A'}, \textcolor{stringliteral}{'1073A'}, \textcolor{stringliteral}{'1258A'}, \textcolor{stringliteral}{'833A'}, \textcolor{stringliteral}{'1072A'}, \textcolor{stringliteral}{'1256A'}, \textcolor{stringliteral}{'499.3m'}, \textcolor{stringliteral}{'5023.7m'}, \textcolor{stringliteral}{
       '61.3m'}, 

@@ -62,10 +62,10 @@ target/
 fits_VL_2011
 .project
 .pydevproject
+.ipynb_checkpoints
 **html/
 **pypics/
 PyNeb_Handbook.pdf
 **/.svn/
 *.*~
-**/.ipynb_checkpoints/
-**/.DS_Store
+.DS_Store

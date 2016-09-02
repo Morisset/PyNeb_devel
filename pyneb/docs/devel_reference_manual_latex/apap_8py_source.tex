@@ -1,5 +1,6 @@
-\hypertarget{apap_8py_source}{}\section{apap.\+py}
-\label{apap_8py_source}\index{pyneb/utils/apap.\+py@{pyneb/utils/apap.\+py}}
+\hypertarget{apap_8py}{\section{apap.\-py}
+\label{apap_8py}\index{pyneb/utils/apap.\-py@{pyneb/utils/apap.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{apap_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1apap}{00001} \textcolor{keyword}{import} re
@@ -13,7 +14,7 @@
 00009 
 \hypertarget{apap_8py_source_l00010}{}\hyperlink{namespacepyneb_1_1utils_1_1apap_aba49aa2681eafa29fc85cb550e4ce28a}{00010} term2\_dic = \{\textcolor{stringliteral}{'0'}:\textcolor{stringliteral}{'S'}, \textcolor{stringliteral}{'1'}:\textcolor{stringliteral}{'P'}, \textcolor{stringliteral}{'2'}:\textcolor{stringliteral}{'D'}, \textcolor{stringliteral}{'3'}:\textcolor{stringliteral}{'F'}, \textcolor{stringliteral}{'4'}:\textcolor{stringliteral}{'G'}, \textcolor{stringliteral}{'5'}:\textcolor{stringliteral}{'H'}, \textcolor{stringliteral}{'6'}:\textcolor{stringliteral}{'I'}\}
 00011 
-\hypertarget{apap_8py_source_l00012}{}\hyperlink{namespacepyneb_1_1utils_1_1apap_ad78f65e1ca140daa8a34fd88a91db97a}{00012} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1apap_ad78f65e1ca140daa8a34fd88a91db97a}{conv\_apap}(str\_in):
+\hypertarget{apap_8py_source_l00012}{}\hyperlink{namespacepyneb_1_1utils_1_1apap_ac3d6e43ef2ad84632e9b5a101e115cb1}{00012} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1apap_ac3d6e43ef2ad84632e9b5a101e115cb1}{conv\_apap}(str\_in):
 00013     \textcolor{stringliteral}{"""}
 00014 \textcolor{stringliteral}{    transform "1.3-01" into 1.3e-01 }
 00015 \textcolor{stringliteral}{    """}
@@ -54,7 +55,7 @@
 00050     Omegas = []
 00051     
 00052     temps\_str = f.readline().split()[2::]
-00053     temp\_array = np.array([\hyperlink{namespacepyneb_1_1utils_1_1apap_ad78f65e1ca140daa8a34fd88a91db97a}{conv\_apap}(temp) \textcolor{keywordflow}{for} temp \textcolor{keywordflow}{in} temps\_str])
+00053     temp\_array = np.array([\hyperlink{namespacepyneb_1_1utils_1_1apap_ac3d6e43ef2ad84632e9b5a101e115cb1}{conv\_apap}(temp) \textcolor{keywordflow}{for} temp \textcolor{keywordflow}{in} temps\_str])
 00054     N\_temp = len(temp\_array)
 00055     \textcolor{keywordflow}{while} \textcolor{keyword}{True}:
 00056         line = f.readline()
@@ -66,8 +67,8 @@
 00062             lev\_i.append(i)
 00063             lev\_j.append(j)
 00064             strg5 = line[8:8+(N\_temp+1)*8].split()
-00065             As.append(\hyperlink{namespacepyneb_1_1utils_1_1apap_ad78f65e1ca140daa8a34fd88a91db97a}{conv\_apap}(strg5[0]))
-00066             Omegas.append([\hyperlink{namespacepyneb_1_1utils_1_1apap_ad78f65e1ca140daa8a34fd88a91db97a}{conv\_apap}(omega) \textcolor{keywordflow}{for} omega \textcolor{keywordflow}{in} strg5[1::]])
+00065             As.append(\hyperlink{namespacepyneb_1_1utils_1_1apap_ac3d6e43ef2ad84632e9b5a101e115cb1}{conv\_apap}(strg5[0]))
+00066             Omegas.append([\hyperlink{namespacepyneb_1_1utils_1_1apap_ac3d6e43ef2ad84632e9b5a101e115cb1}{conv\_apap}(omega) \textcolor{keywordflow}{for} omega \textcolor{keywordflow}{in} strg5[1::]])
 00067     f.close()
 00068     
 00069     return(term, 
@@ -83,7 +84,7 @@
 00079 \textcolor{stringliteral}{    }
 00080 \textcolor{stringliteral}{    atom = apap\_file.split(}\textcolor{stringliteral}{'#'})[1].split(\textcolor{stringliteral}{'.'})[0]
 00081     spectrum = int(re.findall(\textcolor{stringliteral}{r'\(\backslash\)d+'}, atom)[0]) + 1
-00082     ioniz = \hyperlink{namespacepyneb_1_1utils_1_1misc_aec4e973d4cb9299f749ef190ea636a06}{int\_to\_roman}(spectrum).lower()
+00082     ioniz = \hyperlink{namespacepyneb_1_1utils_1_1misc_a7a4c4b4ba1c884da72e0ea05aa8fb90b}{int\_to\_roman}(spectrum).lower()
 00083     elem = re.findall(\textcolor{stringliteral}{'[a-zA-Z]+'}, atom)[0]
 00084     ion\_str = \textcolor{stringliteral}{'\{0\}\{1\}'}.format(elem.capitalize(), spectrum)
 00085     print(\textcolor{stringliteral}{'Reading NIST data for \{0\}'}.format(ion\_str))

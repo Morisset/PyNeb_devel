@@ -1,11 +1,12 @@
-\hypertarget{test__lines_8py_source}{}\section{test\+\_\+lines.\+py}
-\label{test__lines_8py_source}\index{pyneb/test/test\+\_\+lines.\+py@{pyneb/test/test\+\_\+lines.\+py}}
+\hypertarget{test__lines_8py}{\section{test\-\_\-lines.\-py}
+\label{test__lines_8py}\index{pyneb/test/test\-\_\-lines.\-py@{pyneb/test/test\-\_\-lines.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{test__lines_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines}{00001} \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
 00002 \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
 00003 
-\hypertarget{test__lines_8py_source_l00004}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_af8bbc40c02e8cac6dcd70407e6382974}{00004} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_af8bbc40c02e8cac6dcd70407e6382974}{test\_line\_lists}():
+\hypertarget{test__lines_8py_source_l00004}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_acb05b820a841199fa35d7c7333964d2a}{00004} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_acb05b820a841199fa35d7c7333964d2a}{test\_line\_lists}():
 00005     \textcolor{stringliteral}{"""}
 00006 \textcolor{stringliteral}{    Check the validity of all the lines in diags\_dict by comparing the wavelengths}
 00007 \textcolor{stringliteral}{    """}
@@ -35,7 +36,7 @@
 00031         eval(pn.diags\_dict[diag][1])
 00032 
 00033 
-\hypertarget{test__lines_8py_source_l00034}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a0717401ecf42fd5215ae1c8b8f3cf413}{00034} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a0717401ecf42fd5215ae1c8b8f3cf413}{test\_diags}():
+\hypertarget{test__lines_8py_source_l00034}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a6416d6b2bb555e0f43fffbffb5402c2b}{00034} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a6416d6b2bb555e0f43fffbffb5402c2b}{test\_diags}():
 00035     \textcolor{stringliteral}{"""}
 00036 \textcolor{stringliteral}{}
 00037 \textcolor{stringliteral}{    """}
@@ -60,7 +61,7 @@
 00056         \textcolor{keywordflow}{except}:
 00057             print(\textcolor{stringliteral}{'\{\} failed'}.format(to\_eval))
 00058             
-\hypertarget{test__lines_8py_source_l00059}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a59a9d4f79b935f54e1a4fe6186b4e539}{00059} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a59a9d4f79b935f54e1a4fe6186b4e539}{test\_labels}():
+\hypertarget{test__lines_8py_source_l00059}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_ad390fada703f6ef17a79073dc89b4bfb}{00059} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_ad390fada703f6ef17a79073dc89b4bfb}{test\_labels}():
 00060     \textcolor{stringliteral}{"""}
 00061 \textcolor{stringliteral}{    This tool scans all the lines from pn.LINE\_LABEL\_LIST, extract the wavelength and compare with the }
 00062 \textcolor{stringliteral}{    wavelength given by the corresponding atom for the corresponding transition. Is the difference is
@@ -92,7 +93,7 @@
 00087                     print(\textcolor{stringliteral}{'\{0\} \{1:.2f\} =? \{2:.2f\}  \{3:.2f\}'}.format(atom\_str, wavelength, wave, dif))
 00088                     
 00089 
-\hypertarget{test__lines_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a8db24c6e938952a1ab108577567f2d7c}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a8db24c6e938952a1ab108577567f2d7c}{test\_atom\_data}():
+\hypertarget{test__lines_8py_source_l00090}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_a32506e571d5f7b4eb6cb1e4530a34487}{00090} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_a32506e571d5f7b4eb6cb1e4530a34487}{test\_atom\_data}():
 00091     \textcolor{stringliteral}{"""}
 00092 \textcolor{stringliteral}{    This tool try to instantiate all the atoms using all the atomic data.}
 00093 \textcolor{stringliteral}{    """}
@@ -110,7 +111,7 @@
 00105     print(\textcolor{stringliteral}{'Just did \{\} atoms for the \{\} ions'}.format(i, len(atoms)))
 00106     \textcolor{comment}{# Just did 263 atoms for the 55 ions}
 00107 
-\hypertarget{test__lines_8py_source_l00108}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_ac3883054959f6ecfe33f8437d9a925c8}{00108} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_ac3883054959f6ecfe33f8437d9a925c8}{compare\_line\_list}():
+\hypertarget{test__lines_8py_source_l00108}{}\hyperlink{namespacepyneb_1_1test_1_1test__lines_ae698cdd7fa91e0040c681a8045912bf2}{00108} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1test_1_1test__lines_ae698cdd7fa91e0040c681a8045912bf2}{compare\_line\_list}():
 00109     OLD\_LINE\_LABEL\_LIST = pn.utils.init.OLD\_LINE\_LABEL\_LIST
 00110     LINE\_LABEL\_LIST = pn.LINE\_LABEL\_LIST
 00111     

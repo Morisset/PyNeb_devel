@@ -1,55 +1,57 @@
-\hypertarget{namespacepyneb_1_1utils_1_1multiprocs}{}\section{pyneb.\+utils.\+multiprocs Namespace Reference}
-\label{namespacepyneb_1_1utils_1_1multiprocs}\index{pyneb.\+utils.\+multiprocs@{pyneb.\+utils.\+multiprocs}}
+\hypertarget{namespacepyneb_1_1utils_1_1multiprocs}{\section{pyneb.\-utils.\-multiprocs Namespace Reference}
+\label{namespacepyneb_1_1utils_1_1multiprocs}\index{pyneb.\-utils.\-multiprocs@{pyneb.\-utils.\-multiprocs}}
+}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-def \hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}{get\+Tem\+Den\+\_\+helper} (in\+Q, out\+Q, atom, lev\+\_\+i1, lev\+\_\+j1, lev\+\_\+i2, lev\+\_\+j2, wave1, wave2, max\+Error, method, log, start\+\_\+x, end\+\_\+x, to\+\_\+eval, n\+Cut, max\+Iter)
+def \hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}{get\-Tem\-Den\-\_\-helper}
 \end{DoxyCompactItemize}
 
 
 \subsection{Function Documentation}
-\hypertarget{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}{}\index{pyneb\+::utils\+::multiprocs@{pyneb\+::utils\+::multiprocs}!get\+Tem\+Den\+\_\+helper@{get\+Tem\+Den\+\_\+helper}}
-\index{get\+Tem\+Den\+\_\+helper@{get\+Tem\+Den\+\_\+helper}!pyneb\+::utils\+::multiprocs@{pyneb\+::utils\+::multiprocs}}
-\subsubsection[{get\+Tem\+Den\+\_\+helper}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\+utils.\+multiprocs.\+get\+Tem\+Den\+\_\+helper (
+\hypertarget{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}{\index{pyneb\-::utils\-::multiprocs@{pyneb\-::utils\-::multiprocs}!get\-Tem\-Den\-\_\-helper@{get\-Tem\-Den\-\_\-helper}}
+\index{get\-Tem\-Den\-\_\-helper@{get\-Tem\-Den\-\_\-helper}!pyneb::utils::multiprocs@{pyneb\-::utils\-::multiprocs}}
+\subsubsection[{get\-Tem\-Den\-\_\-helper}]{\setlength{\rightskip}{0pt plus 5cm}def pyneb.\-utils.\-multiprocs.\-get\-Tem\-Den\-\_\-helper (
 \begin{DoxyParamCaption}
-\item[{}]{in\+Q, }
-\item[{}]{out\+Q, }
+\item[{}]{in\-Q, }
+\item[{}]{out\-Q, }
 \item[{}]{atom, }
-\item[{}]{lev\+\_\+i1, }
-\item[{}]{lev\+\_\+j1, }
-\item[{}]{lev\+\_\+i2, }
-\item[{}]{lev\+\_\+j2, }
+\item[{}]{lev\-\_\-i1, }
+\item[{}]{lev\-\_\-j1, }
+\item[{}]{lev\-\_\-i2, }
+\item[{}]{lev\-\_\-j2, }
 \item[{}]{wave1, }
 \item[{}]{wave2, }
-\item[{}]{max\+Error, }
+\item[{}]{max\-Error, }
 \item[{}]{method, }
 \item[{}]{log, }
-\item[{}]{start\+\_\+x, }
-\item[{}]{end\+\_\+x, }
-\item[{}]{to\+\_\+eval, }
-\item[{}]{n\+Cut, }
-\item[{}]{max\+Iter}
+\item[{}]{start\-\_\-x, }
+\item[{}]{end\-\_\-x, }
+\item[{}]{to\-\_\-eval, }
+\item[{}]{n\-Cut, }
+\item[{}]{max\-Iter}
 \end{DoxyParamCaption}
-)}\label{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}
+)}}\label{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}
 \begin{DoxyVerb}multiprocessing helper for getTemDen\end{DoxyVerb}
  
 
-Definition at line \hyperlink{multiprocs_8py_source_l00004}{4} of file \hyperlink{multiprocs_8py_source}{multiprocs.\+py}.
+Definition at line \hyperlink{multiprocs_8py_source_l00004}{4} of file \hyperlink{multiprocs_8py_source}{multiprocs.\-py}.
 
 
 \begin{DoxyCode}
-\hypertarget{namespacepyneb_1_1utils_1_1multiprocs_l00004}{}\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a714d57392053c47df242a942eb959b69}{00004}          wave1, wave2, maxError, method, log, start\_x, end\_x, to\_eval, nCut, maxIter):
-00005     \textcolor{stringliteral}{''' multiprocessing helper for getTemDen'''}
-00006     thisAtom = pn.Atom(atom=atom)
-00007     \textcolor{keywordflow}{for} inputs \textcolor{keywordflow}{in} iter(inQ.get, \textcolor{stringliteral}{'STOP'}):
-00008         jobid = inputs[0]
-00009         int\_ratio = inputs[1]
-00010         tem = inputs[2]
-00011         den = inputs[3]
-00012         res = thisAtom.\_getTemDen\_1(int\_ratio, tem=tem, den=den, lev\_i1=lev\_i1, lev\_j1=lev\_j1, lev\_i2=
+\hypertarget{namespacepyneb_1_1utils_1_1multiprocs_l00004}{}\hyperlink{namespacepyneb_1_1utils_1_1multiprocs_a723f731c93c5b93828616060537f65ed}{00004} 
+00005          wave1, wave2, maxError, method, log, start\_x, end\_x, to\_eval, nCut, maxIter):
+00006     \textcolor{stringliteral}{''' multiprocessing helper for getTemDen'''}
+00007     thisAtom = pn.Atom(atom=atom)
+00008     \textcolor{keywordflow}{for} inputs \textcolor{keywordflow}{in} iter(inQ.get, \textcolor{stringliteral}{'STOP'}):
+00009         jobid = inputs[0]
+00010         int\_ratio = inputs[1]
+00011         tem = inputs[2]
+00012         den = inputs[3]
+00013         res = thisAtom.\_getTemDen\_1(int\_ratio, tem=tem, den=den, lev\_i1=lev\_i1, lev\_j1=lev\_j1, lev\_i2=
       lev\_i2, lev\_j2=lev\_j2,
-00013                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start\_x=start\_x, 
-00014                   end\_x=end\_x, to\_eval=to\_eval, nCut=nCut, maxIter=maxIter)
-00015         outQ.put((jobid, res))
-00016     \textcolor{keywordflow}{return}
-00017 \end{DoxyCode}
+00014                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start\_x=start\_x, 
+00015                   end\_x=end\_x, to\_eval=to\_eval, nCut=nCut, maxIter=maxIter)
+00016         outQ.put((jobid, res))
+00017     \textcolor{keywordflow}{return}
+\end{DoxyCode}

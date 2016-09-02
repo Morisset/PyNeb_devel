@@ -1,5 +1,6 @@
-\hypertarget{pn__chianti_8py_source}{}\section{pn\+\_\+chianti.\+py}
-\label{pn__chianti_8py_source}\index{pyneb/utils/pn\+\_\+chianti.\+py@{pyneb/utils/pn\+\_\+chianti.\+py}}
+\hypertarget{pn__chianti_8py}{\section{pn\-\_\-chianti.\-py}
+\label{pn__chianti_8py}\index{pyneb/utils/pn\-\_\-chianti.\-py@{pyneb/utils/pn\-\_\-chianti.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{pn__chianti_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti}{00001} \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
@@ -7,577 +8,616 @@
 00003 \textcolor{keyword}{import} os
 00004 \textcolor{keyword}{import} re
 00005 \textcolor{keyword}{import} pyneb \textcolor{keyword}{as} pn
-00006 \textcolor{keyword}{import} \_chianti\_tools
-00007 \textcolor{keyword}{import} \_chianti\_constants \textcolor{keyword}{as} const
-00008 \textcolor{keyword}{from} physics \textcolor{keyword}{import} sym2name, vactoair
-00009 \textcolor{keyword}{from} manage\_atomic\_data \textcolor{keyword}{import} getLevelsNIST, atom2chianti
-00010 \textcolor{keyword}{from} misc \textcolor{keyword}{import} parseAtom
-00011 
-\hypertarget{pn__chianti_8py_source_l00012}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{00012} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{Chianti\_getA}(ion\_chianti):
-00013     \textcolor{stringliteral}{"""}
-00014 \textcolor{stringliteral}{    Return As from Chianti database.}
-00015 \textcolor{stringliteral}{    Usage:}
-00016 \textcolor{stringliteral}{        As\_O3 = Chianti\_getA('o\_3')}
-00017 \textcolor{stringliteral}{    """}
-00018     wgfa = \_chianti\_tools.wgfaRead(ion\_chianti)
-00019     NLevels = np.max(wgfa[\textcolor{stringliteral}{'lvl2'}])
-00020     As = np.zeros((NLevels, NLevels))
-00021     \textcolor{keywordflow}{for} i, j, a \textcolor{keywordflow}{in} zip(wgfa[\textcolor{stringliteral}{'lvl2'}], wgfa[\textcolor{stringliteral}{'lvl1'}], wgfa[\textcolor{stringliteral}{'avalue'}]):
-00022         As[i-1, j-1] = a
-00023     \textcolor{keywordflow}{return} As
-00024 
-\hypertarget{pn__chianti_8py_source_l00025}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{00025} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\_getE}(ion\_chianti):
-00026     \textcolor{stringliteral}{"""}
-00027 \textcolor{stringliteral}{    Return energies from the Chianti database}
-00028 \textcolor{stringliteral}{    Usage:}
-00029 \textcolor{stringliteral}{        E\_O3 = Chianti\_getE('o\_3')}
-00030 \textcolor{stringliteral}{    """}
-00031     Es = \_chianti\_tools.elvlcRead(ion\_chianti)
-00032     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} \textcolor{stringliteral}{'j'} \textcolor{keywordflow}{in} Es:
-00033         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
-00034     dtype = [(\textcolor{stringliteral}{'ecmth'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'ionS'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'term'}, \textcolor{stringliteral}{'S20'}),  (\textcolor{stringliteral}{'pretty'}, \textcolor{stringliteral}{'S30'}), 
-00035              (\textcolor{stringliteral}{'spd'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'ecm'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'j'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'l'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'erydth'}, \textcolor{stringliteral}{'<f8'}), 
-00036              (\textcolor{stringliteral}{'conf'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'lvl'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'spin'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'eryd'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'mult'}, \textcolor{stringliteral}{'<i8'})]
-00037     arr = np.recarray((len(Es[\textcolor{stringliteral}{'j'}]),), dtype=dtype)
-00038     \textcolor{keywordflow}{for} k \textcolor{keywordflow}{in} Es.keys():
-00039         \textcolor{keywordflow}{if} k \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} (\textcolor{stringliteral}{'status'}, \textcolor{stringliteral}{'ref'}):
-00040             arr[k] = Es[k]
-00041     \textcolor{keywordflow}{return} arr
-00042 
-\hypertarget{pn__chianti_8py_source_l00043}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{00043} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(atom, nmax=None):
-00044     \textcolor{stringliteral}{"""}
-00045 \textcolor{stringliteral}{    Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.}
-00046 \textcolor{stringliteral}{    }
-00047 \textcolor{stringliteral}{    """}
-00048     E\_chianti = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\_getE}(\hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a9c992b2ae01f2e369be5d539172f78a0}{atom2chianti}(atom))
-00049     \textcolor{keywordflow}{if} E\_chianti \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00050         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
-00051     E\_NIST = \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_ad09376e8676854d44680ae14210b5589}{getLevelsNIST}(atom)
-00052     \textcolor{keywordflow}{if} E\_NIST \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00053         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
-00054     \textcolor{comment}{# Here follow a list of filter to try to find coincidence between the configuration used in Chanti and
+00006 \textcolor{keywordflow}{if} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'8'}:
+00007     \textcolor{keyword}{from} . \textcolor{keyword}{import} \_chianti\_tools\_8 \textcolor{keyword}{as} \_chianti\_tools
+00008 \textcolor{keywordflow}{elif} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'7'}:
+00009     \textcolor{keyword}{from} . \textcolor{keyword}{import} \_chianti\_tools
+00010 \textcolor{keyword}{from} . \textcolor{keyword}{import} \_chianti\_constants \textcolor{keyword}{as} const
+00011 \textcolor{keyword}{from} .physics \textcolor{keyword}{import} sym2name, vactoair
+00012 \textcolor{keyword}{from} .manage\_atomic\_data \textcolor{keyword}{import} getLevelsNIST, atom2chianti
+00013 \textcolor{keyword}{from} .misc \textcolor{keyword}{import} parseAtom
+00014 
+\hypertarget{pn__chianti_8py_source_l00015}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae49411e98cb7ac96f53887d3f277a041}{00015} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae49411e98cb7ac96f53887d3f277a041}{Chianti\_getA}(ion\_chianti, NLevels=None):
+00016     \textcolor{stringliteral}{"""}
+00017 \textcolor{stringliteral}{    Return As from Chianti database.}
+00018 \textcolor{stringliteral}{    Usage:}
+00019 \textcolor{stringliteral}{        As\_O3 = Chianti\_getA('o\_3')}
+00020 \textcolor{stringliteral}{    """}
+00021     wgfa = \_chianti\_tools.wgfaRead(ion\_chianti)
+00022     NLevels = np.max(wgfa[\textcolor{stringliteral}{'lvl2'}])
+00023     As = np.zeros((NLevels, NLevels))
+00024     \textcolor{keywordflow}{for} i, j, a \textcolor{keywordflow}{in} zip(wgfa[\textcolor{stringliteral}{'lvl2'}], wgfa[\textcolor{stringliteral}{'lvl1'}], wgfa[\textcolor{stringliteral}{'avalue'}]):
+00025         As[i-1, j-1] = a
+00026     \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00027         As = As[0:NLevels, 0:NLevels]
+00028     \textcolor{keywordflow}{return} As
+00029 
+\hypertarget{pn__chianti_8py_source_l00030}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_af2ab54887a9b6970ef047eb14a81357d}{00030} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_af2ab54887a9b6970ef047eb14a81357d}{Chianti\_getE}(ion\_chianti, NLevels=None):
+00031     \textcolor{stringliteral}{"""}
+00032 \textcolor{stringliteral}{    Return energies from the Chianti database}
+00033 \textcolor{stringliteral}{    Usage:}
+00034 \textcolor{stringliteral}{        E\_O3 = Chianti\_getE('o\_3')}
+00035 \textcolor{stringliteral}{    """}
+00036     
+00037     Es = \_chianti\_tools.elvlcRead(ion\_chianti)
+00038     \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} \textcolor{stringliteral}{'j'} \textcolor{keywordflow}{in} Es:
+00039         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00040     dtype = [(\textcolor{stringliteral}{'ecmth'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'ionS'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'term'}, \textcolor{stringliteral}{'S20'}),  (\textcolor{stringliteral}{'pretty'}, \textcolor{stringliteral}{'S30'}), 
+00041              (\textcolor{stringliteral}{'spd'}, \textcolor{stringliteral}{'S10'}), (\textcolor{stringliteral}{'ecm'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'j'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'l'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'erydth'}, \textcolor{stringliteral}{'<f8'}), 
+00042              (\textcolor{stringliteral}{'conf'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'lvl'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'spin'}, \textcolor{stringliteral}{'<i8'}), (\textcolor{stringliteral}{'eryd'}, \textcolor{stringliteral}{'<f8'}), (\textcolor{stringliteral}{'mult'}, \textcolor{stringliteral}{'<i8'})]
+00043     arr = np.recarray((len(Es[\textcolor{stringliteral}{'j'}]),), dtype=dtype)
+00044     \textcolor{keywordflow}{for} k \textcolor{keywordflow}{in} Es.keys():
+00045         \textcolor{keywordflow}{if} k \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} (\textcolor{stringliteral}{'status'}, \textcolor{stringliteral}{'ref'}, \textcolor{stringliteral}{'label'}, \textcolor{stringliteral}{'filename'}):
+00046             arr[k] = Es[k]
+00047     \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00048         arr = arr[0:NLevels]
+00049     \textcolor{keywordflow}{return} arr
+00050 
+\hypertarget{pn__chianti_8py_source_l00051}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{00051} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(atom, NLevels=None):
+00052     \textcolor{stringliteral}{"""}
+00053 \textcolor{stringliteral}{    Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.}
+00054 \textcolor{stringliteral}{    }
+00055 \textcolor{stringliteral}{    """}
+00056     E\_chianti = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_af2ab54887a9b6970ef047eb14a81357d}{Chianti\_getE}(\hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a2c05deb31d8bc74727659c88846651a1}{atom2chianti}(atom))
+00057     \textcolor{keywordflow}{if} E\_chianti \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00058         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00059     E\_NIST = \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_ad09376e8676854d44680ae14210b5589}{getLevelsNIST}(atom)
+00060     \textcolor{keywordflow}{if} E\_NIST \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00061         \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00062     \textcolor{comment}{# Here follow a list of filter to try to find coincidence between the configuration used in Chanti and
        in NIST}
-00055     remove\_stars = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\)*'},\textcolor{stringliteral}{''}, str)
-00056     remove\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{r'\(\backslash\)([^)]*\(\backslash\))'},\textcolor{stringliteral}{''}, str)
-00057     change\_2pto1p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{'.'}, str)
-00058     change\_2pto0p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{''}, str)
-00059     remove\_point\_before\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\)('}, \textcolor{stringliteral}{'('}, str)
-00060     remove\_before\_firstp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'^[^.]*.'}, \textcolor{stringliteral}{''}, str)
-00061     change\_ptpsp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).'}, \textcolor{stringliteral}{' '}, str)
-00062     \textcolor{comment}{# Define the Dictionary}
-00063     Chianti2NIST = \{\}
-00064     \textcolor{keywordflow}{for} i\_N, E \textcolor{keywordflow}{in} enumerate(E\_NIST):
-00065         \textcolor{keywordflow}{if} i\_N >= len(E\_chianti):
-00066             \textcolor{keywordflow}{break}
-00067         \textcolor{keywordflow}{if} nmax \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None} \textcolor{keywordflow}{and} i\_N > nmax:
-00068             \textcolor{keywordflow}{break}
-00069         
-00070         term = remove\_stars(E[\textcolor{stringliteral}{'term'}])
-00071 
-00072         c1 = remove\_stars(E[\textcolor{stringliteral}{'conf'}])
-00073         
-00074         c12 = remove\_par(c1)
-00075         c123 = change\_2pto1p(c12)
-00076         c124 = change\_2pto0p(c12)
+00063     remove\_stars = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\)*'},\textcolor{stringliteral}{''}, str)
+00064     remove\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{r'\(\backslash\)([^)]*\(\backslash\))'},\textcolor{stringliteral}{''}, str)
+00065     change\_2pto1p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{'.'}, str)
+00066     change\_2pto0p = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\).'}, \textcolor{stringliteral}{''}, str)
+00067     remove\_point\_before\_par = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).\(\backslash\)('}, \textcolor{stringliteral}{'('}, str)
+00068     remove\_before\_firstp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'^[^.]*.'}, \textcolor{stringliteral}{''}, str)
+00069     change\_ptpsp = \textcolor{keyword}{lambda} str: re.sub(\textcolor{stringliteral}{'\(\backslash\).'}, \textcolor{stringliteral}{' '}, str)
+00070     \textcolor{comment}{# Define the Dictionary}
+00071     Chianti2NIST = \{\}
+00072     \textcolor{keywordflow}{for} i\_N, E \textcolor{keywordflow}{in} enumerate(E\_NIST):
+00073         \textcolor{keywordflow}{if} i\_N >= len(E\_chianti):
+00074             \textcolor{keywordflow}{break}
+00075         \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None} \textcolor{keywordflow}{and} i\_N > NLevels:
+00076             \textcolor{keywordflow}{break}
 00077         
-00078         c15 = remove\_point\_before\_par(c1) 
-00079         
-00080         c16 = remove\_before\_firstp(c1)
-00081         c126 = remove\_before\_firstp(c12)
-00082         c1236 = remove\_before\_firstp(c123)
-00083         c1246 = remove\_before\_firstp(c124)
-00084         c156 = remove\_before\_firstp(c15)
+00078         term = remove\_stars(E[\textcolor{stringliteral}{'term'}])
+00079 
+00080         c1 = remove\_stars(E[\textcolor{stringliteral}{'conf'}])
+00081         
+00082         c12 = remove\_par(c1)
+00083         c123 = change\_2pto1p(c12)
+00084         c124 = change\_2pto0p(c12)
 00085         
-00086         c17 = change\_ptpsp(c1)
-00087         c127 = change\_ptpsp(c12)
-00088         c1237 = change\_ptpsp(c123)
-00089         c1247 = change\_ptpsp(c124)
-00090         c157 = change\_ptpsp(c15)
-00091         c167 = change\_ptpsp(c16)
-00092         c1267 = change\_ptpsp(c126)
-00093         c12367 = change\_ptpsp(c1236)
-00094         c12467 = change\_ptpsp(c1246)
-00095         c1567 = change\_ptpsp(c156)
-00096        
-00097         confs = (c1, c12, c123, c124, c15, c16, c126, c1236, c1246, c156,
-00098                  c17, c127, c1237, c1247, c157, c167, c1267, c12367, c12467, c1567)
-00099         \textcolor{keywordflow}{for} conf \textcolor{keywordflow}{in} confs:   
-00100             pretty = \textcolor{stringliteral}{'\{0\} \{1\}\{2\}'}.format(conf, term, E[\textcolor{stringliteral}{'J'}])
-00101             i\_Ch = np.where(E\_chianti[\textcolor{stringliteral}{'pretty'}] == pretty)[0]
-00102             \textcolor{keywordflow}{if} len(i\_Ch) == 1:
-00103                 Chianti2NIST[i\_N] = i\_Ch[0]
-00104                         
-00105     \textcolor{keywordflow}{return} Chianti2NIST
-00106         
-\hypertarget{pn__chianti_8py_source_l00107}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{00107} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(ion\_chianti, tem, lev1=None, lev2=None, Splups=None, NLevelsMax=None):
-00108     \textcolor{stringliteral}{"""}
-00109 \textcolor{stringliteral}{    Return the values of Upsilon at a given temperature (may be a table)}
-00110 \textcolor{stringliteral}{    Usage:}
-00111 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', 10000)}
-00112 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', np.linspace(5000, 20000, 20))}
-00113 \textcolor{stringliteral}{    lower and upper levels can be given as lev1 and lev2. If not, full table is return}
-00114 \textcolor{stringliteral}{    Splups is the result of \_chianti\_tools.splupsRead(ion\_chianti), can be passed to avoid reloading it}
-00115 \textcolor{stringliteral}{    NLevelsMax reduce the number of levels considered.}
-00116 \textcolor{stringliteral}{    """}
-00117     temp=np.asarray(tem)
-00118     \textcolor{keywordflow}{if} Splups \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00119         Splups = \_chianti\_tools.splupsRead(ion\_chianti)
-00120     \textcolor{keywordflow}{if} NLevelsMax \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00121         nsplups = len(Splups[\textcolor{stringliteral}{"lvl1"}])
-00122         nlevels = np.max(Splups[\textcolor{stringliteral}{"lvl2"}])
-00123     \textcolor{keywordflow}{else}:
-00124         nsplups = np.min((len(Splups[\textcolor{stringliteral}{"lvl1"}]), NLevelsMax))
-00125         nlevels = np.min((np.max(Splups[\textcolor{stringliteral}{"lvl2"}]), NLevelsMax))
-00126     ntemp=temp.size
-00127     \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
-00128         Omega = np.zeros((nlevels, nlevels, ntemp))
-00129     \textcolor{keywordflow}{else}:
-00130         Omega = np.zeros(ntemp)
-00131     lvl1 = np.array(Splups[\textcolor{stringliteral}{"lvl1"}])
-00132     lvl2 = np.array(Splups[\textcolor{stringliteral}{"lvl2"}])
-00133     \textcolor{keywordflow}{if} lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00134         range1 = np.arange(nlevels)
-00135     \textcolor{keywordflow}{else}:
-00136         range1 = np.array([lev1-1])
-00137     \textcolor{keywordflow}{if} lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
-00138         range2 = np.arange(nlevels)
+00086         c15 = remove\_point\_before\_par(c1) 
+00087         
+00088         c16 = remove\_before\_firstp(c1)
+00089         c126 = remove\_before\_firstp(c12)
+00090         c1236 = remove\_before\_firstp(c123)
+00091         c1246 = remove\_before\_firstp(c124)
+00092         c156 = remove\_before\_firstp(c15)
+00093         
+00094         c17 = change\_ptpsp(c1)
+00095         c127 = change\_ptpsp(c12)
+00096         c1237 = change\_ptpsp(c123)
+00097         c1247 = change\_ptpsp(c124)
+00098         c157 = change\_ptpsp(c15)
+00099         c167 = change\_ptpsp(c16)
+00100         c1267 = change\_ptpsp(c126)
+00101         c12367 = change\_ptpsp(c1236)
+00102         c12467 = change\_ptpsp(c1246)
+00103         c1567 = change\_ptpsp(c156)
+00104        
+00105         confs = (c1, c12, c123, c124, c15, c16, c126, c1236, c1246, c156,
+00106                  c17, c127, c1237, c1247, c157, c167, c1267, c12367, c12467, c1567)
+00107         \textcolor{keywordflow}{for} conf \textcolor{keywordflow}{in} confs:   
+00108             pretty = \textcolor{stringliteral}{'\{0\} \{1\}\{2\}'}.format(conf, term, E[\textcolor{stringliteral}{'J'}])
+00109             i\_Ch = np.where(E\_chianti[\textcolor{stringliteral}{'pretty'}] == pretty)[0]
+00110             \textcolor{keywordflow}{if} len(i\_Ch) == 1:
+00111                 \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None} \textcolor{keywordflow}{and} i\_Ch[0] <= NLevels:
+00112                     Chianti2NIST[i\_N] = i\_Ch[0]
+00113     \textcolor{keywordflow}{if} len(Chianti2NIST) == 0:
+00114         Chianti2NIST = \textcolor{keywordtype}{None}
+00115         
+00116         \textcolor{comment}{### Il faut que ni i\_N ni i\_Ch depasse NLvels. Et il faut que NLevels soit diminue dansla cas
+       contraire.}
+00117     \textcolor{keywordflow}{return} Chianti2NIST
+00118         
+\hypertarget{pn__chianti_8py_source_l00119}{}\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{00119} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(ion\_chianti, tem, lev1=None, lev2=None, Splups=None, NLevels=None):
+00120     \textcolor{stringliteral}{"""}
+00121 \textcolor{stringliteral}{    Return the values of Upsilon at a given temperature (may be a table)}
+00122 \textcolor{stringliteral}{    Usage:}
+00123 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', 10000)}
+00124 \textcolor{stringliteral}{        Chianti\_getOmega('o\_3', np.linspace(5000, 20000, 20))}
+00125 \textcolor{stringliteral}{    lower and upper levels can be given as lev1 and lev2. If not, full table is return}
+00126 \textcolor{stringliteral}{    Splups is the result of \_chianti\_tools.splupsRead(ion\_chianti), can be passed to avoid reloading it}
+00127 \textcolor{stringliteral}{    NLevelsMax reduce the number of levels considered.}
+00128 \textcolor{stringliteral}{    """}
+00129     temp=np.asarray(tem)
+00130     \textcolor{keywordflow}{if} Splups \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00131         \textcolor{keywordflow}{if} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'8'}:
+00132             Splups = \_chianti\_tools.scupsRead(ion\_chianti)
+00133             print(Splups.keys())
+00134         \textcolor{keywordflow}{elif} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'7'}:
+00135             Splups = \_chianti\_tools.splupsRead(ion\_chianti)
+00136     \textcolor{keywordflow}{if} NLevels \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00137         nsplups = len(Splups[\textcolor{stringliteral}{"lvl1"}])
+00138         nlevels = np.max(Splups[\textcolor{stringliteral}{"lvl2"}])
 00139     \textcolor{keywordflow}{else}:
-00140         range2 = np.array([lev2-1])
-00141     \textcolor{keywordflow}{for} l1 \textcolor{keywordflow}{in} range1:
-00142         \textcolor{keywordflow}{for} l2 \textcolor{keywordflow}{in} range2:
-00143             isplups = np.where(((lvl1 == (l1+1)) & (lvl2 == (l2+1))))
-00144             \textcolor{keywordflow}{if} type(isplups) == type(()):
-00145                 isplups = isplups[0]                
-00146             \textcolor{keywordflow}{if} len(isplups) == 0:
-00147                 ups = np.zeros(ntemp)
-00148             \textcolor{keywordflow}{else}:
-00149                 ttype=Splups[\textcolor{stringliteral}{"ttype"}][isplups]
-00150                 cups=Splups[\textcolor{stringliteral}{"cups"}][isplups]
-00151                 nspl=Splups[\textcolor{stringliteral}{"nspl"}][isplups]
-00152                 dx=1./(float(nspl)-1.)
-00153                 splups=Splups[\textcolor{stringliteral}{"splups"}][isplups]
-00154                 de=Splups[\textcolor{stringliteral}{'de'}][isplups]
-00155                 kte = const.boltzmann*temp/(de*const.ryd2erg)
-00156                 der=0
-00157                 \textcolor{keywordflow}{if} ttype == 1:
-00158                     st=1.-np.log(cups)/np.log(kte+cups)
-00159                     xs=dx*np.arange(nspl)
-00160                     y2=interpolate.splrep(xs,splups,s=0)
-00161                     sups=interpolate.splev(st,y2,der=der)
-00162                     ups=sups*np.log(kte+np.exp(1.))
-00163                 \textcolor{keywordflow}{elif} ttype == 2:
-00164                     st=kte/(kte+cups)
-00165                     xs=dx*np.arange(nspl)
-00166                     y2=interpolate.splrep(xs,splups,s=0)
-00167                     sups=interpolate.splev(st,y2,der=der)
-00168                     ups=sups
-00169                 \textcolor{keywordflow}{elif} ttype == 3:
-00170                     st=kte/(kte+cups)
-00171                     xs=dx*np.arange(nspl)
-00172                     y2=interpolate.splrep(xs,splups,s=0)
-00173                     sups=interpolate.splev(st,y2,der=der)
-00174                     ups=sups/(kte+1.)
-00175                 \textcolor{keywordflow}{elif} ttype == 4:
-00176                     st=1.-np.log(cups)/np.log(kte+cups)
-00177                     xs=dx*np.arange(nspl)
-00178                     y2=interpolate.splrep(xs,splups,s=0)
-00179                     sups=interpolate.splev(st,y2,der=der)
-00180                     ups=sups*np.log(kte+cups)
-00181                 \textcolor{keywordflow}{elif} ttype == 5:
-00182                     \textcolor{comment}{# dielectronic rates}
-00183                     st=kte/(kte+cups)
-00184                     xs=dx*np.arange(nspl)
-00185                     y2=interpolate.splrep(xs,splups,s=0)
-00186                     sups=interpolate.splev(st,y2,der=der)
-00187                     ups=sups/(kte+0.)
-00188                 \textcolor{keywordflow}{elif} ttype == 6:
-00189                     st=kte/(kte+cups)
-00190                     xs=dx*np.arange(nspl)
-00191                     y2=interpolate.splrep(xs,splups,s=0)
-00192                     sups=interpolate.splev(st,y2,der=der)
-00193                     ups=10.**sups
-00194                 \textcolor{keywordflow}{elif} ttype > 6:
-00195                     pn.log\_.warning(\textcolor{stringliteral}{' t\_type ne 1,2,3,4,5=\{\} \{\} \{\}'}.format(ttype,l1,l2), calling=\textcolor{stringliteral}{'
+00140         nsplups = np.min((len(Splups[\textcolor{stringliteral}{"lvl1"}]), NLevels))
+00141         nlevels = np.min((np.max(Splups[\textcolor{stringliteral}{"lvl2"}]), NLevels))
+00142     ntemp=temp.size
+00143     \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
+00144         Omega = np.zeros((nlevels, nlevels, ntemp))
+00145     \textcolor{keywordflow}{else}:
+00146         Omega = np.zeros(ntemp)
+00147     lvl1 = np.array(Splups[\textcolor{stringliteral}{"lvl1"}])
+00148     lvl2 = np.array(Splups[\textcolor{stringliteral}{"lvl2"}])
+00149     \textcolor{keywordflow}{if} lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00150         range1 = np.arange(nlevels)
+00151     \textcolor{keywordflow}{else}:
+00152         range1 = np.array([lev1-1])
+00153     \textcolor{keywordflow}{if} lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00154         range2 = np.arange(nlevels)
+00155     \textcolor{keywordflow}{else}:
+00156         range2 = np.array([lev2-1])
+00157     \textcolor{keywordflow}{for} l1 \textcolor{keywordflow}{in} range1:
+00158         \textcolor{keywordflow}{for} l2 \textcolor{keywordflow}{in} range2:
+00159             isplups = np.where(((lvl1 == (l1+1)) & (lvl2 == (l2+1))))
+00160             \textcolor{keywordflow}{if} type(isplups) == type(()):
+00161                 isplups = isplups[0]                
+00162             \textcolor{keywordflow}{if} len(isplups) == 0:
+00163                 ups = np.zeros(ntemp)
+00164             \textcolor{keywordflow}{else}:
+00165                 ttype=Splups[\textcolor{stringliteral}{"ttype"}][isplups]
+00166                 cups=Splups[\textcolor{stringliteral}{"cups"}][isplups]
+00167                 \textcolor{keywordflow}{if} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'8'}:
+00168                     nspl=Splups[\textcolor{stringliteral}{"ntemp"}][isplups]
+00169                     dx=1./(float(nspl)-1.)
+00170                     xs = Splups[\textcolor{stringliteral}{'btemp'}][isplups]
+00171                     splups=Splups[\textcolor{stringliteral}{"bscups"}][isplups]
+00172                 \textcolor{keywordflow}{elif} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'7'}:
+00173                     nspl=Splups[\textcolor{stringliteral}{"nspl"}][isplups]
+00174                     dx=1./(float(nspl)-1.)
+00175                     xs=dx*np.arange(nspl)
+00176                     splups=Splups[\textcolor{stringliteral}{"splups"}][isplups]
+00177                 de=Splups[\textcolor{stringliteral}{'de'}][isplups]
+00178                 kte = const.boltzmann*temp/(de*const.ryd2erg)
+00179                 der=0
+00180                 \textcolor{keywordflow}{if} ttype == 1:
+00181                     st=1.-np.log(cups)/np.log(kte+cups)
+00182                     y2=interpolate.splrep(xs,splups,s=0)
+00183                     sups=interpolate.splev(st,y2,der=der)
+00184                     ups=sups*np.log(kte+np.exp(1.))
+00185                 \textcolor{keywordflow}{elif} ttype == 2:
+00186                     st=kte/(kte+cups)
+00187                     y2=interpolate.splrep(xs,splups,s=0)
+00188                     sups=interpolate.splev(st,y2,der=der)
+00189                     ups=sups
+00190                 \textcolor{keywordflow}{elif} ttype == 3:
+00191                     st=kte/(kte+cups)
+00192                     y2=interpolate.splrep(xs,splups,s=0)
+00193                     sups=interpolate.splev(st,y2,der=der)
+00194                     ups=sups/(kte+1.)
+00195                 \textcolor{keywordflow}{elif} ttype == 4:
+00196                     st=1.-np.log(cups)/np.log(kte+cups)
+00197                     y2=interpolate.splrep(xs,splups,s=0)
+00198                     sups=interpolate.splev(st,y2,der=der)
+00199                     ups=sups*np.log(kte+cups)
+00200                 \textcolor{keywordflow}{elif} ttype == 5:
+00201                     \textcolor{comment}{# dielectronic rates}
+00202                     st=kte/(kte+cups)
+00203                     y2=interpolate.splrep(xs,splups,s=0)
+00204                     sups=interpolate.splev(st,y2,der=der)
+00205                     ups=sups/(kte+0.)
+00206                 \textcolor{keywordflow}{elif} ttype == 6:
+00207                     st=kte/(kte+cups)
+00208                     y2=interpolate.splrep(xs,splups,s=0)
+00209                     sups=interpolate.splev(st,y2,der=der)
+00210                     ups=10.**sups
+00211                 \textcolor{keywordflow}{elif} ttype > 6:
+00212                     pn.log\_.warning(\textcolor{stringliteral}{' t\_type ne 1,2,3,4,5=\{\} \{\} \{\}'}.format(ttype,l1,l2), calling=\textcolor{stringliteral}{'
       pn.chianti.Chianti\_getOmega'})
-00196             \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
-00197                 Omega[l2, l1, :] = ups
-00198             \textcolor{keywordflow}{else}:
-00199                 Omega = ups
-00200 
-00201     Omega = np.where(Omega > 0.,Omega,0.)
-00202     \textcolor{keywordflow}{return} Omega
-00203 
-\hypertarget{pn__chianti_8py_source_l00204}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti}{00204} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti}{\_AtomChianti}(object):
-00205     
-\hypertarget{pn__chianti_8py_source_l00206}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_accfb95c4b9bdc734c43e40cc5d21c5c1}{00206}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_accfb95c4b9bdc734c43e40cc5d21c5c1}{\_\_init\_\_}(self, elem=None, spec=None, atom=None):
-00207         \textcolor{stringliteral}{"""}
-00208 \textcolor{stringliteral}{        Object dealing with As values from the Chianti database.}
-00209 \textcolor{stringliteral}{        The directory where to find the data must be given through the environment variable XUVTOP.}
-00210 \textcolor{stringliteral}{        This object is not aimed to be used by itself, it is called by Atom.}
-00211 \textcolor{stringliteral}{        """}
-\hypertarget{pn__chianti_8py_source_l00212}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a949f340c2041435c590ca066e2797e7d}{00212}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a949f340c2041435c590ca066e2797e7d}{log\_} = pn.log\_
-00213         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-\hypertarget{pn__chianti_8py_source_l00214}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{00214}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom} = atom
-\hypertarget{pn__chianti_8py_source_l00215}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{00215}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[0]
-\hypertarget{pn__chianti_8py_source_l00216}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{00216}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[1])
-00217         \textcolor{keywordflow}{else}:
-00218             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem} = elem
-00219             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec} = int(spec)
-00220             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom} = elem + str(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec})
-\hypertarget{pn__chianti_8py_source_l00221}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7471c40b97108627573a9814cde6feec}{00221}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7471c40b97108627573a9814cde6feec}{name} = sym2name[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem}]
-\hypertarget{pn__chianti_8py_source_l00222}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{00222}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti} =  \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a9c992b2ae01f2e369be5d539172f78a0}{atom2chianti}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
-\hypertarget{pn__chianti_8py_source_l00223}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{00223}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling} = \textcolor{stringliteral}{'Atom \{\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
-00224         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a04653df9012e443155feef79b471d216}{\_loadChianti}()
-00225         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af8bfc64a36028b1802d6d7be9ef7301f}{initWaves}()
-00226         
-\hypertarget{pn__chianti_8py_source_l00227}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a04653df9012e443155feef79b471d216}{00227}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a04653df9012e443155feef79b471d216}{\_loadChianti}(self):
-\hypertarget{pn__chianti_8py_source_l00228}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{00228}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName} = \_chianti\_tools.ion2filename(self.
+00213             \textcolor{keywordflow}{if} (lev1 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}) \textcolor{keywordflow}{and} (lev2 \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}):
+00214                 Omega[l2, l1, :] = ups
+00215             \textcolor{keywordflow}{else}:
+00216                 Omega = ups
+00217 
+00218     Omega = np.where(Omega > 0.,Omega,0.)
+00219     \textcolor{keywordflow}{return} Omega
+00220 
+\hypertarget{pn__chianti_8py_source_l00221}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti}{00221} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti}{\_AtomChianti}(object):
+00222     
+\hypertarget{pn__chianti_8py_source_l00223}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_accfb95c4b9bdc734c43e40cc5d21c5c1}{00223}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_accfb95c4b9bdc734c43e40cc5d21c5c1}{\_\_init\_\_}(self, elem=None, spec=None, atom=None, NLevels=None):
+00224         \textcolor{stringliteral}{"""}
+00225 \textcolor{stringliteral}{        Object dealing with As values from the Chianti database.}
+00226 \textcolor{stringliteral}{        The directory where to find the data must be given through the environment variable XUVTOP.}
+00227 \textcolor{stringliteral}{        This object is not aimed to be used by itself, it is called by Atom.}
+00228 \textcolor{stringliteral}{        """}
+\hypertarget{pn__chianti_8py_source_l00229}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a949f340c2041435c590ca066e2797e7d}{00229}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a949f340c2041435c590ca066e2797e7d}{log\_} = pn.log\_
+00230         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+\hypertarget{pn__chianti_8py_source_l00231}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{00231}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom} = atom
+\hypertarget{pn__chianti_8py_source_l00232}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{00232}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[0]
+\hypertarget{pn__chianti_8py_source_l00233}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{00233}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[1])
+00234         \textcolor{keywordflow}{else}:
+00235             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem} = elem
+00236             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec} = int(spec)
+00237             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom} = elem + str(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a12c7570333087fefa72763dd77a81379}{spec})
+\hypertarget{pn__chianti_8py_source_l00238}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7471c40b97108627573a9814cde6feec}{00238}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7471c40b97108627573a9814cde6feec}{name} = sym2name[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_abe30b15c08f41bbb5c548c197977293a}{elem}]
+\hypertarget{pn__chianti_8py_source_l00239}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{00239}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti} =  \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a2c05deb31d8bc74727659c88846651a1}{atom2chianti}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
+\hypertarget{pn__chianti_8py_source_l00240}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{00240}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling} = \textcolor{stringliteral}{'Atom \{\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
+\hypertarget{pn__chianti_8py_source_l00241}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{00241}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} = \textcolor{keywordtype}{None}
+\hypertarget{pn__chianti_8py_source_l00242}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{00242}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels} = NLevels
+00243         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a51852adf7bfefb13c29781d9ba297164}{\_loadChianti}()
+00244         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7a801384a2639d7428f8c3b4a09cd0a7}{initWaves}()
+00245         
+\hypertarget{pn__chianti_8py_source_l00246}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a51852adf7bfefb13c29781d9ba297164}{00246}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a51852adf7bfefb13c29781d9ba297164}{\_loadChianti}(self):
+\hypertarget{pn__chianti_8py_source_l00247}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{00247}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName} = \_chianti\_tools.ion2filename(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti}) + \textcolor{stringliteral}{'.wgfa'}
-00229         
-\hypertarget{pn__chianti_8py_source_l00230}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{00230}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{atomFile} = self.fullFileName.split(\textcolor{stringliteral}{'/'})[-1]
-\hypertarget{pn__chianti_8py_source_l00231}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aaf24255765203c5d7650a7e7fc0f888d}{00231}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aaf24255765203c5d7650a7e7fc0f888d}{atomPath} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}[:-len(self.
+00248         
+\hypertarget{pn__chianti_8py_source_l00249}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{00249}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{atomFile} = self.fullFileName.split(\textcolor{stringliteral}{'/'})[-1]
+\hypertarget{pn__chianti_8py_source_l00250}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aaf24255765203c5d7650a7e7fc0f888d}{00250}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aaf24255765203c5d7650a7e7fc0f888d}{atomPath} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}[:-len(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{atomFile})]
-00232         
-00233         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}):
-00234             self.log\_.error(\textcolor{stringliteral}{'File \{0\} not found'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}), calling=self.
+00251         
+00252         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}):
+00253             self.log\_.error(\textcolor{stringliteral}{'File \{0\} not found'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac091a3412fff7c4af350dbbe6b604082}{fullFileName}), calling=self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling})
-00235         
-\hypertarget{pn__chianti_8py_source_l00236}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{00236}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version} = self.atomPath.split(\textcolor{stringliteral}{'/'})[-4]
-\hypertarget{pn__chianti_8py_source_l00237}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{00237}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments} = \{\}
-00238         
-00239         Chianti\_A = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae701b2adb22d5cde4fd8ae2967b55fd0}{Chianti\_getA}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})
-\hypertarget{pn__chianti_8py_source_l00240}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{00240}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
-00241         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00242             Chianti\_A\_tmp = Chianti\_A.copy()
-00243             \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}:
-00244                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti] != i\_chianti:
-00245                     Chianti\_A[i\_chianti,:] = Chianti\_A\_tmp[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti],:]
-00246                     Chianti\_A[:,i\_chianti] = Chianti\_A\_tmp[:,self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti]]
-00247         self.log\_.message(\textcolor{stringliteral}{'Reading atom data from Chianti \{\}'}.format(self.
+00254         
+\hypertarget{pn__chianti_8py_source_l00255}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{00255}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version} = self.atomPath.split(\textcolor{stringliteral}{'/'})[-4]
+\hypertarget{pn__chianti_8py_source_l00256}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{00256}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments} = \{\}
+00257         
+00258         Chianti\_A = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_ae49411e98cb7ac96f53887d3f277a041}{Chianti\_getA}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti}, NLevels=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels})
+00259         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00260             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom})
+00261         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00262             Chianti\_A\_tmp = Chianti\_A.copy()
+00263             \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}:
+00264                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti] != i\_chianti:
+00265                     Chianti\_A[i\_chianti,:] = Chianti\_A\_tmp[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti],:]
+00266                     Chianti\_A[:,i\_chianti] = Chianti\_A\_tmp[:,self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af40dabefe9f067611af9696725412980}{Chianti2NIST}[i\_chianti]]
+00267         self.log\_.message(\textcolor{stringliteral}{'Reading atom data from Chianti \{\}'}.format(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_acf53db82cf11ffa5218615522a69dff2}{atomFile}), calling = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling})
-\hypertarget{pn__chianti_8py_source_l00248}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{00248}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{Chianti\_E} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a9044db416b867ab604784eb0246c88e2}{Chianti\_getE}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})
-00249         NLevels = len(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{Chianti\_E})
-\hypertarget{pn__chianti_8py_source_l00250}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{00250}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST} = \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_ad09376e8676854d44680ae14210b5589}{getLevelsNIST}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom}, NLevels)
-00251         NLevels = np.min((len(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}), NLevels))
-00252         need\_NIST = \textcolor{keyword}{True}
-00253         
-00254         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00255             energy = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}[\textcolor{stringliteral}{'energy'}] / 1e8
-00256             stat\_weight = 1 + 2 * self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}[\textcolor{stringliteral}{'J'}]
-00257             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'VACUUM'}] = \textcolor{stringliteral}{'1'}
-00258             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'NOTE'}] = \textcolor{stringliteral}{'Energy levels'}
-00259             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'SOURCE'}] = \textcolor{stringliteral}{'NIST 2014'}
-00260         \textcolor{keywordflow}{elif} need\_NIST:
-00261             pn.log\_.error(\textcolor{stringliteral}{'NIST data are needed for this format of atomic data'}, calling=self.
+\hypertarget{pn__chianti_8py_source_l00268}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{00268}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{Chianti\_E} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_af2ab54887a9b6970ef047eb14a81357d}{Chianti\_getE}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti}, NLevels=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels})
+00269         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels} \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00270             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels} = len(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ad3eb8ed7f4cb58a7806dd820b22f3d37}{Chianti\_E})
+\hypertarget{pn__chianti_8py_source_l00271}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{00271}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST} = \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_ad09376e8676854d44680ae14210b5589}{getLevelsNIST}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a168acbb7ea238fb41299616a512d487c}{atom}, self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels})
+00272         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels} = np.min((len(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}), self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}))
+00273         need\_NIST = \textcolor{keyword}{True}
+00274         
+00275         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00276             energy = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}[\textcolor{stringliteral}{'energy'}] / 1e8
+00277             stat\_weight = 1 + 2 * self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a1e879cf028a221b9ce7908eabf570641}{NIST}[\textcolor{stringliteral}{'J'}]
+00278             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'VACUUM'}] = \textcolor{stringliteral}{'1'}
+00279             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'NOTE'}] = \textcolor{stringliteral}{'Energy levels'}
+00280             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_afebb1605835d41af3a3078038475913a}{comments}[\textcolor{stringliteral}{'SOURCE'}] = \textcolor{stringliteral}{'NIST 2014'}
+00281         \textcolor{keywordflow}{elif} need\_NIST:
+00282             pn.log\_.error(\textcolor{stringliteral}{'NIST data are needed for this format of atomic data'}, calling=self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling}) 
-00262 
-\hypertarget{pn__chianti_8py_source_l00263}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{00263}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{E\_in\_vacuum} = \textcolor{keyword}{True}
-\hypertarget{pn__chianti_8py_source_l00264}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{00264}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy} = energy
-\hypertarget{pn__chianti_8py_source_l00265}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{00265}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight} = stat\_weight
-\hypertarget{pn__chianti_8py_source_l00266}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{00266}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A} = Chianti\_A
-\hypertarget{pn__chianti_8py_source_l00267}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a785ebfaa736f8db0aa4755a0447da689}{00267}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a785ebfaa736f8db0aa4755a0447da689}{atomNLevels} = NLevels
-\hypertarget{pn__chianti_8py_source_l00268}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{00268}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a785ebfaa736f8db0aa4755a0447da689}{atomNLevels}
-00269             
-\hypertarget{pn__chianti_8py_source_l00270}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af8bfc64a36028b1802d6d7be9ef7301f}{00270}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af8bfc64a36028b1802d6d7be9ef7301f}{initWaves}(self):
-00271         \textcolor{stringliteral}{"""}
-00272 \textcolor{stringliteral}{        Initialization of wave\_Ang}
-00273 \textcolor{stringliteral}{        }
-00274 \textcolor{stringliteral}{        """}
-\hypertarget{pn__chianti_8py_source_l00275}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{00275}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang} = np.zeros((self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}, self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}))
-00276         
-00277         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}):
-00278             \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i):
-00279                 wave = 1. / abs(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[i] - self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[j])
-00280                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{E\_in\_vacuum}:
-00281                     wave = \hyperlink{namespacepyneb_1_1utils_1_1physics_aafb02f69e32ab62fa89420481f9a65f4}{vactoair}(wave)
-00282                 self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang}[i, j] = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang}[j, i] = wave
-00283  
-\hypertarget{pn__chianti_8py_source_l00284}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{00284}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{\_test\_lev}(self, level):
-00285         \textcolor{stringliteral}{"""}
-00286 \textcolor{stringliteral}{        Test whether selected level is legal}
-00287 \textcolor{stringliteral}{}
-00288 \textcolor{stringliteral}{        Parameters:}
-00289 \textcolor{stringliteral}{            - level        selected atom level}
-00290 \textcolor{stringliteral}{}
-00291 \textcolor{stringliteral}{        """}       
-00292         \textcolor{keywordflow}{if} level < -1 \textcolor{keywordflow}{or} level == 0 \textcolor{keywordflow}{or} level > self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}:
-00293             self.log\_.error(\textcolor{stringliteral}{'Wrong value for level: \{0\}, maximum = \{1\}'}.format(level, self.
+00283 
+\hypertarget{pn__chianti_8py_source_l00284}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{00284}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{E\_in\_vacuum} = \textcolor{keyword}{True}
+\hypertarget{pn__chianti_8py_source_l00285}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{00285}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy} = energy
+\hypertarget{pn__chianti_8py_source_l00286}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{00286}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight} = stat\_weight
+\hypertarget{pn__chianti_8py_source_l00287}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{00287}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A} = Chianti\_A
+\hypertarget{pn__chianti_8py_source_l00288}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a785ebfaa736f8db0aa4755a0447da689}{00288}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a785ebfaa736f8db0aa4755a0447da689}{atomNLevels} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}
+00289             
+\hypertarget{pn__chianti_8py_source_l00290}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7a801384a2639d7428f8c3b4a09cd0a7}{00290}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7a801384a2639d7428f8c3b4a09cd0a7}{initWaves}(self):
+00291         \textcolor{stringliteral}{"""}
+00292 \textcolor{stringliteral}{        Initialization of wave\_Ang}
+00293 \textcolor{stringliteral}{        }
+00294 \textcolor{stringliteral}{        """}
+\hypertarget{pn__chianti_8py_source_l00295}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{00295}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang} = np.zeros((self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}, self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}))
+00296         
+00297         \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} range(1, self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}):
+00298             \textcolor{keywordflow}{for} j \textcolor{keywordflow}{in} range(i):
+00299                 wave = 1. / abs(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[i] - self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[j])
+00300                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a0f18a10053d8b91b233a17e586760326}{E\_in\_vacuum}:
+00301                     wave = \hyperlink{namespacepyneb_1_1utils_1_1physics_ae7f2ba7fc89983bb4d9fa50eb37f4b36}{vactoair}(wave)
+00302                 self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang}[i, j] = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aca46b2e32f9bc1412824ea3998fbe97f}{wave\_Ang}[j, i] = wave
+00303  
+\hypertarget{pn__chianti_8py_source_l00304}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{00304}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{\_test\_lev}(self, level):
+00305         \textcolor{stringliteral}{"""}
+00306 \textcolor{stringliteral}{        Test whether selected level is legal}
+00307 \textcolor{stringliteral}{}
+00308 \textcolor{stringliteral}{        Parameters:}
+00309 \textcolor{stringliteral}{            - level        selected atom level}
+00310 \textcolor{stringliteral}{}
+00311 \textcolor{stringliteral}{        """}       
+00312         \textcolor{keywordflow}{if} level < -1 \textcolor{keywordflow}{or} level == 0 \textcolor{keywordflow}{or} level > self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}:
+00313             self.log\_.error(\textcolor{stringliteral}{'Wrong value for level: \{0\}, maximum = \{1\}'}.format(level, self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab23fbd744cdeaa1e09454f014db040dc}{NLevels}),
-00294                             calling=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling})
-00295     
-\hypertarget{pn__chianti_8py_source_l00296}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aed967b738fd8c3d9ebef843f71d7063e}{00296}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aed967b738fd8c3d9ebef843f71d7063e}{getA}(self, lev\_i= -1, lev\_j= -1):
-00297         \textcolor{stringliteral}{"""}
-00298 \textcolor{stringliteral}{        Return the transition probability data. }
-00299 \textcolor{stringliteral}{        If no arguments are given, the whole array of A is returned.}
-00300 \textcolor{stringliteral}{        A specific A value can be obtained by giving either the upper and lower levels.}
-00301 \textcolor{stringliteral}{            }
-00302 \textcolor{stringliteral}{        Usage:}
-00303 \textcolor{stringliteral}{            A\_O3 = O3.getA()          # The whole A array is stored in A\_O3}
-00304 \textcolor{stringliteral}{            O3.getA(4, 2)      # A(4, 2) of the O3 atom is printed}
-00305 \textcolor{stringliteral}{            O3.getA(2, 4)      # Returns 0}
-00306 \textcolor{stringliteral}{}
-00307 \textcolor{stringliteral}{        Parameters:}
-00308 \textcolor{stringliteral}{            - lev\_i  upper level of transition (default= -1, returns complete array)}
-00309 \textcolor{stringliteral}{            - lev\_j  lower level of transition (default= -1, returns complete array)}
-00310 \textcolor{stringliteral}{            }
-00311 \textcolor{stringliteral}{        """}
-00312         
-00313         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{\_test\_lev}(lev\_i)
-00314         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{\_test\_lev}(lev\_j)
-00315         \textcolor{keywordflow}{if} (lev\_i == -1):
-00316             \textcolor{keywordflow}{if} (lev\_j == -1):
-00317                 \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}
-00318             \textcolor{keywordflow}{else}:
-00319                 \textcolor{keywordflow}{return} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}[lev\_i - 1])
-00320         \textcolor{keywordflow}{else}:
-00321             \textcolor{keywordflow}{return} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}[lev\_i - 1, lev\_j - 1])
-00322 
-\hypertarget{pn__chianti_8py_source_l00323}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a6a02beb861a01f6349a3cd87681491f0}{00323}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a6a02beb861a01f6349a3cd87681491f0}{getStatWeight}(self, level= -1):
-00324         \textcolor{stringliteral}{"""}
-00325 \textcolor{stringliteral}{        Returns the array of statistical weights of the ion (if no arguments are given) }
-00326 \textcolor{stringliteral}{            or the statistical weight of level i (if i is given as an argument, }
-00327 \textcolor{stringliteral}{            with the optional keyword level).}
-00328 \textcolor{stringliteral}{            }
-00329 \textcolor{stringliteral}{        Usage:}
-00330 \textcolor{stringliteral}{            O3.getStatWeight()}
-00331 \textcolor{stringliteral}{            O3.getStatWeight(level=4)}
-00332 \textcolor{stringliteral}{            O3.getStatWeight(4)}
-00333 \textcolor{stringliteral}{                      }
-00334 \textcolor{stringliteral}{        Parameters:}
-00335 \textcolor{stringliteral}{            - level  selected atomic level (default= -1, returns complete array)}
-00336 \textcolor{stringliteral}{            }
-00337 \textcolor{stringliteral}{        """}
-00338         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{\_test\_lev}(level)
-00339         
-00340         \textcolor{keywordflow}{if} level == -1:
-00341             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight}
-00342         \textcolor{keywordflow}{else}:
-00343             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight}[level-1]
-00344         
-00345     
-\hypertarget{pn__chianti_8py_source_l00346}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_adfaee032bacec747d8a1573968d0ebf1}{00346}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_adfaee032bacec747d8a1573968d0ebf1}{getEnergy}(self, level= -1, unit='1/Ang'):
-00347         \textcolor{stringliteral}{"""}
-00348 \textcolor{stringliteral}{        Return energy level of selected level (or array of energy levels, if level not given) }
-00349 \textcolor{stringliteral}{            in Angstrom^-1 (default) or another unit}
-00350 \textcolor{stringliteral}{        }
-00351 \textcolor{stringliteral}{        Usage:}
-00352 \textcolor{stringliteral}{            O3.getEnergy(4, unit='eV')}
-00353 \textcolor{stringliteral}{        Parameters:}
-00354 \textcolor{stringliteral}{            - level  selected atomic level (default= -1, returns complete array)}
-00355 \textcolor{stringliteral}{            - unit   [str] one of '1/Ang' (default), 'eV', or 'Ryd'    }
+00314                             calling=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling})
+00315     
+\hypertarget{pn__chianti_8py_source_l00316}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aed967b738fd8c3d9ebef843f71d7063e}{00316}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_aed967b738fd8c3d9ebef843f71d7063e}{getA}(self, lev\_i= -1, lev\_j= -1):
+00317         \textcolor{stringliteral}{"""}
+00318 \textcolor{stringliteral}{        Return the transition probability data. }
+00319 \textcolor{stringliteral}{        If no arguments are given, the whole array of A is returned.}
+00320 \textcolor{stringliteral}{        A specific A value can be obtained by giving either the upper and lower levels.}
+00321 \textcolor{stringliteral}{            }
+00322 \textcolor{stringliteral}{        Usage:}
+00323 \textcolor{stringliteral}{            A\_O3 = O3.getA()          # The whole A array is stored in A\_O3}
+00324 \textcolor{stringliteral}{            O3.getA(4, 2)      # A(4, 2) of the O3 atom is printed}
+00325 \textcolor{stringliteral}{            O3.getA(2, 4)      # Returns 0}
+00326 \textcolor{stringliteral}{}
+00327 \textcolor{stringliteral}{        Parameters:}
+00328 \textcolor{stringliteral}{            - lev\_i  upper level of transition (default= -1, returns complete array)}
+00329 \textcolor{stringliteral}{            - lev\_j  lower level of transition (default= -1, returns complete array)}
+00330 \textcolor{stringliteral}{            }
+00331 \textcolor{stringliteral}{        """}
+00332         
+00333         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{\_test\_lev}(lev\_i)
+00334         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{\_test\_lev}(lev\_j)
+00335         \textcolor{keywordflow}{if} (lev\_i == -1):
+00336             \textcolor{keywordflow}{if} (lev\_j == -1):
+00337                 \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}
+00338             \textcolor{keywordflow}{else}:
+00339                 \textcolor{keywordflow}{return} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}[lev\_i - 1])
+00340         \textcolor{keywordflow}{else}:
+00341             \textcolor{keywordflow}{return} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a4d531860236fc5a6564cc861b28cabe7}{\_A}[lev\_i - 1, lev\_j - 1])
+00342 
+\hypertarget{pn__chianti_8py_source_l00343}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a6a02beb861a01f6349a3cd87681491f0}{00343}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a6a02beb861a01f6349a3cd87681491f0}{getStatWeight}(self, level= -1):
+00344         \textcolor{stringliteral}{"""}
+00345 \textcolor{stringliteral}{        Returns the array of statistical weights of the ion (if no arguments are given) }
+00346 \textcolor{stringliteral}{            or the statistical weight of level i (if i is given as an argument, }
+00347 \textcolor{stringliteral}{            with the optional keyword level).}
+00348 \textcolor{stringliteral}{            }
+00349 \textcolor{stringliteral}{        Usage:}
+00350 \textcolor{stringliteral}{            O3.getStatWeight()}
+00351 \textcolor{stringliteral}{            O3.getStatWeight(level=4)}
+00352 \textcolor{stringliteral}{            O3.getStatWeight(4)}
+00353 \textcolor{stringliteral}{                      }
+00354 \textcolor{stringliteral}{        Parameters:}
+00355 \textcolor{stringliteral}{            - level  selected atomic level (default= -1, returns complete array)}
 00356 \textcolor{stringliteral}{            }
 00357 \textcolor{stringliteral}{        """}
-00358         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a551f0c33c7ebec76c0af9e86befd29f3}{\_test\_lev}(level)
-00359 
-00360         unit\_dict = \{\textcolor{stringliteral}{'1/Ang'}: 1.,
-00361                      \textcolor{stringliteral}{'Ryd'}: pn.CST.RYD\_ANG,
-00362                      \textcolor{stringliteral}{'eV'}: pn.CST.RYD\_ANG * pn.CST.RYD\_EV,
-00363                      \textcolor{stringliteral}{'cm-1'}: 1e8\}
-00364         \textcolor{keywordflow}{if} unit \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} unit\_dict:
-00365             self.log\_.warn(\textcolor{stringliteral}{'Unit \{0\} unknown, using 1/Ang'}.format(unit), calling=self.
-      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling} + \textcolor{stringliteral}{'.getEnergy'})
-00366             unit = \textcolor{stringliteral}{'1/Ang'}        
-00367         
-00368         \textcolor{keywordflow}{if} level == -1:
-00369             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy} * unit\_dict[unit]
-00370         \textcolor{keywordflow}{else}:
-00371             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[level-1] * unit\_dict[unit]
-00372         
-\hypertarget{pn__chianti_8py_source_l00373}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac7618cb5d81b716d41b44c632867c2d8}{00373}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ac7618cb5d81b716d41b44c632867c2d8}{getSources}(self):
-00374         \textcolor{stringliteral}{"""}
-00375 \textcolor{stringliteral}{        Return bibliographic sources for atomic data, as listed in the headers of the fits files}
-00376 \textcolor{stringliteral}{        }
+00358         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{\_test\_lev}(level)
+00359         
+00360         \textcolor{keywordflow}{if} level == -1:
+00361             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight}
+00362         \textcolor{keywordflow}{else}:
+00363             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a8a718be321d05e4212ff5be195c92b42}{\_StatWeight}[level-1]
+00364         
+00365     
+\hypertarget{pn__chianti_8py_source_l00366}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_adfaee032bacec747d8a1573968d0ebf1}{00366}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_adfaee032bacec747d8a1573968d0ebf1}{getEnergy}(self, level= -1, unit='1/Ang'):
+00367         \textcolor{stringliteral}{"""}
+00368 \textcolor{stringliteral}{        Return energy level of selected level (or array of energy levels, if level not given) }
+00369 \textcolor{stringliteral}{            in Angstrom^-1 (default) or another unit}
+00370 \textcolor{stringliteral}{        }
+00371 \textcolor{stringliteral}{        Usage:}
+00372 \textcolor{stringliteral}{            O3.getEnergy(4, unit='eV')}
+00373 \textcolor{stringliteral}{        Parameters:}
+00374 \textcolor{stringliteral}{            - level  selected atomic level (default= -1, returns complete array)}
+00375 \textcolor{stringliteral}{            - unit   [str] one of '1/Ang' (default), 'eV', or 'Ryd'    }
+00376 \textcolor{stringliteral}{            }
 00377 \textcolor{stringliteral}{        """}
-00378         sources = []
-00379         sources.append(\textcolor{stringliteral}{'A-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version}))
-00380         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.elvlcRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
-00381             sources.append(ref)
-00382         \textcolor{keywordflow}{return} sources
-00383 
-\hypertarget{pn__chianti_8py_source_l00384}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a9e704e6c8efaee3738beabf302cf33e1}{00384}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a9e704e6c8efaee3738beabf302cf33e1}{printSources}(self):
-00385         \textcolor{stringliteral}{"""}
-00386 \textcolor{stringliteral}{        Print bibliographic sources for atomic data, as listed in the headers of the fits files}
-00387 \textcolor{stringliteral}{        }
-00388 \textcolor{stringliteral}{        """}
-00389         print(\textcolor{stringliteral}{'A-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version}))
-00390         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.elvlcRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
-00391             print(ref)
-00392                
-\hypertarget{pn__chianti_8py_source_l00393}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti}{00393} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti}{\_CollChianti}(object):
-00394     
-\hypertarget{pn__chianti_8py_source_l00395}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acfefab5b5e07e3204550565ea2b26ceb}{00395}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acfefab5b5e07e3204550565ea2b26ceb}{\_\_init\_\_}(self, elem=None, spec=None, atom=None, NLevelsMax=None, TemArray=np.logspace(2, 5,
-       20)):
-00396         \textcolor{stringliteral}{"""}
-00397 \textcolor{stringliteral}{        Object dealing with Upsilon values from the Chianti database.}
-00398 \textcolor{stringliteral}{        The directory where to find the data must be given through the environment variable XUVTOP.}
-00399 \textcolor{stringliteral}{        This object is not aimed to be used by itself, it is called by Atom.}
-00400 \textcolor{stringliteral}{        """}
-00401 
-\hypertarget{pn__chianti_8py_source_l00402}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1bb28a8bbcbca5499d0588860cd4280f}{00402}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1bb28a8bbcbca5499d0588860cd4280f}{log\_} = pn.log\_
-00403         
-00404         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-\hypertarget{pn__chianti_8py_source_l00405}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{00405}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom} = atom
-\hypertarget{pn__chianti_8py_source_l00406}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{00406}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[0]
-\hypertarget{pn__chianti_8py_source_l00407}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{00407}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a8c069186002a3e73dd474958e35034d5}{parseAtom}(atom)[1])
-00408         \textcolor{keywordflow}{else}:
-00409             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem} = elem
-00410             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec} = int(spec)
-00411             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom} = elem + str(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec})
-\hypertarget{pn__chianti_8py_source_l00412}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac2de9885177db13b72b7f9a937cc3544}{00412}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac2de9885177db13b72b7f9a937cc3544}{name} = sym2name[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem}]
-\hypertarget{pn__chianti_8py_source_l00413}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{00413}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti} =  \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a9c992b2ae01f2e369be5d539172f78a0}{atom2chianti}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
-\hypertarget{pn__chianti_8py_source_l00414}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{00414}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling} = \textcolor{stringliteral}{'Atom '} + self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom}
-\hypertarget{pn__chianti_8py_source_l00415}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aa3eaa6c3196c09e49430e4aedeea9fe1}{00415}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aa3eaa6c3196c09e49430e4aedeea9fe1}{NLevelsMax} = NLevelsMax
-\hypertarget{pn__chianti_8py_source_l00416}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{00416}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} = \textcolor{stringliteral}{'K'}
-\hypertarget{pn__chianti_8py_source_l00417}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{00417}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray} = TemArray
-00418         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5dd1e03e0086123159b7ca3144bf6ea7}{\_loadChianti}()
-00419         
-\hypertarget{pn__chianti_8py_source_l00420}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5dd1e03e0086123159b7ca3144bf6ea7}{00420}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5dd1e03e0086123159b7ca3144bf6ea7}{\_loadChianti}(self):
-\hypertarget{pn__chianti_8py_source_l00421}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{00421}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName} = \_chianti\_tools.ion2filename(self.
+00378         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a596a6602f53c54689316ee543e407c49}{\_test\_lev}(level)
+00379 
+00380         unit\_dict = \{\textcolor{stringliteral}{'1/Ang'}: 1.,
+00381                      \textcolor{stringliteral}{'Ryd'}: pn.CST.RYD\_ANG,
+00382                      \textcolor{stringliteral}{'eV'}: pn.CST.RYD\_ANG * pn.CST.RYD\_EV,
+00383                      \textcolor{stringliteral}{'cm-1'}: 1e8\}
+00384         \textcolor{keywordflow}{if} unit \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} unit\_dict:
+00385             self.log\_.warn(\textcolor{stringliteral}{'Unit \{0\} unknown, using 1/Ang'}.format(unit), calling=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_af0303fd3e5fd4db39d3d1cdf62b2e4bc}{calling} + \textcolor{stringliteral}{'.getEnergy'})
+00386             unit = \textcolor{stringliteral}{'1/Ang'}        
+00387         
+00388         \textcolor{keywordflow}{if} level == -1:
+00389             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy} * unit\_dict[unit]
+00390         \textcolor{keywordflow}{else}:
+00391             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a7c9c9c75a6bacb0f6533e870cf556035}{\_Energy}[level-1] * unit\_dict[unit]
+00392         
+\hypertarget{pn__chianti_8py_source_l00393}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a3af16a6fe22a1c2e8167dbc59c81092c}{00393}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a3af16a6fe22a1c2e8167dbc59c81092c}{getSources}(self):
+00394         \textcolor{stringliteral}{"""}
+00395 \textcolor{stringliteral}{        Return bibliographic sources for atomic data, as listed in the headers of the fits files}
+00396 \textcolor{stringliteral}{        }
+00397 \textcolor{stringliteral}{        """}
+00398         sources = []
+00399         sources.append(\textcolor{stringliteral}{'A-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version}))
+00400         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.elvlcRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
+00401             sources.append(ref)
+00402         \textcolor{keywordflow}{return} sources
+00403 
+\hypertarget{pn__chianti_8py_source_l00404}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab50936935bf2d84a9fb8b9af705afd38}{00404}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_ab50936935bf2d84a9fb8b9af705afd38}{printSources}(self):
+00405         \textcolor{stringliteral}{"""}
+00406 \textcolor{stringliteral}{        Print bibliographic sources for atomic data, as listed in the headers of the fits files}
+00407 \textcolor{stringliteral}{        }
+00408 \textcolor{stringliteral}{        """}
+00409         print(\textcolor{stringliteral}{'A-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a56253efc79815d86493f5753ff9c5b72}{Chianti\_version}))
+00410         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.elvlcRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___atom_chianti_a97865c9f8fcd274072335cc71fc746a3}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
+00411             print(ref)
+00412                
+\hypertarget{pn__chianti_8py_source_l00413}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti}{00413} \textcolor{keyword}{class }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti}{\_CollChianti}(object):
+00414     
+\hypertarget{pn__chianti_8py_source_l00415}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ae567e272fc61c51e0ff07ffa6eb3ca2d}{00415}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ae567e272fc61c51e0ff07ffa6eb3ca2d}{\_\_init\_\_}(self, elem=None, spec=None, atom=None, NLevels=None, TemArray=np.logspace(2, 5, 20
+      )):
+00416         \textcolor{stringliteral}{"""}
+00417 \textcolor{stringliteral}{        Object dealing with Upsilon values from the Chianti database.}
+00418 \textcolor{stringliteral}{        The directory where to find the data must be given through the environment variable XUVTOP.}
+00419 \textcolor{stringliteral}{        This object is not aimed to be used by itself, it is called by Atom.}
+00420 \textcolor{stringliteral}{        """}
+00421 
+\hypertarget{pn__chianti_8py_source_l00422}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1bb28a8bbcbca5499d0588860cd4280f}{00422}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1bb28a8bbcbca5499d0588860cd4280f}{log\_} = pn.log\_
+00423         
+00424         \textcolor{keywordflow}{if} atom \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+\hypertarget{pn__chianti_8py_source_l00425}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{00425}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom} = atom
+\hypertarget{pn__chianti_8py_source_l00426}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{00426}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem} = \hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[0]
+\hypertarget{pn__chianti_8py_source_l00427}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{00427}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec} = int(\hyperlink{namespacepyneb_1_1utils_1_1misc_a2bb6f906a75f26a882093e9ce9272507}{parseAtom}(atom)[1])
+00428         \textcolor{keywordflow}{else}:
+00429             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem} = elem
+00430             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec} = int(spec)
+00431             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom} = elem + str(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a665d7e8537b9ccec445bde02d78f8e93}{spec})
+\hypertarget{pn__chianti_8py_source_l00432}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac2de9885177db13b72b7f9a937cc3544}{00432}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac2de9885177db13b72b7f9a937cc3544}{name} = sym2name[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a83fc37382d9eb03922e67dacc6ca66d0}{elem}]
+\hypertarget{pn__chianti_8py_source_l00433}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{00433}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti} =  \hyperlink{namespacepyneb_1_1utils_1_1manage__atomic__data_a2c05deb31d8bc74727659c88846651a1}{atom2chianti}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
+\hypertarget{pn__chianti_8py_source_l00434}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{00434}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling} = \textcolor{stringliteral}{'Atom '} + self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom}
+\hypertarget{pn__chianti_8py_source_l00435}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{00435}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels} = NLevels
+\hypertarget{pn__chianti_8py_source_l00436}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{00436}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} = \textcolor{stringliteral}{'K'}
+\hypertarget{pn__chianti_8py_source_l00437}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{00437}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray} = TemArray
+00438         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af803ad8a0b88240bc865a6178307be82}{\_loadChianti}()
+00439         
+\hypertarget{pn__chianti_8py_source_l00440}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af803ad8a0b88240bc865a6178307be82}{00440}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af803ad8a0b88240bc865a6178307be82}{\_loadChianti}(self):
+00441         \textcolor{keywordflow}{if} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'8'}:
+\hypertarget{pn__chianti_8py_source_l00442}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{00442}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName} = \_chianti\_tools.ion2filename(self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}) + \textcolor{stringliteral}{'.scups'}
+00443         \textcolor{keywordflow}{elif} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'7'}:
+00444             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName} = \_chianti\_tools.ion2filename(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}) + \textcolor{stringliteral}{'.splups'}
-00422         
-\hypertarget{pn__chianti_8py_source_l00423}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{00423}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{collFile} = self.fullFileName.split(\textcolor{stringliteral}{'/'})[-1]
-\hypertarget{pn__chianti_8py_source_l00424}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af593f39e6cd3d3def54951d5c5f9a400}{00424}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af593f39e6cd3d3def54951d5c5f9a400}{collPath} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}[:-len(self.
+\hypertarget{pn__chianti_8py_source_l00445}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{00445}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{collFile} = self.fullFileName.split(\textcolor{stringliteral}{'/'})[-1]
+\hypertarget{pn__chianti_8py_source_l00446}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af593f39e6cd3d3def54951d5c5f9a400}{00446}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af593f39e6cd3d3def54951d5c5f9a400}{collPath} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}[:-len(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{collFile})]
-00425         
-00426         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}):
-00427             self.log\_.error(\textcolor{stringliteral}{'File \{0\} not found'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}), calling=self.
+00447         
+00448         \textcolor{keywordflow}{if} \textcolor{keywordflow}{not} os.path.exists(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}):
+00449             self.log\_.error(\textcolor{stringliteral}{'File \{0\} not found'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abe0d4b4734d0426b2053329f466793c4}{fullFileName}), calling=self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
-00428         
-\hypertarget{pn__chianti_8py_source_l00429}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{00429}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{Chianti\_version} = self.collPath.split(\textcolor{stringliteral}{'/'})[-4]
-\hypertarget{pn__chianti_8py_source_l00430}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acd3ca55d5ead72cdfd0c8cf718898d0e}{00430}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acd3ca55d5ead72cdfd0c8cf718898d0e}{comments} = \{\}
-\hypertarget{pn__chianti_8py_source_l00431}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{00431}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups} = \_chianti\_tools.splupsRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti})
-00432         
-\hypertarget{pn__chianti_8py_source_l00433}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{00433}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.
+00450         
+\hypertarget{pn__chianti_8py_source_l00451}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{00451}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{Chianti\_version} = self.collPath.split(\textcolor{stringliteral}{'/'})[-4]
+\hypertarget{pn__chianti_8py_source_l00452}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acd3ca55d5ead72cdfd0c8cf718898d0e}{00452}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_acd3ca55d5ead72cdfd0c8cf718898d0e}{comments} = \{\}
+00453         \textcolor{keywordflow}{if} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'8'}:
+\hypertarget{pn__chianti_8py_source_l00454}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{00454}             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups} = \_chianti\_tools.scupsRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti})
+00455         \textcolor{keywordflow}{elif} pn.config.Chianti\_version\_main == \textcolor{stringliteral}{'7'}:
+00456             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups} = \_chianti\_tools.splupsRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti})
+\hypertarget{pn__chianti_8py_source_l00457}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{00457}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray}, 
-00434                                    Splups=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevelsMax=self.
-      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aa3eaa6c3196c09e49430e4aedeea9fe1}{NLevelsMax})
-00435         
-\hypertarget{pn__chianti_8py_source_l00436}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{00436}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
-00437         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00438             \_CollArray\_tmp = self.\_CollArray.copy()
-00439             \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}:
-00440                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti] != i\_chianti:
-00441                     self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[i\_chianti,:,:] = \_CollArray\_tmp[self.
+00458                                    Splups=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevels=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels})
+00459         
+\hypertarget{pn__chianti_8py_source_l00460}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{00460}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom}, NLevels=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels})
+00461         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00462             \_CollArray\_tmp = self.\_CollArray.copy()
+00463             \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}:
+00464                 \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti] != i\_chianti:
+00465                     self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[i\_chianti,:,:] = \_CollArray\_tmp[self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti],:,:]
-00442                     self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[:,i\_chianti,:] = \_CollArray\_tmp[:,self.
+00466                     self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[:,i\_chianti,:] = \_CollArray\_tmp[:,self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti],:]
-00443         
-00444         self.log\_.message(\textcolor{stringliteral}{'Reading coll data from Chianti \{\}'}.format(self.
+00467         
+00468         self.log\_.message(\textcolor{stringliteral}{'Reading coll data from Chianti \{\}'}.format(self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aafcdb306ebd11d4b89fd80923a8d69c9}{collFile}), calling = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
-\hypertarget{pn__chianti_8py_source_l00445}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aca0906388fe4f71d74dfefe17a1d1906}{00445}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aca0906388fe4f71d74dfefe17a1d1906}{collNLevels} = self.\_CollArray.shape[0]
-\hypertarget{pn__chianti_8py_source_l00446}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{00446}         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels} = self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_aca0906388fe4f71d74dfefe17a1d1906}{collNLevels}
-00447 
-00448 
-\hypertarget{pn__chianti_8py_source_l00449}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{00449}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{\_test\_lev}(self, level):
-00450         \textcolor{stringliteral}{"""}
-00451 \textcolor{stringliteral}{        Test whether selected level is legal}
-00452 \textcolor{stringliteral}{}
-00453 \textcolor{stringliteral}{        Parameters:}
-00454 \textcolor{stringliteral}{            - level        selected atom level}
-00455 \textcolor{stringliteral}{}
-00456 \textcolor{stringliteral}{        """}       
-00457         \textcolor{keywordflow}{if} level < -1 \textcolor{keywordflow}{or} level == 0 \textcolor{keywordflow}{or} level > self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels}:
-00458             self.log\_.error(\textcolor{stringliteral}{'Wrong value for level: \{0\} (maximum: \{1\})'}.format(level, self.
+00469         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels} = self.\_CollArray.shape[0]
+00470 
+00471 
+\hypertarget{pn__chianti_8py_source_l00472}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{00472}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{\_test\_lev}(self, level):
+00473         \textcolor{stringliteral}{"""}
+00474 \textcolor{stringliteral}{        Test whether selected level is legal}
+00475 \textcolor{stringliteral}{}
+00476 \textcolor{stringliteral}{        Parameters:}
+00477 \textcolor{stringliteral}{            - level        selected atom level}
+00478 \textcolor{stringliteral}{}
+00479 \textcolor{stringliteral}{        """}       
+00480         \textcolor{keywordflow}{if} level < -1 \textcolor{keywordflow}{or} level == 0 \textcolor{keywordflow}{or} level > self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels}:
+00481             self.log\_.error(\textcolor{stringliteral}{'Wrong value for level: \{0\} (maximum: \{1\})'}.format(level, self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels}),
-00459                             calling=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
-00460 
-\hypertarget{pn__chianti_8py_source_l00461}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a79ec638d44f16f8df85ed9978896f8a5}{00461}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a79ec638d44f16f8df85ed9978896f8a5}{getOmegaArray}(self, lev\_i= -1, lev\_j= -1):
-00462         \textcolor{stringliteral}{"""}
-00463 \textcolor{stringliteral}{        Return array of original tabulated collision strengths for a given transition, }
-00464 \textcolor{stringliteral}{            as a function of temperature.}
-00465 \textcolor{stringliteral}{        }
-00466 \textcolor{stringliteral}{        Usage:}
-00467 \textcolor{stringliteral}{            O3.getOmegaArray()}
-00468 \textcolor{stringliteral}{        }
-00469 \textcolor{stringliteral}{        Parameters:}
-00470 \textcolor{stringliteral}{            - lev\_j  lower level (default= -1, returns complete array)}
-00471 \textcolor{stringliteral}{            - lev\_i  upper level (default= -1, returns complete array)}
-00472 \textcolor{stringliteral}{}
-00473 \textcolor{stringliteral}{        """}
-00474         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{\_test\_lev}(lev\_i)
-00475         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{\_test\_lev}(lev\_j)
-00476         \textcolor{keywordflow}{if} (lev\_i <= lev\_j) \textcolor{keywordflow}{and} (lev\_i != -1):
-00477             self.log\_.warn(\textcolor{stringliteral}{"wrong levels given \{0\} <= \{1\}"}.format(lev\_i, lev\_j), calling=self.
-      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
-00478             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
-00479         \textcolor{keywordflow}{elif} lev\_i == -1 \textcolor{keywordflow}{or} lev\_j == -1:
-00480             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}
-00481         \textcolor{keywordflow}{else}:
-00482             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[lev\_i-1, lev\_j-1,:]
+00482                             calling=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
 00483 
-\hypertarget{pn__chianti_8py_source_l00484}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a8dd1bccc8974d0b3a44f03658e993b08}{00484}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a8dd1bccc8974d0b3a44f03658e993b08}{getOmega}(self, tem, lev\_i= -1, lev\_j= -1, NLevelsMax=None):
+\hypertarget{pn__chianti_8py_source_l00484}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a79ec638d44f16f8df85ed9978896f8a5}{00484}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a79ec638d44f16f8df85ed9978896f8a5}{getOmegaArray}(self, lev\_i= -1, lev\_j= -1):
 00485         \textcolor{stringliteral}{"""}
-00486 \textcolor{stringliteral}{        Return interpolated value of the collision strength value at the given temperature }
-00487 \textcolor{stringliteral}{            for the complete array or a specified transition.}
-00488 \textcolor{stringliteral}{}
+00486 \textcolor{stringliteral}{        Return array of original tabulated collision strengths for a given transition, }
+00487 \textcolor{stringliteral}{            as a function of temperature.}
+00488 \textcolor{stringliteral}{        }
 00489 \textcolor{stringliteral}{        Usage:}
-00490 \textcolor{stringliteral}{            O3.getOmega(15000.)}
-00491 \textcolor{stringliteral}{            O3.getOmega([8e3, 1e4, 1.2e4])}
-00492 \textcolor{stringliteral}{            O3.getOmega([8e3, 1e4, 1.2e4], 5, 4)}
-00493 \textcolor{stringliteral}{        }
-00494 \textcolor{stringliteral}{        Parameters:}
-00495 \textcolor{stringliteral}{            - tem    electronic temperature in K. May be an array.}
-00496 \textcolor{stringliteral}{            - lev\_i  upper level}
-00497 \textcolor{stringliteral}{            - lev\_j  lower level}
-00498 \textcolor{stringliteral}{}
-00499 \textcolor{stringliteral}{        """}
-00500         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{\_test\_lev}(lev\_i)
-00501         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab0418def377c8054aded2bfb3055a40f}{\_test\_lev}(lev\_j)
-00502         \textcolor{keywordflow}{if} (lev\_i <= lev\_j) \textcolor{keywordflow}{and} (lev\_i != -1):
-00503             self.log\_.warn(\textcolor{stringliteral}{"wrong levels given \{0\} <= \{1\}"}.format(lev\_i, lev\_j), calling=self.
+00490 \textcolor{stringliteral}{            O3.getOmegaArray()}
+00491 \textcolor{stringliteral}{        }
+00492 \textcolor{stringliteral}{        Parameters:}
+00493 \textcolor{stringliteral}{            - lev\_j  lower level (default= -1, returns complete array)}
+00494 \textcolor{stringliteral}{            - lev\_i  upper level (default= -1, returns complete array)}
+00495 \textcolor{stringliteral}{}
+00496 \textcolor{stringliteral}{        """}
+00497         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{\_test\_lev}(lev\_i)
+00498         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{\_test\_lev}(lev\_j)
+00499         \textcolor{keywordflow}{if} (lev\_i <= lev\_j) \textcolor{keywordflow}{and} (lev\_i != -1):
+00500             self.log\_.warn(\textcolor{stringliteral}{"wrong levels given \{0\} <= \{1\}"}.format(lev\_i, lev\_j), calling=self.
       \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
-00504             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}            
-00505         \textcolor{keywordflow}{if} (lev\_i == -1) \textcolor{keywordflow}{and} (lev\_j == -1):
-00506             Omega = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem, Splups=self.
-      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevelsMax=NLevelsMax)
-00507             Chianti2NIST = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
-00508             \textcolor{keywordflow}{if} Chianti2NIST \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00509                 Omega\_tmp = Omega.copy()
-00510                 \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} Chianti2NIST:
-00511                     \textcolor{keywordflow}{if} Chianti2NIST[i\_chianti] != i\_chianti:
-00512                         Omega[i\_chianti,:,:] = Omega\_tmp[Chianti2NIST[i\_chianti],:,:]
-00513                         Omega[:,i\_chianti,:] = Omega\_tmp[:,Chianti2NIST[i\_chianti],:]
-00514         \textcolor{keywordflow}{else}:
-00515             Chianti2NIST = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
-00516             \textcolor{keywordflow}{if} Chianti2NIST \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
-00517                 Omega = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem, lev1=
-      Chianti2NIST[lev\_j-1]+1, lev2=Chianti2NIST[lev\_i-1]+1, 
-00518                              Splups=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevelsMax=NLevelsMax)
-00519         \textcolor{keywordflow}{return} np.squeeze(Omega)
-00520 
-\hypertarget{pn__chianti_8py_source_l00521}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a625343ac2c7b1f7c72f7717f7573d90e}{00521}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a625343ac2c7b1f7c72f7717f7573d90e}{getTemArray}(self, keep\_unit=True):
-00522         \textcolor{stringliteral}{"""}
-00523 \textcolor{stringliteral}{        Return array of tabulated original temperature points (as in fits file) }
-00524 \textcolor{stringliteral}{            of collision strengths.}
-00525 \textcolor{stringliteral}{        }
-00526 \textcolor{stringliteral}{        Parameters:}
-00527 \textcolor{stringliteral}{            - keep\_unit   return temperature in file units (default) or change it to Kelvin (False)}
-00528 \textcolor{stringliteral}{        """}
-00529         \textcolor{keywordflow}{if} keep\_unit:
-00530             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray}
-00531         \textcolor{keywordflow}{else}:            
-00532             \textcolor{keywordflow}{if} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} == \textcolor{stringliteral}{"log(K)"}):
-00533                 \textcolor{keywordflow}{return} pow(10., self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray})
-00534             \textcolor{keywordflow}{else}:
-00535                 \textcolor{keywordflow}{if} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} == \textcolor{stringliteral}{"K/10000"}):
-00536                     \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray} * 1.e4
-00537                 \textcolor{keywordflow}{else}: 
-00538                     \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray}
-00539     
-\hypertarget{pn__chianti_8py_source_l00540}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_afae532a48422f25f0486164c027a3f63}{00540}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_afae532a48422f25f0486164c027a3f63}{getSources}(self):
-00541         \textcolor{stringliteral}{"""}
-00542 \textcolor{stringliteral}{        Return bibliographic sources for atomic data, as listed in the headers of the fits files}
-00543 \textcolor{stringliteral}{        }
-00544 \textcolor{stringliteral}{        """}
-00545         sources = []
-00546         sources.append(\textcolor{stringliteral}{'Omega-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{Chianti\_version}))
-00547         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.splupsRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
-00548             sources.append(ref)
-00549         \textcolor{keywordflow}{return} sources
+00501             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}
+00502         \textcolor{keywordflow}{elif} lev\_i == -1 \textcolor{keywordflow}{or} lev\_j == -1:
+00503             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}
+00504         \textcolor{keywordflow}{else}:
+00505             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a5cdf912f3bcbf25bcbbba1ba8fc072d9}{\_CollArray}[lev\_i-1, lev\_j-1,:]
+00506 
+\hypertarget{pn__chianti_8py_source_l00507}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a8dd1bccc8974d0b3a44f03658e993b08}{00507}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a8dd1bccc8974d0b3a44f03658e993b08}{getOmega}(self, tem, lev\_i= -1, lev\_j= -1):
+00508         \textcolor{stringliteral}{"""}
+00509 \textcolor{stringliteral}{        Return interpolated value of the collision strength value at the given temperature }
+00510 \textcolor{stringliteral}{            for the complete array or a specified transition.}
+00511 \textcolor{stringliteral}{}
+00512 \textcolor{stringliteral}{        Usage:}
+00513 \textcolor{stringliteral}{            O3.getOmega(15000.)}
+00514 \textcolor{stringliteral}{            O3.getOmega([8e3, 1e4, 1.2e4])}
+00515 \textcolor{stringliteral}{            O3.getOmega([8e3, 1e4, 1.2e4], 5, 4)}
+00516 \textcolor{stringliteral}{        }
+00517 \textcolor{stringliteral}{        Parameters:}
+00518 \textcolor{stringliteral}{            - tem    electronic temperature in K. May be an array.}
+00519 \textcolor{stringliteral}{            - lev\_i  upper level}
+00520 \textcolor{stringliteral}{            - lev\_j  lower level}
+00521 \textcolor{stringliteral}{}
+00522 \textcolor{stringliteral}{        """}
+00523         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{\_test\_lev}(lev\_i)
+00524         self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a691f0c72a7b1477a527de09fd4f6f235}{\_test\_lev}(lev\_j)
+00525         \textcolor{keywordflow}{if} (lev\_i <= lev\_j) \textcolor{keywordflow}{and} (lev\_i != -1):
+00526             self.log\_.warn(\textcolor{stringliteral}{"wrong levels given \{0\} <= \{1\}"}.format(lev\_i, lev\_j), calling=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab58a9cfcb76b7c72b9b815c5700e7aae}{calling})
+00527             \textcolor{keywordflow}{return} \textcolor{keywordtype}{None}            
+00528         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+00529             self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_aa5ac8c15155a7a63ddaefa054349ea16}{get\_levs\_order}(self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a904418982790fd63f2324fec90636bb6}{atom})
+00530         \textcolor{keywordflow}{if} (lev\_i == -1) \textcolor{keywordflow}{and} (lev\_j == -1):
+00531             Omega = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem, Splups=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevels=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels})
+00532             \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00533                 Omega\_tmp = Omega.copy()
+00534                 \textcolor{keywordflow}{for} i\_chianti \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}:
+00535                     \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti] != i\_chianti:
+00536                         Omega[i\_chianti,:,:] = Omega\_tmp[self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti],:,:]
+00537                         Omega[:,i\_chianti,:] = Omega\_tmp[:,self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[i\_chianti],:]
+00538         \textcolor{keywordflow}{else}:
+00539             \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST} \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+00540                 \textcolor{keywordflow}{try}:
+00541                     Omega = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem, lev1=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[lev\_j-1]+1, lev2=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a1d2846276b84d8ec47c08b7d32eb7756}{Chianti2NIST}[lev\_i-1]+1, 
+00542                                              Splups=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevels=self.
+      \hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels})
+00543                 \textcolor{keywordflow}{except}:
+00544                     Omega = 0.
+00545             \textcolor{keywordflow}{else}:
+00546                 Omega = \hyperlink{namespacepyneb_1_1utils_1_1pn__chianti_a651b939729d0f5afb817a47a974bfaa1}{Chianti\_getOmega}(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti}, tem, lev1=lev\_j, lev2
+      =lev\_i, 
+00547                              Splups=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_abbdbf5533a480f46baceccc2885d7467}{Splups}, NLevels=self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a453595ef60eae9d063e2a24ef43002f5}{NLevels})
+00548                 
+00549         \textcolor{keywordflow}{return} np.squeeze(Omega)
 00550 
-\hypertarget{pn__chianti_8py_source_l00551}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7e3b3af06277a89015cea46d6ebd9ac8}{00551}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7e3b3af06277a89015cea46d6ebd9ac8}{printSources}(self):
-00552         
-00553         \textcolor{keywordflow}{for} source \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_afae532a48422f25f0486164c027a3f63}{getSources}():
-00554             \textcolor{keywordflow}{print} source    
-00555         
+\hypertarget{pn__chianti_8py_source_l00551}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a625343ac2c7b1f7c72f7717f7573d90e}{00551}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a625343ac2c7b1f7c72f7717f7573d90e}{getTemArray}(self, keep\_unit=True):
+00552         \textcolor{stringliteral}{"""}
+00553 \textcolor{stringliteral}{        Return array of tabulated original temperature points (as in fits file) }
+00554 \textcolor{stringliteral}{            of collision strengths.}
+00555 \textcolor{stringliteral}{        }
+00556 \textcolor{stringliteral}{        Parameters:}
+00557 \textcolor{stringliteral}{            - keep\_unit   return temperature in file units (default) or change it to Kelvin (False)}
+00558 \textcolor{stringliteral}{        """}
+00559         \textcolor{keywordflow}{if} keep\_unit:
+00560             \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray}
+00561         \textcolor{keywordflow}{else}:            
+00562             \textcolor{keywordflow}{if} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} == \textcolor{stringliteral}{"log(K)"}):
+00563                 \textcolor{keywordflow}{return} pow(10., self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray})
+00564             \textcolor{keywordflow}{else}:
+00565                 \textcolor{keywordflow}{if} (self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ac8f0c1513ef4a2f2d12c59fa380a495c}{tem\_units} == \textcolor{stringliteral}{"K/10000"}):
+00566                     \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray} * 1.e4
+00567                 \textcolor{keywordflow}{else}: 
+00568                     \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_a7dc1ede29c8b436a27a20203cdb87f49}{\_TemArray}
+00569     
+\hypertarget{pn__chianti_8py_source_l00570}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ad4ee6409d1b66c4f0fde4aa9dbf6cca2}{00570}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ad4ee6409d1b66c4f0fde4aa9dbf6cca2}{getSources}(self):
+00571         \textcolor{stringliteral}{"""}
+00572 \textcolor{stringliteral}{        Return bibliographic sources for atomic data, as listed in the headers of the fits files}
+00573 \textcolor{stringliteral}{        }
+00574 \textcolor{stringliteral}{        """}
+00575         sources = []
+00576         sources.append(\textcolor{stringliteral}{'Omega-values from \{0\}'}.format(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af02b0dfb67aec7e96a92b42f2ba26699}{Chianti\_version}))
+00577         \textcolor{keywordflow}{for} ref \textcolor{keywordflow}{in}  \_chianti\_tools.splupsRead(self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_af0f28fb84d1ceb9d64e40429c981a6f6}{ion\_chianti})[\textcolor{stringliteral}{'ref'}]:
+00578             sources.append(ref)
+00579         \textcolor{keywordflow}{return} sources
+00580 
+\hypertarget{pn__chianti_8py_source_l00581}{}\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab6061090f17fd6a1122281157459ec7c}{00581}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ab6061090f17fd6a1122281157459ec7c}{printSources}(self):
+00582         
+00583         \textcolor{keywordflow}{for} source \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1utils_1_1pn__chianti_1_1___coll_chianti_ad4ee6409d1b66c4f0fde4aa9dbf6cca2}{getSources}():
+00584             print(source)    
+00585         
 \end{DoxyCode}

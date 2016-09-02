@@ -1,5 +1,6 @@
-\hypertarget{red__corr_8py_source}{}\section{red\+\_\+corr.\+py}
-\label{red__corr_8py_source}\index{pyneb/extinction/red\+\_\+corr.\+py@{pyneb/extinction/red\+\_\+corr.\+py}}
+\hypertarget{red__corr_8py}{\section{red\-\_\-corr.\-py}
+\label{red__corr_8py}\index{pyneb/extinction/red\-\_\-corr.\-py@{pyneb/extinction/red\-\_\-corr.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{red__corr_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1extinction_1_1red__corr}{00001} \textcolor{keyword}{import} numpy \textcolor{keyword}{as} np
@@ -11,11 +12,11 @@
 00007     \textcolor{keyword}{from} scipy \textcolor{keyword}{import} interpolate
 00008 \textcolor{keyword}{from} \hyperlink{namespacepyneb_1_1utils_1_1misc}{pyneb.utils.misc} \textcolor{keyword}{import} execution\_path
 00009 
-\hypertarget{red__corr_8py_source_l00010}{}\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a4859d2aec439b940a61931b8288c5ad9}{00010} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a4859d2aec439b940a61931b8288c5ad9}{my\_X2}(wave, params=[5000., 1., 2., 3.]):
+\hypertarget{red__corr_8py_source_l00010}{}\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a5bee333b0bb8fb9ad4567e8b2de832ed}{00010} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a5bee333b0bb8fb9ad4567e8b2de832ed}{my\_X2}(wave, params=[5000., 1., 2., 3.]):
 00011     \textcolor{keywordflow}{return} params[1] * (wave / params[0]) + params[2] * (wave / params[0]) ** -1 + params[3] * (wave / 
       params[0]) ** -2
 00012 
-\hypertarget{red__corr_8py_source_l00013}{}\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a8a95d94679eeb72a22c8ee1c30748962}{00013} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_a8a95d94679eeb72a22c8ee1c30748962}{poly}(x, coeffs):
+\hypertarget{red__corr_8py_source_l00013}{}\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_ae587819f2a81c5dfbd7b7ce819c497ca}{00013} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1extinction_1_1red__corr_ae587819f2a81c5dfbd7b7ce819c497ca}{poly}(x, coeffs):
 00014     res = 0
 00015     \textcolor{keywordflow}{for} i, coeff \textcolor{keywordflow}{in} enumerate(coeffs):
 00016         res += coeff * x ** i
@@ -65,20 +66,20 @@
 \hypertarget{red__corr_8py_source_l00058}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a712aff76d06f15896ed30e689103f66d}{00058}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a712aff76d06f15896ed30e689103f66d}{log\_} = pn.log\_ 
 \hypertarget{red__corr_8py_source_l00059}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a30606dfd94b4cefefd10dbb1f7cbd473}{00059}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a30606dfd94b4cefefd10dbb1f7cbd473}{calling} = \textcolor{stringliteral}{'RedCorr'}
 \hypertarget{red__corr_8py_source_l00060}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{00060}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict} = \{\} \textcolor{comment}{# dictionary pointing to a reddening function depending on the key}
-00061         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'No correction'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a2f9bf2baa246c949cc0198445e8ece10}{\_zeros}
-00062         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a51dd4794e0a4f7f02382f424cad7e0f9}{\_CCM89}
-00063         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89 Bal07'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a919503a9ebc8aafcf92ea819bcc3265c}{\_CCM89\_Bal07}
-00064         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89 oD94'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a87841a3694fd368a8583680623936e29}{\_CCM89\_oD94}
-00065         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'S79 H83 CCM89'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a758a99903861c8b015cc2074766ad811}{\_S79\_H83\_CCM89}
+00061         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'No correction'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad20df45ee0c6e9081245886135843e72}{\_zeros}
+00062         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0e1f547dbed4401b9c3d34658db9aaf7}{\_CCM89}
+00063         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89 Bal07'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5422d3b4c568033cc97ada0b73670aa9}{\_CCM89\_Bal07}
+00064         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'CCM89 oD94'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8d06942c28efecc3704d5e31c444ca1b}{\_CCM89\_oD94}
+00065         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'S79 H83 CCM89'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5ca5f455ff115c36f4ea3367542cbafa}{\_S79\_H83\_CCM89}
 00066         \textcolor{comment}{#self.\_laws\_dict['GCC 09'] = self.\_GCC09 }
-00067         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'K76'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac1de28238af5c2fc9924c8cda6386b2a}{\_K76}
-00068         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'SM79 Gal'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a3c1ed8005a2173f7222d25df3b38e7f2}{\_SM79\_Gal}
-00069         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'G03 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_acc965477d452c5914a8af1d8d6116a23}{\_G03\_LMC}
-00070         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'MCC99 FM90 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9eacce21ff80a457fc1d285291eed996}{\_MCC99\_FM90\_LMC}
-00071         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F99-like'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{\_F99\_like}
+00067         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'K76'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9958bee692760f5d5037a5b195142c01}{\_K76}
+00068         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'SM79 Gal'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a75a671c41944722df9d5fba814b83b3a}{\_SM79\_Gal}
+00069         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'G03 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5e121988480c19aeb1fa5747b5d8d3a7}{\_G03\_LMC}
+00070         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'MCC99 FM90 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_af97fbc015537102bbc163263b8582986}{\_MCC99\_FM90\_LMC}
+00071         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F99-like'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{\_F99\_like}
 00072         \textcolor{comment}{#self.\_laws\_dict['F99-like IDL'] = self.\_F99\_like\_IDL}
-00073         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F99'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a05f6dd65005f473d38e0c1014c58fb61}{\_F99}
-00074         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F88 F99 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa175c2a1489246b81d7c3b81fb88d7d9}{\_FM88\_F99\_LMC}
+00073         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F99'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8e249217925175868e6890e2e733c56a}{\_F99}
+00074         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[\textcolor{stringliteral}{'F88 F99 LMC'}] = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aae30a2150d566f04044db33a1612be8b}{\_FM88\_F99\_LMC}
 00075 
 00076         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a41b35235a0952185b3c7e34f6835511e}{UserFunction} = UserFunction
 \hypertarget{red__corr_8py_source_l00077}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a7e1e251a6bd48ed36428c4654af46606}{00077}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a7e1e251a6bd48ed36428c4654af46606}{UserParams} = \textcolor{keywordtype}{None}
@@ -95,7 +96,7 @@
 00088             self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV} = E\_BV
 00089  
 00090  
-\hypertarget{red__corr_8py_source_l00091}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa6deda4f66a76e07236cfa10f50a7be2}{00091}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa6deda4f66a76e07236cfa10f50a7be2}{cHbetaFromEbv}(self, ebv):
+\hypertarget{red__corr_8py_source_l00091}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a1eb5bd704c5f5b7c2c94286b90d33dbb}{00091}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a1eb5bd704c5f5b7c2c94286b90d33dbb}{cHbetaFromEbv}(self, ebv):
 00092         \textcolor{stringliteral}{"""}
 00093 \textcolor{stringliteral}{        Return cHbeta from E(BV)}
 00094 \textcolor{stringliteral}{        Usage: }
@@ -111,7 +112,7 @@
 00104         \textcolor{comment}{#return np.asarray((-0.61 + (0.61 ** 2 + 4 * 0.024 * ebv) ** 0.5) / (2 * 0.024))}
 00105     
 00106  
-\hypertarget{red__corr_8py_source_l00107}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0230c671df9a21eeb7d15008946780d0}{00107}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0230c671df9a21eeb7d15008946780d0}{EbvFromCHbeta}(self, cHbeta):
+\hypertarget{red__corr_8py_source_l00107}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab35df7348209fb79b956a3c8bb27e759}{00107}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab35df7348209fb79b956a3c8bb27e759}{EbvFromCHbeta}(self, cHbeta):
 00108         \textcolor{stringliteral}{"""}
 00109 \textcolor{stringliteral}{        Return E(B-V) from cHbeta}
 00110 \textcolor{stringliteral}{        Using: }
@@ -130,7 +131,7 @@
 00123         \textcolor{comment}{#return np.asarray(0.61 * cHbeta + 0.024 * cHbeta ** 2.)}
 00124     
 00125     
-\hypertarget{red__corr_8py_source_l00126}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8040208c6f193358ed1af2ced21fdd26}{00126}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8040208c6f193358ed1af2ced21fdd26}{getLaws}(self):
+\hypertarget{red__corr_8py_source_l00126}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a84e13d28ffcddb1feeb32c0ab62ae29b}{00126}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a84e13d28ffcddb1feeb32c0ab62ae29b}{getLaws}(self):
 00127         \textcolor{stringliteral}{"""}
 00128 \textcolor{stringliteral}{        Return the dictionary keys for the extinction laws}
 00129 \textcolor{stringliteral}{        }
@@ -138,7 +139,7 @@
 00131         \textcolor{keywordflow}{return} self.\_laws\_dict.keys()
 00132     
 00133     
-\hypertarget{red__corr_8py_source_l00134}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a95b4079c79dc6128406d0f992fa60e12}{00134}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a95b4079c79dc6128406d0f992fa60e12}{printLaws}(self):
+\hypertarget{red__corr_8py_source_l00134}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0f5ef5cac970e327841766c07f676c23}{00134}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0f5ef5cac970e327841766c07f676c23}{printLaws}(self):
 00135         \textcolor{stringliteral}{"""}
 00136 \textcolor{stringliteral}{        Print out the extinction laws}
 00137 \textcolor{stringliteral}{        }
@@ -148,39 +149,39 @@
 00141                 doc = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}[law].\_\_doc\_\_
 00142             \textcolor{keywordflow}{except}:
 00143                 doc = \textcolor{stringliteral}{''}
-00144             \textcolor{keywordflow}{print} \textcolor{stringliteral}{"'\{0\}': \{1\}"}.format(law, doc)
+00144             print(\textcolor{stringliteral}{"'\{0\}': \{1\}"}.format(law, doc))
 00145                          
-\hypertarget{red__corr_8py_source_l00146}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad395ff01902fb0628788773a4e8271d3}{00146}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad395ff01902fb0628788773a4e8271d3}{\_get\_e\_bv}(self):
+\hypertarget{red__corr_8py_source_l00146}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac33805bfaabab8f029f01b3dcdbffa4c}{00146}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac33805bfaabab8f029f01b3dcdbffa4c}{\_get\_e\_bv}(self):
 00147         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV}
-\hypertarget{red__corr_8py_source_l00148}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a7004e35d4752299288216365df24f6e8}{00148}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a7004e35d4752299288216365df24f6e8}{\_get\_r\_v}(self):
+\hypertarget{red__corr_8py_source_l00148}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a19b51d443c271dfbef23e853a2c0cacf}{00148}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a19b51d443c271dfbef23e853a2c0cacf}{\_get\_r\_v}(self):
 00149         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a93f7e44201375bc6e05a20c092b6a1d6}{\_\_R\_V}
-\hypertarget{red__corr_8py_source_l00150}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a6757ba1278a16f504442c01766871c82}{00150}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a6757ba1278a16f504442c01766871c82}{\_get\_law}(self):
+\hypertarget{red__corr_8py_source_l00150}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ae23e08c510a8de32425ec439023c00dc}{00150}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ae23e08c510a8de32425ec439023c00dc}{\_get\_law}(self):
 00151         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a08b0e3499e1b8a289d7b2c7e805e6129}{\_\_law}
-\hypertarget{red__corr_8py_source_l00152}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a25559a6ccb185970db8352003f5969a0}{00152}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a25559a6ccb185970db8352003f5969a0}{\_get\_cHbeta}(self):
+\hypertarget{red__corr_8py_source_l00152}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab4f5d5e32fb4be72e6cd703cd0dfb0df}{00152}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab4f5d5e32fb4be72e6cd703cd0dfb0df}{\_get\_cHbeta}(self):
 00153         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta}
-\hypertarget{red__corr_8py_source_l00154}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a12af28f682582ba99d17d9d5f33ca1a3}{00154}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a12af28f682582ba99d17d9d5f33ca1a3}{\_get\_AV}(self):
+\hypertarget{red__corr_8py_source_l00154}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a68f3c957fd80d17a976733494ec92c79}{00154}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a68f3c957fd80d17a976733494ec92c79}{\_get\_AV}(self):
 00155         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{\_\_AV}
-\hypertarget{red__corr_8py_source_l00156}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac2a6eb966c52457c8b7209cf87ee3aff}{00156}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac2a6eb966c52457c8b7209cf87ee3aff}{\_get\_uf}(self):
+\hypertarget{red__corr_8py_source_l00156}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ae917e42eeee77f8070c8c9b8cc184a37}{00156}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ae917e42eeee77f8070c8c9b8cc184a37}{\_get\_uf}(self):
 00157         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf6e0eb6732be82bc65b02c36a2429c2}{\_\_user\_function}
 00158     
-\hypertarget{red__corr_8py_source_l00159}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8b9ff86d57c62a7ce2a3a257f73703f4}{00159}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8b9ff86d57c62a7ce2a3a257f73703f4}{\_set\_e\_bv}(self, value):
+\hypertarget{red__corr_8py_source_l00159}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a435874b44a40876df8f828173171028c}{00159}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a435874b44a40876df8f828173171028c}{\_set\_e\_bv}(self, value):
 \hypertarget{red__corr_8py_source_l00160}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{00160}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} = np.asarray(value)
-\hypertarget{red__corr_8py_source_l00161}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{00161}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa6deda4f66a76e07236cfa10f50a7be2}{cHbetaFromEbv}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV})
+\hypertarget{red__corr_8py_source_l00161}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{00161}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a1eb5bd704c5f5b7c2c94286b90d33dbb}{cHbetaFromEbv}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV})
 \hypertarget{red__corr_8py_source_l00162}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{00162}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{\_\_AV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} * self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a4696ecdd84c912c20e6aa19b1573e875}{R\_V}
 00163         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a99ab4dcd33d50360f4fb61bc80fc90d5}{\_given} = \textcolor{stringliteral}{'E\_BV'}
-\hypertarget{red__corr_8py_source_l00164}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a54ec0d6ca9a2d8de20433951f2b62e74}{00164}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a54ec0d6ca9a2d8de20433951f2b62e74}{\_set\_cHbeta}(self, value):
+\hypertarget{red__corr_8py_source_l00164}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab6f42b2fb11938d407a960799784d5aa}{00164}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab6f42b2fb11938d407a960799784d5aa}{\_set\_cHbeta}(self, value):
 00165         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta} = np.asarray(value)
-00166         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0230c671df9a21eeb7d15008946780d0}{EbvFromCHbeta}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta})
+00166         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab35df7348209fb79b956a3c8bb27e759}{EbvFromCHbeta}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta})
 00167         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{\_\_AV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} * self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a4696ecdd84c912c20e6aa19b1573e875}{R\_V}
 00168         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a99ab4dcd33d50360f4fb61bc80fc90d5}{\_given} = \textcolor{stringliteral}{'cHbeta'}
-\hypertarget{red__corr_8py_source_l00169}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a39508e2a57b48e306e4514f0410b9414}{00169}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a39508e2a57b48e306e4514f0410b9414}{\_set\_AV}(self, value):
+\hypertarget{red__corr_8py_source_l00169}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a98a035be4770e0d690490821cd514a74}{00169}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a98a035be4770e0d690490821cd514a74}{\_set\_AV}(self, value):
 00170         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{\_\_AV} = np.asarray(value)
 00171         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a476840870719872a12ab48a0d1f1a839}{\_\_AV} / self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a4696ecdd84c912c20e6aa19b1573e875}{R\_V}
-00172         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa6deda4f66a76e07236cfa10f50a7be2}{cHbetaFromEbv}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV})
+00172         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ab91dff40a007dd632c35d98042077f3d}{\_\_cHbeta} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a1eb5bd704c5f5b7c2c94286b90d33dbb}{cHbetaFromEbv}(self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad223ec4556fb47fc607488c318e58b13}{\_\_E\_BV})
 00173         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a99ab4dcd33d50360f4fb61bc80fc90d5}{\_given} = \textcolor{stringliteral}{'AV'}
-\hypertarget{red__corr_8py_source_l00174}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad499e0702459bbc8547ddac79125965b}{00174}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad499e0702459bbc8547ddac79125965b}{\_set\_r\_v}(self, value):       
+\hypertarget{red__corr_8py_source_l00174}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9802a083db9982d308b4a78388401b94}{00174}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9802a083db9982d308b4a78388401b94}{\_set\_r\_v}(self, value):       
 \hypertarget{red__corr_8py_source_l00175}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a93f7e44201375bc6e05a20c092b6a1d6}{00175}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a93f7e44201375bc6e05a20c092b6a1d6}{\_\_R\_V} = np.asarray(value)
-\hypertarget{red__corr_8py_source_l00176}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9b6fba4c3e9133d75cbbaf09c163bde3}{00176}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9b6fba4c3e9133d75cbbaf09c163bde3}{\_set\_law}(self, value):
+\hypertarget{red__corr_8py_source_l00176}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa205c5f56725816af787bdea7b8aa29c}{00176}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa205c5f56725816af787bdea7b8aa29c}{\_set\_law}(self, value):
 00177         \textcolor{keywordflow}{if} value \textcolor{keywordflow}{not} \textcolor{keywordflow}{in} self.\_laws\_dict.keys():
 00178             self.log\_.error(\textcolor{stringliteral}{'Unknown extinction law reference: \{0\}'}.format(value), calling=self.
       \hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a30606dfd94b4cefefd10dbb1f7cbd473}{calling})
@@ -195,7 +196,7 @@
 00187                 self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf16ae2a0bdb5dd620f9db382ffeebc9}{cHbeta} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf16ae2a0bdb5dd620f9db382ffeebc9}{cHbeta}
 00188             \textcolor{keywordflow}{elif} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a99ab4dcd33d50360f4fb61bc80fc90d5}{\_given} == \textcolor{stringliteral}{'AV'}:  
 00189                 self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_acbf4ca9cf48abed38b1ffad057420c71}{AV} = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_acbf4ca9cf48abed38b1ffad057420c71}{AV}
-\hypertarget{red__corr_8py_source_l00190}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa3c87390e06478691997fc94ce3a5139}{00190}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa3c87390e06478691997fc94ce3a5139}{\_set\_uf}(self, value):
+\hypertarget{red__corr_8py_source_l00190}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa2b2bda77fced31b3fb64de5731a3d61}{00190}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa2b2bda77fced31b3fb64de5731a3d61}{\_set\_uf}(self, value):
 \hypertarget{red__corr_8py_source_l00191}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf6e0eb6732be82bc65b02c36a2429c2}{00191}         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf6e0eb6732be82bc65b02c36a2429c2}{\_\_user\_function} = value
 00192         \textcolor{keywordflow}{if} value \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
 00193             \textcolor{keywordflow}{if} \textcolor{stringliteral}{'user'} \textcolor{keywordflow}{in} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a96fbed6f54a26dd2f59fe6441c9c3865}{\_laws\_dict}:
@@ -248,7 +249,7 @@
        / rel\_corr
 00238     
 00239     
-\hypertarget{red__corr_8py_source_l00240}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5a570e787f6fe64d23e34b5646e46b6c}{00240}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5a570e787f6fe64d23e34b5646e46b6c}{getCorrHb}(self, wave):
+\hypertarget{red__corr_8py_source_l00240}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_adcef55fc25b8cefce47a0462bf3f9172}{00240}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_adcef55fc25b8cefce47a0462bf3f9172}{getCorrHb}(self, wave):
 00241         \textcolor{stringliteral}{"""}
 00242 \textcolor{stringliteral}{        Return the extinction correction normalized to the correction at 4861AA.}
 00243 \textcolor{stringliteral}{            }
@@ -277,7 +278,7 @@
       \hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV}
 00266 
 00267 
-\hypertarget{red__corr_8py_source_l00268}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a296a9cd0f689dd7e9be3dc788e88ddaa}{00268}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a296a9cd0f689dd7e9be3dc788e88ddaa}{getErrCorrHb}(self, wave, err\_E\_BV):
+\hypertarget{red__corr_8py_source_l00268}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8ed68e860066eafe017e5adcff6b56d9}{00268}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8ed68e860066eafe017e5adcff6b56d9}{getErrCorrHb}(self, wave, err\_E\_BV):
 00269         \textcolor{stringliteral}{"""}
 00270 \textcolor{stringliteral}{        Return the the error on the correction relative to Hbeta for a given wavelength, }
 00271 \textcolor{stringliteral}{            given the error on E(B-V)}
@@ -290,7 +291,7 @@
 00278         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a6e7097b97a6552f30422884af3faff69}{getErrCorr}(self, wave, err\_E\_BV, rel\_wave=pn.CST.HBETA)
 00279 
 00280     
-\hypertarget{red__corr_8py_source_l00281}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_af46527e15978d583e5d857182b560ce4}{00281}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_af46527e15978d583e5d857182b560ce4}{setCorr}(self, obs\_over\_theo, wave1, wave2):
+\hypertarget{red__corr_8py_source_l00281}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a75e8027a7bd81d214ac16db221da8073}{00281}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a75e8027a7bd81d214ac16db221da8073}{setCorr}(self, obs\_over\_theo, wave1, wave2):
 00282         \textcolor{stringliteral}{"""}
 00283 \textcolor{stringliteral}{        Determination of the correction using the ratio of two observed line intensities }
 00284 \textcolor{stringliteral}{            relative to the theoretical value.}
@@ -313,7 +314,7 @@
 00300             self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV} = 0.
 00301         del COR
 00302 
-\hypertarget{red__corr_8py_source_l00303}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa0348dcba9bf9bbdb3296191319c683c}{00303}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa0348dcba9bf9bbdb3296191319c683c}{plot}(self, w\_inf=1000., w\_sup=10000., laws=None, ax=None, **kwargs):
+\hypertarget{red__corr_8py_source_l00303}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a95f0d053c5dd67a00f1c1ceefc8da2c0}{00303}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a95f0d053c5dd67a00f1c1ceefc8da2c0}{plot}(self, w\_inf=1000., w\_sup=10000., laws=None, ax=None, **kwargs):
 00304         \textcolor{stringliteral}{"""}
 00305 \textcolor{stringliteral}{        Plot extinction laws}
 00306 \textcolor{stringliteral}{}
@@ -340,13 +341,13 @@
 00325         \textcolor{keywordflow}{if} laws \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
 00326             laws = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_adfed423013315bad4ba5dda2368dc3d0}{law}
 00327         \textcolor{keywordflow}{elif} laws == \textcolor{stringliteral}{'all'}:
-00328             laws = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8040208c6f193358ed1af2ced21fdd26}{getLaws}()
+00328             laws = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a84e13d28ffcddb1feeb32c0ab62ae29b}{getLaws}()
 00329         \textcolor{keywordflow}{if} type(laws) \textcolor{keywordflow}{is} str:
 00330             laws = [laws]
 00331         laws.sort()    
 00332         \textcolor{keywordflow}{for} i, law \textcolor{keywordflow}{in} enumerate(laws):
 00333             self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_adfed423013315bad4ba5dda2368dc3d0}{law} = law
-00334             corr = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5a570e787f6fe64d23e34b5646e46b6c}{getCorrHb}(w)
+00334             corr = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_adcef55fc25b8cefce47a0462bf3f9172}{getCorrHb}(w)
 00335             \textcolor{keywordflow}{if} corr \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
 00336                 ax.plot(w, np.log10(corr), label=law, c=colors[i % 6], linestyle=styles[i // 6], **kwargs)
 00337         ax.legend()
@@ -356,7 +357,7 @@
 00341         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV} = old\_E\_BV
 00342     
 00343                             
-\hypertarget{red__corr_8py_source_l00344}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a51dd4794e0a4f7f02382f424cad7e0f9}{00344}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a51dd4794e0a4f7f02382f424cad7e0f9}{\_CCM89}(self, wave):
+\hypertarget{red__corr_8py_source_l00344}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0e1f547dbed4401b9c3d34658db9aaf7}{00344}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0e1f547dbed4401b9c3d34658db9aaf7}{\_CCM89}(self, wave):
 00345         \textcolor{stringliteral}{"""}
 00346 \textcolor{stringliteral}{        Cardelli, Clayton & Mathis 1989, ApJ 345, 245}
 00347 \textcolor{stringliteral}{        http://adsabs.harvard.edu/abs/1989ApJ...345..245C}
@@ -402,7 +403,7 @@
 00387         \textcolor{keywordflow}{return} np.squeeze(Xx)
 00388 
 00389 
-\hypertarget{red__corr_8py_source_l00390}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a919503a9ebc8aafcf92ea819bcc3265c}{00390}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a919503a9ebc8aafcf92ea819bcc3265c}{\_CCM89\_Bal07}(self, wave):
+\hypertarget{red__corr_8py_source_l00390}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5422d3b4c568033cc97ada0b73670aa9}{00390}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5422d3b4c568033cc97ada0b73670aa9}{\_CCM89\_Bal07}(self, wave):
 00391         \textcolor{stringliteral}{"""}
 00392 \textcolor{stringliteral}{        Galactic extinction law based on Cardelli et al 1989, modified by Blagrave et al 2007 }
 00393 \textcolor{stringliteral}{        for 3.3 < x < 8 (1250 < lambda < 3030)}
@@ -457,7 +458,7 @@
 00442         \textcolor{keywordflow}{return} np.squeeze(Xx)
 00443     
 00444 
-\hypertarget{red__corr_8py_source_l00445}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a87841a3694fd368a8583680623936e29}{00445}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a87841a3694fd368a8583680623936e29}{\_CCM89\_oD94}(self, wave):
+\hypertarget{red__corr_8py_source_l00445}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8d06942c28efecc3704d5e31c444ca1b}{00445}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8d06942c28efecc3704d5e31c444ca1b}{\_CCM89\_oD94}(self, wave):
 00446         \textcolor{stringliteral}{"""}
 00447 \textcolor{stringliteral}{        Galactic extinction law based on Cardelli et al 1989, modified by O'Donnell 1994}
 00448 \textcolor{stringliteral}{        for 1.1 < x < 3.3 (9100 < lambda < 3030)}
@@ -511,7 +512,7 @@
 00496         \textcolor{keywordflow}{return} np.squeeze(Xx)
 00497 
 00498 
-\hypertarget{red__corr_8py_source_l00499}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a758a99903861c8b015cc2074766ad811}{00499}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a758a99903861c8b015cc2074766ad811}{\_S79\_H83\_CCM89}(self, wave):
+\hypertarget{red__corr_8py_source_l00499}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5ca5f455ff115c36f4ea3367542cbafa}{00499}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5ca5f455ff115c36f4ea3367542cbafa}{\_S79\_H83\_CCM89}(self, wave):
 00500         \textcolor{stringliteral}{"""}
 00501 \textcolor{stringliteral}{        Galactic extinction law (0-33000 A range):}
 00502 \textcolor{stringliteral}{        - In the UV, from Seaton 1979}
@@ -607,7 +608,7 @@
 00592 \textcolor{stringliteral}{        return np.squeeze(Xx)}
 00593 \textcolor{stringliteral}{        """}
 00594 
-\hypertarget{red__corr_8py_source_l00595}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac1de28238af5c2fc9924c8cda6386b2a}{00595}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ac1de28238af5c2fc9924c8cda6386b2a}{\_K76}(self, wave):
+\hypertarget{red__corr_8py_source_l00595}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9958bee692760f5d5037a5b195142c01}{00595}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9958bee692760f5d5037a5b195142c01}{\_K76}(self, wave):
 00596         \textcolor{stringliteral}{"""}
 00597 \textcolor{stringliteral}{        Kaler 1976, ApJS, 31, 517}
 00598 \textcolor{stringliteral}{        http://adsabs.harvard.edu/abs/1976ApJS...31..517K}
@@ -623,12 +624,12 @@
 00608         w = np.asarray([wave]) \textcolor{comment}{# inv microns}
 00609         \textcolor{keywordflow}{if} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV} == 0.:
 00610             \textcolor{keywordflow}{return} np.ones\_like(w)
-00611         f\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a0e9572755930aabb03c6b0e5d66b8356}{execution\_path}(\textcolor{stringliteral}{'Gal\_Kaler.txt'}))
+00611         f\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a937fc19e910346d9d288992e8eeab0ea}{execution\_path}(\textcolor{stringliteral}{'Gal\_Kaler.txt'}))
 00612         f = np.interp(w, f\_tab[:, 0], f\_tab[:, 1])
 00613         \textcolor{keywordflow}{return} np.squeeze(f * self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aaf16ae2a0bdb5dd620f9db382ffeebc9}{cHbeta} / 0.4 / self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a0bc581bcaa8eeeb67b83ffdec58bf164}{E\_BV})
 00614     
 00615 
-\hypertarget{red__corr_8py_source_l00616}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a3c1ed8005a2173f7222d25df3b38e7f2}{00616}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a3c1ed8005a2173f7222d25df3b38e7f2}{\_SM79\_Gal}(self, wave):
+\hypertarget{red__corr_8py_source_l00616}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a75a671c41944722df9d5fba814b83b3a}{00616}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a75a671c41944722df9d5fba814b83b3a}{\_SM79\_Gal}(self, wave):
 00617         \textcolor{stringliteral}{"""}
 00618 \textcolor{stringliteral}{        Galactic extinction law}
 00619 \textcolor{stringliteral}{        Savage & Mathis 1979, ARA&A, 17, 73}
@@ -644,12 +645,12 @@
 00629 \textcolor{stringliteral}{        """}
 00630         x = 1e4 / np.asarray([wave]) \textcolor{comment}{# inv microns}
 00631 
-00632         X\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a0e9572755930aabb03c6b0e5d66b8356}{execution\_path}(\textcolor{stringliteral}{'Gal\_SM79.txt'}))
+00632         X\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a937fc19e910346d9d288992e8eeab0ea}{execution\_path}(\textcolor{stringliteral}{'Gal\_SM79.txt'}))
 00633         Xx = np.interp(x, X\_tab[:, 0], X\_tab[:, 1])
 00634         \textcolor{keywordflow}{return} np.squeeze(Xx)
 00635     
 00636     
-\hypertarget{red__corr_8py_source_l00637}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_acc965477d452c5914a8af1d8d6116a23}{00637}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_acc965477d452c5914a8af1d8d6116a23}{\_G03\_LMC}(self, wave):
+\hypertarget{red__corr_8py_source_l00637}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5e121988480c19aeb1fa5747b5d8d3a7}{00637}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a5e121988480c19aeb1fa5747b5d8d3a7}{\_G03\_LMC}(self, wave):
 00638         \textcolor{stringliteral}{"""}
 00639 \textcolor{stringliteral}{        Extinction curve for the LMC}
 00640 \textcolor{stringliteral}{        Gordon et al. (2003, ApJ, 594,279)}
@@ -665,12 +666,12 @@
 00650 \textcolor{stringliteral}{        """}
 00651         x = 1e4 / np.asarray([wave]) \textcolor{comment}{# inv microns}
 00652 
-00653         X\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a0e9572755930aabb03c6b0e5d66b8356}{execution\_path}(\textcolor{stringliteral}{'LMC\_Gordon.txt'}))
+00653         X\_tab = np.loadtxt(\hyperlink{namespacepyneb_1_1utils_1_1misc_a937fc19e910346d9d288992e8eeab0ea}{execution\_path}(\textcolor{stringliteral}{'LMC\_Gordon.txt'}))
 00654         Xx = self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a4696ecdd84c912c20e6aa19b1573e875}{R\_V} * np.interp(x, X\_tab[:, 0], X\_tab[:, 1])
 00655         \textcolor{keywordflow}{return} np.squeeze(Xx)
 00656     
 00657     
-\hypertarget{red__corr_8py_source_l00658}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{00658}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{\_F99\_like}(self, wave):
+\hypertarget{red__corr_8py_source_l00658}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{00658}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{\_F99\_like}(self, wave):
 00659         \textcolor{stringliteral}{"""}
 00660 \textcolor{stringliteral}{        In the UV, it returns the Fitzpatrick & Massa 1990 law.}
 00661 \textcolor{stringliteral}{        In the opt/IR, it returns the Fitzpatrick & Massa 1990 law. }
@@ -812,7 +813,7 @@
 00786 \textcolor{stringliteral}{        return np.squeeze(Xx)}
 00787 \textcolor{stringliteral}{        """}    
 00788             
-\hypertarget{red__corr_8py_source_l00789}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9eacce21ff80a457fc1d285291eed996}{00789}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a9eacce21ff80a457fc1d285291eed996}{\_MCC99\_FM90\_LMC}(self, wave):
+\hypertarget{red__corr_8py_source_l00789}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_af97fbc015537102bbc163263b8582986}{00789}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_af97fbc015537102bbc163263b8582986}{\_MCC99\_FM90\_LMC}(self, wave):
 00790         \textcolor{stringliteral}{"""}
 00791 \textcolor{stringliteral}{        In the UV, this method returns the extinction curve proposed for the LMC }
 00792 \textcolor{stringliteral}{        by Misselt et al 1999 based on the 1990 variant of the Fitzpatrick & Massa law}
@@ -844,10 +845,10 @@
 00816         c3 = 2.73    
 00817         c4 = 0.64    
 00818         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a133fcc7513d358e629266b24cbe7bebc}{FitzParams} = [x0, gamma, c1, c2, c3, c4]
-00819         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{\_F99\_like}(wave)
+00819         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{\_F99\_like}(wave)
 00820 
 00821 
-\hypertarget{red__corr_8py_source_l00822}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a05f6dd65005f473d38e0c1014c58fb61}{00822}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a05f6dd65005f473d38e0c1014c58fb61}{\_F99}(self, wave):
+\hypertarget{red__corr_8py_source_l00822}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8e249217925175868e6890e2e733c56a}{00822}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8e249217925175868e6890e2e733c56a}{\_F99}(self, wave):
 00823         \textcolor{stringliteral}{"""}
 00824 \textcolor{stringliteral}{        This method returns the R-dependent IR-through-UV extinction curve proposed by Fitzpatrick 1999.}
 00825 \textcolor{stringliteral}{}
@@ -873,10 +874,10 @@
 00845         c2 = -0.824 + 4.717 / self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a4696ecdd84c912c20e6aa19b1573e875}{R\_V} \textcolor{comment}{# 0.7 if RV=3.1}
 00846         c1 = 2.030 - 3.007 * c2 \textcolor{comment}{# -0.0677 if RV = 3.1}
 00847         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a133fcc7513d358e629266b24cbe7bebc}{FitzParams} = [x0, gamma, c1, c2, c3, c4]
-00848         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{\_F99\_like}(wave)
+00848         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{\_F99\_like}(wave)
 00849 
 00850 
-\hypertarget{red__corr_8py_source_l00851}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa175c2a1489246b81d7c3b81fb88d7d9}{00851}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aa175c2a1489246b81d7c3b81fb88d7d9}{\_FM88\_F99\_LMC}(self, wave):
+\hypertarget{red__corr_8py_source_l00851}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aae30a2150d566f04044db33a1612be8b}{00851}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_aae30a2150d566f04044db33a1612be8b}{\_FM88\_F99\_LMC}(self, wave):
 00852         \textcolor{stringliteral}{"""}
 00853 \textcolor{stringliteral}{        This method returns:}
 00854 \textcolor{stringliteral}{        - in the UV, the average LMC extinction curve derived by Fitzpatrick & Massa 1988}
@@ -903,10 +904,10 @@
 00875         c3 = 2.55
 00876         c4 = 0.504  
 00877         self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a133fcc7513d358e629266b24cbe7bebc}{FitzParams} = [x0, gamma, c1, c2, c3, c4]
-00878         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_afa769aa42ed7d39fb04fd36fda88b54e}{\_F99\_like}(wave)
+00878         \textcolor{keywordflow}{return} self.\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a8eb0fe7f840c32a87adfcf7ddd98a095}{\_F99\_like}(wave)
 00879     
 00880     
-\hypertarget{red__corr_8py_source_l00881}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a2f9bf2baa246c949cc0198445e8ece10}{00881}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_a2f9bf2baa246c949cc0198445e8ece10}{\_zeros}(self, wave):
+\hypertarget{red__corr_8py_source_l00881}{}\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad20df45ee0c6e9081245886135843e72}{00881}     \textcolor{keyword}{def }\hyperlink{classpyneb_1_1extinction_1_1red__corr_1_1_red_corr_ad20df45ee0c6e9081245886135843e72}{\_zeros}(self, wave):
 00882         \textcolor{stringliteral}{"""}
 00883 \textcolor{stringliteral}{        No correction, return 0.0}
 00884 \textcolor{stringliteral}{        }

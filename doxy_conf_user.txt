@@ -4,7 +4,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = PyNeb
-PROJECT_NUMBER         = 1.0.15
+PROJECT_NUMBER         = 1.0.20
 PROJECT_BRIEF          = "PyNeb Reference Manual" 
 PROJECT_LOGO           = 
 OUTPUT_DIRECTORY       = pyneb/docs/html/user_reference_manual

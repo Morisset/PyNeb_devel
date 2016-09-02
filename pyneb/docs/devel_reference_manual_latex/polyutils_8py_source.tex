@@ -1,5 +1,6 @@
-\hypertarget{polyutils_8py_source}{}\section{polyutils.\+py}
-\label{polyutils_8py_source}\index{pyneb/utils/polyutils.\+py@{pyneb/utils/polyutils.\+py}}
+\hypertarget{polyutils_8py}{\section{polyutils.\-py}
+\label{polyutils_8py}\index{pyneb/utils/polyutils.\-py@{pyneb/utils/polyutils.\-py}}
+}
 
 \begin{DoxyCode}
 \hypertarget{polyutils_8py_source_l00001}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils}{00001} \textcolor{stringliteral}{"""}
@@ -77,7 +78,7 @@
 00073 \textcolor{comment}{# We need the any function for python < 2.5}
 00074 \textcolor{comment}{#}
 00075 \textcolor{keywordflow}{if} sys.version\_info[:2] < (2,5) :
-\hypertarget{polyutils_8py_source_l00076}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a7a16ae5631115dce0a513eaec3a06470}{00076}     \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a7a16ae5631115dce0a513eaec3a06470}{any}(iterable) :
+\hypertarget{polyutils_8py_source_l00076}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_ae57e4cc7030d5459a7e7c1f61d7ed9a8}{00076}     \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_ae57e4cc7030d5459a7e7c1f61d7ed9a8}{any}(iterable) :
 00077         \textcolor{keywordflow}{for} element \textcolor{keywordflow}{in} iterable:
 00078             \textcolor{keywordflow}{if} element :
 00079                 \textcolor{keywordflow}{return} \textcolor{keyword}{True}
@@ -86,7 +87,7 @@
 00082 \textcolor{comment}{#}
 00083 \textcolor{comment}{# Helper functions to convert inputs to 1d arrays}
 00084 \textcolor{comment}{#}
-\hypertarget{polyutils_8py_source_l00085}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a2d09c123dbbcfd4623784cacf1fc945c}{00085} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a2d09c123dbbcfd4623784cacf1fc945c}{trimseq}(seq) :
+\hypertarget{polyutils_8py_source_l00085}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{00085} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(seq) :
 00086     \textcolor{stringliteral}{"""Remove small Poly series coefficients.}
 00087 \textcolor{stringliteral}{}
 00088 \textcolor{stringliteral}{    Parameters}
@@ -160,12 +161,12 @@
 00156     arrays = [np.array(a, ndmin=1, copy=0) \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} alist]
 00157     \textcolor{keywordflow}{if} min([a.size \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]) == 0 :
 00158         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Coefficient array is empty"})
-00159     \textcolor{keywordflow}{if} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a7a16ae5631115dce0a513eaec3a06470}{any}([a.ndim != 1 \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]) :
+00159     \textcolor{keywordflow}{if} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_ae57e4cc7030d5459a7e7c1f61d7ed9a8}{any}([a.ndim != 1 \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]) :
 00160         \textcolor{keywordflow}{raise} ValueError(\textcolor{stringliteral}{"Coefficient array is not 1-d"})
 00161     \textcolor{keywordflow}{if} trim :
-00162         arrays = [\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a2d09c123dbbcfd4623784cacf1fc945c}{trimseq}(a) \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]
+00162         arrays = [\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a973183162fdba436dae4946ec78c009b}{trimseq}(a) \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]
 00163 
-00164     \textcolor{keywordflow}{if} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a7a16ae5631115dce0a513eaec3a06470}{any}([a.dtype == np.dtype(object) \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]) :
+00164     \textcolor{keywordflow}{if} \hyperlink{namespacepyneb_1_1utils_1_1polyutils_ae57e4cc7030d5459a7e7c1f61d7ed9a8}{any}([a.dtype == np.dtype(object) \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays]) :
 00165         ret = []
 00166         \textcolor{keywordflow}{for} a \textcolor{keywordflow}{in} arrays :
 00167             \textcolor{keywordflow}{if} a.dtype != np.dtype(object) :
@@ -237,7 +238,7 @@
 00233     \textcolor{keywordflow}{else} :
 00234         \textcolor{keywordflow}{return} c[:ind[-1] + 1].copy()
 00235 
-\hypertarget{polyutils_8py_source_l00236}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a3216f3b76273619e84e2e0e6c22dbf21}{00236} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a3216f3b76273619e84e2e0e6c22dbf21}{getdomain}(x) :
+\hypertarget{polyutils_8py_source_l00236}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_afbf8321a135ca2dc247215e16ea3399f}{00236} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_afbf8321a135ca2dc247215e16ea3399f}{getdomain}(x) :
 00237     \textcolor{stringliteral}{"""}
 00238 \textcolor{stringliteral}{    Return a domain suitable for given abscissae.}
 00239 \textcolor{stringliteral}{}
@@ -283,7 +284,7 @@
 00279     \textcolor{keywordflow}{else} :
 00280         \textcolor{keywordflow}{return} np.array((x.min(), x.max()))
 00281 
-\hypertarget{polyutils_8py_source_l00282}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a3621b172891db0806163f72f22e3723b}{00282} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a3621b172891db0806163f72f22e3723b}{mapparms}(old, new) :
+\hypertarget{polyutils_8py_source_l00282}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a6d5e6ebb1be7c9077ec3ae28e803c83c}{00282} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a6d5e6ebb1be7c9077ec3ae28e803c83c}{mapparms}(old, new) :
 00283     \textcolor{stringliteral}{"""}
 00284 \textcolor{stringliteral}{    Linear map parameters between domains.}
 00285 \textcolor{stringliteral}{}
@@ -330,7 +331,7 @@
 00326     scl = newlen/oldlen
 00327     \textcolor{keywordflow}{return} off, scl
 00328 
-\hypertarget{polyutils_8py_source_l00329}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9a4c51bf58904c4c9ddc7d7525404481}{00329} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_a9a4c51bf58904c4c9ddc7d7525404481}{mapdomain}(x, old, new) :
+\hypertarget{polyutils_8py_source_l00329}{}\hyperlink{namespacepyneb_1_1utils_1_1polyutils_ad7fe440bbe8d96e839de461f4db98cef}{00329} \textcolor{keyword}{def }\hyperlink{namespacepyneb_1_1utils_1_1polyutils_ad7fe440bbe8d96e839de461f4db98cef}{mapdomain}(x, old, new) :
 00330     \textcolor{stringliteral}{"""}
 00331 \textcolor{stringliteral}{    Apply linear map to input points.}
 00332 \textcolor{stringliteral}{}
@@ -394,6 +395,6 @@
 00390 \textcolor{stringliteral}{}
 00391 \textcolor{stringliteral}{    """}
 00392     x = np.asanyarray(x)
-00393     off, scl = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a3621b172891db0806163f72f22e3723b}{mapparms}(old, new)
+00393     off, scl = \hyperlink{namespacepyneb_1_1utils_1_1polyutils_a6d5e6ebb1be7c9077ec3ae28e803c83c}{mapparms}(old, new)
 00394     \textcolor{keywordflow}{return} off + scl*x
 \end{DoxyCode}
