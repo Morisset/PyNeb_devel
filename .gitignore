@@ -68,3 +68,4 @@ PyNeb_Handbook.pdf
 **/.svn/
 *.*~
 **/.ipynb_checkpoints/
+**/.DS_Store

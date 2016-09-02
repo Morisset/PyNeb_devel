@@ -292,9 +292,9 @@ gsLevelDict = {
             'd8': ['$3$F$_4$', '$^3$F$_3$', '$^3$F$_2$', '$^1$D$_2$', '$^3$P$_2$', '$^3$P2$_1$', '$^3$P$_0$']
             }
 
-
-_predefinedDataFileDict = {'IRAF_09_orig':
-                           {'Al2': {'atom': 'al_ii_atom.fits', 'coll': 'al_ii_coll.fits'},
+_predefinedDataFileDict = {}
+_predefinedDataFileDict['IRAF_09_orig']={
+                            'Al2': {'atom': 'al_ii_atom.fits', 'coll': 'al_ii_coll.fits'},
                             'Ar2': {'atom': 'ar_ii_atom.fits', 'coll': 'ar_ii_coll.fits'},
                             'Ar3': {'atom': 'ar_iii_atom.fits', 'coll': 'ar_iii_coll.fits'},
                             'Ar4': {'atom': 'ar_iv_atom.fits', 'coll': 'ar_iv_coll.fits'},
@@ -330,9 +330,9 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                             'S4': {'atom': 's_iv_atom.fits', 'coll': 's_iv_coll.fits'},
                             'Si2': {'atom': 'si_ii_atom.fits', 'coll': 'si_ii_coll.fits'},
                             'Si3': {'atom': 'si_iii_atom.fits', 'coll': 'si_iii_coll.fits'},
-                            },
-                         'IRAF_09':
-                           {'H1': {'rec': 'h_i_rec_SH95.fits'},
+                            }
+_predefinedDataFileDict['IRAF_09']={
+                            'H1': {'rec': 'h_i_rec_SH95.fits'},
                             'He1': {'rec': 'he_i_rec_Pal12-Pal13.fits'},
                             'He2': {'rec': 'he_ii_rec_SH95.fits'},
                             'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.fits', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.fits'},
@@ -371,9 +371,9 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                             'S4': {'atom': 's_iv_atom_BDF80-JKD86-DHKD82.fits', 'coll': 's_iv_coll_DHKD82.fits'},
                             'Si2': {'atom': 'si_ii_atom_Dal91-BL93-CSB93-N77.fits', 'coll': 'si_ii_coll_DK91.fits'},
                             'Si3': {'atom': 'si_iii_atom_WL95-M83-OKH88-FW90-KS86.fits', 'coll': 'si_iii_coll_DK94.fits'},
-                            },
-                           'PYNEB_13_01':
-                            {'H1': {'rec': 'h_i_rec_SH95.fits'},
+                            }
+_predefinedDataFileDict['PYNEB_13_01']={
+                             'H1': {'rec': 'h_i_rec_SH95.fits'},
                              'He1': {'rec': 'he_i_rec_Pal12-Pal13.fits'},
                              'He2': {'rec': 'he_ii_rec_SH95.fits'},
                              'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.fits', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.fits'},
@@ -419,9 +419,9 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                              'Si3': {'atom': 'si_iii_atom_WL95-M83-OKH88-FW90-KS86.fits', 'coll': 'si_iii_coll_DK94.fits'},
                              'Xe3': {'atom': 'xe_iii_atom_M93-BHQZ95.fits', 'coll': 'xe_iii_coll_SB98.fits'},
                              'Xe4': {'atom': 'xe_iv_atom_S04-BHQZ95.fits', 'coll': 'xe_iv_coll_SB98.fits'}
-                             },
-                           'PYNEB_14_01':
-                            {'H1': {'rec': 'h_i_rec_SH95.fits'},
+                             }
+_predefinedDataFileDict['PYNEB_14_01']={
+                             'H1': {'rec': 'h_i_rec_SH95.fits'},
                              'He1': {'rec': 'he_i_rec_Pal12-Pal13.fits'},
                              'He2': {'rec': 'he_ii_rec_SH95.fits'},
                              'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.fits', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.fits'},
@@ -429,8 +429,6 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                              'Ar3': {'atom': 'ar_iii_atom_B60-M83-KS86.fits', 'coll': 'ar_iii_coll_GMZ95.fits'},
                              'Ar4': {'atom': 'ar_iv_atom_MZ82.fits', 'coll': 'ar_iv_coll_RB97.fits'},
                              'Ar5': {'atom': 'ar_v_atom_B60-LL93-MZ82-KS86.fits', 'coll': 'ar_v_coll_GMZ95.fits'},
-                             #'Ba2': {'atom': 'ba_ii_atom_C04.fits', 'coll': 'ba_ii_coll_SB98.fits'},
-                             #'Ba4': {'atom': 'ba_iv_atom_SC10-BHQZ95.fits', 'coll': 'ba_iv_coll_SB98.fits'},
                              'C1': {'atom': 'c_i_atom_B60-NS84-FFS85.fits', 'coll': 'c_i_coll_JBK87-PA76.fits'},
                              'C2': {'atom': 'c_ii_atom_MG93-PP95-NS81-GMZ98.fits', 'coll': 'c_ii_coll_BP92.fits'},
                              'C3': {'atom': 'c_iii_atom_BK93-G83-NS78-WFD96.fits', 'coll': 'c_iii_coll_Bal85.fits'},
@@ -439,7 +437,6 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                              'Cl2': {'atom': 'cl_ii_atom_RK74-MZ83.fits', 'coll': 'cl_ii_coll_T04.fits'},
                              'Cl3': {'atom': 'cl_iii_atom_M83-KS86.fits', 'coll': 'cl_iii_coll_BZ89.fits'},
                              'Cl4': {'atom': 'cl_iv_atom_B60-H85-KS86-MZ82-EM84.fits', 'coll': 'cl_iv_coll_GMZ95.fits'},
-                             #'Fe3': {'atom': 'fe_iii_atom_Z96_Q96_J00.dat', 'coll': 'fe_iii_coll_Z96.dat'},
                              'K4': {'atom': 'k_iv_atom_B60-M83-KS86.fits', 'coll': 'k_iv_coll_GMZ95.fits'},
                              'K5': {'atom': 'k_v_atom_B60-M83-KS86.fits', 'coll': 'k_v_coll_BZL88.fits'},
                              'Mg5': {'atom': 'mg_v_atom_Bal06-B60-GMZ97.fits', 'coll': 'mg_v_coll_BZ94.fits'},
@@ -478,9 +475,10 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                              'Rb4': {'atom': 'rb_iv_atom_BH86.dat', 'coll': 'rb_iv_coll_S97.dat'},
                              'Rb5': {'atom': 'rb_v_atom_BH86.dat', 'coll': 'rb_v_coll_S97.dat'},
                              'Rb6': {'atom': 'rb_vi_atom_BH86.dat', 'coll': 'rb_vi_coll_S97.dat'}
-                             },
-                           'PYNEB_14_02':
-                            {'H1': {'rec': 'h_i_rec_SH95.fits'},
+                             }
+
+_predefinedDataFileDict['PYNEB_14_02']={
+                             'H1': {'rec': 'h_i_rec_SH95.fits'},
                              'He1': {'rec': 'he_i_rec_Pal12-Pal13.fits'},
                              'He2': {'rec': 'he_ii_rec_SH95.fits'},
                              'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.dat', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.dat'},
@@ -532,83 +530,31 @@ _predefinedDataFileDict = {'IRAF_09_orig':
                              'Kr4': {'atom': 'kr_iv_atom_BH86.dat', 'coll': 'kr_iv_coll_S97.dat'},
                              'Kr5': {'atom': 'kr_v_atom_BH86.dat', 'coll': 'kr_v_coll_S97.dat'},
                              'Se3': {'atom': 'se_iii_atom_BH86.dat', 'coll': 'se_iii_coll_S97.dat'},
-                             'Se4': {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'},
-                             'Br3': {'atom': 'br_iii_atom_BH86.dat', 'coll': 'br_iii_coll_S97.dat'},
-                             'Br4': {'atom': 'br_iv_atom_BH86.dat', 'coll': 'br_iv_coll_S97.dat'},
-                             'Rb4': {'atom': 'rb_iv_atom_BH86.dat', 'coll': 'rb_iv_coll_S97.dat'},
-                             'Rb5': {'atom': 'rb_v_atom_BH86.dat', 'coll': 'rb_v_coll_S97.dat'},
-                             'Rb6': {'atom': 'rb_vi_atom_BH86.dat', 'coll': 'rb_vi_coll_S97.dat'}
-                             },
-                           'PYNEB_14_03':
-                            {'H1': {'rec': 'h_i_rec_SH95.fits', 'trc': 'h_i_trc_SH95-caseB.dat'},
-                             'He1': {'rec': 'he_i_rec_Pal12-Pal13.fits'},
-                             'He2': {'rec': 'he_ii_rec_SH95.fits', 'trc': 'he_ii_trc_SH95-caseB.dat'},
-                             '3He2': {'atom': '3he_ii_atom_cloudy.dat', 'coll': '3he_ii_coll_cloudy.dat'},
-                             'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.dat', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.dat'},
-                             'Ar2': {'atom': 'ar_ii_atom_Bal06.dat', 'coll': 'ar_ii_coll_PB95.dat'},
-                             'Ar3': {'atom': 'ar_iii_atom_M83-KS86.dat', 'coll': 'ar_iii_coll_GMZ95.dat'},
-                             #'Ar3': {'atom': 'ar_iii_atom_MB09.dat', 'coll': 'ar_iii_coll_MB09.dat'},
-                             'Ar4': {'atom': 'ar_iv_atom_MZ82.dat', 'coll': 'ar_iv_coll_RB97.dat'},
-                             'Ar5': {'atom': 'ar_v_atom_LL93-MZ82-KS86.dat', 'coll': 'ar_v_coll_GMZ95.dat'},
-                             'Ba2': {'atom': 'ba_ii_atom_C04.dat', 'coll': 'ba_ii_coll_SB98.dat'},
-                             'Ba4': {'atom': 'ba_iv_atom_BHQZ95.dat', 'coll': 'ba_iv_coll_SB98.dat'},
-                             'C1': {'atom': 'c_i_atom_FFS85.dat', 'coll': 'c_i_coll_JBK87-PA76.dat'},
-                             'C2': {'atom': 'c_ii_atom_GMZ98.dat', 'coll': 'c_ii_coll_BP92.dat'},
-                             'C3': {'atom': 'c_iii_atom_G83-NS78-WFD96.dat', 'coll': 'c_iii_coll_Bal85.dat'},
-                             'C4': {'atom': 'c_iv_atom_WFD96.dat', 'coll': 'c_iv_coll_AK04.dat'},
-                             'Ca5': {'atom': 'ca_v_atom_M83-KS86.dat', 'coll': 'ca_v_coll_GMZ95.dat'},
-                             'Cl2': {'atom': 'cl_ii_atom_MZ83.dat', 'coll': 'cl_ii_coll_T04.dat'},
-                             'Cl3': {'atom': 'cl_iii_atom_M83-KS86.dat', 'coll': 'cl_iii_coll_BZ89.dat'},
-                             'Cl4': {'atom': 'cl_iv_atom_KS86-MZ82-EM84.dat', 'coll': 'cl_iv_coll_GMZ95.dat'},
-                             'Fe3': {'atom': 'fe_iii_atom_Q96_J00.dat', 'coll': 'fe_iii_coll_Z96.dat'},
-                             'Fe4': {'atom': 'fe_iv_atom_FFRR08.dat', 'coll': 'fe_iv_coll_ZP97.dat'},
-                             'Fe5': {'atom': 'fe_v_atom_Nal00.dat', 'coll': 'fe_v_coll_BGMcL07.dat'},
-                             'Fe6': {'atom': 'fe_vi_atom_CP00.dat', 'coll': 'fe_vi_coll_CP99.dat'},
-                             'Fe7': {'atom': 'fe_vii_atom_WB08.dat', 'coll': 'fe_vii_coll_WB08.dat'},
-                             'K4': {'atom': 'k_iv_atom_M83-KS86.dat', 'coll': 'k_iv_coll_GMZ95.dat'},
-                             'K5': {'atom': 'k_v_atom_M83-KS86.dat', 'coll': 'k_v_coll_BZL88.dat'},
-                             'Mg5': {'atom': 'mg_v_atom_GMZ97.dat', 'coll': 'mg_v_coll_BZ94.dat'},
-                             'Mg7': {'atom': 'mg_vii_atom_GMZ97.dat', 'coll': 'mg_vii_coll_LB94-U.dat'},
-                             'N1': {'atom': 'n_i_atom_KS86-WFD96.dat', 'coll': 'n_i_coll_PA76-DMR76.dat'},
-                             'N2': {'atom': 'n_ii_atom_GMZ97-WFD96.dat', 'coll': 'n_ii_coll_T11.dat'},
-                             'N3': {'atom': 'n_iii_atom_GMZ98.dat', 'coll': 'n_iii_coll_BP92.dat'},
-                             'N4': {'atom': 'n_iv_atom_WFD96.dat', 'coll': 'n_iv_coll_RBHB94.dat'},
-                             'Na4': {'atom': 'na_iv_atom_GMZ97.dat', 'coll': 'na_iv_coll_BZ94.dat'},
-                             'Na6': {'atom': 'na_vi_atom_GMZ97.dat', 'coll': 'na_vi_coll_LB94.dat'},
-                             'Ne2': {'atom': 'ne_ii_atom_Bal06.dat', 'coll': 'ne_ii_coll_GMB01.dat'},
-                             'Ne3': {'atom': 'ne_iii_atom_GMZ97.dat', 'coll': 'ne_iii_coll_McLB00.dat'},
-                             'Ne4': {'atom': 'ne_iv_atom_BBZ89-BK88.dat', 'coll': 'ne_iv_coll_G81.dat'},
-                             'Ne5': {'atom': 'ne_v_atom_GMZ97-U-BD93.dat', 'coll': 'ne_v_coll_LB94.dat'},
-                             'Ne6': {'atom': 'ne_vi_atom_GMZ98.dat', 'coll': 'ne_vi_coll_ZGP94.dat'},
-                             'Ni3': {'atom': 'ni_iii_atom_B01.dat', 'coll': 'ni_iii_coll_B01.dat'},
-                             'O1': {'atom': 'o_i_atom_WFD96.dat', 'coll': 'o_i_coll_BK95.dat'},
-                             'O2': {'atom': 'o_ii_atom_Z82-WFD96.dat', 'coll': 'o_ii_coll_P06-T07.dat'},
-                             'O3': {'atom': 'o_iii_atom_SZ00-WFD96.dat', 'coll': 'o_iii_coll_AK99.dat'},
-                             'O4': {'atom': 'o_iv_atom_GMZ98.dat', 'coll': 'o_iv_coll_BP92.dat'},
-                             'O5': {'atom': 'o_v_atom_H80-NS79.dat', 'coll': 'o_v_coll_BBDK85.dat'},
-                             'S2': {'atom': 's_ii_atom_PKW09.dat', 'coll': 's_ii_coll_TZ10.dat'},
-                             'S3': {'atom': 's_iii_atom_PKW09.dat', 'coll': 's_iii_coll_TG99.dat'},
-                             'S4': {'atom': 's_iv_atom_JKD86-DHKD82.dat', 'coll': 's_iv_coll_DHKD82.dat'},
-                             'Si2': {'atom': 'si_ii_atom_BL93-CSB93-N77.dat', 'coll': 'si_ii_coll_DK91.dat'},
-                             'Si3': {'atom': 'si_iii_atom_M83-OKH88-FW90-KS86.dat', 'coll': 'si_iii_coll_DK94.dat'},
-                             'Xe3': {'atom': 'xe_iii_atom_BHQZ95.dat', 'coll': 'xe_iii_coll_SB98.dat'},
-                             'Xe4': {'atom': 'xe_iv_atom_BHQZ95.dat', 'coll': 'xe_iv_coll_SB98.dat'},
-                             'Xe6': {'atom': 'xe_vi_atom_BHQZ95.dat', 'coll': 'xe_vi_coll_SB98.dat'},
-                             'Kr3': {'atom': 'kr_iii_atom_BH86.dat', 'coll':'kr_iii_coll_S97.dat'},
-                             'Kr4': {'atom': 'kr_iv_atom_BH86.dat', 'coll': 'kr_iv_coll_S97.dat'},
-                             'Kr5': {'atom': 'kr_v_atom_BH86.dat', 'coll': 'kr_v_coll_S97.dat'},
-                             'Se3': {'atom': 'se_iii_atom_BH86.dat', 'coll': 'se_iii_coll_S97.dat'},
-                             'Se4': {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'},
                              'Br3': {'atom': 'br_iii_atom_BH86.dat', 'coll': 'br_iii_coll_S97.dat'},
                              'Br4': {'atom': 'br_iv_atom_BH86.dat', 'coll': 'br_iv_coll_S97.dat'},
                              'Rb4': {'atom': 'rb_iv_atom_BH86.dat', 'coll': 'rb_iv_coll_S97.dat'},
                              'Rb5': {'atom': 'rb_v_atom_BH86.dat', 'coll': 'rb_v_coll_S97.dat'},
                              'Rb6': {'atom': 'rb_vi_atom_BH86.dat', 'coll': 'rb_vi_coll_S97.dat'}
                              }
-                           } 
 
-_predefinedDataFileDict['PYNEB_16_01'] = _predefinedDataFileDict['PYNEB_14_03']
+_predefinedDataFileDict['PYNEB_14_03']=_predefinedDataFileDict['PYNEB_14_02'].copy()
+_predefinedDataFileDict['PYNEB_14_03']['Fe4'] = {'atom': 'fe_iv_atom_FFRR08.dat', 'coll': 'fe_iv_coll_ZP97.dat'}
+_predefinedDataFileDict['PYNEB_14_03']['Fe5'] = {'atom': 'fe_v_atom_Nal00.dat', 'coll': 'fe_v_coll_BGMcL07.dat'}
+_predefinedDataFileDict['PYNEB_14_03']['Fe6'] = {'atom': 'fe_vi_atom_CP00.dat', 'coll': 'fe_vi_coll_CP99.dat'}
+_predefinedDataFileDict['PYNEB_14_03']['Fe7'] = {'atom': 'fe_vii_atom_WB08.dat', 'coll': 'fe_vii_coll_WB08.dat'}
+_predefinedDataFileDict['PYNEB_14_03']['3He2'] = {'atom': '3he_ii_atom_cloudy.dat', 'coll': '3he_ii_coll_cloudy.dat'}
+_predefinedDataFileDict['PYNEB_14_03']['S3']['coll'] =  's_iii_coll_TG99.dat'
+
+_predefinedDataFileDict['PYNEB_16_01'] = _predefinedDataFileDict['PYNEB_14_03'].copy()
 _predefinedDataFileDict['PYNEB_16_01']['Fe2'] = {'atom': 'fe_ii_atom_B15.dat', 'coll': 'fe_ii_coll_B15.dat'}
+_predefinedDataFileDict['PYNEB_16_01']['P2'] = {'atom': 'p_ii_atom_MZ82.dat', 'coll': 'p_ii_coll_T04.dat'}
+
+
+# Next release, check with JGR:
+# ['Se4'] = {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'}
+# ['Kr6'] = {'atom': 'kr_vi_atom_B05.dat', 'coll': 'kr_vi_coll_B16.dat'}
+# ['Se3']['coll'] = 'se_iii_coll_B16.dat'
+
  
 def airtovac(wave):
     """

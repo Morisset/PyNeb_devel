@@ -373,8 +373,9 @@ class _AtomDataAscii(object):
             for com in comments_tab:
                 key = com.split()[1]
                 self.comments[key] = com.split(key)[1].strip()
+            A = at_data.copy()
             if self.NLevels is not None:
-                at_data = at_data[0:self.NLevels, 2:self.NLevels+2]
+                A = at_data[0:self.NLevels, 2:self.NLevels+2]
             self.NLevels = A.shape[0]
             
             
