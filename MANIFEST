@@ -88,6 +88,8 @@ pyneb/atomic_data/kr_iv_atom_BH86.dat
 pyneb/atomic_data/kr_iv_coll_S97.dat
 pyneb/atomic_data/kr_v_atom_BH86.dat
 pyneb/atomic_data/kr_v_coll_S97.dat
+pyneb/atomic_data/kr_vi_atom_B05.dat
+pyneb/atomic_data/kr_vi_coll_B16.dat
 pyneb/atomic_data/mg_v_atom_GMZ97.dat
 pyneb/atomic_data/mg_v_coll_BZ94.dat
 pyneb/atomic_data/mg_vii_atom_GMZ97.dat
@@ -156,6 +158,8 @@ pyneb/atomic_data/o_iv_coll_AK08.dat
 pyneb/atomic_data/o_iv_coll_BP92.dat
 pyneb/atomic_data/o_v_atom_H80-NS79.dat
 pyneb/atomic_data/o_v_coll_BBDK85.dat
+pyneb/atomic_data/p_ii_atom_MZ82.dat
+pyneb/atomic_data/p_ii_coll_T04.dat
 pyneb/atomic_data/rb_iv_atom_BH86.dat
 pyneb/atomic_data/rb_iv_coll_S97.dat
 pyneb/atomic_data/rb_v_atom_BH86.dat
@@ -178,6 +182,7 @@ pyneb/atomic_data/s_iii_coll_TG99.dat
 pyneb/atomic_data/s_iv_atom_JKD86-DHKD82.dat
 pyneb/atomic_data/s_iv_coll_DHKD82.dat
 pyneb/atomic_data/se_iii_atom_BH86.dat
+pyneb/atomic_data/se_iii_coll_B16.dat
 pyneb/atomic_data/se_iii_coll_S97.dat
 pyneb/atomic_data/se_iv_atom_B05.dat
 pyneb/atomic_data/se_iv_coll_B05.dat
@@ -305,6 +310,7 @@ pyneb/atomic_data/levels/k_xiv_levels.dat
 pyneb/atomic_data/levels/kr_iii_levels.dat
 pyneb/atomic_data/levels/kr_iv_levels.dat
 pyneb/atomic_data/levels/kr_v_levels.dat
+pyneb/atomic_data/levels/kr_vi_levels.dat
 pyneb/atomic_data/levels/mg_ii_levels.dat
 pyneb/atomic_data/levels/mg_iv_levels.dat
 pyneb/atomic_data/levels/mg_ix_levels.dat
@@ -370,6 +376,7 @@ pyneb/atomic_data/levels/o_iv_levels.dat
 pyneb/atomic_data/levels/o_v_levels.dat
 pyneb/atomic_data/levels/o_vi_levels.dat
 pyneb/atomic_data/levels/o_vii_levels.dat
+pyneb/atomic_data/levels/p_ii_levels.dat
 pyneb/atomic_data/levels/p_ix_levels.dat
 pyneb/atomic_data/levels/p_v_levels.dat
 pyneb/atomic_data/levels/p_vii_levels.dat
