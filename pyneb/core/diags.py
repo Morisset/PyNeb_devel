@@ -503,7 +503,11 @@ class Diagnostics(object):
                     else:
                         return corrIntens[i_obs]
                 try:
-                    diag_value = eval(diag[1])#[0]
+                    ee = eval(diag[1])
+                    if len(ee) > 1:
+                        diag_value = ee[0]
+                    else:
+                        diag_value = ee
                 except:
                     diag_value = None
                     self.log_.warn('A line in diagnostic {0} of {1}{2} is missing'.format(diag[1], sym, spec),
