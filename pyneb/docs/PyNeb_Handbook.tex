@@ -10,7 +10,7 @@
 
 
     
-\documentclass[11pt]{article}
+\documentclass{report}
 
     
     
@@ -270,16 +270,19 @@
     \begin{document}
     
     
+    
     \maketitle
     
     
+    \tableofcontents
+
 
     
-    \section{PyNeb's Handbook}
+\chapter{PyNeb's Handbook}\label{pynebs-handbook}
 
-    \subsection{Introduction}
+\section{Introduction}\label{introduction}
 
-    PyNeb is a package for the analysis of emission lines, which evolved
+PyNeb is a package for the analysis of emission lines, which evolved
 from the IRAF package nebular (Shaw and Dufour 1995; Shaw et al 1998).
 It is a library rather than a code: this means that, to use it, one has
 to write a python script or enter an interactive python session to call
@@ -289,7 +292,7 @@ that the name of the code and the tarball are CapitalCase (PyNeb,
 PyNeb-{[}version-number{]}), whereas the module and directories are all
 lowercase (pyneb, pynebcore.py, etc).
 
-    References: Whenever you use PyNeb for calculations that lead to a
+References: Whenever you use PyNeb for calculations that lead to a
 published paper, you are kindly asked to cite the code as:
 
 Luridiana, V., Morisset, C., \& Shaw, R. A. 2015: PyNeb: a new tool for
@@ -299,11 +302,11 @@ results, A\&A, 573, 42
 The paper is accessible at
 http://adsabs.harvard.edu/abs/2015A\%26A\ldots{}573A..42L
 
-    \subsection{Installation}
+\section{Installation}\label{installation}
 
-    \subsubsection{Requirements}
+\subsection{Requirements}\label{requirements}
 
-    To run PyNeb, you must have python v. 2.6 or above installed (but not
+To run PyNeb, you must have python v. 2.6 or above installed (but not
 python v. 3.n, which is a different python branch), plus the matplotlib,
 numpy and scipy libraries. Numpy minimum version is 1.5.1.
 
@@ -313,7 +316,7 @@ numpy and scipy libraries. Numpy minimum version is 1.5.1.
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-1.10.4
+1.11.1
 
     \end{Verbatim}
 
@@ -331,9 +334,10 @@ numpy and scipy libraries. Numpy minimum version is 1.5.1.
 
     \end{Verbatim}
 
-    \subsubsection{Installing the code with pip}
+\subsection{Installing the code with
+pip}\label{installing-the-code-with-pip}
 
-    This is the easiest way to install or upgrade PyNeb. You need to install
+This is the easiest way to install or upgrade PyNeb. You need to install
 pip first: get it from http://pypi.python.org/pypi/pip and install it
 either using:
 
@@ -363,15 +367,17 @@ pip uninstall pyneb
 PyNeb's webpage at www.iac.es/proyecto/PyNeb contains a Troubleshooting
 page to address most frequent installation problems.
 
-    \subsubsection{Installing the code from the tar file}
+\subsection{Installing the code from the tar
+file}\label{installing-the-code-from-the-tar-file}
 
-    Download the PyNeb package from the pypi site
+Download the PyNeb package from the pypi site
 https://pypi.python.org/pypi/PyNeb. Unpack the PyNeb tarball in the
 directory of your choice, enter the directory
 PyNeb-{[}version-number{]}, which is PyNeb's root directory and contains
 the following:
 
 \begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
   setup.py (a file, which is the package installer)
 \item
@@ -393,7 +399,7 @@ interface (e.g., python or ipython) and start using PyNeb by inputting:
 {\color{incolor}In [{\color{incolor}3}]:} \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn} \PY{c+c1}{\PYZsh{} We use the pn alias for PyNeb}
 \end{Verbatim}
 
-    (In the following, we will always assume that the PyNeb package has been
+(In the following, we will always assume that the PyNeb package has been
 imported under the alias ``pn''.)
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -401,22 +407,22 @@ imported under the alias ``pn''.)
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-1.0.20
+1.0.21
 
     \end{Verbatim}
 
-    \subsection{First steps using PyNeb}
+\section{First steps using PyNeb}\label{first-steps-using-pyneb}
 
-    A sketch of the organization of PyNeb can help to understand the role
+A sketch of the organization of PyNeb can help to understand the role
 played by the different classes.
 
-    \begin{figure}[htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics{PN_organisation.jpg}
 \caption{PyNeb organisation}
 \end{figure}
 
-    The main classes are \textbf{Atom}, \textbf{RecAtom}, \textbf{EmisGrid},
+The main classes are \textbf{Atom}, \textbf{RecAtom}, \textbf{EmisGrid},
 \textbf{Observations}, and \textbf{Diagnostics}. Some classes use other
 classes; for example, Atom is used in almost all the other classes. A
 detailed description of each class is given in the following, and the
@@ -428,24 +434,25 @@ to define most of its features, but the scripts written as PyNeb
 wrappers need not be OO; they may follow the more classical functional
 or structured programming style.
 
-    \subsection{How atoms are represented: the Atom and RecAtom classes}
+\section{How atoms are represented: the Atom and RecAtom
+classes}\label{how-atoms-are-represented-the-atom-and-recatom-classes}
 
-    PyNeb distinguishes between atoms emitting collisionally-excited lines
+PyNeb distinguishes between atoms emitting collisionally-excited lines
 (called here ``collisional atoms'') and atoms emitting recombination
 lines (``recombination atoms''). Both are represented as n-level systems
 and share the same basic syntax, but they are encoded in different
 classes and their internal representation is different in either case,
 as detailed in the following sections.
 
-    \subsubsection{The Atom class}
+\subsection{The Atom class}\label{the-atom-class}
 
-    The critical features of the physical atom relevant for our scope are
+The critical features of the physical atom relevant for our scope are
 encapsulated, for the collisional case, in the \textbf{Atom} data
 structure. \textbf{Atom} contains the way atomic data are read and
 managed to compute, for example, line emissivities and to determine
 diagnostics from line ratios, as well as ionic and total abundances.
 
-    Instantiation of the \textbf{Atom} class to create an \textbf{Atom}
+Instantiation of the \textbf{Atom} class to create an \textbf{Atom}
 object is done by specifying an ion:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -453,11 +460,17 @@ object is done by specifying an ion:
         \PY{n}{O3} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Atom}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
 \end{Verbatim}
 
-    This command tells the code to create an O++ ion model (corresponding to
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/core/pynebcore.py:1011: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  self.\_CollArray[lev\_i-1, lev\_j-1, :] = coll\_data[i,2:]
+
+    \end{Verbatim}
+
+This command tells the code to create an O++ ion model (corresponding to
 the {[}O III{]} spectrum, hence the ``3'') by reading the {[}O III{]}
 atomic data.
 
-    You can create (instantiate) as many atoms as you need, or even create
+You can create (instantiate) as many atoms as you need, or even create
 atoms for the same ion using different atomic data. Some basic info on
 an existing Atom object can be retrieved by the print command:
 
@@ -470,7 +483,7 @@ Atom O3 from o\_iii\_atom\_SZ00-WFD96.dat and o\_iii\_coll\_AK99.dat
 
     \end{Verbatim}
 
-    The two *.dat files mentioned contain the atomic data used to fill in
+The two *.dat files mentioned contain the atomic data used to fill in
 the structure of this particular \textbf{Atom} object. The organisation
 of these data files will be explained in the section on atomic data.
 
@@ -501,7 +514,7 @@ example you can display the ion's intrinsic properties:
 {\color{outcolor}Out[{\color{outcolor}9}]:} 'p2'
 \end{Verbatim}
         
-    or the value of the data you are using, such as the energy of the fourth
+or the value of the data you are using, such as the energy of the fourth
 level in eV:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -512,7 +525,7 @@ level in eV:
 {\color{outcolor}Out[{\color{outcolor}10}]:} 2.5135650188001009
 \end{Verbatim}
         
-    The complete inventory of features and methods of the \textbf{Atom}
+The complete inventory of features and methods of the \textbf{Atom}
 class can be displayed by entering:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -524,7 +537,7 @@ class can be displayed by entering:
 
     \end{Verbatim}
 
-    The various methods, which can be either public or private, are
+The various methods, which can be either public or private, are
 described in the PyNeb Reference Manual. Private methods have names
 starting with underscore ``\_'' and are not supposed to be used by
 ``standard'' users.
@@ -554,9 +567,10 @@ getEnergy(self, level=-1, unit='1/Ang') method of pyneb.core.pynebcore.\_AtomDat
 
     \end{Verbatim}
 
-    \subsubsection{Print and plot atomic properties}
+\subsection{Print and plot atomic
+properties}\label{print-and-plot-atomic-properties}
 
-    The \textbf{printIonic} method displays informations on the atom's
+The \textbf{printIonic} method displays informations on the atom's
 transitions:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -592,7 +606,7 @@ warng Atom O3: Cannot print critical densities as tem is missing
 
     \end{Verbatim}
 
-    Some arguments can be passed to the method to obtain more information:
+Some arguments can be passed to the method to obtain more information:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}14}]:} \PY{n}{O3}\PY{o}{.}\PY{n}{printIonic}\PY{p}{(}\PY{n}{tem}\PY{o}{=}\PY{l+m+mf}{10000.}\PY{p}{,} \PY{n}{den}\PY{o}{=}\PY{l+m+mf}{1e3}\PY{p}{,} \PY{n}{printA}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{printPop}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{printCrit}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
@@ -642,7 +656,7 @@ Level 6:  2.407E-12  3.991E+10
 
     \end{Verbatim}
 
-    Each block describes a transition: the transition probability (in s-1;
+Each block describes a transition: the transition probability (in s-1;
 first row), the wavelength of the corresponding emission line (in
 Angstrom or microns; second row), the two atomic levels (third row), and
 the emissivity of the line (fourth row).
@@ -661,10 +675,10 @@ You can plot the line emissivities using the following command:
     \end{center}
     { \hspace*{\fill} \\}
     
-    You can use then take advantage of matplotlib's plotting tools to zoom,
+You can use then take advantage of matplotlib's plotting tools to zoom,
 crop, or move the figure as you need.
 
-    A Grotrian diagram of the ion (i.e., a plot of the energy levels and
+A Grotrian diagram of the ion (i.e., a plot of the energy levels and
 transition wavelengths) can be obtained using:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -672,15 +686,21 @@ transition wavelengths) can be obtained using:
          \PY{n}{O3}\PY{o}{.}\PY{n}{plotGrotrian}\PY{p}{(}\PY{n}{tem}\PY{o}{=}\PY{l+m+mf}{1e4}\PY{p}{,} \PY{n}{den}\PY{o}{=}\PY{l+m+mf}{1e2}\PY{p}{,} \PY{n}{thresh\PYZus{}int}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{,} \PY{n}{unit} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{eV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
 \end{Verbatim}
 
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:190: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  a = empty(shape, dtype, order)
+
+    \end{Verbatim}
+
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_48_0.pdf}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_48_1.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    The diagram can be tailored in various ways, zoomed in or saved into a
+The diagram can be tailored in various ways, zoomed in or saved into a
 file.
 
-    Atomic data are accessible using the following commands:
+Atomic data are accessible using the following commands:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}17}]:} \PY{n}{O3}\PY{o}{.}\PY{n}{getA}\PY{p}{(}\PY{p}{)}
@@ -748,9 +768,10 @@ getOmega(self, tem, lev\_i=-1, lev\_j=-1, wave=-1) method of pyneb.core.pynebcor
 
     \end{Verbatim}
 
-    \subsubsection{Using Atom to compute populations and emissivities}
+\subsection{Using Atom to compute populations and
+emissivities}\label{using-atom-to-compute-populations-and-emissivities}
 
-    The \textbf{Atom} class is equipped with method which give access to the
+The \textbf{Atom} class is equipped with method which give access to the
 populations, emissivities, and other atomic quantities:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -803,7 +824,7 @@ populations, emissivities, and other atomic quantities:
 {\color{outcolor}Out[{\color{outcolor}26}]:} 1.0943418702999062e-05
 \end{Verbatim}
         
-    Wavelengths should be entered with enough precision to avoid confusion
+Wavelengths should be entered with enough precision to avoid confusion
 with nearby lines. Use \textbf{printTransition} to check if the
 transition selected by the code actually correponds to the one you
 intended:
@@ -820,11 +841,11 @@ Transition: 4 -> 3
 
     \end{Verbatim}
 
-    \textbf{getTransition} is an abridged version which only returns the
+\textbf{getTransition} is an abridged version which only returns the
 tuple of levels rather than an extended output, and is therefore apt to
 be used in scripts.
 
-    In addition to the wavelength, a transition can also be specified
+In addition to the wavelength, a transition can also be specified
 through its defining levels, as in:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -835,7 +856,7 @@ through its defining levels, as in:
 {\color{outcolor}Out[{\color{outcolor}28}]:} 1.0943418702999062e-05
 \end{Verbatim}
         
-    In the case of \textbf{getEmissivity}, tem and den can be arrays. In
+In the case of \textbf{getEmissivity}, tem and den can be arrays. In
 such a case, if they have different dimensions N and M, the function
 will return an array of NxM emissivities corresponding to all tem-den
 combinations; if both arrays have the same dimension, you can obtain the
@@ -860,9 +881,10 @@ element by element. This is controlled by the ``product'' parameter:
 {\color{outcolor}Out[{\color{outcolor}30}]:} array([  1.14345463e-21,   1.75668558e-21])
 \end{Verbatim}
         
-    \subsubsection{Physical conditions determined from line ratios}
+\subsection{Physical conditions determined from line
+ratios}\label{physical-conditions-determined-from-line-ratios}
 
-    The \textbf{Atom} object also contains a method to compute the electron
+The \textbf{Atom} object also contains a method to compute the electron
 temperature or density given a line ratio:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -873,14 +895,15 @@ temperature or density given a line ratio:
 {\color{outcolor}Out[{\color{outcolor}31}]:} 10029.228788926666
 \end{Verbatim}
         
-    The keyword tem (or den) specifies the supplied value of the temperature
+The keyword tem (or den) specifies the supplied value of the temperature
 (or density). Which quantity is computed (temperature or density) is
 determined by which quantity is provided to the method: if ``den'' is
 given, then ``tem'' is computed, and vice versa.
 
 If the intensity ratio is a simple ratio of two transitions, you can:
 
-    \begin{itemize}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
   either give the wavelengths of the two transitions involved:
 \end{itemize}
@@ -893,7 +916,8 @@ If the intensity ratio is a simple ratio of two transitions, you can:
 {\color{outcolor}Out[{\color{outcolor}32}]:} 14876.907035306589
 \end{Verbatim}
         
-    \begin{itemize}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
   or give the four levels that define the two transitions, in the
   following order: (upper level of numerator) (lower level of numerator)
@@ -908,7 +932,7 @@ If the intensity ratio is a simple ratio of two transitions, you can:
 {\color{outcolor}Out[{\color{outcolor}33}]:} 14876.907035306589
 \end{Verbatim}
         
-    In the general case of an intensity ratio formed by any number of
+In the general case of an intensity ratio formed by any number of
 transitions, an algebraic expression must be supplied as the argument of
 the keyword \textbf{to\_eval}:
 
@@ -929,7 +953,7 @@ the keyword \textbf{to\_eval}:
 {\color{outcolor}Out[{\color{outcolor}35}]:} 8314.4744402712549
 \end{Verbatim}
         
-    The \textbf{to\_eval} argument accepts either I(i, j) or L(wavelength)
+The \textbf{to\_eval} argument accepts either I(i, j) or L(wavelength)
 to identify the transitions involved in the diagnostic. Both can be
 mixed in the same string. If you do not know what transition corresponds
 to a given wavelength, use \textbf{printTransition} to find it.
@@ -957,14 +981,15 @@ details.
 {\color{outcolor}Out[{\color{outcolor}37}]:} array([ 17133.86515419,  26976.0393771 ])
 \end{Verbatim}
         
-    Notice that if you want to simultaneously determine both temperature and
+Notice that if you want to simultaneously determine both temperature and
 density combining two diagnostics (from two different atoms), you need
 to use the \textbf{getCrossTemDen} method of the \textbf{Diagnostic}
 class
 
-    \subsubsection{Ionic abundance determination}
+\subsection{Ionic abundance
+determination}\label{ionic-abundance-determination}
 
-    The ionic abundance is obtained from the intensity of a line normalized
+The ionic abundance is obtained from the intensity of a line normalized
 to Hbeta=100.
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -975,9 +1000,10 @@ to Hbeta=100.
 {\color{outcolor}Out[{\color{outcolor}38}]:} 1.0943418702999062e-05
 \end{Verbatim}
         
-    \subsubsection{Creating a dictionary of Atom objects}
+\subsection{Creating a dictionary of Atom
+objects}\label{creating-a-dictionary-of-atom-objects}
 
-    You can define all the atoms at once and put them in a dictionary by
+You can define all the atoms at once and put them in a dictionary by
 creating each atom at a time through the commands:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -986,7 +1012,7 @@ creating each atom at a time through the commands:
          \PY{n}{N2} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Atom}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
-    or rather use one of the following shortcuts:
+or rather use one of the following shortcuts:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}40}]:} \PY{n}{atoms} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{getAtomDict}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} a method always requires parenthesis, even without argument}
@@ -1059,7 +1085,7 @@ creating each atom at a time through the commands:
           'Xe6': Atom Xe6 from xe\_vi\_atom\_BHQZ95.dat and xe\_vi\_coll\_SB98.dat\}
 \end{Verbatim}
         
-    It is also possible to select only a subset of the elements or ions
+It is also possible to select only a subset of the elements or ions
 available by specifying the arguments \textbf{elem\_list} or
 \textbf{atom\_list}:
 
@@ -1122,9 +1148,9 @@ warng \_ManageAtomicData: data for O7 not available
           'O3': Atom O3 from o\_iii\_atom\_SZ00-WFD96.dat and o\_iii\_coll\_AK99.dat\}
 \end{Verbatim}
         
-    In all these cases, a dictionary is created whose keys are the
-conventional atom names $<$element$><$spectrum$>$, and the corresponding
-entries the atoms themselves; e. g.:
+In all these cases, a dictionary is created whose keys are the
+conventional atom names \(<\)element\(><\)spectrum\(>\), and the
+corresponding entries the atoms themselves; e. g.:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}46}]:} \PY{n}{atoms}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
@@ -1142,7 +1168,7 @@ entries the atoms themselves; e. g.:
 {\color{outcolor}Out[{\color{outcolor}47}]:} array(5.948363882838976e-21)
 \end{Verbatim}
         
-    This can be useful if you need to loop on a list of atoms, to plot
+This can be useful if you need to loop on a list of atoms, to plot
 atomic data for example. To see what atoms have been created (which is
 limited by the data included in the selected atomic data set), enter:
 
@@ -1154,7 +1180,7 @@ limited by the data included in the selected atomic data set), enter:
 {\color{outcolor}Out[{\color{outcolor}48}]:} ['N2', 'Ar3', 'O3', 'O2']
 \end{Verbatim}
         
-    If you want to be able to access them directly rather than through a
+If you want to be able to access them directly rather than through a
 dictionary, input from the command line:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1162,7 +1188,7 @@ dictionary, input from the command line:
              \PY{n+nb}{vars}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{o}{=}\PY{n}{atoms}\PY{p}{[}\PY{n}{key}\PY{p}{]}
 \end{Verbatim}
 
-    and then you will be able to do the following:
+and then you will be able to do the following:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}50}]:} \PY{n}{Ar3}\PY{o}{.}\PY{n}{elem}
@@ -1172,17 +1198,19 @@ dictionary, input from the command line:
 {\color{outcolor}Out[{\color{outcolor}50}]:} 'Ar'
 \end{Verbatim}
         
-    \subsection{The atomic data}
+\section{The atomic data}\label{the-atomic-data}
 
-    \subsubsection{Changing the data files used for atomic data}
+\subsection{Changing the data files used for atomic
+data}\label{changing-the-data-files-used-for-atomic-data}
 
-    Since, for a given ion, there can be different calculations of atomic
+Since, for a given ion, there can be different calculations of atomic
 data with slightly (or not so slightly!) different results, more than
 one version of the data can exist for a given ion. The data are stored
 in and read from different types of files depending on the mechanism of
 line formation:
 
-    \begin{itemize}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
   In the case of recombination data, a single xxx\_rec\_XYZ.fits file
   contains the line emissivities, in a 2D temperature-density dependent
@@ -1192,6 +1220,7 @@ line formation:
   different way depending on the file format:
 
   \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
   \item
     The only data format admitted was, originally, fits (extension:
     .fits). Fits atomic data for a given ion are organized in two files
@@ -1199,6 +1228,7 @@ line formation:
     XYZ is the acronym of the source paper(s)):
 
     \begin{itemize}
+    \itemsep1pt\parskip0pt\parsep0pt
     \item
       the xxx\_atom\_XYZ.fits file, containing the energies, the
       statistical weights and the transitions probabilities (the
@@ -1212,6 +1242,7 @@ line formation:
     ascii tables (extension .dat), which are organized as follows:
 
     \begin{itemize}
+    \itemsep1pt\parskip0pt\parsep0pt
     \item
       xxx\_levels.dat contain the energy levels and statistical weights.
       These file are downloaded from NIST and the source papers are
@@ -1226,20 +1257,20 @@ line formation:
   \end{itemize}
 \end{itemize}
 
-    Each of these file contains information for a finite number of levels N.
+Each of these file contains information for a finite number of levels N.
 Specifically, the energy levels and the statistical weights are arrays
 with N elements (one value per level), while the transition probability
 tables are triangular N*N matrices with zeros on the main diagonal
 (transition probabilities are different from zero only for (j
 -\textgreater{} i) transitions with j \textgreater{} i).
 
-    This number is a feature of the particular atomic calculation, not an
+This number is a feature of the particular atomic calculation, not an
 intrinsic feature of the physical atom, so that an Atom object created
 within PyNeb will have a number of levels NLevels equal to the number of
 levels of all the data used (or the minimum of them if either of the
 atom, coll or levels is different).
 
-    You can access the NIST raw data by:
+You can access the NIST raw data by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}51}]:} \PY{n}{O3} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Atom}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
@@ -1256,7 +1287,7 @@ atom, coll or levels is different).
                dtype=[('conf', 'S23'), ('term', 'S9'), ('J', '<f8'), ('energy', '<f8'), ('ref', 'S10')])
 \end{Verbatim}
         
-    You can access the full raw NIST data set by:
+You can access the full raw NIST data set by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}52}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{manage\PYZus{}atomic\PYZus{}data}\PY{o}{.}\PY{n}{getLevelsNIST}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{}O2 is lighter than O3...}
@@ -1329,7 +1360,7 @@ atom, coll or levels is different).
                dtype=[('conf', 'S23'), ('term', 'S9'), ('J', '<f8'), ('energy', '<f8'), ('ref', 'S10')])
 \end{Verbatim}
         
-    You can print the name of the atomic data used for a given ion with:
+You can print the name of the atomic data used for a given ion with:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}53}]:} \PY{k}{print}\PY{p}{(}\PY{n}{O3}\PY{o}{.}\PY{n}{atomFile}\PY{p}{)}
@@ -1349,7 +1380,7 @@ o\_iii\_coll\_AK99.dat
 
     \end{Verbatim}
 
-    As the files can be located in different directories, you may also find
+As the files can be located in different directories, you may also find
 useful to print out the path:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1358,12 +1389,12 @@ useful to print out the path:
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-/home/morisset/anaconda2/lib/python2.7/site-packages/pyneb/utils/../atomic\_data/
-/home/morisset/anaconda2/lib/python2.7/site-packages/pyneb/utils/../atomic\_data/
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/../atomic\_data/
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/../atomic\_data/
 
     \end{Verbatim}
 
-    A set of data files for a given group of ions is called a data set. The
+A set of data files for a given group of ions is called a data set. The
 default data set (or the adopted data set, if a different one has been
 set) can be displayed with the command:
 
@@ -1443,7 +1474,7 @@ set) can be displayed with the command:
           'Xe6': \{'atom': 'xe\_vi\_atom\_BHQZ95.dat', 'coll': 'xe\_vi\_coll\_SB98.dat'\}\}
 \end{Verbatim}
         
-    while the data files set for a particular ion can be displayed by
+while the data files set for a particular ion can be displayed by
 providing an argument to the above; e.g.~for {[}SIV{]}:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1460,7 +1491,7 @@ warng \_ManageAtomicData: trc data not available for S4
 {\color{outcolor}Out[{\color{outcolor}57}]:} ('s\_iv\_atom\_JKD86-DHKD82.dat', 's\_iv\_coll\_DHKD82.dat', None, None)
 \end{Verbatim}
         
-    The complete inventory of data available for a given ion can be
+The complete inventory of data available for a given ion can be
 displayed with the command:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1480,7 +1511,7 @@ displayed with the command:
           'o\_ii\_coll\_T07.dat']
 \end{Verbatim}
         
-    This method looks for all the ``o\_ii\_*'' files in a set of paths which
+This method looks for all the ``o\_ii\_*'' files in a set of paths which
 includes the location of the atomic data provided with the package and
 the current directory (the one from where the python session is
 running); additional paths can be added with the following command:
@@ -1489,7 +1520,7 @@ running); additional paths can be added with the following command:
 {\color{incolor}In [{\color{incolor}59}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{addDataFilePath}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/tmp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
-    When both a .dat and a .fits version of the same data are found, the
+When both a .dat and a .fits version of the same data are found, the
 .fits files are ignored, but you can force PyNeb to include them by
 running the command:
 
@@ -1497,14 +1528,14 @@ running the command:
 {\color{incolor}In [{\color{incolor}60}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{includeFitsPath}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-    If you want to change the atomic data used for a given ion, use the
+If you want to change the atomic data used for a given ion, use the
 following command to point to an existing data file:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}61}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{setDataFile}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s\PYZus{}iii\PYZus{}coll\PYZus{}HRS12.fits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
-    If you want to change several data files at once, it may be worth
+If you want to change several data files at once, it may be worth
 defining a dictionary with all your preferred atomic data files within
 your script:
 
@@ -1517,12 +1548,13 @@ your script:
          \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{setDataFileDict}\PY{p}{(}\PY{n}{DataFileDict}\PY{p}{)}
 \end{Verbatim}
 
-    Make sure that all the files listed actually exist, as this is not
+Make sure that all the files listed actually exist, as this is not
 checked by the code.
 
-    \subsubsection{Predefined sets of atomic data}
+\subsection{Predefined sets of atomic
+data}\label{predefined-sets-of-atomic-data}
 
-    Predefined atomic data sets are provided by PyNeb. Each data set is
+Predefined atomic data sets are provided by PyNeb. Each data set is
 identified by a label; the one of the default data set can be retrieved
 by the following command:
 
@@ -1534,7 +1566,7 @@ by the following command:
 {\color{outcolor}Out[{\color{outcolor}63}]:} 'PYNEB\_14\_03'
 \end{Verbatim}
         
-    To display the complete list of the existing predefined dictionaries,
+To display the complete list of the existing predefined dictionaries,
 enter:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1551,29 +1583,30 @@ enter:
           'IRAF\_09\_orig']
 \end{Verbatim}
         
-    The following command can be used to set one of them:
+The following command can be used to set one of them:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}65}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{setDataFileDict}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{IRAF\PYZus{}09}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
-    To revert to the default set:
+To revert to the default set:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}66}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{resetDataFileDict}\PY{p}{(}\PY{p}{)}
          \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{removeFitsPath}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-    You can have a look at the other methods of pn.atomicData in the
+You can have a look at the other methods of pn.atomicData in the
 Reference Manual, or using the \textbf{help} command.
 
-    \subsubsection{Creating new atomic data files}
+\subsection{Creating new atomic data
+files}\label{creating-new-atomic-data-files}
 
-    The following is an example of a 6-level atom file of {[}O III{]},
+The following is an example of a 6-level atom file of {[}O III{]},
 containing the matrix of transition probabilities. The energy levels and
 statistical weigths are not in this file.
 
-    Aij\\1/s 1/s 1/s 1/s 1/s 1/s\\0.0000000e+00 0.0000000e+00 0.0000000e+00
+Aij\\1/s 1/s 1/s 1/s 1/s 1/s\\0.0000000e+00 0.0000000e+00 0.0000000e+00
 0.0000000e+00 0.0000000e+00 0.0000000e+00\\2.5960000e-05 0.0000000e+00
 0.0000000e+00 0.0000000e+00 0.0000000e+00 0.0000000e+00\\3.0300000e-11
 9.6320000e-05 0.0000000e+00 0.0000000e+00 0.0000000e+00
@@ -1584,7 +1617,7 @@ statistical weigths are not in this file.
 oxygen\\*** SPECTRUM 3\\*** GSCONFIG unknown\\*** SOURCE3 Froese Fischer
 et al 2004, ADNDT 87, 1\\*** NOTE3 A-values from all levels
 
-    The effective collision strengths are a function of electron temperature
+The effective collision strengths are a function of electron temperature
 (a collective property of the electron distribution) and are obtained as
 the average over a Maxwellian distribution of the collision strengths,
 which depend on the energy. (Note: in this document, we will often refer
@@ -1598,7 +1631,7 @@ The existence of this 3rd dimension prevents the data from being simply
 stored in a matrix as transition probabilities are. Instead, each
 transition is presented in a line, as in the following example:
 
-    *** OIII collision strengths data\\0 0 3.699e+00 4.000e+00 4.301e+00
+*** OIII collision strengths data\\0 0 3.699e+00 4.000e+00 4.301e+00
 4.477e+00\\1 2 5.240e-01 5.648e-01 6.007e-01 6.116e-01\\1 3 2.469e-01
 2.766e-01 3.106e-01 3.264e-01\\1 4 2.347e-01 2.693e-01 3.094e-01
 3.256e-01\\1 5 4.094e-02 4.069e-02 4.299e-02 4.424e-02\\1 6 1.130e-01
@@ -1615,7 +1648,7 @@ L35\\*** NOTE1 All collision strengths from levels up to 5\\*** SOURCE2
 Aggarwal and Keenan 1999, ApJS 123, 311\\*** NOTE2 Collision strengths
 of 6-1, 6-2, 6-3
 
-    The first row of the data block (0 0 \ldots{}) contains, from the third
+The first row of the data block (0 0 \ldots{}) contains, from the third
 element on, the array of electron temperatures for which the collision
 strengths are tabulated (in log10(K) or K/10000, depending on the
 particular data set).
@@ -1651,16 +1684,16 @@ O3: All collision strengths: Aggarwal and Keenan 1999, ApJS 123, 311
 
     \end{Verbatim}
 
-    \subsubsection{Plotting atomic data}
+\subsection{Plotting atomic data}\label{plotting-atomic-data}
 
-    The atomic data available can be plotted using the methods of the
+The atomic data available can be plotted using the methods of the
 \textbf{DataPlot} class. The class must be instantiated by specifying
 which data sets are to be plotted. The available methods are
 \textbf{plotA}, \textbf{plotRelA} and \textbf{plotAllA} to plot
 transition probabilities, and \textbf{plotOmega} to plot collision
 strengths.
 
-    You must first create an instantiation of DataPlot for a given atom,
+You must first create an instantiation of DataPlot for a given atom,
 e.g.:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1671,12 +1704,32 @@ e.g.:
     \begin{Verbatim}[commandchars=\\\{\}]
 warng \_ManageAtomicData: rec data not available for O3
 warng \_ManageAtomicData: trc data not available for O3
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:165: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  ttype=Splups["ttype"][isplups]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:166: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  cups=Splups["cups"][isplups]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:168: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  nspl=Splups["ntemp"][isplups]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:170: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  xs = Splups['btemp'][isplups]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:171: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  splups=Splups["bscups"][isplups]
+/Users/christophemorisset/anaconda/lib/python2.7/site-packages/pyneb/utils/pn\_chianti.py:177: VisibleDeprecationWarning: converting an array with ndim > 0 to an index will result in an error in the future
+  de=Splups['de'][isplups]
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
 warng \_ManageAtomicData: rec data not available for S3
 warng \_ManageAtomicData: trc data not available for S3
 
     \end{Verbatim}
 
-    Then you can plot the different As and Omegas~:
+Then you can plot the different As and Omegas~:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}69}]:} \PY{n}{dp\PYZus{}S3}\PY{o}{.}\PY{n}{plotA}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} transition probabilities plot}
@@ -1729,9 +1782,10 @@ warng DataPlot.plotA: Problem in plotting A
     \end{center}
     { \hspace*{\fill} \\}
     
-    \subsubsection{Recombination lines: the RecAtom class}
+\subsection{Recombination lines: the RecAtom
+class}\label{recombination-lines-the-recatom-class}
 
-    This object is similar to \textbf{Atom}, but some methods differ due to
+This object is similar to \textbf{Atom}, but some methods differ due to
 the particularities of the recombination spectrum. It is instantiated
 with the following command:
 
@@ -1739,7 +1793,7 @@ with the following command:
 {\color{incolor}In [{\color{incolor}73}]:} \PY{n}{H1} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RecAtom}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
 \end{Verbatim}
 
-    The data are read from a fits file and interpolated in temperature and
+The data are read from a fits file and interpolated in temperature and
 density. The name of the file is retrievable through:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1750,7 +1804,7 @@ density. The name of the file is retrievable through:
 {\color{outcolor}Out[{\color{outcolor}74}]:} 'h\_i\_rec\_SH95.fits'
 \end{Verbatim}
         
-    The ions for which recombination lines are available are listed with the
+The ions for which recombination lines are available are listed with the
 command:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1761,7 +1815,7 @@ command:
 {\color{outcolor}Out[{\color{outcolor}75}]:} ['He1', 'He2', 'H1']
 \end{Verbatim}
         
-    You can list all the available data files for a given ion by:
+You can list all the available data files for a given ion by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}76}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{atomicData}\PY{o}{.}\PY{n}{getAllAvailableFiles}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{H1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -1776,7 +1830,7 @@ command:
           'h\_i\_trc\_SH95-caseB.dat']
 \end{Verbatim}
         
-    The emissivities are obtained by, e.g.:
+The emissivities are obtained by, e.g.:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}77}]:} \PY{n}{Hbeta} \PY{o}{=} \PY{n}{H1}\PY{o}{.}\PY{n}{getEmissivity}\PY{p}{(}\PY{n}{tem}\PY{o}{=}\PY{l+m+mf}{1e4}\PY{p}{,} \PY{n}{den}\PY{o}{=}\PY{l+m+mf}{1e3}\PY{p}{,} \PY{n}{lev\PYZus{}i}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{lev\PYZus{}j}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
@@ -1789,7 +1843,7 @@ command:
 
     \end{Verbatim}
 
-    The argument used to identify the various lines in the data file depend
+The argument used to identify the various lines in the data file depend
 on whether the atom is a hydrogenoid or not. In the first case, the
 transition can be specified either as a pair of levels \textbf{lev\_i},
 \textbf{lev\_j}, or as a label (labels are descriptive of level pairs):
@@ -1814,7 +1868,7 @@ transition can be specified either as a pair of levels \textbf{lev\_i},
 
     \end{Verbatim}
 
-    As in the case of collisional lines, setting \textbf{product=False}
+As in the case of collisional lines, setting \textbf{product=False}
 modifies the input array of temperature and density values:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1826,7 +1880,7 @@ modifies the input array of temperature and density values:
 
     \end{Verbatim}
 
-    In the case of non-hydrogenoids, the transition can be specified either
+In the case of non-hydrogenoids, the transition can be specified either
 as a wavelength or as a label (labels are descriptive of wavelengths):
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1841,8 +1895,8 @@ as a wavelength or as a label (labels are descriptive of wavelengths):
 
     \end{Verbatim}
 
-    Enter \textbf{$<$Atom.labels$>$} to display the valid labels for both
-kind of recombiation atoms, i.e.:
+Enter \textbf{\(<\)Atom.labels\(>\)} to display the valid labels for
+both kind of recombiation atoms, i.e.:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}82}]:} \PY{n}{H1}\PY{o}{.}\PY{n}{labels}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
@@ -1852,7 +1906,7 @@ kind of recombiation atoms, i.e.:
 {\color{outcolor}Out[{\color{outcolor}82}]:} ['2\_1', '3\_1', '3\_2', '4\_1', '4\_2', '4\_3', '5\_1', '5\_2', '5\_3', '5\_4']
 \end{Verbatim}
         
-    As an example application, you can easily generate a 2D table of H
+As an example application, you can easily generate a 2D table of H
 alpha/ H Beta as a function of Te and Ne:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1871,7 +1925,7 @@ alpha/ H Beta as a function of Te and Ne:
 
     \end{Verbatim}
 
-    By default, H1 emissivities are computed under case B; to compute Case A
+By default, H1 emissivities are computed under case B; to compute Case A
 emissivities, the atomic data file must be changed:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -1905,7 +1959,7 @@ emissivities, the atomic data file must be changed:
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}88}]:} <matplotlib.colorbar.Colorbar at 0x7fd89bdbcc10>
+{\color{outcolor}Out[{\color{outcolor}88}]:} <matplotlib.colorbar.Colorbar at 0x11356f410>
 \end{Verbatim}
         
     \begin{center}
@@ -1913,13 +1967,15 @@ emissivities, the atomic data file must be changed:
     \end{center}
     { \hspace*{\fill} \\}
     
-    \subsection{The extinction class: RedCorr()}
+\section{The extinction class:
+RedCorr()}\label{the-extinction-class-redcorr}
 
-    The class RedCorr manages the extinction (reddening) correction. It can
-compute the logarithmic extinction at H$\beta$ by comparing an observed
-ratio to a theoretical one (usually H$\alpha$/H$\beta$, but any other
-ratio can be used). The object is also able to compute the correction to
-be applied to any intensity, given the wavelength of the line.
+The class RedCorr manages the extinction (reddening) correction. It can
+compute the logarithmic extinction at H\(\beta\) by comparing an
+observed ratio to a theoretical one (usually H\(\alpha\)/H\(\beta\), but
+any other ratio can be used). The object is also able to compute the
+correction to be applied to any intensity, given the wavelength of the
+line.
 
 Various extinction laws are included in the class, and any user-defined
 function can also be implemented. The available extinction laws can be
@@ -2113,7 +2169,7 @@ listed by entering (here no need to instantiate an object):
 
     \end{Verbatim}
 
-    Less detailed output is obtained with:
+Less detailed output is obtained with:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}90}]:} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{getLaws}\PY{p}{(}\PY{p}{)}
@@ -2134,13 +2190,13 @@ listed by entering (here no need to instantiate an object):
           'CCM89']
 \end{Verbatim}
         
-    To apply an extinction correction, you have to define a RedCorr object:
+To apply an extinction correction, you have to define a RedCorr object:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}91}]:} \PY{n}{rc} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{n}{E\PYZus{}BV} \PY{o}{=} \PY{l+m+mf}{1.2}\PY{p}{,} \PY{n}{R\PYZus{}V} \PY{o}{=} \PY{l+m+mf}{3.2}\PY{p}{,} \PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F99}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
-    The parameters can also be defined after the instantiation:
+The parameters can also be defined after the instantiation:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}92}]:} \PY{n}{rc} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{p}{)} 
@@ -2148,12 +2204,12 @@ listed by entering (here no need to instantiate an object):
          \PY{n}{rc}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S79 H83 CCM89}\PY{l+s+s1}{\PYZsq{}}
 \end{Verbatim}
 
-    $c(H\beta)$ and $E_{B-V}$ are related through:
+\(c(H\beta)\) and \(E_{B-V}\) are related through:
 
-\[(1-f_\lambda).c(H\beta) = 0.4 E_{B-V} X_\lambda\] applied to $\lambda$
-= 4861, with $f_\beta$ = 0.:
+\[(1-f_\lambda).c(H\beta) = 0.4 E_{B-V} X_\lambda\] applied to
+\(\lambda\) = 4861, with \(f_\beta\) = 0.:
 
-    so that, once one of the two parameters is defined, the other is also
+so that, once one of the two parameters is defined, the other is also
 automatically defined; to output its value, enter:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2164,7 +2220,7 @@ automatically defined; to output its value, enter:
 {\color{outcolor}Out[{\color{outcolor}93}]:} 1.9457101047071228
 \end{Verbatim}
         
-    The reddening of a given spectrum is determined by using the ratio of
+The reddening of a given spectrum is determined by using the ratio of
 two observed line intensities relative to the theoretical value, for
 example:
 
@@ -2172,7 +2228,7 @@ example:
 {\color{incolor}In [{\color{incolor}94}]:} \PY{n}{rc}\PY{o}{.}\PY{n}{setCorr}\PY{p}{(}\PY{l+m+mf}{6.5} \PY{o}{/} \PY{l+m+mf}{2.86}\PY{p}{,} \PY{l+m+mf}{6563.}\PY{p}{,} \PY{l+m+mf}{4861.}\PY{p}{)}
 \end{Verbatim}
 
-    Once a law and either c(H$\beta$) or E$_{B-V}$ are defined, the
+Once a law and either c(H\(\beta\)) or E\(_{B-V}\) are defined, the
 correction for any wavelength is obtained by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2186,10 +2242,10 @@ correction for any wavelength is obtained by:
 
     \end{Verbatim}
 
-    where \textbf{wave} can either be a single wavelength or a list or array
+where \textbf{wave} can either be a single wavelength or a list or array
 of wavelengths.
 
-    The correction relative to the H$\beta$ correction is given by:
+The correction relative to the H\(\beta\) correction is given by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}96}]:} \PY{n}{corr} \PY{o}{=} \PY{n}{rc}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave}\PY{p}{)}
@@ -2201,8 +2257,8 @@ of wavelengths.
 
     \end{Verbatim}
 
-    and the correction relative to any other wavelength (p.~ej., H$\alpha$)
-is given by:
+and the correction relative to any other wavelength (p.~ej.,
+H\(\alpha\)) is given by:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}97}]:} \PY{n}{corr} \PY{o}{=} \PY{n}{rc}\PY{o}{.}\PY{n}{getCorr}\PY{p}{(}\PY{l+m+mf}{5007.}\PY{p}{,} \PY{l+m+mf}{6563.}\PY{p}{)}
@@ -2214,7 +2270,7 @@ is given by:
 
     \end{Verbatim}
 
-    The class includes a plotting tool to have a quick look at the different
+The class includes a plotting tool to have a quick look at the different
 extinction laws:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2227,14 +2283,14 @@ extinction laws:
     \end{center}
     { \hspace*{\fill} \\}
     
-    A user-defined method can also be used. User-defined methods must accept
+A user-defined method can also be used. User-defined methods must accept
 2 parameters: the first is the wavelength (or wavelength array), in
 Angstrom, and the second is an optional parameter (which can also be a
 list). The method must return
-$X(\lambda) = A(\lambda)/E_{B-V} = R_V A(\lambda)/A_V$. The correction
-is then: $10^{0.4 E_{B-V} X(\lambda)}$
+\(X(\lambda) = A(\lambda)/E_{B-V} = R_V A(\lambda)/A_V\). The correction
+is then: \(10^{0.4 E_{B-V} X(\lambda)}\)
 
-    Here is an example of a user-defined function:
+Here is an example of a user-defined function:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}99}]:} \PY{k}{def} \PY{n+nf}{my\PYZus{}X}\PY{p}{(}\PY{n}{wave}\PY{p}{,} \PY{n}{params} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{5000.}\PY{p}{,} \PY{l+m+mf}{1.}\PY{p}{,} \PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mf}{3.}\PY{p}{]}\PY{p}{)}\PY{p}{:}
@@ -2250,9 +2306,9 @@ is then: $10^{0.4 E_{B-V} X(\lambda)}$
 
     \end{Verbatim}
 
-    \subsection{The EmissionLine class}
+\section{The EmissionLine class}\label{the-emissionline-class}
 
-    This is the class characterizing emission lines. An emission line is
+This is the class characterizing emission lines. An emission line is
 identified by an element and a spectrum (which identify the emitting
 ion), a wavelength in Angstrom, a blend flag, a label in the standard
 PyNeb format, an observed intensity, a reddening-corrected intensity, an
@@ -2260,14 +2316,14 @@ expression describing how the intensity depends on the included
 wavelengths, an observational error and an error on the corrected
 intensity. Other programs determine one or more of these values.
 
-    To instantiate an Emission Line object, use the following:
+To instantiate an Emission Line object, use the following:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}100}]:} \PY{n}{line} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{EmissionLine}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{5007}\PY{p}{,} \PY{n}{obsIntens}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{1.4}\PY{p}{,} \PY{l+m+mf}{1.3}\PY{p}{]}\PY{p}{)}
           \PY{n}{line2} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{EmissionLine}\PY{p}{(}\PY{n}{label} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O3\PYZus{}5007A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{obsIntens}\PY{o}{=}\PY{l+m+mi}{320}\PY{p}{,} \PY{n}{corrected}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
 \end{Verbatim}
 
-    obsIntens is a value, a list or a numpy array of values corresponding to
+obsIntens is a value, a list or a numpy array of values corresponding to
 the observed intensity of the given emission line.
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2279,7 +2335,7 @@ Line O3 O3\_5007A
 
     \end{Verbatim}
 
-    To know how the label of a given line is exactly spelled, you can print
+To know how the label of a given line is exactly spelled, you can print
 the dictionary pn.LINE\_LABEL\_LIST
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2291,11 +2347,11 @@ the dictionary pn.LINE\_LABEL\_LIST
 
     \end{Verbatim}
 
-    It is possible to instantiate a line not contained in the
+It is possible to instantiate a line not contained in the
 pn.LINE\_LABEL\_LIST. In this case a warning is issued, but the code
 doesn't stop.
 
-    The observed intensity is stored in \textbf{line.obsIntens} and the
+The observed intensity is stored in \textbf{line.obsIntens} and the
 extinction-corrected intensity is stored in \textbf{line.corrIntens}.
 \textbf{line.corrIntens} is set to 0.0 when the line is instantiated,
 unless the parameter corrected is set to \textbf{True}, in which case
@@ -2303,7 +2359,7 @@ the observed value \textbf{obsIntens} is copied to the
 \textbf{corrIntens} slot (the same applies for \textbf{corrError}, which
 is set to \textbf{obsError}).
 
-    The \textbf{corrIntens} value can also be computed using an
+The \textbf{corrIntens} value can also be computed using an
 instantiation of the \textbf{pn.RedCorr} class:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2314,7 +2370,7 @@ instantiation of the \textbf{pn.RedCorr} class:
 {\color{incolor}In [{\color{incolor}104}]:} \PY{n}{line}\PY{o}{.}\PY{n}{correctIntens}\PY{p}{(}\PY{n}{redcorr}\PY{p}{)} \PY{c+c1}{\PYZsh{}redcorr is used to compute line.corrIntens}
 \end{Verbatim}
 
-    The line information is printed using:
+The line information is printed using:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}105}]:} \PY{n}{line}\PY{o}{.}\PY{n}{printLine}\PY{p}{(}\PY{p}{)}
@@ -2329,12 +2385,12 @@ Corrected error: [ 0.  0.]
 
     \end{Verbatim}
 
-    Most of the times, users will not need to define or manipulate
+Most of the times, users will not need to define or manipulate
 EmissionLine objects, since most of the work on the EmissionLine objects
 will be performed from the Observation class (read data, extinction
 correction); see next section.
 
-    WARNING: Note that the wavelengths assigned to EmissionLine objects are
+WARNING: Note that the wavelengths assigned to EmissionLine objects are
 simply the numerical part of the label:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2347,7 +2403,7 @@ simply the numerical part of the label:
 
     \end{Verbatim}
 
-    whereas pn.Atom computes them as the difference from energy levels:
+whereas pn.Atom computes them as the difference from energy levels:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}107}]:} \PY{n}{Hb2} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RecAtom}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{getWave}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
@@ -2359,7 +2415,7 @@ simply the numerical part of the label:
 
     \end{Verbatim}
 
-    This can cause small errors when both methods are used simultaneously.
+This can cause small errors when both methods are used simultaneously.
 For instance, the extinction correction at Hb1 is slightly different
 from the expected value of 1:
 
@@ -2371,7 +2427,7 @@ from the expected value of 1:
 {\color{outcolor}Out[{\color{outcolor}108}]:} 1.0004052204507501
 \end{Verbatim}
         
-    This happens because the ExtCorr uses the precise H$\beta$ value
+This happens because the ExtCorr uses the precise H\(\beta\) value
 computed from energy levels. If this roundoff error exceeds your
 tolerance, a possible workaround is forcing the emission line to have
 exactly the wavelength computed from the energy levels:
@@ -2387,15 +2443,16 @@ warng EmissionLine: Atom H1 not valid
 
     \end{Verbatim}
 
-    This will generate a warning (as the transition is not included in the
+This will generate a warning (as the transition is not included in the
 inventory for the specified atom), but the code won't stop.
 
-    \subsection{The Observation class: reading and dealing with
-observations}
+\section{The Observation class: reading and dealing with
+observations}\label{the-observation-class-reading-and-dealing-with-observations}
 
-    \subsubsection{Reading observation from a file}
+\subsection{Reading observation from a
+file}\label{reading-observation-from-a-file}
 
-    pn.Observation is the class characterizing observation records. An
+pn.Observation is the class characterizing observation records. An
 observation record is composed of an object identifier, the observed
 intensity of one or more emission lines, and, optionally, the dereddened
 line intensities and the identifier of the extinction law used, and the
@@ -2490,14 +2547,14 @@ O2\_7330A+ [ 5.17000008]
           \PY{n}{obs}\PY{o}{.}\PY{n}{correctData}\PY{p}{(}\PY{p}{)}                      \PY{c+c1}{\PYZsh{} the dereddened data are computed}
 \end{Verbatim}
 
-    The data can be read by the readData method as above or directly while
+The data can be read by the readData method as above or directly while
 instantiating the object:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}115}]:} \PY{n}{obs} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Observation}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{observations1.dat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fileFormat}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lines\PYZus{}in\PYZus{}rows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{corrected}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
 \end{Verbatim}
 
-    The format of the data file from which the emission line intensities are
+The format of the data file from which the emission line intensities are
 read can be one of three kinds: ``lines\_in\_rows'' as above, or
 ``lines\_in\_cols'' like this one:
 
@@ -2518,7 +2575,7 @@ Overwriting observations2.dat
 {\color{incolor}In [{\color{incolor}117}]:} \PY{n}{obs2} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Observation}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{observations2.dat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fileFormat}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lines\PYZus{}in\PYZus{}cols}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{corrected}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
 \end{Verbatim}
 
-    or fileFormat=`lines\_in\_rows\_err\_cols' (errors labeled ``err''.
+or fileFormat=`lines\_in\_rows\_err\_cols' (errors labeled ``err''.
 Don't name an observation ``err''!) like this one:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2544,7 +2601,7 @@ warng EmissionLine: Atom H1 not valid
 
     \end{Verbatim}
 
-    The delimiter between the columns is any sequence of spaces or TAB, but
+The delimiter between the columns is any sequence of spaces or TAB, but
 it can be changed using the delimiter parameter. The line names are
 defined by a label starting with the name of the atom (`O2'), followed
 by an underscore, followed by a wavelength and ending with a unit (`A'
@@ -2623,16 +2680,17 @@ is obtained by entering:
 
     \end{Verbatim}
 
-    The presence of a trailing ``e'' at the end of the label points to the
+The presence of a trailing ``e'' at the end of the label points to the
 error associated to the line. The error is considered to be relative to
 the intensity (i.e., 0.05 means 5\% of the intensity), unless the
 parameter errIsRelative is set to False. A common value for all the
 errors can be defined by the parameter \textbf{err\_default} (0.10 is
 the default value).
 
-    \subsubsection{Extinction correction in Observation class}
+\subsection{Extinction correction in Observation
+class}\label{extinction-correction-in-observation-class}
 
-    Once the data have been read, they have to be corrected from extinction.
+Once the data have been read, they have to be corrected from extinction.
 An instantiation of \textbf{RedCorr()} is available inside the
 \textbf{Observation} object as \textbf{obs.extinction}.
 
@@ -2647,13 +2705,13 @@ extinction parameters must be set manually; for example:
           \PY{n}{obs}\PY{o}{.}\PY{n}{extinction}\PY{o}{.}\PY{n}{E\PYZus{}BV} \PY{o}{=} \PY{l+m+mf}{0.34}
 \end{Verbatim}
 
-    An extinction law has to be specified in either case:
+An extinction law has to be specified in either case:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}122}]:} \PY{n}{obs}\PY{o}{.}\PY{n}{extinction}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F99}\PY{l+s+s1}{\PYZsq{}}
 \end{Verbatim}
 
-    To correct all the lines at once:
+To correct all the lines at once:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}123}]:} \PY{n}{obs}\PY{o}{.}\PY{n}{correctData}\PY{p}{(}\PY{p}{)}
@@ -2725,14 +2783,14 @@ O2\_7330A+ [ 9.61370718]
 
     \end{Verbatim}
 
-    If you want the corrected line intensities to be normalized to a given
+If you want the corrected line intensities to be normalized to a given
 wavelength, use the following:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}126}]:} \PY{n}{obs}\PY{o}{.}\PY{n}{correctData}\PY{p}{(}\PY{n}{normWave}\PY{o}{=}\PY{l+m+mf}{4861.}\PY{p}{)}
 \end{Verbatim}
 
-    The extinction correction can be determined by comparing the observed
+The extinction correction can be determined by comparing the observed
 values to a theoretical ratio, as in the following:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2812,10 +2870,10 @@ O2\_7330A+ [ 1598.12655872]
 
     \end{Verbatim}
 
-    By default, this method prints out the corrected intensities. To print
+By default, this method prints out the corrected intensities. To print
 the observed intensities, use the \textbf{returnObs=True} parameter.
 
-    The method \textbf{getSortedLines} returns the lines sorted in
+The method \textbf{getSortedLines} returns the lines sorted in
 alphabetical order according to either the emitting atoms (default) or
 the wavelength (using the \textbf{crit=`wave'} parameter):
 
@@ -2853,7 +2911,7 @@ the wavelength (using the \textbf{crit=`wave'} parameter):
 
     \end{Verbatim}
 
-    The following method, which gives the list of all the atoms implied in
+The following method, which gives the list of all the atoms implied in
 the observed emission lines, will be useful later:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -2869,9 +2927,10 @@ the observed emission lines, will be useful later:
                 dtype='|S3')
 \end{Verbatim}
         
-    \subsubsection{Adding observations and lines}
+\subsection{Adding observations and
+lines}\label{adding-observations-and-lines}
 
-    Once an \textbf{Observation} object is instantiated, you can add a new
+Once an \textbf{Observation} object is instantiated, you can add a new
 observation (corresponding, e.g., to a new object or a new fiber) by
 using:
 
@@ -2879,7 +2938,7 @@ using:
 {\color{incolor}In [{\color{incolor}133}]:} \PY{n}{obs}\PY{o}{.}\PY{n}{addObs}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{test}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{25}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
-    where `test' is the name of the new observation. The new observation
+where `test' is the name of the new observation. The new observation
 must have the same size of \textbf{obs}, that is, it must contain
 \textbf{obs.n\_lines} lines.
 
@@ -2888,35 +2947,35 @@ must have the same size of \textbf{obs}, that is, it must contain
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-S4\_10.5m [  1.86287333e+06   9.89878231e-01]
-Ne2\_12.8m [  2.28962464e+06   9.01003799e-01]
-Ne3\_15.6m [  9.68184283e+06   1.76795879e-02]
-S3\_18.7m [  2.90091821e+06   9.09521814e-01]
-O2\_3726A [ 0.99069915  0.69847094]
-O2\_3729A [ 0.46892362  0.51271245]
-Ne3\_3869A [ 0.75888083  0.27264817]
-Ne3\_3968A [ 0.35320246  0.29546079]
-S2\_4069A [ 0.06443513  0.86307066]
-S2\_4076A [ 0.03486379  0.43933782]
-O3\_4363A [ 0.81982369  0.91910674]
-H1r\_4861A [ 100.            0.60394002]
-O3\_5007A [  7.24228868e+02   6.44575237e-01]
-N2\_5755A [ 7.55158652  0.96374025]
-S3\_6312A [ 38.21722558   0.51069208]
-O1\_6300A [ 82.92131172   0.23916481]
-O1\_6364A [ 30.17724087   0.1205119 ]
-N2\_6548A [ 549.03539807    0.92044244]
-H1r\_6563A [ 285.            0.57723395]
-N2\_6584A [  1.63368483e+03   3.71812495e-01]
-S2\_6716A [ 134.21899293    0.50811338]
-S2\_6731A [ 246.50683125    0.3771552 ]
-Ar3\_7136A [  1.11657610e+03   2.12588939e-01]
-O2\_7319A+ [  1.98764418e+03   7.96377244e-01]
-O2\_7330A+ [  1.59812656e+03   8.72629934e-01]
+S4\_10.5m [  1.86287333e+06   2.78459278e-01]
+Ne2\_12.8m [  2.28962464e+06   9.53623136e-01]
+Ne3\_15.6m [  9.68184283e+06   5.60162375e-01]
+S3\_18.7m [  2.90091821e+06   5.36780528e-01]
+O2\_3726A [ 0.99069915  0.67691353]
+O2\_3729A [ 0.46892362  0.01428534]
+Ne3\_3869A [ 0.75888083  0.96276666]
+Ne3\_3968A [ 0.35320246  0.13828883]
+S2\_4069A [ 0.06443513  0.46249405]
+S2\_4076A [ 0.03486379  0.99805526]
+O3\_4363A [ 0.81982369  0.59713807]
+H1r\_4861A [ 100.            0.78223163]
+O3\_5007A [  7.24228868e+02   1.58710251e-01]
+N2\_5755A [ 7.55158652  0.40264241]
+S3\_6312A [ 38.21722558   0.40319109]
+O1\_6300A [ 82.92131172   0.66824492]
+O1\_6364A [ 30.17724087   0.95694954]
+N2\_6548A [  5.49035398e+02   2.52928787e-01]
+H1r\_6563A [ 285.            0.70501826]
+N2\_6584A [  1.63368483e+03   8.85168908e-01]
+S2\_6716A [ 134.21899293    0.4385847 ]
+S2\_6731A [ 246.50683125    0.88167321]
+Ar3\_7136A [  1.11657610e+03   3.88988790e-01]
+O2\_7319A+ [  1.98764418e+03   8.53219275e-01]
+O2\_7330A+ [  1.59812656e+03   8.98304031e-01]
 
     \end{Verbatim}
 
-    You can also add a new emission line by means of:
+You can also add a new emission line by means of:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}135}]:} \PY{n}{line} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{EmissionLine}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Cl3\PYZus{}5518A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{obsIntens}\PY{o}{=}\PY{p}{[}\PY{l+m+mf}{3.5}\PY{p}{,} \PY{l+m+mf}{2.5}\PY{p}{]}\PY{p}{)}
@@ -2928,38 +2987,38 @@ O2\_7330A+ [  1.59812656e+03   8.72629934e-01]
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-S4\_10.5m [  1.86287333e+06   9.89878231e-01]
-Ne2\_12.8m [  2.28962464e+06   9.01003799e-01]
-Ne3\_15.6m [  9.68184283e+06   1.76795879e-02]
-S3\_18.7m [  2.90091821e+06   9.09521814e-01]
-O2\_3726A [ 0.99069915  0.69847094]
-O2\_3729A [ 0.46892362  0.51271245]
-Ne3\_3869A [ 0.75888083  0.27264817]
-Ne3\_3968A [ 0.35320246  0.29546079]
-S2\_4069A [ 0.06443513  0.86307066]
-S2\_4076A [ 0.03486379  0.43933782]
-O3\_4363A [ 0.81982369  0.91910674]
-H1r\_4861A [ 100.            0.60394002]
-O3\_5007A [  7.24228868e+02   6.44575237e-01]
-N2\_5755A [ 7.55158652  0.96374025]
-S3\_6312A [ 38.21722558   0.51069208]
-O1\_6300A [ 82.92131172   0.23916481]
-O1\_6364A [ 30.17724087   0.1205119 ]
-N2\_6548A [ 549.03539807    0.92044244]
-H1r\_6563A [ 285.            0.57723395]
-N2\_6584A [  1.63368483e+03   3.71812495e-01]
-S2\_6716A [ 134.21899293    0.50811338]
-S2\_6731A [ 246.50683125    0.3771552 ]
-Ar3\_7136A [  1.11657610e+03   2.12588939e-01]
-O2\_7319A+ [  1.98764418e+03   7.96377244e-01]
-O2\_7330A+ [  1.59812656e+03   8.72629934e-01]
+S4\_10.5m [  1.86287333e+06   2.78459278e-01]
+Ne2\_12.8m [  2.28962464e+06   9.53623136e-01]
+Ne3\_15.6m [  9.68184283e+06   5.60162375e-01]
+S3\_18.7m [  2.90091821e+06   5.36780528e-01]
+O2\_3726A [ 0.99069915  0.67691353]
+O2\_3729A [ 0.46892362  0.01428534]
+Ne3\_3869A [ 0.75888083  0.96276666]
+Ne3\_3968A [ 0.35320246  0.13828883]
+S2\_4069A [ 0.06443513  0.46249405]
+S2\_4076A [ 0.03486379  0.99805526]
+O3\_4363A [ 0.81982369  0.59713807]
+H1r\_4861A [ 100.            0.78223163]
+O3\_5007A [  7.24228868e+02   1.58710251e-01]
+N2\_5755A [ 7.55158652  0.40264241]
+S3\_6312A [ 38.21722558   0.40319109]
+O1\_6300A [ 82.92131172   0.66824492]
+O1\_6364A [ 30.17724087   0.95694954]
+N2\_6548A [  5.49035398e+02   2.52928787e-01]
+H1r\_6563A [ 285.            0.70501826]
+N2\_6584A [  1.63368483e+03   8.85168908e-01]
+S2\_6716A [ 134.21899293    0.4385847 ]
+S2\_6731A [ 246.50683125    0.88167321]
+Ar3\_7136A [  1.11657610e+03   3.88988790e-01]
+O2\_7319A+ [  1.98764418e+03   8.53219275e-01]
+O2\_7330A+ [  1.59812656e+03   8.98304031e-01]
 Cl3\_5518A [  8.85845356e-05   6.32746683e-05]
 
     \end{Verbatim}
 
-    \subsubsection{Getting line intensities}
+\subsection{Getting line intensities}\label{getting-line-intensities}
 
-    You can extract the line intensities from an \textbf{Observation} object
+You can extract the line intensities from an \textbf{Observation} object
 by, for example:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -3008,12 +3067,13 @@ by, for example:
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}139}]:} array([  1.59812656e+03,   8.72629934e-01])
+{\color{outcolor}Out[{\color{outcolor}139}]:} array([  1.59812656e+03,   8.98304031e-01])
 \end{Verbatim}
         
-    \subsection{Using Observation to determine ionic abundances}
+\section{Using Observation to determine ionic
+abundances}\label{using-observation-to-determine-ionic-abundances}
 
-    Once the electron temperature and density are determined, it is easy to
+Once the electron temperature and density are determined, it is easy to
 obtain the ionic abundances from a set of emission lines included in an
 \textbf{Observation} object:
 
@@ -3058,11 +3118,12 @@ warng \_ManageAtomicData: coll data not available for H1
            'S3': array([  1.12822738e-06])\}
 \end{Verbatim}
         
-    \subsection{Exploring line intensities with the EmisGrid class}
+\section{Exploring line intensities with the EmisGrid
+class}\label{exploring-line-intensities-with-the-emisgrid-class}
 
-    \subsubsection{The EmisGrid class}
+\subsection{The EmisGrid class}\label{the-emisgrid-class}
 
-    Most plots are obtained by operating on emission maps, which are grids
+Most plots are obtained by operating on emission maps, which are grids
 of emissivities as a function of temperature and density generated by
 the \textbf{EmisGrid} class.
 
@@ -3080,7 +3141,7 @@ emissivity of all its lines in a 30x30 grid:
 {\color{incolor}In [{\color{incolor}142}]:} \PY{n}{O3\PYZus{}EG} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{EmisGrid}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{n\PYZus{}tem}\PY{o}{=}\PY{l+m+mi}{30}\PY{p}{,} \PY{n}{n\PYZus{}den}\PY{o}{=}\PY{l+m+mi}{30}\PY{p}{)}
 \end{Verbatim}
 
-    The arguments are described in more details in the Reference Manual.
+The arguments are described in more details in the Reference Manual.
 Here is the list:
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -3089,7 +3150,7 @@ Here is the list:
                               \PY{n}{den\PYZus{}max}\PY{o}{=}\PY{l+m+mf}{1.e8}\PY{p}{,} \PY{n}{restore\PYZus{}file}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{atomObj}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}
 \end{Verbatim}
 
-    The emissivity grid of a specific line can be obtained by means of:
+The emissivity grid of a specific line can be obtained by means of:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}144}]:} \PY{n}{O3\PYZus{}5007} \PY{o}{=} \PY{n}{O3\PYZus{}EG}\PY{o}{.}\PY{n}{getGrid}\PY{p}{(}\PY{n}{wave}\PY{o}{=}\PY{l+m+mi}{5007}\PY{p}{)}
@@ -3103,13 +3164,13 @@ Here is the list:
 {\color{outcolor}Out[{\color{outcolor}145}]:} (100, 100)
 \end{Verbatim}
         
-    The emissivity grid of a combination of lines can also be computed:
+The emissivity grid of a combination of lines can also be computed:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}146}]:} \PY{n}{O3\PYZus{}Te} \PY{o}{=} \PY{n}{O3\PYZus{}EG}\PY{o}{.}\PY{n}{getGrid}\PY{p}{(}\PY{n}{to\PYZus{}eval} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L(4363)/L(5007)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
-    There are two plotting tools integrated in the \textbf{EmisGrid} object:
+There are two plotting tools integrated in the \textbf{EmisGrid} object:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}147}]:} \PY{n}{O3\PYZus{}EG}\PY{o}{.}\PY{n}{plotImage}\PY{p}{(}\PY{n}{to\PYZus{}eval} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L(4363)/L(5007)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -3129,13 +3190,13 @@ Here is the list:
     \end{center}
     { \hspace*{\fill} \\}
     
-    See the Reference Manual for more option and the \textbf{Diagnostic}
+See the Reference Manual for more option and the \textbf{Diagnostic}
 class for producing plots combining different atoms.
 
-    \subsubsection{Instantiating various EmisGrid objects with
-getEmisGridDict}
+\subsection{Instantiating various EmisGrid objects with
+getEmisGridDict}\label{instantiating-various-emisgrid-objects-with-getemisgriddict}
 
-    It is quite common to have to instantiate various \textbf{EmisGrid}
+It is quite common to have to instantiate various \textbf{EmisGrid}
 objects, especially if you want to make a diagnostic diagram. This can
 easily be done using the \textbf{getEmisGridDict} method, used for
 example as follows:
@@ -3149,12 +3210,12 @@ example as follows:
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}150}]:} \{'N2': <pyneb.core.emisGrid.EmisGrid at 0x7fd8a059ec90>,
-           'O2': <pyneb.core.emisGrid.EmisGrid at 0x7fd89b90a3d0>,
-           'O3': <pyneb.core.emisGrid.EmisGrid at 0x7fd89b90a6d0>\}
+{\color{outcolor}Out[{\color{outcolor}150}]:} \{'N2': <pyneb.core.emisGrid.EmisGrid at 0x115c51150>,
+           'O2': <pyneb.core.emisGrid.EmisGrid at 0x117767e10>,
+           'O3': <pyneb.core.emisGrid.EmisGrid at 0x117767490>\}
 \end{Verbatim}
         
-    This command generates a dictionary of emission grids for {[}O II{]},
+This command generates a dictionary of emission grids for {[}O II{]},
 {[}O III{]} and {[}N II{]}. The resulting maps are saved in a directory
 defined by default when PyNeb is started, in the pn.config.pypic\_path
 variable. It first tries to use the \$HOME/.pypics directory; if it
@@ -3172,13 +3233,13 @@ computed or restored:
           \PY{n}{emisgrids} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{getEmisGridDict}\PY{p}{(}\PY{n}{atomDict}\PY{o}{=}\PY{n}{diags}\PY{o}{.}\PY{n}{atomDict}\PY{p}{,} \PY{n}{den\PYZus{}max}\PY{o}{=}\PY{l+m+mf}{1e6}\PY{p}{)}
 \end{Verbatim}
 
-    This \textbf{EmisGrid} dictionary will be very useful to plot diagnostic
+This \textbf{EmisGrid} dictionary will be very useful to plot diagnostic
 diagrams with the \textbf{Diagnostic} object, as is described in the
 next section.
 
-    \subsection{The Diagnostics class}
+\section{The Diagnostics class}\label{the-diagnostics-class}
 
-    \textbf{Diagnostics} is the class used to evaluate temperatures and
+\textbf{Diagnostics} is the class used to evaluate temperatures and
 densities from line ratios. It is also the class that plots the
 diagnostic Te-Ne diagrams. The object is instantiated like this:
 
@@ -3186,7 +3247,7 @@ diagnostic Te-Ne diagrams. The object is instantiated like this:
 {\color{incolor}In [{\color{incolor}152}]:} \PY{n}{diags} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Diagnostics}\PY{p}{(}\PY{p}{)}        \PY{c+c1}{\PYZsh{} instantiate the Diagnostic class  }
 \end{Verbatim}
 
-    An optional parameter \textbf{addAll=True} (default is \textbf{False})
+An optional parameter \textbf{addAll=True} (default is \textbf{False})
 lets the object load all the available diagnostics. Most of the time
 this option is not used and the diagnostics are added manually as they
 are needed:
@@ -3195,7 +3256,7 @@ are needed:
 {\color{incolor}In [{\color{incolor}153}]:} \PY{n}{diags}\PY{o}{.}\PY{n}{addDiag}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NI] 5198/5200}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NII] 5755/6548}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OII] 3726/3729}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
-    Each diagnostic is defined by a label and is associated to a tuple
+Each diagnostic is defined by a label and is associated to a tuple
 containing 3 elements: the atom corresponding to the diagnostic lines,
 the algebraic definition of the line ratios and the algebraic definition
 of the error of the diagnostic, which depends on the error of each line
@@ -3204,13 +3265,13 @@ III{]} lines, 4363/5007, and the error is the quadratic sum of the
 relative error of each line (E(lambda)): RMS(a, b) = sqrt(a\textbf{2 +
 b}2).
 
-    Users can also define their own diagnostics, for example using:
+Users can also define their own diagnostics, for example using:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}154}]:} \PY{n}{diags}\PY{o}{.}\PY{n}{addDiag}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII] 4363/4959}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L(4363)/L(4959)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RMS([E(4363),E(4959)])}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
-    Notice that the diagnostics are defined so that they tend to increase
+Notice that the diagnostics are defined so that they tend to increase
 with the main parameter they trace: {[}OIII{]} 4363/5007 increases with
 the electron temperature.
 
@@ -3222,9 +3283,10 @@ means of the \textbf{diags.getDiagLabels()} and
 diagrams (see below). A diagnostic can be removed from the list with the
 \textbf{delDiag} method.
 
-    \subsubsection{Determination of temperature and density}
+\subsection{Determination of temperature and
+density}\label{determination-of-temperature-and-density}
 
-    The \textbf{getCrossTemDen} method cross-converges the temperature and
+The \textbf{getCrossTemDen} method cross-converges the temperature and
 density derived from two sensitive line ratios (not necessarily from the
 same atom), by inputting the quantity derived with one line ratio into
 the other and then iterating. When the iteration process ends, the two
@@ -3374,9 +3436,10 @@ temperature and density can be individual numbers as well as arrays
 
     \end{Verbatim}
 
-    \subsubsection{Diagnostic diagram combining various atoms}
+\subsection{Diagnostic diagram combining various
+atoms}\label{diagnostic-diagram-combining-various-atoms}
 
-    The plotting tool included in the \textbf{Diagnostics} class requires an
+The plotting tool included in the \textbf{Diagnostics} class requires an
 \textbf{EmisGrid} dictionary (as returned by
 \textbf{pn.getEmisGridDict}; see the previous section) and an
 \textbf{Observation} object. The plot is obtained by:
@@ -3393,146 +3456,90 @@ temperature and density can be individual numbers as well as arrays
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}158}]:} \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}png\PYZsq{}
+{\color{incolor}In [{\color{incolor}158}]:} \PY{k}{print} \PY{n}{obs}\PY{o}{.}\PY{n}{getIntens}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'S2\_6716A': array([ 1.22000003]), 'O2\_7330A+': array([ 5.17000008]), 'S3\_6312A': array([ 0.75999999]), 'Ne2\_12.8m': array([ 8.30000019]), 'O1\_6364A': array([ 0.54000002]), 'Ne3\_15.6m': array([ 34.09999847]), 'O1\_6300A': array([ 1.69000006]), 'Ne3\_3869A': array([ 18.89999962]), 'Ne3\_3968A': array([ 6.4000001]), 'N2\_6548A': array([ 6.84000015]), 'S3\_18.7m': array([ 10.]), 'O2\_3729A': array([ 18.60000038]), 'S2\_6731A': array([ 2.18000007]), 'N2\_6584A': array([ 19.]), 'O3\_5007A': array([ 435.08999634]), 'N2\_5755A': array([ 0.50999999]), 'H1r\_6563A': array([ 3.45000005]), 'S4\_10.5m': array([ 7.]), 'S2\_4076A': array([ 0.44999999]), 'O3\_4363A': array([ 4.36000013]), 'H1r\_4861A': array([ 100.]), 'Ar3\_7136A': array([ 4.90999985]), 'O2\_3726A': array([ 39.70000076]), 'S2\_4069A': array([ 0.85000002]), 'O2\_7319A+': array([ 6.53999996])\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}159}]:} \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}png\PYZsq{}
           \PY{n}{mpl}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{savefig}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{150}\PY{p}{)}
           \PY{n}{emisgrids} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{getEmisGridDict}\PY{p}{(}\PY{n}{atomDict}\PY{o}{=}\PY{n}{diags}\PY{o}{.}\PY{n}{atomDict}\PY{p}{)}
           \PY{n}{diags}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{emisgrids}\PY{p}{,} \PY{n}{obs}\PY{p}{)}
 \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-
-        ---------------------------------------------------------------------------
-
-        ValueError                                Traceback (most recent call last)
-
-        <ipython-input-158-2bf090738407> in <module>()
-          2 mpl.rc("savefig", dpi=150)
-          3 emisgrids = pn.getEmisGridDict(atomDict=diags.atomDict)
-    ----> 4 diags.plot(emisgrids, obs)
-    
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/pyneb/core/diags.pyc in plot(self, emis\_grids, obs, quad, i\_obs, alpha, ax)
-        535                     if tol\_value > 0.:
-        536                         levels = [(1 - tol\_value) * diag\_value, (1 + tol\_value) * diag\_value]
-    --> 537                         CS = ax.contourf(X, Y, diag\_map, levels=levels, alpha=alpha, colors=col)
-        538                     CS = ax.contour(X, Y, diag\_map, levels=[diag\_value], colors=col, linestyles=style)
-        539                     ax.set\_xlabel(r'log(n\$\_\{\textbackslash{}rm e\}\$) [cm\$\^{}\{-3\}\$]')
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/\_\_init\_\_.pyc in inner(ax, *args, **kwargs)
-       1810                     warnings.warn(msg \% (label\_namer, func.\_\_name\_\_),
-       1811                                   RuntimeWarning, stacklevel=2)
-    -> 1812             return func(ax, *args, **kwargs)
-       1813         pre\_doc = inner.\_\_doc\_\_
-       1814         if pre\_doc is None:
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/axes/\_axes.pyc in contourf(self, *args, **kwargs)
-       5650             self.cla()
-       5651         kwargs['filled'] = True
-    -> 5652         return mcontour.QuadContourSet(self, *args, **kwargs)
-       5653     contourf.\_\_doc\_\_ = mcontour.QuadContourSet.contour\_doc
-       5654 
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/contour.pyc in \_\_init\_\_(self, ax, *args, **kwargs)
-       1422         are described in QuadContourSet.contour\_doc.
-       1423         """
-    -> 1424         ContourSet.\_\_init\_\_(self, ax, *args, **kwargs)
-       1425 
-       1426     def \_process\_args(self, *args, **kwargs):
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/contour.pyc in \_\_init\_\_(self, ax, *args, **kwargs)
-        861         self.\_transform = kwargs.get('transform', None)
-        862 
-    --> 863         self.\_process\_args(*args, **kwargs)
-        864         self.\_process\_levels()
-        865 
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/contour.pyc in \_process\_args(self, *args, **kwargs)
-       1443                 self.\_corner\_mask = mpl.rcParams['contour.corner\_mask']
-       1444 
-    -> 1445             x, y, z = self.\_contour\_args(args, kwargs)
-       1446 
-       1447             \_mask = ma.getmask(z)
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/contour.pyc in \_contour\_args(self, args, kwargs)
-       1538             warnings.warn('Log scale: values of z <= 0 have been masked')
-       1539             self.zmin = z.min()
-    -> 1540         self.\_contour\_level\_args(z, args)
-       1541         return (x, y, z)
-       1542 
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/matplotlib/contour.pyc in \_contour\_level\_args(self, z, args)
-       1183             raise ValueError("Filled contours require at least 2 levels.")
-       1184 
-    -> 1185         if len(self.levels) > 1 and np.amin(np.diff(self.levels)) <= 0.0:
-       1186             if hasattr(self, '\_corner\_mask') and self.\_corner\_mask == 'legacy':
-       1187                 warnings.warn("Contour levels are not increasing")
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/numpy/core/fromnumeric.pyc in amin(a, axis, out, keepdims)
-       2352     else:
-       2353         return \_methods.\_amin(a, axis=axis,
-    -> 2354                               out=out, keepdims=keepdims)
-       2355 
-       2356 
-
-
-        /home/morisset/anaconda2/lib/python2.7/site-packages/numpy/core/\_methods.pyc in \_amin(a, axis, out, keepdims)
-         27 
-         28 def \_amin(a, axis=None, out=None, keepdims=False):
-    ---> 29     return umr\_minimum(a, axis, None, out, keepdims)
-         30 
-         31 def \_sum(a, axis=None, dtype=None, out=None, keepdims=False):
-
-
-        ValueError: zero-size array to reduction operation minimum which has no identity
-
-    \end{Verbatim}
-
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_339_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_340_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    If there is more than one spectrum in the \textbf{Observation} object,
+If there is more than one spectrum in the \textbf{Observation} object,
 the index of the observation to be used is given by \textbf{i\_obs}:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{diags}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{emisgrids}\PY{p}{,} \PY{n}{obs}\PY{p}{,} \PY{n}{i\PYZus{}obs} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}160}]:} \PY{n}{diags}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{emisgrids}\PY{p}{,} \PY{n}{obs}\PY{p}{,} \PY{n}{i\PYZus{}obs} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
 \end{Verbatim}
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_342_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{diags}\PY{o}{.}\PY{n}{diags}
+{\color{incolor}In [{\color{incolor}161}]:} \PY{n}{diags}\PY{o}{.}\PY{n}{diags}
 \end{Verbatim}
 
-    The label used to identify emission lines can be changed in the
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}161}]:} \{'[NII] 5755/6548': ('N2', 'L(5755)/L(6548)', 'RMS([E(6548), E(5755)])'),
+           '[NII] 5755/6584': ('N2', 'L(5755)/L(6584)', 'RMS([E(6584), E(5755)])'),
+           '[NII] 5755/6584+': ('N2',
+            'L(5755)/(L(6548)+L(6584))',
+            'RMS([E(6548)*L(6548)/(L(6548)+L(6584)), E(6584)*L(6584)/(L(6584)+L(6548)), E(5755)])'),
+           '[NeIII] 3869/15.6m': ('Ne3',
+            'L(3869)/L(156000)',
+            'RMS([E(156000), E(3869)])'),
+           '[NeIII] 3930+/15.6m': ('Ne3',
+            '(L(3869)+L(3968))/L(156000)',
+            'RMS([E(156000), E(3869)*L(3869)/(L(3869)+L(3968)), E(3968)*L(3968)/(L(3869)+L(3968))])'),
+           '[OIII] 4363/5007': ('O3', 'L(4363)/L(5007)', 'RMS([E(5007), E(4363)])'),
+           '[OII] 3726/3729': ('O2', 'L(3726)/L(3729)', 'RMS([E(3729), E(3726)])'),
+           '[OII] 3727+/7325+': ('O2',
+            '(L(3726)+L(3729))/(B("7319A+")+B("7330A+"))',
+            'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")),BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+"))])'),
+           '[SIII] 6312/18.7m': ('S3', 'L(6312)/L(187000)', 'RMS([E(187000), E(6312)])'),
+           '[SII] 4069/4076': ('S2', 'L(4069)/L(4076)', 'RMS([E(4069), E(4076)])'),
+           '[SII] 4072+/6720+': ('S2',
+            '(L(4069)+L(4076))/(L(6716)+L(6731))',
+            'RMS([E(6716)*L(6716)/(L(6716)+L(6731)), E(6731)*L(6731)/(L(6716)+L(6731)), E(4069)*L(4069)/(L(4069)+L(4076)), E(4076)*L(4076)/(L(4069)+L(4076))])'),
+           '[SII] 6731/6716': ('S2', 'L(6731)/L(6716)', 'RMS([E(6716), E(6731)])')\}
+\end{Verbatim}
+        
+The label used to identify emission lines can be changed in the
 \textbf{diags} object, using for example:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII] 4363/5007}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII]na}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}162}]:} \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII] 4363/5007}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII]na}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
-    \subsection{Determination of elemental abundances using ICFs}
+\section{Determination of elemental abundances using
+ICFs}\label{determination-of-elemental-abundances-using-icfs}
 
-    The determination of elemental abundances is complicated by the fact
+The determination of elemental abundances is complicated by the fact
 that some ions are not observed. To take this into account when
 computing the total abundances, it is necessary to use ionization
 correction factors (ICFs). ICFs are expressions used to correct the
 abundance of observed ions for unseen ions to get the total elemental
-abundance of a given element: \[X(elem) = X(ion) * icf,\] where $X(ion)$
-may be the abundance of one single ion or the sum of several ions of the
-element. These expressions are generally obtained empirically or
-semiempirically, based on the results of photoionization models or a
-comparison between the ionization potentials of different ions. Most
-expressions have been devised for a specific kind of object (e.g., PNe,
-HII regions, etc) and should not be applied to objects of a different
-kind.
+abundance of a given element: \[X(elem) = X(ion) * icf,\] where
+\(X(ion)\) may be the abundance of one single ion or the sum of several
+ions of the element. These expressions are generally obtained
+empirically or semiempirically, based on the results of photoionization
+models or a comparison between the ionization potentials of different
+ions. Most expressions have been devised for a specific kind of object
+(e.g., PNe, HII regions, etc) and should not be applied to objects of a
+different kind.
 
 In PyNeb, an icf formula is identified by an element (``elem'', e.g.
 ``O''), which is the element of which the total abundance is seeked for;
@@ -3547,22 +3554,38 @@ the equation number of the icf within the paper.
 The following snippet illustrates how PyNeb manages icfs:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{atom\PYZus{}abun} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{0.002}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ne3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{1.2e\PYZhy{}5}\PY{p}{\PYZcb{}}
-        \PY{n}{icf} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{ICF}\PY{p}{(}\PY{p}{)}
-        \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getAvailableICFs}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ne}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} lists all the available recipes for Ne}
+{\color{incolor}In [{\color{incolor}163}]:} \PY{n}{atom\PYZus{}abun} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{0.002}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ne3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{1.2e\PYZhy{}5}\PY{p}{\PYZcb{}}
+          \PY{n}{icf} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{ICF}\PY{p}{(}\PY{p}{)}
+          \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getAvailableICFs}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ne}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} lists all the available recipes for Ne}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{elem\PYZus{}abun} \PY{o}{=} \PY{n}{icf}\PY{o}{.}\PY{n}{getElemAbundance}\PY{p}{(}\PY{n}{atom\PYZus{}abun}\PY{p}{,} \PY{n}{icf\PYZus{}list}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TPP77\PYZus{}15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{} Computes the Ne abundance with the TPP06 recipe}
-        \PY{k}{print} \PY{n}{elem\PYZus{}abun}
+\{'Ne': ['KB94\_A28.10', 'KH01\_4d', 'direct\_Ne.2356', 'direct\_Ne.345', 'S78\_265b', 'direct\_Ne.23', 'KB94\_A28.8', 'KB94\_A28.6', 'DIMS14\_20', 'DIMS14\_17c', 'TPP77\_15', 'PHCD07\_13', 'PHCD07\_12', 'PC69\_40', 'KB94\_A27', 'KB94\_A28.10b', 'Ial06\_19b', 'Ial06\_19c', 'Ial06\_19a', 'DIMS14\_17a', 'DIMS14\_17b', 'direct\_Ne.2345', 'direct\_Ne.235']\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}164}]:} \PY{n}{elem\PYZus{}abun} \PY{o}{=} \PY{n}{icf}\PY{o}{.}\PY{n}{getElemAbundance}\PY{p}{(}\PY{n}{atom\PYZus{}abun}\PY{p}{,} \PY{n}{icf\PYZus{}list}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TPP77\PYZus{}15}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{} Computes the Ne abundance with the TPP06 recipe}
+          \PY{k}{print} \PY{n}{elem\PYZus{}abun}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{elem\PYZus{}abun} \PY{o}{=} \PY{n}{icf}\PY{o}{.}\PY{n}{getElemAbundance}\PY{p}{(}\PY{n}{elem\PYZus{}abun}\PY{p}{)}  \PY{c+c1}{\PYZsh{} performs all the possible element abundance computations given the input ionic abundance set and available icf  }
-        \PY{k}{print} \PY{n}{elem\PYZus{}abun}
+\{'TPP77\_15': 1.8e-05\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}165}]:} \PY{n}{elem\PYZus{}abun} \PY{o}{=} \PY{n}{icf}\PY{o}{.}\PY{n}{getElemAbundance}\PY{p}{(}\PY{n}{elem\PYZus{}abun}\PY{p}{)}  \PY{c+c1}{\PYZsh{} performs all the possible element abundance computations given the input ionic abundance set and available icf  }
+          \PY{k}{print} \PY{n}{elem\PYZus{}abun}
 \end{Verbatim}
 
-    The first line above defines a set of ionic abundances; the second
+    \begin{Verbatim}[commandchars=\\\{\}]
+warng ICF: 1./(1. - abun["N2"] / elem\_abun["KB94\_A1.10b"]) cannot be evaluated for KB94\_A30.10b
+\{'Ial06\_22a': nan, 'Ial06\_22b': nan, 'Ial06\_22c': nan, 'KB94\_A28.10': nan, 'KH01\_4d': nan, 'KH01\_4e': nan, 'KH01\_4f': nan, 'KH01\_4g': nan, 'KH01\_4a': nan, 'KH01\_4b': nan, 'KH01\_4c': nan, 'KH01\_4txt': nan, 'direct\_Ne.2356': nan, 'KB94\_A10b': nan, 'direct\_Mg.45': nan, 'direct\_Ne.345': nan, 'S78\_265b': nan, 'direct\_S.2345': nan, 'DIMS14\_39': nan, 'DIMS14\_35': nan, 'DIMS14\_36': nan, 'Ial06\_23c': nan, 'Ial06\_23b': nan, 'Ial06\_23a': nan, 'DIMS14\_32': nan, 'KB94\_A28.8': nan, 'KB94\_A28.6': nan, 'KB94\_A30.0': nan, 'direct\_S.23': nan, 'direct\_Cl.234': nan, 'direct\_O.2345': nan, 'Ial06\_24b': nan, 'Ial06\_24c': nan, 'DIMS14\_29': nan, 'DIMS14\_26': nan, 'GKA07\_1.p269': nan, 'DIMS14\_23': nan, 'DIMS14\_20': nan, 'KB94\_A1.6': nan, 'direct\_N.23': nan, 'ITL94\_20': nan, 'KB94\_A1.8': nan, 'KB94\_A36.8': nan, 'KB94\_A36.6': nan, 'Ial06\_21a': nan, 'KB94\_A30.10': nan, 'direct\_He.23': nan, 'RR05\_2': nan, 'RR05\_3': nan, 'DIMS14\_10': nan, 'RR05\_4': nan, 'DIMS14\_14': nan, 'direct\_Ar.345': nan, 'TPP77\_14': nan, 'ITL94\_19': nan, 'DIMS14\_17b': nan, 'PHCD07\_17': nan, 'PHCD07\_16': nan, 'PHCD07\_13': nan, 'PHCD07\_12': nan, 'direct\_N.2345': nan, 'KB94\_A13.10': nan, 'KB94\_A36.10b': nan, 'Ial06\_24a': nan, 'KB94\_A12': nan, 'KB94\_A10': nan, 'KB94\_A16': nan, 'Ial06\_16': nan, 'Ial06\_17': nan, 'KB94\_A19': nan, 'PC69\_40': nan, 'DIMS14\_29b': nan, 'direct\_Ar.234': nan, 'PTPR92\_21': nan, 'direct\_O.23': nan, 'mGKA07-PTPR92\_p269': nan, 'KB94\_A1.10': nan, 'direct\_Ar.23': nan, 'KB94\_A26': nan, 'KB94\_A27': nan, 'KB94\_A21': nan, 'direct\_Cl.34': nan, 'DIMS14\_14b': nan, 'KB94\_A28.10b': nan, 'Ial06\_20b': nan, 'Ial06\_20c': nan, 'Ial06\_20a': nan, 'KB94\_A8': nan, 'KB94\_A6': nan, 'KB94\_A0': nan, 'direct\_N.234': nan, 'KB94\_A32': nan, 'direct\_Ne.23': nan, 'direct\_Cl.23': nan, 'Ial06\_19b': nan, 'Ial06\_19c': nan, 'Ial06\_19a': nan, 'direct\_S.234': nan, 'direct\_O.234': nan, 'TPP77\_13': nan, 'Ial06\_21c': nan, 'Ial06\_21b': nan, 'DIMS14\_17a': nan, 'DIMS14\_17c': nan, 'TPP77\_15': nan, 'direct\_Ne.2345': nan, 'DIMS14\_12': nan, 'KB94\_A36.10': nan, 'KB94\_A13.10b': nan, 'direct\_Ne.235': nan, 'Ial06\_18a': nan, 'Ial06\_18c': nan, 'Ial06\_18b': nan\}
+
+    \end{Verbatim}
+
+The first line above defines a set of ionic abundances; the second
 defines an ICF object; the third lists the label of all the available
 recipes for Ne; in the fourth, a specific one is selected to compute the
 desired abundance; in the fifth line, all the possible element abundance
@@ -3573,30 +3596,50 @@ Additionally, PyNeb provides a series of single-line commands to explore
 the icf collection and its source papers; e.g.:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getAvailableICFs}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}166}]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getAvailableICFs}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getExpression}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the analytical expression of the icf identified by the label KH01\PYZus{}4g}
+\{'Mg': ['direct\_Mg.45'], 'Ne': ['KB94\_A28.10', 'KH01\_4d', 'direct\_Ne.2356', 'direct\_Ne.345', 'S78\_265b', 'direct\_Ne.23', 'KB94\_A28.8', 'KB94\_A28.6', 'DIMS14\_20', 'DIMS14\_17c', 'TPP77\_15', 'PHCD07\_13', 'PHCD07\_12', 'PC69\_40', 'KB94\_A27', 'KB94\_A28.10b', 'Ial06\_19b', 'Ial06\_19c', 'Ial06\_19a', 'DIMS14\_17a', 'DIMS14\_17b', 'direct\_Ne.2345', 'direct\_Ne.235'], 'Cl': ['KH01\_4f', 'mGKA07-PTPR92\_p269', 'DIMS14\_32', 'GKA07\_1.p269', 'Ial06\_21a', 'DIMS14\_29', 'DIMS14\_29b', 'direct\_Cl.34', 'direct\_Cl.234', 'direct\_Cl.23', 'Ial06\_21c', 'Ial06\_21b'], 'C': ['DIMS14\_39', 'KB94\_A13.10', 'KB94\_A12', 'KB94\_A16', 'KB94\_A19', 'KB94\_A26', 'KB94\_A21', 'KB94\_A13.10b'], 'O': ['KH01\_4b', 'KB94\_A10b', 'direct\_O.2345', 'DIMS14\_12', 'KB94\_A8', 'KB94\_A10', 'Ial06\_16', 'Ial06\_17', 'direct\_O.23', 'KB94\_A6', 'direct\_O.234', 'TPP77\_13'], 'N': ['KH01\_4c', 'KB94\_A1.6', 'direct\_N.23', 'KB94\_A1.8', 'DIMS14\_14', 'direct\_N.2345', 'KB94\_A1.10', 'DIMS14\_14b', 'KB94\_A0', 'direct\_N.234', 'TPP77\_14', 'Ial06\_18a', 'Ial06\_18c', 'Ial06\_18b'], 'S': ['KH01\_4e', 'direct\_S.2345', 'direct\_S.23', 'DIMS14\_26', 'DIMS14\_23', 'KB94\_A36.8', 'KB94\_A36.6', 'KB94\_A36.10b', 'Ial06\_20a', 'Ial06\_20b', 'Ial06\_20c', 'direct\_S.234', 'KB94\_A36.10'], 'Ar': ['Ial06\_22a', 'Ial06\_22b', 'Ial06\_22c', 'KH01\_4g', 'KH01\_4txt', 'DIMS14\_36', 'Ial06\_23c', 'Ial06\_23a', 'KB94\_A30.0', 'ITL94\_20', 'KB94\_A30.10', 'direct\_Ar.345', 'ITL94\_19', 'PHCD07\_17', 'PHCD07\_16', 'KB94\_A30.10b', 'direct\_Ar.23', 'direct\_Ar.234', 'KB94\_A32', 'DIMS14\_35', 'Ial06\_23b'], 'Fe': ['Ial06\_24b', 'Ial06\_24c', 'RR05\_2', 'RR05\_3', 'RR05\_4', 'Ial06\_24a'], 'He': ['KH01\_4a', 'direct\_He.23', 'DIMS14\_10', 'PTPR92\_21']\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}167}]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getExpression}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the analytical expression of the icf identified by the label KH01\PYZus{}4g}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getReference}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the bibliographic reference of the source paper}
+Ar = (Ar3 + Ar4) * (He2 + He3) / He2 / (1 -  N2 / (KH01\_4c))
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}168}]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getReference}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the bibliographic reference of the source paper}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getURL}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the ADS URL of the source paper}
+Kwitter \& Henry 2001, ApJ, 562, 804
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}169}]:} \PY{k}{print} \PY{n}{icf}\PY{o}{.}\PY{n}{getURL}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KH01\PYZus{}4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} returns the ADS URL of the source paper}
 \end{Verbatim}
 
-    PyNeb provides a large set of icfs compiled from the literature; each
+    \begin{Verbatim}[commandchars=\\\{\}]
+http://adsabs.harvard.edu/abs/2001ApJ{\ldots}562..804K
+
+    \end{Verbatim}
+
+PyNeb provides a large set of icfs compiled from the literature; each
 icf is stored together with the bibliographic reference, the URL and a
 comment with further details. Further expressions are being added
 continuously, and a special function (\textbf{addICF}) enables users to
 add customized expressions to the collection.
 
-    \subsection{The logging facility}
+\section{The logging facility}\label{the-logging-facility}
 
-    When importing PyNeb, a special object named \textbf{pn.log} is
+When importing PyNeb, a special object named \textbf{pn.log} is
 instantiated to hold messages (error, warnings, normal messages and
 debug tools). This object receives messages, writes them to the standard
 output (and eventually to a file) and also holds them in memory. It can
@@ -3606,19 +3649,20 @@ message (the named \textbf{calling} parameter), and the time at which is
 was sent.
 
 There is a level of verbosity, which can be changed at any moment (e.g.
-\emph{\emph{pn.log}.level = 2}\_), which determines the kind of messages
-that will be printed to the standard output (commonly the screen).
+\textbf{pn.log\_.level = 2}), which determines the kind of messages that
+will be printed to the standard output (commonly the screen).
 
 \textbf{pn.log} can manage 5 types of messages:
 
-    \begin{itemize}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
 \item
-  \textbf{debug}: using \emph{\emph{pn.log}.debug(`This is the message',
-  calling = `Routine1')}\_; it is printed if pn.log\_level
-  \textgreater{}= 4.
+  \textbf{debug}: using \textbf{pn.log\_.debug(`This is the message',
+  calling = `Routine1')}; it is printed if pn.log\_level \textgreater{}=
+  4.
 \item
-  \textbf{message}: using \emph{\emph{pn.log}.message(`This is the
-  message', calling = `Routine1')}\_; it is printed if pn.log\_level
+  \textbf{message}: using \textbf{pn.log\_.message(`This is the
+  message', calling = `Routine1')}; it is printed if pn.log\_level
   \textgreater{}= 3.
 \item
   \textbf{warning}: using \textbf{pn.log\_warn(`This is the warning',
@@ -3632,196 +3676,243 @@ that will be printed to the standard output (commonly the screen).
   behavior is altered by changing pn.log\_.no\_exit to False, in which
   case a SystemExit~exception is raised (and the program stops).
 \item
-  \textbf{timer}: using \emph{\emph{pn.log}.timer(`Ending the process',
-  calling = `Routine1', quiet = False)}\_. This method prints (if quiet
-  = True) the message with the time spent since the last call of timer.
+  \textbf{timer}: using \textbf{pn.log\_.timer(`Ending the process',
+  calling = `Routine1', quiet = False)}. This method prints (if quiet =
+  True) the message with the time spent since the last call of timer.
 \end{itemize}
 
-    At any moment in a script file, the verbosity can be changed either to
+At any moment in a script file, the verbosity can be changed either to
 see what's happening, or to avoid being annoyed by too many messages.
 
-    \section{Sample scripts}
+\chapter{Sample scripts}\label{sample-scripts}
 
-    \subsection{Simple diagnostic diagram}
+\section{Simple diagnostic diagram}\label{simple-diagnostic-diagram}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{writefile} smc24.dat
-        NAME SMC\PYZus{}24
-        cHbeta     0.047
-        S4\PYZus{}10.5m   7.00000
-        Ne2\PYZus{}12.8m  8.3000
-        Ne3\PYZus{}15.6m 34.10
-        S3\PYZus{}18.7m  10.
-        O2\PYZus{}3726A  39.700
-        O2\PYZus{}3729A  18.600
-        Ne3\PYZus{}3869A 18.90
-        Ne3\PYZus{}3968A  6.4
-        S2\PYZus{}4069A   0.85
-        S2\PYZus{}4076A   0.450
-        O3\PYZus{}4363A   4.36
-        O3\PYZus{}5007A 435.09
-        N2\PYZus{}5755A   0.510000
-        S3\PYZus{}6312A   0.76
-        O1\PYZus{}6300A   1.69
-        O1\PYZus{}6364A   0.54
-        N2\PYZus{}6548A   6.840000
-        N2\PYZus{}6584A  19.00
-        S2\PYZus{}6716A   1.220000
-        S2\PYZus{}6731A   2.180000
-        Ar3\PYZus{}7136A  4.91
-        O2\PYZus{}7319A+   6.540000
-        O2\PYZus{}7330A+   5.17
-        S3\PYZus{}33.6m    8.
+{\color{incolor}In [{\color{incolor}170}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{writefile} smc24.dat
+          NAME SMC\PYZus{}24
+          cHbeta     0.047
+          S4\PYZus{}10.5m   7.00000
+          Ne2\PYZus{}12.8m  8.3000
+          Ne3\PYZus{}15.6m 34.10
+          S3\PYZus{}18.7m  10.
+          O2\PYZus{}3726A  39.700
+          O2\PYZus{}3729A  18.600
+          Ne3\PYZus{}3869A 18.90
+          Ne3\PYZus{}3968A  6.4
+          S2\PYZus{}4069A   0.85
+          S2\PYZus{}4076A   0.450
+          O3\PYZus{}4363A   4.36
+          O3\PYZus{}5007A 435.09
+          N2\PYZus{}5755A   0.510000
+          S3\PYZus{}6312A   0.76
+          O1\PYZus{}6300A   1.69
+          O1\PYZus{}6364A   0.54
+          N2\PYZus{}6548A   6.840000
+          N2\PYZus{}6584A  19.00
+          S2\PYZus{}6716A   1.220000
+          S2\PYZus{}6731A   2.180000
+          Ar3\PYZus{}7136A  4.91
+          O2\PYZus{}7319A+   6.540000
+          O2\PYZus{}7330A+   5.17
+          S3\PYZus{}33.6m    8.
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Diagnostic plot}
-        
-        \PY{c+c1}{\PYZsh{} Imports}
-        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
-        \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}png\PYZsq{}
-        \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
-        
-        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} General settings}
-        \PY{c+c1}{\PYZsh{} Setting verbosity level. Enter pn.my\PYZus{}logging? for details}
-        \PY{n}{pn}\PY{o}{.}\PY{n}{log\PYZus{}}\PY{o}{.}\PY{n}{level} \PY{o}{=} \PY{l+m+mi}{2} \PY{c+c1}{\PYZsh{} set this to 3 to have more details}
-        
-        \PY{c+c1}{\PYZsh{} Adopt an extinction law}
-        \PY{n}{extinction\PYZus{}law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}
-        
-        \PY{c+c1}{\PYZsh{} Define the data file}
-        \PY{n}{obs\PYZus{}data} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{smc24.dat}\PY{l+s+s1}{\PYZsq{}}
-        
-        \PY{c+c1}{\PYZsh{} Define plot title}
-        \PY{n}{title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SMC 24}\PY{l+s+s1}{\PYZsq{}}
-        
-        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Read and deredden observational data}
-        \PY{c+c1}{\PYZsh{} define an Observation object and assign it to name \PYZsq{}obs\PYZsq{}}
-        \PY{n}{obs} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Observation}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} fill obs with data read from file obs\PYZus{}data, with lines varying across rows and a default percent error on line intensities}
-        \PY{n}{obs}\PY{o}{.}\PY{n}{readData}\PY{p}{(}\PY{n}{obs\PYZus{}data}\PY{p}{,} \PY{n}{fileFormat}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lines\PYZus{}in\PYZus{}rows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{err\PYZus{}default}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} deredden data with Cardelli\PYZsq{}s law}
-        \PY{n}{obs}\PY{o}{.}\PY{n}{extinction}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{n}{extinction\PYZus{}law}
-        \PY{n}{obs}\PY{o}{.}\PY{n}{correctData}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Include the diagnostics of interest}
-        \PY{c+c1}{\PYZsh{} instantiate the Diagnostics class}
-        \PY{n}{diags} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Diagnostics}\PY{p}{(}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} include in diags the relevant line ratios}
-        \PY{n}{diags}\PY{o}{.}\PY{n}{addDiag}\PY{p}{(}\PY{p}{[}
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NII] 5755/6584}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OII] 3726/3729}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII] 4363/5007}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 4072+/6720+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SIII] 6312/18.7m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NeIII] 3930+/15.6m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                      \PY{p}{]}\PY{p}{)}
-        \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII]a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 4072+/6720+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII]b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Create the emission maps to be compared to the observation data (some overkill here)}
-        \PY{n}{emisgrids} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{getEmisGridDict}\PY{p}{(}\PY{n}{atom\PYZus{}list}\PY{o}{=}\PY{n}{diags}\PY{o}{.}\PY{n}{getUniqueAtoms}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{den\PYZus{}max}\PY{o}{=}\PY{l+m+mf}{1e6}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Plot}
-        \PY{c+c1}{\PYZsh{} Create the contour plot as the intersection of tem\PYZhy{}den emission maps with dereddened line ratios}
-        \PY{n}{diags}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{emisgrids}\PY{p}{,} \PY{n}{obs}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Place the title}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{title}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Display the plot}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}The observed ratio can be automatically extracted from an Observation object named obs:}
-        \PY{n}{Te}\PY{p}{,} \PY{n}{Ne} \PY{o}{=} \PY{n}{diags}\PY{o}{.}\PY{n}{getCrossTemDen}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NII] 5755/6548}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{obs}\PY{o}{=}\PY{n}{obs}\PY{p}{)}
-        \PY{k}{print} \PY{n}{Te}\PY{p}{,} \PY{n}{Ne}
-\end{Verbatim}
+Overwriting smc24.dat
 
-    \subsection{Extinction}
+    \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Sample extinction in PyNeb}
-        \PY{c+c1}{\PYZsh{} shows how to display available extinction laws, select one or define a new one,}
-        \PY{c+c1}{\PYZsh{} and do some simple dereddening calculations}
-        \PY{c+c1}{\PYZsh{} Further examples can be found in other sample scripts}
-        \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}svg\PYZsq{}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
-        \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
-        
-        \PY{c+c1}{\PYZsh{} Convert wavelength to x}
-        \PY{k}{def} \PY{n+nf}{x}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{:}
-            \PY{k}{return} \PY{l+m+mf}{10000.} \PY{o}{/} \PY{n}{wave}
-        
-        \PY{c+c1}{\PYZsh{} Define an extinction law (to be used below)}
-        \PY{k}{def} \PY{n+nf}{my\PYZus{}X}\PY{p}{(}\PY{n}{wave}\PY{p}{,} \PY{n}{par}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
-            \PY{n}{x} \PY{o}{=} \PY{l+m+mf}{10000.} \PY{o}{/} \PY{n}{wave}
-            \PY{n}{Rv} \PY{o}{=} \PY{l+m+mf}{3.1}
-            \PY{n}{X\PYZus{}lin} \PY{o}{=} \PY{n}{x}\PY{o}{/}\PY{l+m+mf}{2.} \PY{c+c1}{\PYZsh{} linear part of the extinction law}
-            \PY{n}{X\PYZus{}bump} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mf}{2.} \PY{o}{\PYZhy{}}\PY{l+m+mi}{6}\PY{o}{*}\PY{n}{x} \PY{o}{+} \PY{l+m+mf}{20.} \PY{c+c1}{\PYZsh{} bump part of the extinction law}
-            \PY{k}{return} \PY{n}{Rv}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{x}\PY{o}{\PYZlt{}}\PY{l+m+mf}{5.}\PY{p}{,} \PY{n}{X\PYZus{}lin}\PY{p}{,} \PY{n}{X\PYZus{}bump}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Define a reddening correction object}
-        \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} List the available laws}
-        \PY{c+c1}{\PYZsh{}RC.printLaws()}
-        
-        \PY{c+c1}{\PYZsh{} Plot the available laws}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
-        \PY{n}{RC}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{laws}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Choose the one we intend to use }
-        \PY{n}{RC}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}
-        \PY{c+c1}{\PYZsh{} or define a new one}
-        \PY{n}{RC}\PY{o}{.}\PY{n}{UserFunction} \PY{o}{=} \PY{n}{my\PYZus{}X}
-        \PY{n}{RC}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user}\PY{l+s+s1}{\PYZsq{}}
-        
-        \PY{c+c1}{\PYZsh{} Plot the selected law as a function of x}
-        \PY{c+c1}{\PYZsh{} Define an array in lambda to do the plot}
-        \PY{n}{wave}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{logspace}\PY{p}{(}\PY{l+m+mf}{2.5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} Plot commands}
-        \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-        \PY{n}{ax} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-        \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylim}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{15}\PY{p}{]}\PY{p}{)}
-        \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
-        \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{,} \PY{n}{my\PYZus{}X}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{RC}\PY{o}{.}\PY{n}{law}\PY{p}{)}\PY{p}{)}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1/\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{lambda\PYZdl{} (\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{mu\PYZca{}\PYZob{}\PYZhy{}1\PYZcb{}\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A\PYZdl{}\PYZus{}V\PYZdl{}/E(B\PYZhy{}V)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{upper left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Correct observed line ratios}
-        \PY{n}{wave1} \PY{o}{=} \PY{l+m+mi}{5007}
-        \PY{n}{I\PYZus{}obs1} \PY{o}{=} \PY{l+m+mf}{4.0}
-        \PY{n}{wave2} \PY{o}{=} \PY{l+m+mi}{4686}
-        \PY{n}{I\PYZus{}obs2} \PY{o}{=} \PY{l+m+mf}{0.10}
-        
-        \PY{c+c1}{\PYZsh{} Correct based on the given law and the observed Ha/Hb ratio}
-        \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{n}{law}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{I\PYZus{}obs\PYZus{}HaHb} \PY{o}{=} \PY{l+m+mf}{3.5} 
-        \PY{n}{I\PYZus{}theo\PYZus{}HaHb} \PY{o}{=} \PY{l+m+mf}{2.86} 
-        \PY{n}{RC}\PY{o}{.}\PY{n}{setCorr}\PY{p}{(}\PY{n}{I\PYZus{}obs\PYZus{}HaHb} \PY{o}{/} \PY{n}{I\PYZus{}theo\PYZus{}HaHb}\PY{p}{,} \PY{l+m+mf}{6563.}\PY{p}{,} \PY{l+m+mf}{4861.}\PY{p}{)}
-        \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Correction based on the given law and the observed Ha/Hb ratio:}\PY{l+s+s1}{\PYZsq{}}
-        \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave1}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave1}\PY{p}{)}
-        \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave2}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave2}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Correct based on the given law and c(Hb)}
-        \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{n}{law}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{cHbeta}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
-        \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{Correction based on the given law and c(Hbeta):}\PY{l+s+s1}{\PYZsq{}}
-        \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave1}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave1}\PY{p}{)}
-        \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave2}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave2}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}171}]:} \PY{c+c1}{\PYZsh{} Diagnostic plot}
+          
+          \PY{c+c1}{\PYZsh{} Imports}
+          \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+          \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}png\PYZsq{}
+          \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
+          \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+          
+          \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} General settings}
+          \PY{c+c1}{\PYZsh{} Setting verbosity level. Enter pn.my\PYZus{}logging? for details}
+          \PY{n}{pn}\PY{o}{.}\PY{n}{log\PYZus{}}\PY{o}{.}\PY{n}{level} \PY{o}{=} \PY{l+m+mi}{2} \PY{c+c1}{\PYZsh{} set this to 3 to have more details}
+          
+          \PY{c+c1}{\PYZsh{} Adopt an extinction law}
+          \PY{n}{extinction\PYZus{}law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}
+          
+          \PY{c+c1}{\PYZsh{} Define the data file}
+          \PY{n}{obs\PYZus{}data} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{smc24.dat}\PY{l+s+s1}{\PYZsq{}}
+          
+          \PY{c+c1}{\PYZsh{} Define plot title}
+          \PY{n}{title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SMC 24}\PY{l+s+s1}{\PYZsq{}}
+          
+          \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Read and deredden observational data}
+          \PY{c+c1}{\PYZsh{} define an Observation object and assign it to name \PYZsq{}obs\PYZsq{}}
+          \PY{n}{obs} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Observation}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} fill obs with data read from file obs\PYZus{}data, with lines varying across rows and a default percent error on line intensities}
+          \PY{n}{obs}\PY{o}{.}\PY{n}{readData}\PY{p}{(}\PY{n}{obs\PYZus{}data}\PY{p}{,} \PY{n}{fileFormat}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lines\PYZus{}in\PYZus{}rows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{err\PYZus{}default}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} deredden data with Cardelli\PYZsq{}s law}
+          \PY{n}{obs}\PY{o}{.}\PY{n}{extinction}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{n}{extinction\PYZus{}law}
+          \PY{n}{obs}\PY{o}{.}\PY{n}{correctData}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Include the diagnostics of interest}
+          \PY{c+c1}{\PYZsh{} instantiate the Diagnostics class}
+          \PY{n}{diags} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{Diagnostics}\PY{p}{(}\PY{p}{)}
+          \PY{c+c1}{\PYZsh{} include in diags the relevant line ratios}
+          \PY{n}{diags}\PY{o}{.}\PY{n}{addDiag}\PY{p}{(}\PY{p}{[}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NII] 5755/6584}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OII] 3726/3729}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[OIII] 4363/5007}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 4072+/6720+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SIII] 6312/18.7m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NeIII] 3930+/15.6m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                        \PY{p}{]}\PY{p}{)}
+          \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII]a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{diags}\PY{o}{.}\PY{n}{addClabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 4072+/6720+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII]b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Create the emission maps to be compared to the observation data (some overkill here)}
+          \PY{n}{emisgrids} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{getEmisGridDict}\PY{p}{(}\PY{n}{atom\PYZus{}list}\PY{o}{=}\PY{n}{diags}\PY{o}{.}\PY{n}{getUniqueAtoms}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{den\PYZus{}max}\PY{o}{=}\PY{l+m+mf}{1e6}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Plot}
+          \PY{c+c1}{\PYZsh{} Create the contour plot as the intersection of tem\PYZhy{}den emission maps with dereddened line ratios}
+          \PY{n}{diags}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{emisgrids}\PY{p}{,} \PY{n}{obs}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Place the title}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{title}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Display the plot}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}The observed ratio can be automatically extracted from an Observation object named obs:}
+          \PY{n}{Te}\PY{p}{,} \PY{n}{Ne} \PY{o}{=} \PY{n}{diags}\PY{o}{.}\PY{n}{getCrossTemDen}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[NII] 5755/6548}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[SII] 6731/6716}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{obs}\PY{o}{=}\PY{n}{obs}\PY{p}{)}
+          \PY{k}{print} \PY{n}{Te}\PY{p}{,} \PY{n}{Ne}
 \end{Verbatim}
 
-    \subsection{Line ratio and diagnostics}
+    \begin{Verbatim}[commandchars=\\\{\}]
+warng EmissionLine: line 33.6m for atom S3 not valid
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_364_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+12117.9858196 4633.56182002
+
+    \end{Verbatim}
+
+\section{Extinction}\label{extinction}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}159}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+{\color{incolor}In [{\color{incolor}172}]:} \PY{c+c1}{\PYZsh{} Sample extinction in PyNeb}
+          \PY{c+c1}{\PYZsh{} shows how to display available extinction laws, select one or define a new one,}
+          \PY{c+c1}{\PYZsh{} and do some simple dereddening calculations}
+          \PY{c+c1}{\PYZsh{} Further examples can be found in other sample scripts}
+          \PY{o}{\PYZpc{}}\PY{k}{config} InlineBackend.figure\PYZus{}format = \PYZsq{}svg\PYZsq{}
+          \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+          \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+          \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
+          
+          \PY{c+c1}{\PYZsh{} Convert wavelength to x}
+          \PY{k}{def} \PY{n+nf}{x}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{:}
+              \PY{k}{return} \PY{l+m+mf}{10000.} \PY{o}{/} \PY{n}{wave}
+          
+          \PY{c+c1}{\PYZsh{} Define an extinction law (to be used below)}
+          \PY{k}{def} \PY{n+nf}{my\PYZus{}X}\PY{p}{(}\PY{n}{wave}\PY{p}{,} \PY{n}{par}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+              \PY{n}{x} \PY{o}{=} \PY{l+m+mf}{10000.} \PY{o}{/} \PY{n}{wave}
+              \PY{n}{Rv} \PY{o}{=} \PY{l+m+mf}{3.1}
+              \PY{n}{X\PYZus{}lin} \PY{o}{=} \PY{n}{x}\PY{o}{/}\PY{l+m+mf}{2.} \PY{c+c1}{\PYZsh{} linear part of the extinction law}
+              \PY{n}{X\PYZus{}bump} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mf}{2.} \PY{o}{\PYZhy{}}\PY{l+m+mi}{6}\PY{o}{*}\PY{n}{x} \PY{o}{+} \PY{l+m+mf}{20.} \PY{c+c1}{\PYZsh{} bump part of the extinction law}
+              \PY{k}{return} \PY{n}{Rv}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{x}\PY{o}{\PYZlt{}}\PY{l+m+mf}{5.}\PY{p}{,} \PY{n}{X\PYZus{}lin}\PY{p}{,} \PY{n}{X\PYZus{}bump}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Define a reddening correction object}
+          \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} List the available laws}
+          \PY{c+c1}{\PYZsh{}RC.printLaws()}
+          
+          \PY{c+c1}{\PYZsh{} Plot the available laws}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+          \PY{n}{RC}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{laws}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Choose the one we intend to use }
+          \PY{n}{RC}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}
+          \PY{c+c1}{\PYZsh{} or define a new one}
+          \PY{n}{RC}\PY{o}{.}\PY{n}{UserFunction} \PY{o}{=} \PY{n}{my\PYZus{}X}
+          \PY{n}{RC}\PY{o}{.}\PY{n}{law} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user}\PY{l+s+s1}{\PYZsq{}}
+          
+          \PY{c+c1}{\PYZsh{} Plot the selected law as a function of x}
+          \PY{c+c1}{\PYZsh{} Define an array in lambda to do the plot}
+          \PY{n}{wave}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{logspace}\PY{p}{(}\PY{l+m+mf}{2.5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{)}
+          \PY{c+c1}{\PYZsh{} Plot commands}
+          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+          \PY{n}{ax} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+          \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylim}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{15}\PY{p}{]}\PY{p}{)}
+          \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+          \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{,} \PY{n}{my\PYZus{}X}\PY{p}{(}\PY{n}{wave}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{RC}\PY{o}{.}\PY{n}{law}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1/\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{lambda\PYZdl{} (\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{mu\PYZca{}\PYZob{}\PYZhy{}1\PYZcb{}\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A\PYZdl{}\PYZus{}V\PYZdl{}/E(B\PYZhy{}V)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{upper left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Correct observed line ratios}
+          \PY{n}{wave1} \PY{o}{=} \PY{l+m+mi}{5007}
+          \PY{n}{I\PYZus{}obs1} \PY{o}{=} \PY{l+m+mf}{4.0}
+          \PY{n}{wave2} \PY{o}{=} \PY{l+m+mi}{4686}
+          \PY{n}{I\PYZus{}obs2} \PY{o}{=} \PY{l+m+mf}{0.10}
+          
+          \PY{c+c1}{\PYZsh{} Correct based on the given law and the observed Ha/Hb ratio}
+          \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{n}{law}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{I\PYZus{}obs\PYZus{}HaHb} \PY{o}{=} \PY{l+m+mf}{3.5} 
+          \PY{n}{I\PYZus{}theo\PYZus{}HaHb} \PY{o}{=} \PY{l+m+mf}{2.86} 
+          \PY{n}{RC}\PY{o}{.}\PY{n}{setCorr}\PY{p}{(}\PY{n}{I\PYZus{}obs\PYZus{}HaHb} \PY{o}{/} \PY{n}{I\PYZus{}theo\PYZus{}HaHb}\PY{p}{,} \PY{l+m+mf}{6563.}\PY{p}{,} \PY{l+m+mf}{4861.}\PY{p}{)}
+          \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Correction based on the given law and the observed Ha/Hb ratio:}\PY{l+s+s1}{\PYZsq{}}
+          \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave1}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave1}\PY{p}{)}
+          \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave2}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave2}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Correct based on the given law and c(Hb)}
+          \PY{n}{RC} \PY{o}{=} \PY{n}{pn}\PY{o}{.}\PY{n}{RedCorr}\PY{p}{(}\PY{n}{law}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CCM89}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{cHbeta}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+          \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{Correction based on the given law and c(Hbeta):}\PY{l+s+s1}{\PYZsq{}}
+          \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave1}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs1} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave1}\PY{p}{)}
+          \PY{k}{print} \PY{n+nb}{str}\PY{p}{(}\PY{n}{wave2}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{: I\PYZus{}obs =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ I\PYZus{}dered =}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{I\PYZus{}obs2} \PY{o}{*} \PY{n}{RC}\PY{o}{.}\PY{n}{getCorrHb}\PY{p}{(}\PY{n}{wave2}\PY{p}{)}
+\end{Verbatim}
+
+    
+    \begin{verbatim}
+<matplotlib.figure.Figure at 0x115787950>
+    \end{verbatim}
+
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_366_1.pdf}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_366_2.pdf}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Correction based on the given law and the observed Ha/Hb ratio:
+5007: I\_obs = 4.0  I\_dered = 3.89887770727
+4686: I\_obs = 0.1  I\_dered = 0.103424700345
+
+Correction based on the given law and c(Hbeta):
+5007: I\_obs = 4.0  I\_dered = 3.89706278973
+4686: I\_obs = 0.1  I\_dered = 0.103488047966
+
+    \end{Verbatim}
+
+\section{Line ratio and diagnostics}\label{line-ratio-and-diagnostics}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}173}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
           \PY{l+s+sd}{Sample PyNeb script}
           \PY{l+s+sd}{Plots the [O III] 4363/5007 ratio as a function of Te for several Ne values}
           \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
@@ -3861,14 +3952,14 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_367_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_368_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \subsection{Contour plots}
+\section{Contour plots}\label{contour-plots}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}160}]:} \PY{c+c1}{\PYZsh{} Plot the contour diagram of the selected diagnostics}
+{\color{incolor}In [{\color{incolor}174}]:} \PY{c+c1}{\PYZsh{} Plot the contour diagram of the selected diagnostics}
           \PY{c+c1}{\PYZsh{} Warning: it takes a long time to plot the 80 contours}
           \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -3897,14 +3988,15 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_369_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_370_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \subsection{Diagnostic diagrams of a 2-components region}
+\section{Diagnostic diagrams of a 2-components
+region}\label{diagnostic-diagrams-of-a-2-components-region}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}161}]:} \PY{c+c1}{\PYZsh{} Analysis plot of a simple two\PYZhy{}component model, meant to illustrate the bias arising }
+{\color{incolor}In [{\color{incolor}175}]:} \PY{c+c1}{\PYZsh{} Analysis plot of a simple two\PYZhy{}component model, meant to illustrate the bias arising }
           \PY{c+c1}{\PYZsh{} from assuming that the region is homogeneous in density}
           \PY{c+c1}{\PYZsh{} First, an emission region made up of two different subregions is modelled,}
           \PY{c+c1}{\PYZsh{} each with a different mass and density. The resulting overall emissivity is computed}
@@ -3975,15 +4067,23 @@ see what's happening, or to avoid being annoyed by too many messages.
           \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
+    \begin{Verbatim}[commandchars=\\\{\}]
+0.89220155323 <type 'numpy.float64'>
+2.30324282866 <type 'numpy.float64'>
+0.899354220227 <type 'numpy.float64'>
+
+    \end{Verbatim}
+
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_371_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_372_1.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Diagnostic diagrams of a 2-components region¶}
+\chapter{Diagnostic diagrams of a 2-components
+region¶}\label{diagnostic-diagrams-of-a-2-components-region}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}162}]:} \PY{c+c1}{\PYZsh{} Emissivity plot}
+{\color{incolor}In [{\color{incolor}176}]:} \PY{c+c1}{\PYZsh{} Emissivity plot}
           \PY{c+c1}{\PYZsh{} For a quick and dirty plot, see also o3.plotEmiss}
           
           \PY{c+c1}{\PYZsh{} Imports}
@@ -4017,14 +4117,14 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_373_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_374_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Grotrian diagrams}
+\chapter{Grotrian diagrams}\label{grotrian-diagrams}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}163}]:} \PY{c+c1}{\PYZsh{} Grotrian diagram of [O II]}
+{\color{incolor}In [{\color{incolor}177}]:} \PY{c+c1}{\PYZsh{} Grotrian diagram of [O II]}
           
           \PY{c+c1}{\PYZsh{} Imports}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -4038,14 +4138,15 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_375_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_376_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Comparison of transition probabilities}
+\chapter{Comparison of transition
+probabilities}\label{comparison-of-transition-probabilities}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}164}]:} \PY{c+c1}{\PYZsh{} Transition probabilities plot}
+{\color{incolor}In [{\color{incolor}178}]:} \PY{c+c1}{\PYZsh{} Transition probabilities plot}
           
           \PY{c+c1}{\PYZsh{} Imports}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -4058,14 +4159,15 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_377_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_378_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Comparison of collision strengths for a given ion}
+\chapter{Comparison of collision strengths for a given
+ion}\label{comparison-of-collision-strengths-for-a-given-ion}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}165}]:} \PY{c+c1}{\PYZsh{} Collision strength plot}
+{\color{incolor}In [{\color{incolor}179}]:} \PY{c+c1}{\PYZsh{} Collision strength plot}
           
           \PY{c+c1}{\PYZsh{} Imports}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -4078,14 +4180,14 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_379_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_380_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Emissivity map of a line}
+\chapter{Emissivity map of a line}\label{emissivity-map-of-a-line}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}166}]:} \PY{c+c1}{\PYZsh{} Emissivity map of [O III] 5007 }
+{\color{incolor}In [{\color{incolor}180}]:} \PY{c+c1}{\PYZsh{} Emissivity map of [O III] 5007 }
           
           \PY{c+c1}{\PYZsh{} Imports}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -4107,14 +4209,15 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_381_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_382_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \section{Emissivity map of a line ratio}
+\chapter{Emissivity map of a line
+ratio}\label{emissivity-map-of-a-line-ratio}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}167}]:} \PY{c+c1}{\PYZsh{} Emissivity map of the [O III] 4363/5007 line ratio}
+{\color{incolor}In [{\color{incolor}181}]:} \PY{c+c1}{\PYZsh{} Emissivity map of the [O III] 4363/5007 line ratio}
           
           \PY{c+c1}{\PYZsh{} Imports}
           \PY{k+kn}{import} \PY{n+nn}{pyneb} \PY{k+kn}{as} \PY{n+nn}{pn}
@@ -4127,7 +4230,7 @@ see what's happening, or to avoid being annoyed by too many messages.
 \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_383_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{PyNeb_Handbook_files/PyNeb_Handbook_384_0.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
