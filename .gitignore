@@ -1,3 +1,21 @@
+#
+**/dev_test/
+**/my_tests/
+fits_VL_2011
+.project
+.pydevproject
+.ipynb_checkpoints
+**html/
+**pypics/
+PyNeb_Handbook.pdf
+.svn/
+*.*~
+.DS_Store
+PyNeb_Handbook_files/
+**reference_manual_latex/
+*.aux
+*.out
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -55,22 +73,3 @@ docs/_build/
 
 # PyBuilder
 target/
-
-#
-**/dev_test/
-**/my_tests/
-fits_VL_2011
-.project
-.pydevproject
-.ipynb_checkpoints
-**html/
-**pypics/
-PyNeb_Handbook.pdf
-**/.svn/
-*.*~
-.DS_Store
-PyNeb_Handbook_files/
-devel_reference_manual_latex/
-user_reference_manual_latex/
-*.aux
-*.out
