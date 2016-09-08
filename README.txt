@@ -31,15 +31,15 @@ You may find useful to download, install and upgrade PyNeb using `pip <http://ww
 
 For example:
 
-* pip install --user PyNeb
+* pip install PyNeb
 
-Note you do NOT need --user if you installed python with Ureka or Canopy
+Note you MAY need --user if you installed python without Anaconda or Canopy
 
 Updates use the same command. You can also use:
 
-* easy_install --user PyNeb
+* easy_install PyNeb
 
-Note you do NOT need --user if you installed python with Ureka or Canopy
+Note you MAY need --user if you installed python without Anaconda or Canopy
 
 Warranty
 ========
@@ -49,7 +49,7 @@ PyNeb is provided as it is. No warranty at all.
 Manual
 ======
 
-* The HowTo user guide, reference manual and developer manual are accessible from `HERE <http://pythonhosted.org/PyNeb/>`_.
+* The HowTo user guide, reference manual and developer manual are accessible from `HERE <http://132.248.1.102/PyNeb/>`_.
 
 Discussion Groups
 =================
