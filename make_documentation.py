@@ -31,7 +31,7 @@ def HowTo_inPDF():
 	#run("/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --invisible --convert-to pdf --outdir pyneb/docs pyneb/docs/PyNeb_HowTo.docx".format(pyneb.__version__))
 
 def HandBook_inPDF():
-	run("cd pyneb/doc ; ipython nbconvert --to latex --template mytemplate --post PDF  PyNeb_Handbook")
+	run("cd pyneb/doc ; jupyter-nbconvert --to latex --template mytemplate --post PDF  PyNeb_Handbook")
 	run("cp pyneb/doc/PyNeb_Handbook.pdf pyneb/doc/html")
 
 if __name__ == '__main__':
