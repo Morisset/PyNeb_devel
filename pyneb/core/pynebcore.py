@@ -16,7 +16,7 @@ from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve
 from ..utils import chebyshev
 from ..utils.init import LINE_LABEL_LIST, BLEND_LIST, SPEC_LIST, label2levelDict
-from ..utils.physics import sym2name, gsDict, gsLevelDict, gsFromAtom, vactoair, CST
+from ..utils.physics import sym2name, gsLevelDict, gsFromAtom, vactoair, CST
 from ..utils.manage_atomic_data import getLevelsNIST
 from ..utils.pn_chianti import _AtomChianti, _CollChianti
 from ..extinction.red_corr import RedCorr
@@ -2554,7 +2554,7 @@ class Atom(object):
                     pass
                 shift += 1
         ax.text(1 - dx / 2., max(energies) * 0.5, 'E [{0:s}] '.format(unit), horizontalalignment='right', color='blue')
-        plt.xlabel('Ground-state configuration: {0}'.format(self.gs), color="#004400")
+        ax.set_xlabel('Ground-state configuration: {0}'.format(self.gs), color="#004400")
                
         ax.xaxis.set_ticks_position("none")
         ax.yaxis.set_ticks_position("none")

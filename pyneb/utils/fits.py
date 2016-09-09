@@ -9,7 +9,7 @@ except:
         import astropy.io.fits as pyfits
     except:
         pn.log_.error('pyfits not installed')
-from physics import sym2name, gsDict
+from physics import sym2name, gsFromAtom
 
     
 def _updateHeader(hdu, input_file, content, elem, spec):
@@ -29,11 +29,7 @@ def _updateHeader(hdu, input_file, content, elem, spec):
     hdu.header.update('ATOM', sym2name[elem.capitalize()])
     hdu.header.update('SPECTRUM', roman_to_int(spec))
     atom = elem.capitalize() + str(roman_to_int(spec))
-    for key in gsDict.keys():
-        if (atom in gsDict[key]):
-            gs = key
-        else:
-            gs = 'unknown'
+    gs = gsFromAtom(atom)
     hdu.header.update('GSCONFIG', gs)
     
 
