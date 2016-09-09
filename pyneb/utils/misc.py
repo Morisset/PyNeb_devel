@@ -157,7 +157,9 @@ def roman_to_int(input_):
       
       
 def parseAtom(atom):
-    '''Parses an atom label into the element and spectrum parts'''
+    '''
+    Parses an atom label into the element and spectrum parts
+    '''
 
     iso = ''
     elem = ''
