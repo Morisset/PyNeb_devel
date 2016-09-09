@@ -1,5 +1,5 @@
-from math import sqrt
 import numpy as np
+from misc import parseAtom
 
 class CST(object):
     BOLTZMANN = 1.3806488e-16 # erg/K - NIST 2010
@@ -13,7 +13,7 @@ class CST(object):
     RYD_EV = HPLANCK * CLIGHT * RYD * 1.e-7 / ECHARGE # infinite mass Rydberg in eV
     RYD_ANG = 1.e8 / RYD # infinite mass Rydberg in A
     RYD2ERG = HPLANCK * CLIGHT * RYD
-    KCOLLRATE = sqrt(2 * PI / BOLTZMANN) * (HPLANCK / (2 * PI))**2 / EMASS**1.5 # constant of collisional rate equation
+    KCOLLRATE = np.sqrt(2 * PI / BOLTZMANN) * (HPLANCK / (2 * PI))**2 / EMASS**1.5 # constant of collisional rate equation
     BOLTZMANN_eVK = 8.617343e-5 # Boltzmann constant in eV/K
     
     HBETA = 4861.3316598713955
@@ -21,6 +21,7 @@ class CST(object):
 Z = {}
 Z["H"] = 1
 Z["He"] = 2
+#Z["3He"] = 2
 Z["Li"] = 3
 Z["Be"] = 4
 Z["B"] = 5
@@ -129,6 +130,9 @@ Z["Bh"] = 107
 Z["Hs"] = 108
 Z["Mt"] = 109
 
+Z_inv = {}
+for k in Z.keys():
+    Z_inv[Z[k]] = k
 
 IP = {}
 IP['H2'] = 13.598
@@ -221,8 +225,10 @@ IP['K6'] = 82.66
 
 sym2name = {
             'H': 'hydrogen',
-            'He': 'helium',
             '3He': 'helium',
+            'He': 'helium',
+            'Li': 'lithium',
+            'Be': 'beryllium',
             'B': 'boron',
             'C': 'carbon',
             'N': 'nitrogen',
@@ -231,7 +237,7 @@ sym2name = {
             'Ne': 'neon',
             'Na': 'sodium',
             'Mg': 'magnesium',
-            'Al': 'aluminium',
+            'Al': 'aluminum',
             'Si': 'silicon',
             'P': 'phosphorus',
             'S': 'sulfur',
@@ -239,26 +245,102 @@ sym2name = {
             'Ar': 'argon',
             'K': 'potassium',
             'Ca': 'calcium',
+            'Sc': 'scandium',
+            'Ti': 'titanium',
+            'V': 'vanadium',
             'Cr': 'chromium',
+            'Mn': 'manganese',
             'Fe': 'iron',
             'Co': 'cobalt',
             'Ni': 'nickel',
             'Cu': 'copper',
             'Zn': 'zinc',
+            'Ga': 'gallium',
+            'Ge': 'germanium',
+            'As': 'arsenic',
             'Se': 'selenium',
             'Br': 'bromine',
             'Kr': 'krypton',
+            'Rb': 'rubidium',
+            'Sr': 'strontium',
+            'Y': 'yttrium',
+            'Zr': 'zirconium',
+            'Nb': 'niobium',
+            'Mo': 'molybdenum',
+            'Tc': 'technetium',
+            'Ru': 'ruthenium',
+            'Rh': 'rhodium',
+            'Pd': 'palladium',
             'Ag': 'silver',
-            'Au': 'gold',
-            'Ba': 'barium',
+            'Cd': 'cadmium',
+            'In': 'indium',
+            'Sn': 'tin',
+            'Sb': 'antimony',
+            'Te': 'tellurium',
+            'I': 'iodine',
             'Xe': 'xenon',
-            'Rb': 'rubidium'
+            'Cs': 'cesium',
+            'Ba': 'barium',
+            'La': 'lanthanum',
+            'Ce': 'cerium',
+            'Pr': 'praseodymium',
+            'Nd': 'neodymium',
+            'Pm': 'promethium',
+            'Sm': 'samarium',
+            'Eu': 'europium',
+            'Gd': 'gadolinium',
+            'Tb': 'terbium',
+            'Dy': 'dysprosium',
+            'Ho': 'holmium',
+            'Er': 'erbium',
+            'Tm': 'thulium',
+            'Yb': 'ytterbium',
+            'Lu': 'lutetium',
+            'Hf': 'hafnium',
+            'Ta': 'tantalum',
+            'W': 'tungsten',
+            'Re': 'rhenium',
+            'Os': 'osmium',
+            'Ir': 'iridium',
+            'Pt': 'platinum',
+            'Au': 'gold',
+            'Hg': 'mercury',
+            'Tl': 'thallium',
+            'Pb': 'lead',
+            'Bi': 'bismuth',
+            'Po': 'polonium',
+            'At': 'astatine',
+            'Rn': 'radon',
+            'Fr': 'francium',
+            'Ra': 'radium',
+            'Ac': 'actinium',
+            'Th': 'thorium',
+            'Pa': 'protactinium',
+            'U': 'uranium',
+            'Np': 'neptunium',
+            'Pu': 'plutonium',
+            'Am': 'americium',
+            'Cm': 'curium',
+            'Bk': 'berkelium',
+            'Cf': 'californium',
+            'Es': 'einsteinium',
+            'Fm': 'fermium',
+            'Md': 'mendelevium',
+            'No': 'nobelium',
+            'Lr': 'lawrencium',
+            'Rf': 'rutherfordium',
+            'Db': 'dubnium',
+            'Sg': 'seaborgium',
+            'Bh': 'bohrium',
+            'Hs': 'hassium',
+            'Mt': 'meitnerium',
+            'Ds': 'darmstadtium'
             }
-
+"""
 gsDict = {
             'p1': ['C2', 'N3', 'O4', 'F5', 'Al1', 'Si2', 'P3', 'S4', 'Ar6', 'Se4', 'Ga1', 'Ge2', 'As3', 'Se4',
                    'K7', 'Ca8', 'Fe14', 'Ni16', 'In1', 'Sn2', 'Sb3', 'Te4', 'I5', 'Xe6'],
-            'p2': ['N2', 'O3', 'Ne5', 'S3', 'Cl4', 'Ar5', 'Se3', 'Kr5', 'Xe5', 'Rb6'],
+            'p2': ['C1', 'N2', 'O3', 'Ne5', 'S3', 'Cl4', 'Ar5', 'Se3', 'Kr5', 'Xe5', 'Rb6'],
             'p3': ['N1', 'O2', 'Ne4', 'Na5', 'S2', 'Cl3', 'Ar4', 'K5', 'Se2', 'Kr4', 'Xe4', 'Rb5', 'Br3'],
             'p4': ['O1', 'Ne3', 'Na4', 'Mg5', 'Cl2', 'Ar3', 'K4', 'Ca5', 'Kr3', 'Xe3', 'Rb4'],
             'p5': ['Ne2', 'Na3', 'Si6', 'Cl1', 'Ar2', 'K3', 'Ba4'],
@@ -269,15 +351,40 @@ gsDict = {
             'd4': ['Fe5'],
             'd5': ['Fe4'],
             'd6': ['Fe3'],
+            'd7': ['Fe2'],
             'd8': ['Ni3']
             }
+"""
 
+def gsFromAtom(atom, verbose=False):
+    """
+    atom: eg 'O3' for O++
+    """
+    special_dict = {'Fe2': 'd7', 'Fe3': 'd6', 'Fe4': 'd5', 'Fe5': 'd4', 'Fe6': 'd3', 'Fe7': 'd2', 'Ni3': 'd8',
+                    'Ba2': 's1'}
+    if atom in special_dict:
+        return special_dict[atom]
+    
+    elem, i_str = parseAtom(atom) # Tranform e.g. 'O3' into 'O', '3'
+    z = Z[elem]
+    conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6') 
+    cn = np.array([2, 10, 28, 46, 78])
+    k = z - int(i_str) - cn
+    k_res = np.min(k[k>=0])
+    try:
+        res = conf[k_res]
+    except:
+        res = 'unknown'
+    return res
+
+"""
 def gsFromAtom(atom):
     result = 'unknown'
     for gs in gsDict:
         if atom in gsDict[gs]:
             result = gs
     return result
+"""
     
 gsLevelDict = {
             'p1': ['$^2$P$_{1/2}$', '$^2$P$_{3/2}$', '$^4$P$_{1/2}$', '$^4$P$_{3/2}$', '$^4$P$_{5/2}$', '$^2$D$_{3/2}$', '$^2$D$_{5/2}$', '$^2$S$_{1/2}$'],
