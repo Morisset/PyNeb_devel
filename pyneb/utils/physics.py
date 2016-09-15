@@ -237,7 +237,7 @@ sym2name = {
             'Ne': 'neon',
             'Na': 'sodium',
             'Mg': 'magnesium',
-            'Al': 'aluminum',
+            'Al': 'aluminium',
             'Si': 'silicon',
             'P': 'phosphorus',
             'S': 'sulfur',
@@ -366,12 +366,15 @@ def gsFromAtom(atom, verbose=False):
         return special_dict[atom]
     
     elem, i_str = parseAtom(atom) # Tranform e.g. 'O3' into 'O', '3'
-    z = Z[elem]
+    try:
+        z = Z[elem]
+    except:
+        return 'unknown'
     conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6') 
     cn = np.array([2, 10, 28, 46, 78])
     k = z - int(i_str) - cn
-    k_res = np.min(k[k>=0])
     try:
+        k_res = np.min(k[k>=0])
         res = conf[k_res]
     except:
         res = 'unknown'
