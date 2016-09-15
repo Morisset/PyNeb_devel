@@ -161,6 +161,8 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
                 isplups = isplups[0]                
             if len(isplups) == 0:
                 ups = np.zeros(ntemp)
+            elif len(isplups) > 1:
+                isplups = isplups[0]
             else:
                 ttype=Splups["ttype"][isplups]
                 cups=Splups["cups"][isplups]
@@ -269,10 +271,10 @@ class _AtomChianti(object):
         if self.NLevels is None:
             self.NLevels = len(self.Chianti_E)
         self.NIST = getLevelsNIST(self.atom, self.NLevels)
-        self.NLevels = np.min((len(self.NIST), self.NLevels))
         need_NIST = True
         
         if self.NIST is not None:
+            self.NLevels = np.min((len(self.NIST), self.NLevels))    
             energy = self.NIST['energy'] / 1e8
             stat_weight = 1 + 2 * self.NIST['J']
             self.comments['VACUUM'] = '1'
