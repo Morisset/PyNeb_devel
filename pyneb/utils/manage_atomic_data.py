@@ -500,6 +500,27 @@ class _ManageAtomicData(object):
             except:
                 pn.log_.warn('File not found {}, no Chianti data available'.format(masterlist), 
                              calling='_initChianti')
+    def addAllChianti(self):
+        atoms = self.getAllAtoms()
+        masterlist = '{0}/masterlist/masterlist.ions'.format(self.Chianti_path)
+        try:
+            with open(masterlist, 'r') as f:
+                lines = f.readlines()
+        except:
+            pn.config.error('Masterlist file not read', calling='addAllChianti')
+            return None
+        chianti_ions = [l[0:7].strip() for l in lines]
+        chianti_ions = [i.capitalize().replace('_','') for i in chianti_ions if i[-1] != 'd']
+        for cion in chianti_ions:
+            if cion not in atoms and cion not in ('H1', 'He1', 'He2'):
+                try:
+                    atfiles = self.getAllAvailableFiles(cion)
+                    for atfile in atfiles:
+                        self.setDataFile(atfile)
+                except:
+                    pass
+
+
         
     def printPoem(self, yr=0):
         """
