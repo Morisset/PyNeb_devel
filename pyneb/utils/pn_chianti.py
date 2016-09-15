@@ -457,7 +457,9 @@ class _CollChianti(object):
         self._CollArray = Chianti_getOmega(self.ion_chianti, tem=self._TemArray, 
                                    Splups=self.Splups, NLevels=self.NLevels)
         
+        self.NLevels = np.min((self._CollArray.shape[0]-1, self._CollArray.shape[1]-1, self.NLevels))
         self.Chianti2NIST = get_levs_order(self.atom, NLevels=self.NLevels)
+        
         if self.Chianti2NIST is not None:
             _CollArray_tmp = self._CollArray.copy()
             for i_chianti in self.Chianti2NIST:
