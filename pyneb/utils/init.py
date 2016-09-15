@@ -2,7 +2,7 @@ import numpy as np
 import pyneb as pn
 
 ELEM_LIST = ['Ag', 'Al', 'Ar', 'Au', 'B', 'Ba', 'C', 'Ca', 'Cl', 'Co', 'Cr', 'Cu', 'F', 'Fe', 'H', 'He', 'K',
-             'Kr', 'Mg', 'N', 'Na', 'Ne', 'Ni', 'O', 'P', 'S', 'Si', 'Xe', 'Zn', 'Se', 'Br', 'Rb', '3He']
+             'Kr', 'Mg', 'Mn', 'N', 'Na', 'Ne', 'Ni', 'O', 'P', 'S', 'Si', 'Ti', 'Xe', 'Zn', 'Se', 'Br', 'Rb', '3He']
 SPEC_LIST = ['1', '2', '3', '4', '5', '6', '7']
 
 def _print_LINE_LABEL_LIST(*args, **kwargs):
