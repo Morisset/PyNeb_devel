@@ -1319,8 +1319,11 @@ class Atom(object):
         self._A = self.getA() # index = quantum number - 1
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()
-        self.EnergyNLevels = len(self._Energy)
-        
+        if self.NLevels > 0:
+            self.EnergyNLevels = len(self._Energy)
+        else:
+            self.EnergyNLevels = None
+            
     def getOmega(self, tem, lev_i= -1, lev_j= -1, wave= -1):
         """
         Return interpolated value of the collision strength value at the given temperature 
