@@ -134,6 +134,17 @@ Z_inv = {}
 for k in Z.keys():
     Z_inv[Z[k]] = k
 
+"""
+def make_IPs():
+    import mendeleev
+    for i in np.arange(117):
+        a = mendeleev.element(i+1)
+        to_print = 'IP["{}"] = ['.format(a.symbol)
+        to_print += ', '.join(str(v) for v in a.ionenergies.values())
+        to_print += ']'
+        print(to_print)
+"""
+
 IP = {}
 IP["H"] = [13.5984340051]
 IP["He"] = [24.587387936, 54.41776311]
