@@ -19,8 +19,8 @@ def Chianti_getA(ion_chianti, NLevels=None):
         As_O3 = Chianti_getA('o_3')
     """
     wgfa = _chianti_tools.wgfaRead(ion_chianti)
-    NLevels = np.max(wgfa['lvl2'])
-    As = np.zeros((NLevels, NLevels))
+    NLevels_ori = np.max(wgfa['lvl2'])
+    As = np.zeros((NLevels_ori, NLevels_ori))
     for i, j, a in zip(wgfa['lvl2'], wgfa['lvl1'], wgfa['avalue']):
         As[i-1, j-1] = a
     if NLevels is not None:
