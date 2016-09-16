@@ -16,7 +16,7 @@ from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve
 from ..utils import chebyshev
 from ..utils.init import LINE_LABEL_LIST, BLEND_LIST, SPEC_LIST, label2levelDict
-from ..utils.physics import sym2name, gsLevelDict, gsFromAtom, vactoair, CST
+from ..utils.physics import sym2name, gsLevelDict, gsFromAtom, vactoair, CST, Z, IP
 from ..utils.manage_atomic_data import getLevelsNIST
 from ..utils.pn_chianti import _AtomChianti, _CollChianti
 from ..extinction.red_corr import RedCorr
@@ -1226,6 +1226,19 @@ class Atom(object):
             self.spec = int(spec)
             self.atom = self.elem + str(self.spec)
         self.name = sym2name[self.elem]
+        try:
+            self.Z = Z[self.elem]
+        except:
+            self.Z = -1
+        if self.elem in IP:
+            if self.spec == 1:
+                self.IP = 0
+            elif self.spec < len(IP[self.elem])+2:
+                self.IP = IP[self.elem][self.spec-2]
+            else:
+                self.IP = -1
+        else:
+            self.IP = -1
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making atom object for {0} {1}'.format(self.elem, self.spec), calling=self.calling)
         self.NLevels = NLevels
