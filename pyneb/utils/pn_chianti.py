@@ -161,9 +161,9 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
                 isplups = isplups[0]                
             if len(isplups) == 0:
                 ups = np.zeros(ntemp)
-            elif len(isplups) > 1:
-                isplups = isplups[0]
             else:
+                if len(isplups) > 1 or np.ndim(isplups)==1:
+                    isplups = isplups[0]
                 ttype=Splups["ttype"][isplups]
                 cups=Splups["cups"][isplups]
                 if pn.config.Chianti_version_main == '8':
