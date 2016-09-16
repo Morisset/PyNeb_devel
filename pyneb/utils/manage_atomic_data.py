@@ -564,6 +564,9 @@ def extract_flt(str_):
     extract_flt('123.00?') -> 123.00
     """
     res = ''
+    if len(str_) > 0:
+        if str_[0] in('(', '['):
+            str_ = str_[1:]
     for l in bs(str_):
         if l.isdigit() or l == '.':
             res += l
