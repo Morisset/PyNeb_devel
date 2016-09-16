@@ -1005,8 +1005,8 @@ class _CollDataAscii(object):
 
         self._CollArray = np.zeros((self.NLevels, self.NLevels, len(self._TemArray)))
         for i in range(len(self._lev_is)):
-            lev_i = self._lev_is[i]
-            lev_j = self._lev_js[i]
+            lev_i = int(self._lev_is[i])
+            lev_j = int(self._lev_js[i])
             if (lev_i != 0) and (lev_j != 0) and (lev_i <= self.NLevels) and (lev_j <= self.NLevels):
                 self._CollArray[lev_i-1, lev_j-1, :] = coll_data[i,2:]
            
@@ -1214,6 +1214,7 @@ class Atom(object):
             S2 = pn.Atom(atom='S2', OmegaInterp='Linear')
         """        
         self.log_ = log_
+        self.type = 'coll'
         if atom is not None:
             self.atom = str.capitalize(atom)
             self.elem = parseAtom(self.atom)[0]
@@ -2647,6 +2648,8 @@ class RecAtom(object):
          
         """
         self.log_ = log_
+        self.type = 'rec'
+        self.gs = None
         if atom is not None:
             self.atom = str.capitalize(atom)
             self.elem = parseAtom(self.atom)[0]
@@ -2658,6 +2661,19 @@ class RecAtom(object):
         self.name = sym2name[self.elem]
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making rec-atom object for {0} {1:d}'.format(self.elem, self.spec), calling=self.calling)
+        try:
+            self.Z = Z[self.elem]
+        except:
+            self.Z = -1
+        if self.elem in IP:
+            if self.spec == 1:
+                self.IP = 0
+            elif self.spec < len(IP[self.elem])+2:
+                self.IP = IP[self.elem][self.spec-2]
+            else:
+                self.IP = -1
+        else:
+            self.IP = -1
         
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         file_type = self.recFitsFile.split('.')[-1]
