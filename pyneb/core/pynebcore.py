@@ -1232,14 +1232,27 @@ class Atom(object):
         except:
             self.Z = -1
         if self.elem in IP:
-            if self.spec == 1:
-                self.IP = 0
-            elif self.spec < len(IP[self.elem])+2:
-                self.IP = IP[self.elem][self.spec-2]
-            else:
+            if self.spec == 0:
                 self.IP = -1
+                self.IP_up = -1
+            elif self.spec == 1:
+                self.IP = 0
+                try:
+                    self.IP_up = IP[self.elem][self.spec-1]
+                except:
+                    self.IP = -1                    
+            else:
+                try:
+                    self.IP = IP[self.elem][self.spec-2]
+                except:
+                    self.IP = -1
+                try:
+                    self.IP_up = IP[self.elem][self.spec-1]
+                except:
+                    self.IP = -1                    
         else:
             self.IP = -1
+            self.IP_up = -1
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making atom object for {0} {1}'.format(self.elem, self.spec), calling=self.calling)
         self.NLevels = NLevels
