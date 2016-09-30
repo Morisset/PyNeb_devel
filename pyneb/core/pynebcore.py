@@ -2578,7 +2578,8 @@ class Atom(object):
                     if (detailed is False):
                         ax.text(dx, y, levelLabels[i_tot], size='medium', verticalalignment='center')
                     else:
-                        ax.text(dx, y, str(i_tot+1) + ": " + levelLabels[i_tot] , size='medium', verticalalignment='center', color = color_list[np.mod(multiplets[i_multi][i], len(color_list))])
+                        ax.text(dx, y, str(i_tot+1) + ": " + levelLabels[i_tot] , size='medium', verticalalignment='center', 
+                                color = color_list[np.mod(multiplets[i_multi][i], len(color_list))])
                     i_tot += 1
                 except:
                     pass
@@ -2591,7 +2592,8 @@ class Atom(object):
         ax.xaxis.set_ticklabels([])
         ax.yaxis.set_ticklabels([])
         
-        emis_max = np.max(self.getEmissivity(tem, den))
+        all_emis = self.getEmissivity(tem, den)
+        emis_max = np.max(all_emis)
         N_lines = (self.getEmissivity(1e4, 1e3) > (emis_max * thresh_int)).sum() # number of lines plotted
         x_pad = 0.1 * (x_span - 0.6 * x_0)     
         if N_lines > 1:
@@ -2603,7 +2605,7 @@ class Atom(object):
         cc = colors.ColorConverter()
         for j in np.arange(self.NLevels - 1) + 2:
             for i in np.arange(j - 1) + 1:
-                emis = self.getEmissivity(tem, den, j, i)
+                emis = all_emis[j-1, i-1]
                 if emis > (emis_max * thresh_int):
                     N_seg = 1000. #number of segments to draw emission line, to make it look smooth
                     xx = np.ones(N_seg+1) * x  # x coord of segmente making up one line
