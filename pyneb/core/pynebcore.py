@@ -3123,7 +3123,8 @@ class RecAtom(object):
             logd[tt] = log_dens_max
         res = interpolate.griddata((self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
                                    (temg, logd), method=method)
-        return res.T
+        #return res.T
+        return res
 
 
     def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, label=None,
