@@ -3080,6 +3080,8 @@ class RecAtom(object):
                 deng = den
             else:
                 temg, deng = np.meshgrid(tem, den)
+                temg = temg.T
+                deng = deng.T
         else:
             if tem.size != den.size:
                 log_.error('tem and den must have the same size', calling=self.calling)
@@ -3123,7 +3125,6 @@ class RecAtom(object):
             logd[tt] = log_dens_max
         res = interpolate.griddata((self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
                                    (temg, logd), method=method)
-        #return res.T
         return res
 
 
