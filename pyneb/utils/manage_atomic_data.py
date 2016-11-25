@@ -24,6 +24,7 @@ class _ManageAtomicData(object):
         self.addDataFilePath('./')
         self._RecombData = {}
         self._initChianti()
+        self.read_gsconf()
 
     def includeFitsPath(self):
         self.addDataFilePath('../atomic_data_fits/old_fits/', inPyNeb=True)
@@ -519,8 +520,13 @@ class _ManageAtomicData(object):
                         self.setDataFile(atfile)
                 except:
                     pass
-
-
+    
+    def read_gsconf(self):
+        try:
+            gsconf = np.genfromtxt(execution_path('../atomic_data/levels/gsconfs.dat'), names=['atom', 'gsconf'], dtype=None)
+            self.gsconf = {gs['atom']:gs['gsconf'] for gs in gsconf}
+        except:
+            self.gsconf = {}
         
     def printPoem(self, yr=0):
         """
@@ -649,6 +655,52 @@ def getLevelsNIST(atom, NLevels = None):
     else:
         return None
     
+def getNIST(elem, ion, fileout=None):
+    """
+    This will download the enegy levels from NIST and write them to a file
+    example: getNIST('O',3) write the o_iii_levels.dat file
+    """
+    
+    try:
+        from selenium import webdriver
+        from selenium.webdriver.support.ui import Select
+    except:
+        pn.log_.warn('selenium not installed', calling='get_NIST')
+        return None
+    import time
+    atom_NIST = elem + ' ' + int_to_roman(int(ion))
+    browser = webdriver.Firefox()
+    try:
+        browser.get('http://physics.nist.gov/PhysRefData/ASD/levels_form.html')
+        Select(browser.find_element_by_name('format')).select_by_value('1')
+        browser.find_element_by_css_selector("input[name='multiplet_ordered'][value='1']").click()
+        browser.find_element_by_name('spectrum').send_keys(atom_NIST)
+        browser.find_element_by_name('lande_out').click()
+        browser.find_element_by_name('perc_out').click()
+        browser.find_element_by_name('submit').click()
+        time.sleep(1)
+        tab = browser.find_element_by_tag_name('pre').text
+    except:
+        tab = None
+    browser.close()
+    
+    if tab is not None:
+        if fileout is None:
+            fileout = '{}_{}_levels.dat'.format(elem.lower(), int_to_roman(int(ion)).lower())
+        with open(fileout, 'w') as f:
+            res = tab.split('\n')
+            print_it = True
+            i_line = 0
+            for line in res[4:]:
+                if '---' in line or '[' in line:
+                    print_it = False
+                if print_it:
+                    f.write(line+'\n')
+                    i_line += 1
+        return i_line
+    else:
+        return None
+            
     
 def _atom_fits2ascii(filename):
     """

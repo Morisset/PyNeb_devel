@@ -1,5 +1,7 @@
 import numpy as np
-from misc import parseAtom
+from misc import parseAtom, roman_to_int
+from glob import glob
+import pyneb as pn
 
 class CST(object):
     BOLTZMANN = 1.3806488e-16 # erg/K - NIST 2010
@@ -491,20 +493,96 @@ def gsFromAtom(atom, verbose=False):
     if atom in special_dict:
         return special_dict[atom]
     """
-    elem, i_str = parseAtom(atom) # Tranform e.g. 'O3' into 'O', '3'
+    if atom in pn.atomicData.gsconf:
+        if verbose:
+            print('Obtained from gsconfs.dat')
+        return pn.atomicData.gsconf[atom]
+        
+    from manage_atomic_data import getLevelsNIST
+
+    res = 'unknown'
     try:
-        z = Z[elem]
+        NIST_gsconf = getLevelsNIST(atom)[0][0].split('.')[-1]
+        if NIST_gsconf[-1] in ('0123456789'):
+            NIST_gsconf = NIST_gsconf[-2:]
+        else:
+            NIST_gsconf = NIST_gsconf[-1] + '1'
+        res = NIST_gsconf
+        if verbose:
+            print('Obtained from NIST')
     except:
-        return 'unknown'
-    conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6','d7', 'd8') 
-    cn = np.array([2, 10, 28, 46, 54, 78])
-    k = z - int(i_str) - cn
-    try:
-        k_res = np.min(k[k>=0])
-        res = conf[k_res]
-    except:
-        res = 'unknown'
-    return res
+        elem, i_str = parseAtom(atom) # Tranform e.g. 'O3' into 'O', '3'
+        try:
+            z = Z[elem]
+        except:
+            if verbose:
+                print('Unknown Z')
+            return 'unknown'    
+        
+        # Z-I :     
+        ZmI = z - int(i_str)
+        conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6','d7', 'd8')
+        cn = np.array([2, 10, 28, 46, 54, 78])
+        #cn = np.array([2, 10, 18, 36, 54, 86])
+        k = ZmI - cn
+        try:
+            k_res = np.min(k[k>=0])
+            res = conf[k_res]
+            if verbose:
+                print('Obtained from formula')
+        except:
+            if verbose:
+                print('Unknown conf')
+            res = 'unknown'
+
+#===============================================================================
+#     if ZmI < 2:
+#         n = 1
+#     elif ZmI < 10:
+#         n = 2
+#     elif ZmI < 18:
+#         n = 3
+#     elif ZmI < 36:
+#         n = 4
+#     elif ZmI < 54:
+#         n = 5
+#     elif ZmI < 86:
+#         n = 6
+#     elif ZmI < 118:
+#         n = 7
+#     else:
+#         n = 8
+#         
+#     Cfromn = {1:0, 2:2, 3:10, 4:18, 5:36, 6:54, 7:86, 8:118}
+# 
+# 
+#     conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6','ps1', 'ps2','d1', 'd2', 'd3', 'd4', 'd5', 'd6', 
+#             'd7', 'd8', 'd9', 'd10', 'ds1', 'ds2', 'f1', 'f2', 'f3', 'f4', 'unknown')
+#     
+#     Del = np.zeros((6, 26))
+#     for n_i in 1+np.arange(5):
+#         for seq in np.arange(26):
+#             if seq >= 3 and seq <= 8:
+#                 if n_i in (4,5):
+#                     Del[n_i, seq] = 10
+#                 elif n_i == 6:
+#                     Del[n_i, seq] = 24
+#             elif seq >= 11 and seq <= 22:
+#                 if n_i in (4,5):
+#                     Del[n_i, seq] = -8
+#                 elif n_i == 6:
+#                     Del[n_i, seq] = 6
+#             elif seq == 23:
+#                 if n_i == 6:
+#                     Del[n_i, seq] = -20
+#     s = z - Cfromn[n]
+#     print('Z = {}, I = {}, s = {}, n = {}'.format(z, i_str, s, n))
+#     i_res = ZmI - Cfromn[n] - Del[n,s]
+#     print('ires = {}'.format(i_res))
+#     res2 = conf[i_res]    
+#===============================================================================
+    
+    return res 
 
 """
 def gsFromAtom(atom):
@@ -514,6 +592,21 @@ def gsFromAtom(atom):
             result = gs
     return result
 """
+
+def make_gsconf_file(outfile='gsconfs.dat'):
+    file_names = sorted(glob('*levels.dat'))
+    with open(outfile, 'w') as of:
+        for fname in file_names:
+            elem, ion, foo = fname.split('_')
+            elem = elem.capitalize()
+            ion = int(roman_to_int(ion))
+            with open(fname, 'r') as f:
+                NIST_gsconf = f.readline().split('|')[0].strip()
+                if NIST_gsconf[-1] in ('0123456789'):
+                    NIST_gsconf_red = NIST_gsconf[-2:]
+                else:
+                    NIST_gsconf_red = NIST_gsconf[-1] + '1'
+                of.write('{}{} {}\n'.format(elem, ion, NIST_gsconf_red))
     
 gsLevelDict = {
             'p1': ['$^2$P$_{1/2}$', '$^2$P$_{3/2}$', '$^4$P$_{1/2}$', '$^4$P$_{3/2}$', '$^4$P$_{5/2}$', '$^2$D$_{3/2}$', '$^2$D$_{5/2}$', '$^2$S$_{1/2}$'],
