@@ -299,6 +299,7 @@ pyneb/atomic_data/levels/fe_xxi_levels.dat
 pyneb/atomic_data/levels/fe_xxii_levels.dat
 pyneb/atomic_data/levels/fe_xxiii_levels.dat
 pyneb/atomic_data/levels/fe_xxiv_levels.dat
+pyneb/atomic_data/levels/gsconfs.dat
 pyneb/atomic_data/levels/h_i_levels.dat
 pyneb/atomic_data/levels/he_i_levels.dat
 pyneb/atomic_data/levels/he_ii_levels.dat

@@ -1318,10 +1318,7 @@ class Atom(object):
 
         self.NLevels = np.min((self.atomNLevels, self.collNLevels))
             
-        try:
-            self.gs = self.AtomData.gs
-        except:
-            self.gs = gsFromAtom(self.atom)
+        self.gs = gsFromAtom(self.atom)
         try:
             self.AtomHeader = self.AtomData.AtomHeader
         except:

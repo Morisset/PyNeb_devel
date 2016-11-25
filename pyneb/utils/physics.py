@@ -602,8 +602,15 @@ def make_gsconf_file(outfile='gsconfs.dat'):
             ion = int(roman_to_int(ion))
             with open(fname, 'r') as f:
                 NIST_gsconf = f.readline().split('|')[0].strip()
+                if NIST_gsconf[-1] in '>':
+                    NIST_gsconf = NIST_gsconf.split('<')[-2]
+                if NIST_gsconf[-1] in ')':
+                    NIST_gsconf = NIST_gsconf.split('(')[-2][:-2]
                 if NIST_gsconf[-1] in ('0123456789'):
-                    NIST_gsconf_red = NIST_gsconf[-2:]
+                    if NIST_gsconf[-2] in ('0123456789'):
+                        NIST_gsconf_red = NIST_gsconf[-3:]
+                    else:
+                        NIST_gsconf_red = NIST_gsconf[-2:]
                 else:
                     NIST_gsconf_red = NIST_gsconf[-1] + '1'
                 of.write('{}{} {}\n'.format(elem, ion, NIST_gsconf_red))
