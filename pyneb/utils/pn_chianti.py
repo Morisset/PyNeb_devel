@@ -69,10 +69,15 @@ def get_levs_order(atom, NLevels=None):
     change_ptpsp = lambda str: re.sub('\.', ' ', str)
     # Define the Dictionary
     Chianti2NIST = {}
+    if NLevels is not None:
+        this_NLevels = min((NLevels, len(E_chianti), len(E_NIST)))
+    else:
+        this_NLevels = min((len(E_chianti), len(E_NIST)))
     for i_N, E in enumerate(E_NIST):
+        
         if i_N >= len(E_chianti):
             break
-        if NLevels is not None and i_N > NLevels:
+        if i_N > this_NLevels:
             break
         
         term = remove_stars(E['term'])
@@ -108,7 +113,7 @@ def get_levs_order(atom, NLevels=None):
             pretty = '{0} {1}{2}'.format(conf, term, E['J'])
             i_Ch = np.where(E_chianti['pretty'] == pretty)[0]
             if len(i_Ch) == 1:
-                if NLevels is not None and i_Ch[0] <= NLevels:
+                if i_Ch[0] <= this_NLevels:
                     Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
         Chianti2NIST = None
@@ -578,7 +583,12 @@ class _CollChianti(object):
         """
         sources = []
         sources.append('Omega-values from {0}'.format(self.Chianti_version))
-        for ref in  _chianti_tools.splupsRead(self.ion_chianti)['ref']:
+        
+        if pn.config.Chianti_version_main == '8':
+            refs = _chianti_tools.scupsRead(self.ion_chianti)
+        elif pn.config.Chianti_version_main == '7':
+            refs = _chianti_tools.splupsRead(self.ion_chianti)
+        for ref in  refs['ref']:
             sources.append(ref)
         return sources
 
