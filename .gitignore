@@ -73,3 +73,5 @@ docs/_build/
 
 # PyBuilder
 target/
+
+*.toc
