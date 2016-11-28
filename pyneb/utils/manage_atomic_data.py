@@ -623,6 +623,8 @@ def readNIST(NISTfile,NLevels=None):
             d['J'] = 0.
         elif '/' in d['J']:
             d['J'] = '{0:.1f}'.format(float(d['J'].split('/')[0]) / float(d['J'].split('/')[1]))
+        elif ',' in d['J']:
+            d['J'] = '{0:.1f}'.format(float(d['J'].split(',')[0]))
         else:
             d['J'] = '{0:.1f}'.format(float(d['J']))
            
