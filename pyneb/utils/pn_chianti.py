@@ -113,7 +113,7 @@ def get_levs_order(atom, NLevels=None):
             pretty = '{0} {1}{2}'.format(conf, term, E['J'])
             i_Ch = np.where(E_chianti['pretty'] == pretty)[0]
             if len(i_Ch) == 1:
-                if i_Ch[0] <= this_NLevels:
+                if i_Ch[0] < this_NLevels and i_N < this_NLevels:
                     Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
         Chianti2NIST = None
@@ -262,15 +262,26 @@ class _AtomChianti(object):
         self.Chianti_version = self.atomPath.split('/')[-4]
         self.comments = {}
         
-        Chianti_A = Chianti_getA(self.ion_chianti, NLevels=self.NLevels)
         if self.Chianti2NIST is None:
-            self.Chianti2NIST = get_levs_order(self.atom)
+            self.Chianti2NIST = get_levs_order(self.atom, NLevels=self.NLevels)
+
+        if self.NLevels is None:
+            this_NLevels = None
+        else:
+            if self.Chianti2NIST is not None:
+                this_NLevels = np.max((self.NLevels, np.max(self.Chianti2NIST.values()[0:self.NLevels])))
+            else:
+                this_NLevels = self.NLevels
+                
+        Chianti_A = Chianti_getA(self.ion_chianti, NLevels=this_NLevels)
         if self.Chianti2NIST is not None:
             Chianti_A_tmp = Chianti_A.copy()
             for i_chianti in self.Chianti2NIST:
                 if self.Chianti2NIST[i_chianti] != i_chianti:
                     Chianti_A[i_chianti,:] = Chianti_A_tmp[self.Chianti2NIST[i_chianti],:]
                     Chianti_A[:,i_chianti] = Chianti_A_tmp[:,self.Chianti2NIST[i_chianti]]
+        if self.NLevels is not None:
+            Chianti_A = Chianti_A[0:self.NLevels, 0:self.NLevels]
         self.log_.message('Reading atom data from Chianti {}'.format(self.atomFile), calling = self.calling)
         self.Chianti_E = Chianti_getE(self.ion_chianti, NLevels=self.NLevels)
         if self.NLevels is None:
