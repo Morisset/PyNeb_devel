@@ -113,7 +113,7 @@ def get_levs_order(atom, NLevels=None):
             pretty = '{0} {1}{2}'.format(conf, term, E['J'])
             i_Ch = np.where(E_chianti['pretty'] == pretty)[0]
             if len(i_Ch) == 1:
-                if i_Ch[0] < this_NLevels and i_N < this_NLevels:
+                if i_Ch[0] <= this_NLevels and i_N <= this_NLevels:
                     Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
         Chianti2NIST = None
@@ -131,6 +131,7 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
     Splups is the result of _chianti_tools.splupsRead(ion_chianti), can be passed to avoid reloading it
     NLevelsMax reduce the number of levels considered.
     """
+    pn.log_.message('NLevels = {}'.format(NLevels), calling='Chianti_getOmega')
     temp=np.asarray(tem)
     if Splups is None:
         if pn.config.Chianti_version_main == '8':
