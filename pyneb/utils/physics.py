@@ -1003,7 +1003,7 @@ Converted to IDL V5.0 W. Landsman September 1997
     """
 
     wave2 = wave**2.
-    fact = 1. + 2.735182e-4 + 131.4182/wave2 + 2.76249e8/(wave2**2.)
+    fact = 1. + 2.735182e-4 + 131.4182/wave2 + 2.76249e8/wave2**2.
     fact = fact * ( wave >= 2000. ) + 1.*( wave < 2000. )
     
     # Convert wavelengths
