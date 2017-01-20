@@ -1,8 +1,12 @@
 import numpy as np
 import pyneb as pn
 
-ELEM_LIST = ['Ag', 'Al', 'Ar', 'Au', 'B', 'Ba', 'C', 'Ca', 'Cl', 'Co', 'Cr', 'Cu', 'F', 'Fe', 'H', 'He', 'K',
-             'Kr', 'Mg', 'Mn', 'N', 'Na', 'Ne', 'Ni', 'O', 'P', 'S', 'Si', 'Ti', 'Xe', 'Zn', 'Se', 'Br', 'Rb', '3He']
+ELEM_LIST = ['Ag', 'Al', 'Ar', 'As', 'Au', 'B', 'Ba', 'Be', 'Bi', 'Br',
+     'C', 'Ca', 'Cd', 'Ce', 'Cl', 'Co', 'Cr', 'Cs', 'Cu', 'Dy', 'Er', 'Eu', 'F', 'Fe', 'Ga', 'Gd', 'Ge',
+     'H', 'He', 'Hf', 'Hg', 'Ho', 'I', 'In', 'Ir', 'K', 'Kr', 'La', 'Li', 'Lu', 'Mg', 'Mn', 'Mo',
+     'N', 'Na', 'Nb', 'Nd', 'Ne', 'Ni', 'O', 'Os', 'P', 'Pb', 'Pd', 'Pm', 'Pr', 'Pt',
+     'Rb', 'Re', 'Rh', 'Ru', 'S', 'Sb', 'Sc', 'Se', 'Si', 'Sm', 'Sn', 'Sr',
+     'Ta', 'Tb', 'Te', 'Tc', 'Th', 'Ti', 'Tl','Tm', 'U', 'V', 'W', 'Xe', 'Y', 'Yb', 'Zn', 'Zr', '3He']
 SPEC_LIST = ['1', '2', '3', '4', '5', '6', '7']
 
 def _print_LINE_LABEL_LIST(*args, **kwargs):
