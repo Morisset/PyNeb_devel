@@ -394,9 +394,11 @@ class _AtomDataAscii(object):
             A = np.zeros([self.NLevels, self.NLevels])
             A[:,:] = at_data[:,2:]
 
-        
-        self.NIST = getLevelsNIST(self.atom, self.NLevels)
-        
+        if need_NIST:
+            self.NIST = getLevelsNIST(self.atom, self.NLevels)
+        else:
+            self.NIST = None
+            
         web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
         if self.NIST is not None:
             energy = self.NIST['energy'] / 1e8
