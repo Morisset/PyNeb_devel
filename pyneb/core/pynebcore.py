@@ -378,7 +378,6 @@ class _AtomDataAscii(object):
                 A = at_data[0:self.NLevels, 2:self.NLevels+2]
             self.NLevels = A.shape[0]
             
-            
             # Read Es
             energy = at_data[:,0]
             if units == 'eV': 
