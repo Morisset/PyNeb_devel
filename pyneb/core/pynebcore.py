@@ -398,8 +398,8 @@ class _AtomDataAscii(object):
         else:
             self.NIST = None
             
-        web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
         if self.NIST is not None:
+            web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
             energy = self.NIST['energy'] / 1e8
             stat_weight = 1 + 2 * self.NIST['J']
             self.comments['VACUUM'] = '1'
@@ -2605,7 +2605,7 @@ class Atom(object):
             for i in np.arange(j - 1) + 1:
                 emis = all_emis[j-1, i-1]
                 if emis > (emis_max * thresh_int):
-                    N_seg = 1000. #number of segments to draw emission line, to make it look smooth
+                    N_seg = 1000 #number of segments to draw emission line, to make it look smooth
                     xx = np.ones(N_seg+1) * x  # x coord of segmente making up one line
                     yy = np.linspace(self.getEnergy(i, unit=unit), self.getEnergy(j, unit=unit), N_seg+1)
                     scale = np.linspace(0, 1, N_seg+1)
