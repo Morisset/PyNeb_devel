@@ -797,5 +797,25 @@ def _coll_fits2ascii(filename, overwrite=None):
     print('{} done'.format(fileout))
     fout.close()
     
+def print_stout_coll(Atom, file_):
     
+    if type(Atom) is not pn.Atom:
+        pn.log_.error('Atom must be a PyNeb.Atom object', calling='print_stout')
     
+    temps = Atom.getTemArray(keep_unit=False)
+    n_temp = len(temps)
+    omegas = Atom.getOmegaArray()
+    n_levels = omegas.shape[0]
+    with open(file_, 'w') as f:
+        f.write('11 10 14\n')
+        f.write('TEMP {} \n'.format(' '.join(['{:.0f}'.format(t) for t in temps])))
+        for i in range(n_levels):
+            for j in range(n_levels):
+                if omegas[i,j].sum() > 0.0:
+                    f.write('CS ELECTRON {} {} {} \n'.format(i+1, j+1, ' '.join([str(o) for o in omegas[i,j]])))
+        f.write('***************\n')
+        f.write('Refs:\n')
+        for s in Atom.CollData.getSources():
+            f.write('{} \n'.format(s))
+
+
