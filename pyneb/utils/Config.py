@@ -92,6 +92,11 @@ class _Config(object):
         except:
             self.INSTALLED['h5py'] = False
         try:
+            from astropy.table import Table
+            self.INSTALLED['astropy Table'] = True
+        except:
+            self.INSTALLED['astropy Table'] = False
+        try:
             import cvxopt
             self.INSTALLED['cvxopt'] = True
         except:
