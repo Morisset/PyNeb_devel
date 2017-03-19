@@ -886,9 +886,11 @@ _predefinedDataFileDict['PYNEB_14_03']['S3']['coll'] =  's_iii_coll_TG99.dat'
 _predefinedDataFileDict['PYNEB_16_01'] = _predefinedDataFileDict['PYNEB_14_03'].copy()
 _predefinedDataFileDict['PYNEB_16_01']['Fe2'] = {'atom': 'fe_ii_atom_B15.dat', 'coll': 'fe_ii_coll_B15.dat'}
 _predefinedDataFileDict['PYNEB_16_01']['P2'] = {'atom': 'p_ii_atom_MZ82.dat', 'coll': 'p_ii_coll_T04.dat'}
-_predefinedDataFileDict['PYNEB_16_01']['H1']['rec'] = 'h_i_rec_SH95.hdf5'
-_predefinedDataFileDict['PYNEB_16_01']['He1']['rec'] = 'he_i_rec_Pal12-Pal13.hdf5'
-_predefinedDataFileDict['PYNEB_16_01']['He2']['rec'] = 'he_ii_rec_SH95.hdf5'
+
+_predefinedDataFileDict['PYNEB_17_01'] = _predefinedDataFileDict['PYNEB_16_01'].copy()
+_predefinedDataFileDict['PYNEB_17_01']['H1']['rec'] = 'h_i_rec_SH95.hdf5'
+_predefinedDataFileDict['PYNEB_17_01']['He1']['rec'] = 'he_i_rec_Pal12-Pal13.hdf5'
+_predefinedDataFileDict['PYNEB_17_01']['He2']['rec'] = 'he_ii_rec_SH95.hdf5'
 
 
 # Next release, check with JGR:
