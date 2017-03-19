@@ -32,13 +32,14 @@ if config.INSTALLED['plt']:
 if config.INSTALLED['mp']:
     from multiprocessing import Queue, Process
     from ..utils.multiprocs import getTemDen_helper
-if config.INSTALLED['pyfits']:
-    import pyfits
-elif config.INSTALLED['pyfits from astropy']:
+if config.INSTALLED['pyfits from astropy']:
     import astropy.io.fits as pyfits
-if config.INSTALLED['h5py']:
+elif config.INSTALLED['pyfits']:
+    import pyfits
+if config.INSTALLED['astropy Table']:
+    from astropy.table import Table
+elif config.INSTALLED['h5py']:
     import h5py
-
 
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
@@ -2688,6 +2689,8 @@ class RecAtom(object):
         else:
             self.IP = -1
         
+        
+        
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         file_type = self.recFitsFile.split('.')[-1]
         if file_type == 'fits':
@@ -2762,19 +2765,30 @@ class RecAtom(object):
         Called by __init__
         """
         
-        if not config.INSTALLED['h5py']:
-            log_.error('You need to install h5py', calling=self.calling)
+        if not config.INSTALLED['h5py'] and not config.INSTALLED['astropy Table']:
+            log_.error('You need to install astropy (prefered) or h5py', calling=self.calling)
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
             log_.error('No hdf5 data for atom: {0}'.format(self.atom), calling=self.calling)
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
-        try:
-            hf5 = h5py.File(self.recFitsFullPath, 'r')
-        except:
-            log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
-        self._RecombData = hf5['updated_data'].value
-        hf5.close()
+
+        
+        if config.INSTALLED['astropy Table']:
+            try:
+                hf5 = Table.read(self.recFitsFullPath, path='updated_data')
+                self._RecombData = hf5
+                log_.message('HDF5 data read from {} using Astropy.table'.format(self.recFitsFullPath), calling=self.calling)
+            except:
+                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+        elif config.INSTALLED['h5py']:
+            try:
+                hf5 = h5py.File(self.recFitsFullPath, 'r')
+                self._RecombData = hf5['updated_data'].value
+                hf5.close()
+                log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
+            except:
+                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
         if self.atom in config.DataFiles:
             if self.recFitsFile not in config.DataFiles[self.atom]:
                 config.DataFiles[self.atom].append(self.recFitsFile)
@@ -2788,8 +2802,7 @@ class RecAtom(object):
             self.log_dens = self._RecombData['DENS']
         except:
             log_.error('No DENS field in {0}'.format(self.recFitsFile))
-        self.labels = self._RecombData.dtype.names
-        self.labels = tuple([l for l in self.labels if l not in ('TEMP', 'DENS')])
+        self.labels = tuple([l for l in self._RecombData.dtype.names if l not in ('TEMP', 'DENS')])
         if '_' in self._RecombData.dtype.names[0]:
             self.label_type = 'transitions'
         else:
