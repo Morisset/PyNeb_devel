@@ -37,7 +37,7 @@ if config.INSTALLED['pyfits from astropy']:
 elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
-    from astropy.table import Table
+    from astropy.table import Table, Column
 elif config.INSTALLED['h5py']:
     import h5py
 
@@ -2649,7 +2649,7 @@ class Atom(object):
 
 class RecAtom(object):
     
-    def __init__(self, elem, spec, atom=None):
+    def __init__(self, elem=None, spec=None, atom=None, case='B'):
         """
         RecAtom class. Used to manage recombination data and compute emissivities.
         
@@ -2664,6 +2664,7 @@ class RecAtom(object):
         self.log_ = log_
         self.type = 'rec'
         self.gs = None
+        self.case = case
         if atom is not None:
             self.atom = str.capitalize(atom)
             self.elem = parseAtom(self.atom)[0]
@@ -2689,14 +2690,14 @@ class RecAtom(object):
         else:
             self.IP = -1
         
-        
-        
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         file_type = self.recFitsFile.split('.')[-1]
         if file_type == 'fits':
             self._loadFit()
         elif file_type == 'hdf5':
             self._loadHDF5()
+        elif file_type == 'func':
+            self._loadFunctions()
         
         if 'trc' in atomicData.getDataFile()[self.atom].keys():
             self._loadTotRecombination()
@@ -2848,6 +2849,72 @@ class RecAtom(object):
             self.label_type = 'wavelengths'
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
+    def _loadFunctions(self):
+        """
+        read functions to compute emissivities from formulae
+        """
+        
+        temp = np.linspace(1000, 20000, 20)
+        dens = np.logspace(1, 5, 15)
+        self._RecombData = Table()
+        self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
+        if self.recFitsFile is None:
+            log_.error('No func data for atom: {0}'.format(self.atom), calling=self.calling)
+            return None
+        self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
+        with open(self.recFitsFullPath, 'r') as f:
+            ftype = f.readline().strip()
+        try:
+            data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None)
+        except:
+            data = None
+        if data is not None:
+            t2d, d2d = np.meshgrid(temp, dens)
+            self._RecombData.add_column(Column(t2d, name='TEMP'))
+            self._RecombData.add_column(Column(np.log10(d2d), name='DENS'))
+            if ftype == 'PEQ1991':
+                for dd in data:
+                    case = dd[2]
+                    if case == self.case:
+                        lamb = dd[1]*10. # Angstrom
+                        a = dd[3]
+                        b = dd[4]
+                        c = dd[5]
+                        d = dd[6]
+                        Br = dd[7]
+                        z = self.spec 
+                        t = 1e-4 * t2d / z**2
+                        alpha = 1e-13 * z * a * t**b / (1. + c * t**d)
+                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
+                        E_erg = E_Ryd * CST.RYD2ERG   #erg
+                        emis = Br * alpha * E_erg
+                        self._RecombData.add_column(Column(emis, name=dd[0]))
+            elif ftype == 'S94':
+                for dd in data:
+                    case = dd[2]
+                    if case == self.case:
+                        lamb = dd[1]*10. # Angstrom
+                        a = dd[3]
+                        b = dd[4]
+                        c = dd[5]
+                        d = dd[6]
+                        t = 1e-4 * t2d 
+                        alpha = 1e-14 * a * t**b *(1. + c*(1.-t) + d*(1.-t)**2)
+                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
+                        E_erg = E_Ryd * CST.RYD2ERG   #erg
+                        emis = alpha * E_erg
+                        self._RecombData.add_column(Column(emis, name=dd[0]))
+        
+        self.labels = tuple([l for l in self._RecombData.dtype.names if l not in ('TEMP', 'DENS')])         
+        if '_' in self._RecombData.dtype.names[0]:
+            self.label_type = 'transitions'
+        elif '+' in self._RecombData.dtype.names[0]:
+            self.label_type = 'wavelengths'
+        else:
+            self.label_type = 'wavelengths'
+        self.temp = self._RecombData['TEMP']
+        self.log_dens = self._RecombData['DENS']
+        log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadTotRecombination(self):
         """
@@ -3018,6 +3085,8 @@ class RecAtom(object):
 
         """
         if ('_' in label) and (self.label_type == 'transitions'):
+            return True
+        elif ('+' in label) and (self.label_type == 'wavelengths'):
             return True
         elif ('.' in label) and (self.label_type == 'wavelengths'):
             return True
