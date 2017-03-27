@@ -144,6 +144,8 @@ pyneb/atomic_data/o_ii_coll_P06-T07.dat
 pyneb/atomic_data/o_ii_coll_P76-McLB93-v1.dat
 pyneb/atomic_data/o_ii_coll_P76-McLB93-v2.dat
 pyneb/atomic_data/o_ii_coll_T07.dat
+pyneb/atomic_data/o_ii_rec_P91.func
+pyneb/atomic_data/o_ii_rec_S94.func
 pyneb/atomic_data/o_iii_atom_FFT04-SZ00.dat
 pyneb/atomic_data/o_iii_atom_FFT04.dat
 pyneb/atomic_data/o_iii_atom_GMZ97-WFD96.dat
@@ -1165,11 +1167,17 @@ pyneb/atomic_data/levels/zr_v_levels.dat
 pyneb/atomic_data/levels/zr_vi_levels.dat
 pyneb/atomic_data/levels/zr_xiv_levels.dat
 pyneb/atomic_data_fits/h_i_rec_SH95-caseA.fits
+pyneb/atomic_data_fits/h_i_rec_SH95-caseA.hdf5
 pyneb/atomic_data_fits/h_i_rec_SH95.fits
+pyneb/atomic_data_fits/h_i_rec_SH95.hdf5
 pyneb/atomic_data_fits/he_i_rec_Pal12-Pal13.fits
+pyneb/atomic_data_fits/he_i_rec_Pal12-Pal13.hdf5
 pyneb/atomic_data_fits/he_i_rec_Pal12.fits
+pyneb/atomic_data_fits/he_i_rec_Pal12.hdf5
 pyneb/atomic_data_fits/he_ii_rec_SH95-caseA.fits
+pyneb/atomic_data_fits/he_ii_rec_SH95-caseA.hdf5
 pyneb/atomic_data_fits/he_ii_rec_SH95.fits
+pyneb/atomic_data_fits/he_ii_rec_SH95.hdf5
 pyneb/atomic_data_fits/old_fits/al_ii_atom_JSP86-HK87-VVF96-KS86.fits
 pyneb/atomic_data_fits/old_fits/al_ii_coll_KHAF92-TBK85-TBK84.fits
 pyneb/atomic_data_fits/old_fits/ar_ii_atom_Bal06.fits
