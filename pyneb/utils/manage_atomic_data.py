@@ -381,7 +381,7 @@ class _ManageAtomicData(object):
     def setDataFile(self, data_file=None, atom=None, data_type=None):
         """
         Associate an atomic data file to an atom and a type of data, which is one of 
-            ('atom', 'coll', 'rec').
+            ('atom', 'coll', 'rec', 'func').
 
         Usage:
             pn.atomicData.setDataFile('cl_iii_atom_M83-KS86.fits')
@@ -406,7 +406,7 @@ class _ManageAtomicData(object):
         if data_type is None:
             strs = re.split(r'[_.]+',data_file)
             data_type = strs[2]
-        if data_type not in ('atom', 'coll', 'rec', 'trc'):
+        if data_type not in ('atom', 'coll', 'rec', 'trc', 'func'):
             self.log_.error('{0} is not a valid type'.format(data_type))
             return None
         if elem not in ELEM_LIST:
