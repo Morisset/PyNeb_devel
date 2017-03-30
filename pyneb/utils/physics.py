@@ -891,6 +891,11 @@ _predefinedDataFileDict['PYNEB_17_01'] = _predefinedDataFileDict['PYNEB_16_01'].
 _predefinedDataFileDict['PYNEB_17_01']['H1']['rec'] = 'h_i_rec_SH95.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He1']['rec'] = 'he_i_rec_Pal12-Pal13.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He2']['rec'] = 'he_ii_rec_SH95.hdf5'
+_predefinedDataFileDict['PYNEB_17_01']['O2']['rec'] = 'o_ii_rec_SSB17-B-opt.hdf5'
+_predefinedDataFileDict['PYNEB_17_01']['C1']['rec'] = 'c_i_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['C2']['rec'] = 'c_ii_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['C3']['rec'] = 'c_iii_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['C4']['rec'] = 'c_iv_rec_P91.func'
 
 
 # Next release, check with JGR:
