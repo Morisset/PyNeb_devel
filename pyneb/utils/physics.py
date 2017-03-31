@@ -891,7 +891,6 @@ _predefinedDataFileDict['PYNEB_17_01'] = _predefinedDataFileDict['PYNEB_16_01'].
 _predefinedDataFileDict['PYNEB_17_01']['H1']['rec'] = 'h_i_rec_SH95.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He1']['rec'] = 'he_i_rec_Pal12-Pal13.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He2']['rec'] = 'he_ii_rec_SH95.hdf5'
-_predefinedDataFileDict['PYNEB_17_01']['O2']['rec'] = 'o_ii_rec_SSB17-B-opt.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['C1']['rec'] = 'c_i_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['C2']['rec'] = 'c_ii_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['C3']['rec'] = 'c_iii_rec_P91.func'
@@ -900,13 +899,13 @@ _predefinedDataFileDict['PYNEB_17_01']['N1']['rec'] = 'n_i_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['N2']['rec'] = 'n_ii_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['N3']['rec'] = 'n_iii_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['N4']['rec'] = 'n_iv_rec_P91.func'
-_predefinedDataFileDict['PYNEB_17_01']['N5']['rec'] = 'n_v_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['N5'] = {'rec' : 'n_v_rec_P91.func'}
 _predefinedDataFileDict['PYNEB_17_01']['O1']['rec'] = 'o_i_rec_P91.func'
-_predefinedDataFileDict['PYNEB_17_01']['O2']['rec'] = 'o_ii_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['O2']['rec'] = 'o_ii_rec_SSB17-B-opt.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['O3']['rec'] = 'o_iii_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['O4']['rec'] = 'o_iv_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['O5']['rec'] = 'o_v_rec_P91.func'
-_predefinedDataFileDict['PYNEB_17_01']['O6']['rec'] = 'o_vi_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['O6'] = {'rec' : 'o_vi_rec_P91.func'}
 
 
 # Next release, check with JGR:
