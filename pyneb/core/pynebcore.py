@@ -2815,6 +2815,8 @@ class RecAtom(object):
             self.label_type = 'wavelengths'
         if 'SOURCE' in self._RecombData.meta:
             self.sources.append(self._RecombData.meta['SOURCE'])
+        if self.recFitsFile.split('.')[0][-4:] == 'SH95':
+            self.useNIST = True
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
        
     def _loadFit(self):
