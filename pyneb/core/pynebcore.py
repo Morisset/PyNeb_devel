@@ -1349,6 +1349,7 @@ class Atom(object):
             self.EnergyNLevels = len(self._Energy)
         else:
             self.EnergyNLevels = None
+        self.source = self.getSources()
             
     def getOmega(self, tem, lev_i= -1, lev_j= -1, wave= -1):
         """
@@ -2665,6 +2666,7 @@ class RecAtom(object):
         self.type = 'rec'
         self.gs = None
         self.case = case
+        self.sources = []
         if atom is not None:
             self.atom = str.capitalize(atom)
             self.elem = parseAtom(self.atom)[0]
@@ -2692,6 +2694,7 @@ class RecAtom(object):
         
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         file_type = self.recFitsFile.split('.')[-1]
+        self.useNIST = False
         if file_type == 'fits':
             self._loadFit()
         elif file_type == 'hdf5':
@@ -2703,19 +2706,22 @@ class RecAtom(object):
             self._loadTotRecombination()
         
         self.E_in_vacuum = True
-        self.NIST = getLevelsNIST(self.atom)
         self.comments = {}
-        web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
-        if self.NIST is not None:
-            self.NLevels = len(self.NIST)
-            self._Energy = self.NIST['energy'] / 1e8
-            self.comments['VACUUM'] = '1'
-            self.comments['NOTE'] = 'Energy levels'
-            source = '\n    '
-            for ref in np.unique(self.NIST['ref']):
-                source = source + web.format(ref[1:], self.elem, self.spec) + ')\n  + ' 
-            self.comments['SOURCE'] = source[0:-5]
-        self.initWaves()
+
+        if self.useNIST:
+            self.NIST = getLevelsNIST(self.atom)
+            web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
+            if self.NIST is not None:
+                self.NLevels = len(self.NIST)
+                self._Energy = self.NIST['energy'] / 1e8
+                self.comments['VACUUM'] = '1'
+                self.comments['NOTE'] = 'Energy levels'
+                for ref in np.unique(self.NIST['ref']):
+                    self.sources.append(web.format(ref[1:], self.elem, self.spec))
+            self.initWaves()
+        else:
+            self.NIST = None
+            self.NLevels = 0
 
 
     def _test_lev(self, level):
@@ -2774,7 +2780,6 @@ class RecAtom(object):
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
 
-        
         if config.INSTALLED['astropy Table']:
             try:
                 hf5 = Table.read(self.recFitsFullPath, path='updated_data')
@@ -2808,6 +2813,8 @@ class RecAtom(object):
             self.label_type = 'transitions'
         else:
             self.label_type = 'wavelengths'
+        if 'SOURCE' in self._RecombData.meta:
+            self.sources.append(self._RecombData.meta['SOURCE'])
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
        
     def _loadFit(self):
@@ -2816,6 +2823,20 @@ class RecAtom(object):
         Called by __init__
 
         """
+        
+        
+        header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
+        for record in header.items():
+            if 'SOURCE' in record[0]:
+                number = record[0].lstrip('SOURCE')
+                try:
+                    print(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                except:
+                    print(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+        
+        
+        
+        
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
             log_.error('No fits data for atom: {0}'.format(self.atom), calling=self.calling)
@@ -2826,6 +2847,7 @@ class RecAtom(object):
         except:
             log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
         self._RecombData = hdu[1].data
+        header = hdu[1].header
         hdu.close()
         if self.atom in config.DataFiles:
             if self.recFitsFile not in config.DataFiles[self.atom]:
@@ -2847,6 +2869,16 @@ class RecAtom(object):
             self.label_type = 'transitions'
         else:
             self.label_type = 'wavelengths'
+            
+        for record in header.items():
+            if 'SOURCE' in record[0]:
+                number = record[0].lstrip('SOURCE')
+                try:
+                    self.sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                except:
+                    self.sources.append(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+        
+            
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadFunctions(self):
@@ -2863,7 +2895,8 @@ class RecAtom(object):
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         with open(self.recFitsFullPath, 'r') as f:
-            ftype = f.readline().strip()
+            self._funcType = f.readline().strip()
+            source = f.readline()
         try:
             data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None)
         except:
@@ -2872,7 +2905,8 @@ class RecAtom(object):
             t2d, d2d = np.meshgrid(temp, dens)
             self._RecombData.add_column(Column(t2d, name='TEMP'))
             self._RecombData.add_column(Column(np.log10(d2d), name='DENS'))
-            if ftype == 'PEQ1991':
+            if self._funcType == 'PEQ1991':
+                self.useNIST = False
                 for dd in data:
                     case = dd[2]
                     if case == self.case:
@@ -2889,7 +2923,8 @@ class RecAtom(object):
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = Br * alpha * E_erg
                         self._RecombData.add_column(Column(emis, name=dd[0]))
-            elif ftype == 'S94':
+            elif self._funcType == 'S94':
+                self.useNIST = False
                 for dd in data:
                     case = dd[2]
                     if case == self.case:
@@ -2914,6 +2949,7 @@ class RecAtom(object):
             self.label_type = 'wavelengths'
         self.temp = self._RecombData['TEMP']
         self.log_dens = self._RecombData['DENS']
+        self.sources.append(source)
         log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadTotRecombination(self):
@@ -3035,20 +3071,14 @@ class RecAtom(object):
     
               
     def printSources(self):
-        """
-        Print bibliographic sources for atomic data, as listed in the headers of the fits files.
         
-        """       
-        header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
-        for record in header.items():
-            if 'SOURCE' in record[0]:
-                number = record[0].lstrip('SOURCE')
-                try:
-                    print(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
-                except:
-                    print(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
-
-
+        for source in self.sources:
+            print(source)
+            
+    def getSources(self):
+        
+        return self.sources
+    
     def getEnergy(self, level= -1, unit='1/Ang'):
         """
         Return energy level of selected level (or array of energy levels, if level not given) 
