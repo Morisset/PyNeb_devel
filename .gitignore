@@ -1,14 +1,9 @@
 #
-**/dev_test/
-**/my_tests/
-fits_VL_2011
 .project
 .pydevproject
 .ipynb_checkpoints
 **html/
-**pypics/
 PyNeb_Handbook.pdf
-.svn/
 *.*~
 .DS_Store
 PyNeb_Handbook_files/
@@ -61,17 +56,3 @@ nosetests.xml
 coverage.xml
 *.cover
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-*.toc
