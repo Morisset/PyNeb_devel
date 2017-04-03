@@ -7,15 +7,19 @@ that is found in the LICENSE file
 
 
 '''
-import os, fnmatch
-from types import *
-from ConfigParser import *
+import os, fnmatch, sys
+#from types import *
+import types
+if sys.version_info[0] == 2:
+    from ConfigParser import RawConfigParser
+else:
+    from configparser import RawConfigParser
 import pickle
 from datetime import date
 import numpy as np
 from scipy import interpolate
-import _chianti_constants as const
-from FortranRecordReader import FortranRecordReader
+from . import _chianti_constants as const
+from .FortranRecordReader import FortranRecordReader
 
 
 #
@@ -588,7 +592,7 @@ def defaultsRead(verbose=0):
     rcfile=os.path.join(os.environ['HOME'],'.chianti/chiantirc')
     if os.path.isfile(rcfile):
         print((' reading chiantirc file'))
-        config = configparser.RawConfigParser(initDefaults)
+        config = RawConfigParser(initDefaults)
         config.read(rcfile)
         defaults = {}
         for anitem in config.items('chianti'):

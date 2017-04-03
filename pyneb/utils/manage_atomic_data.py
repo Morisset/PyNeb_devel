@@ -447,8 +447,8 @@ class _ManageAtomicData(object):
         if (type(at_set) == list) or (type(at_set) == tuple):
             at_dict = {}
             for item in at_set:
-                atom = pn.utils.misc.parseAtom(item)[0]
-                spec = pn.utils.misc.parseAtom(item)[1]
+                atom = parseAtom(item)[0]
+                spec = parseAtom(item)[1]
                 if spec is '':
                     for ispec in SPEC_LIST:
                         try:
@@ -600,33 +600,35 @@ def readNIST(NISTfile,NLevels=None):
                     delimiter = '|', names = 'conf, term, J, energy, ref', 
                     dtype=('a23', 'a9', 'a4', 'float', 'a10'), autostrip=True,
                     converters = {'energy':extract_flt, 'J':bs, 'conf':bs, 'term': bs, 'ref':bs})
-    data = data[data['J'] != '']
-    previous_ref = ''
-    previous_conf = ''
-    previous_term = ''
+    mask = data['J'] != bs('')
+    data = data[mask]
+    previous_ref = bs('')
+    previous_conf = bs('')
+    previous_term = bs('')
     for d in data:
-        if d['conf'] == '':
+        if d['conf'] == bs(''):
             d['conf'] = previous_conf
         else:
             previous_conf = d['conf']
-        if d['term'] == '':
+        if d['term'] == bs(''):
             d['term'] = previous_term
         else:
             previous_term = d['term']
-        if d['ref'] == '':
+        if d['ref'] == bs(''):
             d['ref'] = previous_ref
         else:
             previous_ref = d['ref']
-        if '?' in d['J']:
+            
+        if bs('?') in d['J']:
             d['J'] = d['J'].split('?')[0]
-        if d['J'] == '':
+        if d['J'] == bs(''):
             d['J'] = 0.
-        elif '/' in d['J']:
-            d['J'] = '{0:.1f}'.format(float(d['J'].split('/')[0]) / float(d['J'].split('/')[1]))
-        elif ',' in d['J']:
-            d['J'] = '{0:.1f}'.format(float(d['J'].split(',')[0]))
+        elif bs('/') in d['J']:
+            d['J'] = '{0:.1f}'.format(float(bs(d['J']).split('/')[0]) / float(bs(d['J']).split('/')[1]))
+        elif bs(',') in d['J']:
+            d['J'] = '{0:.1f}'.format(float(bs(d['J']).split(',')[0]))
         else:
-            d['J'] = '{0:.1f}'.format(float(d['J']))
+            d['J'] = '{0:.1f}'.format(float(bs(d['J'])))
            
     data = data[data['energy'].argsort()]
     data = data.astype([('conf', 'a23'), ('term', 'a9'), ('J', 'float'), ('energy', 'float'), ('ref', 'a10')])

@@ -1,7 +1,8 @@
 import numpy as np
-from misc import parseAtom, roman_to_int
+from .misc import parseAtom, roman_to_int
 from glob import glob
 import pyneb as pn
+from . import manage_atomic_data 
 
 class CST(object):
     BOLTZMANN = 1.3806488e-16 # erg/K - NIST 2010
@@ -498,11 +499,9 @@ def gsFromAtom(atom, verbose=False):
             print('Obtained from gsconfs.dat')
         return pn.atomicData.gsconf[atom]
         
-    from manage_atomic_data import getLevelsNIST
-
     res = 'unknown'
     try:
-        NIST_gsconf = getLevelsNIST(atom)[0][0].split('.')[-1]
+        NIST_gsconf = manage_atomic_data.getLevelsNIST(atom)[0][0].split('.')[-1]
         if NIST_gsconf[-1] in ('0123456789'):
             NIST_gsconf = NIST_gsconf[-2:]
         else:
