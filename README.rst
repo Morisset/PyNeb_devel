@@ -41,6 +41,10 @@ Updates use the same command. You can also use:
 
 Note you MAY need --user if you installed python without Anaconda or Canopy
 
+To use the devel package (at your own risks!!!):
+
+* pip install -U git+https://github.com/Morisset/PyNeb_devel.git
+
 Warranty
 ========
 
