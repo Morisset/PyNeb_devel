@@ -68,6 +68,8 @@ class _AtomDataNone(object):
         self.getA = _returnNone
         self.atomNLevels = 0
         self.NLevels = 0
+    def getSources(self):
+        return None 
 
 class _CollDataNone(object):
     
@@ -81,6 +83,8 @@ class _CollDataNone(object):
         self.collNLevels = 0
         self.tem_units = _returnNone()
         self.NLevels = 0
+    def getSources(self):
+        return None 
 
 class _AtomDataFits(object):
     
