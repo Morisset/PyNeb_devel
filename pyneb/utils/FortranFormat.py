@@ -289,8 +289,8 @@ class FortranFormat:
                 else:
                     dot = field.find('.')
                     if dot > 0:
-                        length = int(field[:dot])
-                        fraction = int(field[dot+1:])
+                        length = int(float(field[:dot]))
+                        fraction = int(float(field[dot+1:]))
                         field = (type_, length, fraction)
                     else:
                         if field:
