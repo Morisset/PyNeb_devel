@@ -44,16 +44,14 @@ Examples::
 
   Output::
 
-    >>>format = FortranFormat('2D15.5')
-    >>>line = FortranLine([3.1415926, 2.71828], format)
+    >>>format_ = FortranFormat('2D15.5')
+    >>>line = FortranLine([3.1415926, 2.71828], format_)
     >>>print str(line)
 
   prints::
 
     '3.14159D+00    2.71828D+00'
 """
-
-import string
 
 #
 # The class FortranLine represents a single line of input/output,
@@ -81,12 +79,12 @@ class FortranLine:
          to Fortran conventions.
     """
 
-    def __init__(self, line, format, length = 80):
+    def __init__(self, line, format_, length = 80):
         """
         @param data: either a sequence of Python objects, or a string
                      formatted according to Fortran rules
 
-        @param format: either a Fortran-style format string, or a
+        @param format_: either a Fortran-style format string, or a
                        L{FortranFormat} object. A FortranFormat should
                        be used when the same format string is used repeatedly,
                        because then the rather slow parsing of the string
@@ -103,10 +101,10 @@ class FortranLine:
         else:
             self.text = None
             self.data = line
-        if type(format) == type(''):
-            self.format = FortranFormat(format)
+        if type(format_) == type(''):
+            self.format_ = FortranFormat(format_)
         else:
-            self.format = format
+            self.format_ = format_
         self.length = length
         if self.text is None:
             self._output()
@@ -150,22 +148,22 @@ class FortranLine:
         @returns: C{True} if the line contains only whitespace
         @rtype: C{bool}
         """
-        return len(string.strip(self.text)) == 0
+        return len(self.text.strip()) == 0
 
     def _input(self):
         text = self.text
         if len(text) < self.length: text = text + (self.length-len(text))*' '
         self.data = []
-        for field in self.format:
+        for field in self.format_:
             l = field[1]
             s = text[:l]
             text = text[l:]
-            type = field[0]
+            type_ = field[0]
             value = None
-            if type == 'A':
+            if type_ == 'A':
                 value = s
-            elif type == 'I':
-                s = string.strip(s)
+            elif type_ == 'I':
+                s = s.strip()
                 if len(s) == 0:
                     value = 0
                 else:
@@ -174,19 +172,19 @@ class FortranLine:
                     # e.g.: pdb2myd.ent.Z chain: - model: 0 : CONECT*****
                     # catch this and set value to None
                     try:
-                        value = string.atoi(s)
+                        value = int(s)
                     except:
                         value = None
-            elif type == 'D' or type == 'E' or type == 'F' or type == 'G':
-                s = string.lower(string.strip(s))
-                n = string.find(s, 'd')
+            elif type_ == 'D' or type_ == 'E' or type_ == 'F' or type_ == 'G':
+                s = s.strip().lower()
+                n = s.find('d')
                 if n >= 0:
                     s = s[:n] + 'e' + s[n+1:]
                 if len(s) == 0:
                     value = 0.
                 else:
                     try:
-                        value = string.atof(s)
+                        value = float(s)
                     except:
                         value = None
             if value is not None:
@@ -195,39 +193,39 @@ class FortranLine:
     def _output(self):
         data = self.data
         self.text = ''
-        for field in self.format:
-            type = field[0]
-            if type == "'":
+        for field in self.format_:
+            type_ = field[0]
+            if type_ == "'":
                 self.text = self.text + field[1]
-            elif type == 'X':
+            elif type_ == 'X':
                 self.text = self.text + field[1]*' '
             else: # fields that use input data
                 length = field[1]
                 if len(field) > 2: fraction = field[2]
                 value = data[0]
                 data = data[1:]
-                if type == 'A':
+                if type_ == 'A':
                     self.text = self.text + (value+length*' ')[:length]
                 else: # numeric fields
                     if value is None:
                         s = ''
-                    elif type == 'I':
+                    elif type_ == 'I':
                         s = repr(value)
-                    elif type == 'D':
+                    elif type_ == 'D':
                         s = ('%'+repr(length)+'.'+repr(fraction)+'e') % value
-                        n = string.find(s, 'e')
+                        n = s.find('e')
                         s = s[:n] + 'D' + s[n+1:]
-                    elif type == 'E':
+                    elif type_ == 'E':
                         s = ('%'+repr(length)+'.'+ repr(fraction)+'e') % value
-                    elif type == 'F':
+                    elif type_ == 'F':
                         s = ('%'+repr(length)+'.'+repr(fraction)+'f') % value
-                    elif type == 'G':
+                    elif type_ == 'G':
                         s = ('%'+repr(length)+'.'+repr(fraction)+'g') % value
                     else:
                         raise ValueError('Not yet implemented')
-                    s = string.upper(s)
+                    s = s.upper()
                     self.text = self.text + ((length*' ')+s)[-length:]
-        self.text = string.rstrip(self.text)
+        self.text = self.text.strtrip()
 
 #
 # The class FortranFormat represents a format specification.
@@ -245,65 +243,65 @@ class FortranFormat:
     object has the advantage that the format string is parsed only once.
     """
 
-    def __init__(self, format, nested = False):
+    def __init__(self, format_, nested = False):
         """
-        @param format: a Fortran format specification
-        @type format: C{str}
+        @param format_: a Fortran format specification
+        @type format_: C{str}
         @param nested: I{for internal use}
         """
         fields = []
-        format = string.strip(format)
-        while format and format[0] != ')':
+        format_ = format_.strip()
+        while format_ and format_[0] != ')':
             n = 0
-            while format[0] in string.digits:
-                n = 10*n + string.atoi(format[0])
-                format = format[1:]
+            while format_[0] in '0123456789':
+                n = 10*n + int(format_[0])
+                format_ = format_[1:]
             if n == 0: n = 1
-            type = string.upper(format[0])
-            if type == "'":
-                eof = string.find(format, "'", 1)
-                text = format[1:eof]
-                format = format[eof+1:]
+            type_ = format_[0].upper()
+            if type_ == "'":
+                eof = format_.find("'", 1)
+                text = format_[1:eof]
+                format_ = format_[eof+1:]
             else:
-                format = string.strip(format[1:])
-            if type == '(':
-                subformat = FortranFormat(format, 1)
-                fields = fields + n*subformat.fields
-                format = subformat.rest
-                eof = string.find(format, ',')
+                format_ = format_[1:].strip()
+            if type_ == '(':
+                subformat_ = FortranFormat(format_, 1)
+                fields = fields + n*subformat_.fields
+                format_ = subformat_.rest
+                eof = format_.find(',')
                 if eof >= 0:
-                    format = format[eof+1:]
+                    format_ = format_[eof+1:]
             else:
-                eof = string.find(format, ',')
+                eof = format_.find(',')
                 if eof >= 0:
-                    field = format[:eof]
-                    format = format[eof+1:]
+                    field = format_[:eof]
+                    format_ = format_[eof+1:]
                 else:
-                    eof = string.find(format, ')')
+                    eof = format_.find(')')
                     if eof >= 0:
-                        field = format[:eof]
-                        format = format[eof+1:]
+                        field = format_[:eof]
+                        format_ = format_[eof+1:]
                     else:
-                        field = format
-                        format = ''
-                if type == "'":
-                    field = (type, text)
+                        field = format_
+                        format_ = ''
+                if type_ == "'":
+                    field = (type_, text)
                 else:
-                    dot = string.find(field, '.')
+                    dot = field.find('.')
                     if dot > 0:
-                        length = string.atoi(field[:dot])
-                        fraction = string.atoi(field[dot+1:])
-                        field = (type, length, fraction)
+                        length = int(field[:dot])
+                        fraction = int(field[dot+1:])
+                        field = (type_, length, fraction)
                     else:
                         if field:
-                            length = string.atoi(field)
+                            length = int(field)
                         else:
                             length = 1
-                        field = (type, length)
+                        field = (type_, length)
                 fields = fields + n*[field]
         self.fields = fields
         if nested:
-            self.rest = format
+            self.rest = format_
 
     def __len__(self):
         return len(self.fields)
