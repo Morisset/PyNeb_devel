@@ -620,7 +620,7 @@ def readNIST(NISTfile,NLevels=None):
             previous_ref = d['ref']
             
         if bs('?') in d['J']:
-            d['J'] = d['J'].split('?')[0]
+            d['J'] = bs(d['J']).split('?')[0]
         if d['J'] == bs(''):
             d['J'] = 0.
         elif bs('/') in d['J']:

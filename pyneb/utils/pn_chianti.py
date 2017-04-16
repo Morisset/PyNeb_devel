@@ -10,7 +10,7 @@ elif pn.config.Chianti_version_main == '7':
 from . import _chianti_constants as const
 from .physics import sym2name, vactoair
 from .manage_atomic_data import getLevelsNIST, atom2chianti
-from .misc import parseAtom
+from .misc import parseAtom, bs
 
 def Chianti_getA(ion_chianti, NLevels=None):
     """
@@ -80,9 +80,9 @@ def get_levs_order(atom, NLevels=None):
         if i_N > this_NLevels:
             break
         
-        term = remove_stars(E['term'])
+        term = remove_stars(bs(E['term']))
 
-        c1 = remove_stars(E['conf'])
+        c1 = remove_stars(bs(E['conf']))
         
         c12 = remove_par(c1)
         c123 = change_2pto1p(c12)
@@ -475,8 +475,9 @@ class _CollChianti(object):
             self.Splups = _chianti_tools.splupsRead(self.ion_chianti)
         self._CollArray = Chianti_getOmega(self.ion_chianti, tem=self._TemArray, 
                                    Splups=self.Splups, NLevels=self.NLevels)
-        
-        self.NLevels = np.min((self._CollArray.shape[0]-1, self._CollArray.shape[1]-1, self.NLevels))
+        to_minimize = (self._CollArray.shape[0]-1, self._CollArray.shape[1]-1, self.NLevels)
+        if None not in to_minimize:    
+                self.NLevels = np.min(to_minimize)
         self.Chianti2NIST = get_levs_order(self.atom, NLevels=self.NLevels)
         
         if self.Chianti2NIST is not None:

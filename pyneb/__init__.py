@@ -6,11 +6,13 @@ __all__ = []
 from .version import __version__
 
 import sys
+__pyversion__ = sys.version_info[0]
 
 from .utils.Config import _Config
 config = _Config()
 log_ = config.log_
 log_.message('Starting PyNeb version %s' % __version__, calling='PyNeb')
+
 
 if sys.version_info[0:2] < (2, 6):
     log_.warn('Python version >= 2.6 needed, seems you have {0}'.format(sys.version_info), calling='PyNeb')
