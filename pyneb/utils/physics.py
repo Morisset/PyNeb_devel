@@ -1,5 +1,5 @@
 import numpy as np
-from misc import parseAtom, roman_to_int
+from .misc import parseAtom, roman_to_int
 from glob import glob
 import pyneb as pn
 
@@ -493,13 +493,14 @@ def gsFromAtom(atom, verbose=False):
     if atom in special_dict:
         return special_dict[atom]
     """
+    # The import needs to be here. If in the header, infinite loop occurs at start
+    from .manage_atomic_data import getLevelsNIST
+
     if atom in pn.atomicData.gsconf:
         if verbose:
             print('Obtained from gsconfs.dat')
         return pn.atomicData.gsconf[atom]
         
-    from manage_atomic_data import getLevelsNIST
-
     res = 'unknown'
     try:
         NIST_gsconf = getLevelsNIST(atom)[0][0].split('.')[-1]
@@ -535,63 +536,8 @@ def gsFromAtom(atom, verbose=False):
                 print('Unknown conf')
             res = 'unknown'
 
-#===============================================================================
-#     if ZmI < 2:
-#         n = 1
-#     elif ZmI < 10:
-#         n = 2
-#     elif ZmI < 18:
-#         n = 3
-#     elif ZmI < 36:
-#         n = 4
-#     elif ZmI < 54:
-#         n = 5
-#     elif ZmI < 86:
-#         n = 6
-#     elif ZmI < 118:
-#         n = 7
-#     else:
-#         n = 8
-#         
-#     Cfromn = {1:0, 2:2, 3:10, 4:18, 5:36, 6:54, 7:86, 8:118}
-# 
-# 
-#     conf = ('s1', 's2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6','ps1', 'ps2','d1', 'd2', 'd3', 'd4', 'd5', 'd6', 
-#             'd7', 'd8', 'd9', 'd10', 'ds1', 'ds2', 'f1', 'f2', 'f3', 'f4', 'unknown')
-#     
-#     Del = np.zeros((6, 26))
-#     for n_i in 1+np.arange(5):
-#         for seq in np.arange(26):
-#             if seq >= 3 and seq <= 8:
-#                 if n_i in (4,5):
-#                     Del[n_i, seq] = 10
-#                 elif n_i == 6:
-#                     Del[n_i, seq] = 24
-#             elif seq >= 11 and seq <= 22:
-#                 if n_i in (4,5):
-#                     Del[n_i, seq] = -8
-#                 elif n_i == 6:
-#                     Del[n_i, seq] = 6
-#             elif seq == 23:
-#                 if n_i == 6:
-#                     Del[n_i, seq] = -20
-#     s = z - Cfromn[n]
-#     print('Z = {}, I = {}, s = {}, n = {}'.format(z, i_str, s, n))
-#     i_res = ZmI - Cfromn[n] - Del[n,s]
-#     print('ires = {}'.format(i_res))
-#     res2 = conf[i_res]    
-#===============================================================================
     
     return res 
-
-"""
-def gsFromAtom(atom):
-    result = 'unknown'
-    for gs in gsDict:
-        if atom in gsDict[gs]:
-            result = gs
-    return result
-"""
 
 def make_gsconf_file(outfile='gsconfs.dat'):
     file_names = sorted(glob('*levels.dat'))
@@ -903,6 +849,7 @@ _predefinedDataFileDict['PYNEB_17_01']['N5'] = {'rec' : 'n_v_rec_P91.func'}
 _predefinedDataFileDict['PYNEB_17_01']['O1']['rec'] = 'o_i_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['O2']['rec'] = 'o_ii_rec_SSB17-B-opt.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['O3']['rec'] = 'o_iii_rec_P91.func'
+_predefinedDataFileDict['PYNEB_17_01']['O3']['coll'] = 'o_iii_coll_SSB14.dat'
 _predefinedDataFileDict['PYNEB_17_01']['O4']['rec'] = 'o_iv_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['O5']['rec'] = 'o_v_rec_P91.func'
 _predefinedDataFileDict['PYNEB_17_01']['O6'] = {'rec' : 'o_vi_rec_P91.func'}

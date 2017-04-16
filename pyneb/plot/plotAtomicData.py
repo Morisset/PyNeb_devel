@@ -4,7 +4,6 @@ Module to plot the atomic data
 
 import pyneb as pn
 import numpy as np
-import string
 if pn.config.INSTALLED['plt']:
     import matplotlib as mpl
     import matplotlib.pyplot as plt
@@ -100,7 +99,7 @@ class DataPlot(object):
         for data in old_data:
             if data is not None:
                 pn.atomicData.setDataFile(data)
-        self.atom_rom = string.lower(self.elem + '_' + int_to_roman(int(self.spec)))
+        self.atom_rom = (self.elem + '_' + int_to_roman(int(self.spec))).lower()
         self.n_tem_points = n_tem_points
 
         self.atom_n_max = 0
@@ -139,9 +138,7 @@ class DataPlot(object):
         mark = ['<', (5, 1), '>', 'o', '|']
         i_marker = 0
         # Background colors to distinguish lower levels 
-        bg_color_sequence = ['g', 'r', 'b', 'y', 'm', 'c']
-        # The following command replicates the string to allocate a sufficient number of colors
-        bg_color = bg_color_sequence * (int(atom_n_max - 2) / len(bg_color_sequence) + 1)
+        bg_color = 'grbymc' 
         tick_label = []
         
         for i in range(atom_n_max - 1):
@@ -149,7 +146,7 @@ class DataPlot(object):
             x0 = i * (atom_n_max - 1) - i * (i - 1) / 2 - 0.5
             width = atom_n_max - i - 1
             x1 = x0 + width
-            plt.axvspan(x0, x1, facecolor=bg_color[i], alpha=0.05)
+            plt.axvspan(x0, x1, facecolor=bg_color[i%6], alpha=0.05)
             # The x axis must stretch the maximum range (although some data set might have a lower n_level)
             for j in range(i + 1, atom_n_max):
                 tick_label.append('(' + str(j + 1) + ', ' + str(i + 1) + ')')

@@ -511,7 +511,7 @@ class Diagnostics(object):
                     else:
                         diag_value = ee[0]
                 except:
-                    print ee, type(ee)
+                    #print(ee, type(ee))
                     diag_value = None
                     self.log_.warn('A line in diagnostic {0} of {1}{2} is missing'.format(diag[1], sym, spec),
                                    calling=self.calling)

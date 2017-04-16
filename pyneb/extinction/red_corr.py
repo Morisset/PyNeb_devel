@@ -328,7 +328,11 @@ class RedCorr(object):
             laws = self.getLaws()
         if type(laws) is str:
             laws = [laws]
-        laws.sort()    
+        try:
+            # Python 3 returns laws as a set, no sorting then
+            laws.sort()    
+        except:
+            pass
         for i, law in enumerate(laws):
             self.law = law
             corr = self.getCorrHb(w)
