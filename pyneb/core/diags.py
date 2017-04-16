@@ -460,7 +460,7 @@ class Diagnostics(object):
             f, ax = plt.subplots()
         else:
             f = plt.gcf()
-        X = np.log10(emis_grids[emis_grids.keys()[0]].den2D)
+        X = np.log10(emis_grids[list(emis_grids.keys())[0]].den2D)
         Y = emis_grids[emis_grids.keys()[0]].tem2D
         for label in self.diags:
             diag = self.diags[label]
