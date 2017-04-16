@@ -4244,7 +4244,7 @@ class Observation(object):
         n_obs = self.n_obs
         if i_obs is None:
             log_.message('Entering', calling='addMonteCarloObs')
-            for i in xrange(n_obs):
+            for i in range(n_obs):
                 self.addMonteCarloObs(i_obs=i, N=N)
             log_.message('Leaving', calling='addMonteCarloObs')
         else:
@@ -4252,7 +4252,7 @@ class Observation(object):
             error = np.array([self.getError()[label] for label in self.lineLabels])[:,i_obs]
             all_new_obs = np.random.standard_normal((N, n_lines))
             
-            for i in xrange(N):
+            for i in range(N):
                 new_obs = intens * (all_new_obs[i,:] * error + 1)
                 new_obs[new_obs < 0.] = 0.
                 self.addObs('{0}-MC-{1}'.format(self.names[i_obs], i), new_obs, error)
