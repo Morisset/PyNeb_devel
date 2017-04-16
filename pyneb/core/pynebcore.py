@@ -3897,12 +3897,12 @@ class Observation(object):
         if fileFormat not in format_list:
             self.log_.error('unknown format {0}'.format(fileFormat), calling='Observation.readData')
 
-        if type(obsFile) is file:
-            f = obsFile
-            closeAfterUse = False
-        else:
+        if type(obsFile) is str:
             f = open(obsFile, 'r')
             closeAfterUse = True
+        else:
+            f = obsFile
+            closeAfterUse = False
             
         if fileFormat == 'lines_in_cols':
             hdr = f.readline()
