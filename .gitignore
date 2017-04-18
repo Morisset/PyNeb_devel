@@ -2,8 +2,10 @@
 .project
 .pydevproject
 .ipynb_checkpoints
+.directory
+at_data_plots
 **html/
-PyNeb_Handbook.pdf
+PyNeb_Handbook.*
 *.*~
 .DS_Store
 PyNeb_Handbook_files/
