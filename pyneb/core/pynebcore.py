@@ -68,6 +68,8 @@ class _AtomDataNone(object):
         self.getA = _returnNone
         self.atomNLevels = 0
         self.NLevels = 0
+        self.is_valid = False
+        
     def getSources(self):
         return []
 
@@ -83,6 +85,8 @@ class _CollDataNone(object):
         self.collNLevels = 0
         self.tem_units = _returnNone()
         self.NLevels = 0
+        self.is_valid = False
+        
     def getSources(self):
         return [] 
 
@@ -1221,6 +1225,7 @@ class Atom(object):
         """        
         self.log_ = log_
         self.type = 'coll'
+        self.is_valid = True
         if atom is not None:
             self.atom = str.capitalize(atom)
             self.elem = parseAtom(self.atom)[0]
@@ -1277,6 +1282,7 @@ class Atom(object):
             self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType is None:
             self.AtomData = _AtomDataNone()
+            self.is_valid = False
         else:
             log_.error('Atom file extensions must be fits, dat or chianti')
                     
@@ -1307,6 +1313,7 @@ class Atom(object):
             self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)            
         elif self.collFileType is None:
             self.CollData = _CollDataNone()
+            self.is_valid = False
         try:
             self.CollHeader = self.CollData.CollHeader
         except:
@@ -2668,6 +2675,7 @@ class RecAtom(object):
         """
         self.log_ = log_
         self.type = 'rec'
+        self.is_valid = True
         self.gs = None
         self.case = case
         self.sources = []
@@ -2705,6 +2713,8 @@ class RecAtom(object):
             self._loadHDF5()
         elif file_type == 'func':
             self._loadFunctions()
+        else:
+            self.is_valid = False
         
         if 'trc' in atomicData.getDataFile()[self.atom].keys():
             self._loadTotRecombination()
@@ -3376,7 +3386,7 @@ def getHbEmissivity(tem= -1):
     return j_hb
 
 
-def getAtomDict(atom_list=None, elem_list=None, spec_list=None, **kwargs):
+def getAtomDict(atom_list=None, elem_list=None, spec_list=None, only_coll=False, **kwargs):
     """ 
     Initializes all atoms, according to the atomic files available.
     The elem objects are given conventional names elem+spec (e.g., O III is O3)
@@ -3392,6 +3402,7 @@ def getAtomDict(atom_list=None, elem_list=None, spec_list=None, **kwargs):
                         Takes precedence on elem_list and spec_list
         - elem_list     a list of all the elements for which the elem is to be computed (all by default)
         - spec_list     a list of the spectra for which the elem is to be computed (all by default)
+        - only_coll     if True, ionly Atom are sent back,. Otherwise (default), Atom and RecAtom are sent back
         _ **kwargs      argumentas passed to Atom, e.g. OmegaInterp
 
     """ 
@@ -3411,10 +3422,21 @@ def getAtomDict(atom_list=None, elem_list=None, spec_list=None, **kwargs):
     for atom in atom_list:
         elem, spec = parseAtom(atom)        
         try:
-            all_atoms[atom] = Atom(elem, spec, **kwargs)
+            this_atom = Atom(elem, spec, **kwargs)
+            if this_atom.is_valid:
+                all_atoms[atom] = this_atom
             log_.message('Including ' + atom, calling='getAtomDict')
         except:
             log_.message(atom + ' not found', calling='getAtomDict')
+        if not only_coll:
+            try:
+                this_atom = RecAtom(elem, spec, **kwargs)
+                if this_atom.is_valid:
+                    all_atoms[atom+'r'] = this_atom
+                log_.message('Including ' + atom, calling='getAtomDict')
+            except:
+                log_.message(atom + ' not found', calling='getAtomDict')
+            
     return all_atoms
 
 
