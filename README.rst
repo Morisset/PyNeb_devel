@@ -11,7 +11,7 @@ In PyNeb, the atom is represented as an n-level atom. For given density and temp
 * compute ionic abundances from line intensities and physical conditions
 * compute elemental abundances from ionic abundances and icfs.
 
-PyNeb also incorporates emissivity tables of recombination lines for a few atoms (currently, H and He ions). The interpolated emissivities can be used by any of the module that rely on the n-level line emissivities to carry out the actions listed above.
+PyNeb also incorporates emissivity tables of recombination lines for a few atoms. The interpolated emissivities can be used by any of the module that rely on the n-level line emissivities to carry out the actions listed above.
 
 Emission line ratios are used to self consistently determine electron temperature and density and ionic abundances
 Diagnostic diagrams can easily be plotted.
@@ -52,6 +52,8 @@ PyNeb is provided as it is. No warranty at all.
 
 Manual
 ======
+
+* The manuals are `HERE <https://github.com/Morisset/PyNeb_devel/tree/master/pyneb/docs>`_.
 
 * The HowTo user guide, reference manual and developer manual are accessible from `HERE <http://132.248.1.102/PyNeb/>`_.
 
