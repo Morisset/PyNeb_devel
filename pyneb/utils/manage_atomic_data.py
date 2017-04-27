@@ -423,7 +423,9 @@ class _ManageAtomicData(object):
                     del self._RecombData[atom]
             self.log_.message('Adding {0} {1} data for {2}'.format(data_file, data_type, atom), calling=self.calling)
         else:
-            self.log_.error('Unknown file {0} or corresponding File path not included in list. Run addDataFilePath first'.format(data_file),
+            av_data = self.getAllAvailableFiles(atom, data_type)
+            self.log_.error("""Unknown file {0} or corresponding File path not included in list. 
+You may mean one of these files: {1}""".format(data_file, av_data),
                            calling=self.calling)
         if (atom == 'H1') and ('H1' in pn.atomicData._RecombData):
             del pn.atomicData._RecombData['H1']
