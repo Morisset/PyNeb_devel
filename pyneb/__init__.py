@@ -43,3 +43,12 @@ from .extinction.red_corr import RedCorr
 
 log_.message('PyNeb ready.', calling='PyNeb')
 log_.timer('Starting PyNeb version %s' % __version__, quiet=True, calling='PyNeb')
+
+__info__ = """PyNeb version: {}.
+PyNeb is cited using: Luridiana, V.; Morisset, C.; Shaw, R. A. 2015, A&A, 573, 42
+bibcode: 2015A&A...573A..42L
+Default data dictionary: {}. This set of data can be changed by the user. 
+Do not forget to cite the papers corresponding to the atomic data you are using.
+PyNeb website: https://pypi.python.org/pypi/PyNeb
+PyNeb discussion and hotline group email: pyneb@googlegroups.com
+""".format(__version__, atomicData.defaultDict)
