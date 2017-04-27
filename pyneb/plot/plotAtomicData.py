@@ -228,7 +228,7 @@ class DataPlot(object):
                 plt.xlim((min(x)-0.5, max(x)+0.5))
                 ax.yaxis.set_major_locator(MaxNLocator(max_y_ticks-1))
                 try:
-                    plt.scatter(x, y, c=color, label='_nolegend_', s=40)
+                    plt.scatter(x, y, c=color, label='_nolegend_', s=40, edgecolor='None')
                     lbl = '({0} -> {1})'.format(j,i)
                     ax.text(0.95, 0.95, lbl, fontsize=10, color="#660066", transform=ax.transAxes, ha="right", va="top")                                    
                 except:
