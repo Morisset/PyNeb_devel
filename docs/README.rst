@@ -8,3 +8,4 @@ III. `The atomic data <Notebooks/PyNeb_manual_3.ipynb>`_
 IV. `The Recombination lines <Notebooks/PyNeb_manual_4.ipynb>`_
 V. `The extinction correction <Notebooks/PyNeb_manual_5.ipynb>`_
 VI. `The Observations <Notebooks/PyNeb_manual_6.ipynb>`_
+VII. `The Diagnostic diagrams and determination of Te-Ne <Notebooks/PyNeb_manual_7.ipynb>`_
