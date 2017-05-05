@@ -4,4 +4,6 @@ PyNeb Documentation
 
 I. `Introduction to PyNeb <Notebooks/PyNeb_manual_1.ipynb>`_
 II. `Using Atom to compute emissivities <Notebooks/PyNeb_manual_2.ipynb>`_
-
+III. `The atomic data <Notebooks/PyNeb_manual_3.ipynb>`_
+IV. `The Recombination lines <Notebooks/PyNeb_manual_4.ipynb>`_
+V. `The extinction correction <Notebooks/PyNeb_manual_5.ipynb>`_
