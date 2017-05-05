@@ -381,7 +381,7 @@ def get_reduced_dic(N_rand, n_obs_ori, dic, value_method = 'original',
     It also transforms the abundances by number into 12+log10(abundances by number)
     """
     res = {}
-    for key in dic:
+    for key in dic.keys():
         value = []
         error = []
         for i in np.arange(n_obs_ori):
