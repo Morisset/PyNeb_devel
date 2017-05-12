@@ -4,7 +4,7 @@ import numpy as np
 from pyneb import config, log_, atomicData
 if config.INSTALLED['plt']:
     import matplotlib.pyplot as plt
-from ..utils.misc import int_to_roman, parseAtom
+from ..utils.misc import int_to_roman, parseAtom2
 from ..core.pynebcore import Atom
 from ..utils.saverestore import save, restore
 
@@ -83,8 +83,16 @@ class EmisGrid(object):
             self.den_max = den_max
             self.tem = 10 ** np.linspace(np.log10(tem_min), np.log10(tem_max), n_tem)
             self.den = 10 ** np.linspace(np.log10(den_min), np.log10(den_max), n_den)
-            self.atomFitsFile = self.atom.atomFitsFile
-            self.collFitsFile = self.atom.collFitsFile
+            try:
+                self.atomFitsFile = self.atom.atomFitsFile
+                self.collFitsFile = self.atom.collFitsFile
+            except:
+                self.atomFitsFile = None
+                self.collFitsFile = None
+            try:
+                self.recFitsFile = self.atom.recFitsFile
+            except:
+                self.recFitsFile = None
             self.emis_grid = self.atom.getEmissivity(self.tem, self.den)
             #self.emis_grid = np.empty((self.atom.NLevels, self.atom.NLevels, n_tem, n_den))
         
@@ -111,7 +119,7 @@ class EmisGrid(object):
              spec=self.spec, atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile)
 
 
-    def getGrid(self, lev_i=None, lev_j=None, wave= -1, to_eval=None):
+    def getGrid(self, lev_i=None, lev_j=None, wave= -1, to_eval=None, label=None):
         """
         2D array of a line emissivity for the (Te, Ne) values of a regularly spaced grid.
         The line is specified either as the wavelength or the levels. An expression can also be used, 
@@ -125,6 +133,8 @@ class EmisGrid(object):
         """
         if wave != -1:
             lev_i, lev_j = self.atom.getTransition(wave)
+        if label is not None:
+            to_eval = 'S("{}")'.format(label)
 
         if to_eval is None:
             to_eval = 'I(' + str(lev_i) + ',' + str(lev_j) + ')'
@@ -133,6 +143,8 @@ class EmisGrid(object):
             return self.emis_grid[lev_i - 1, lev_j - 1, :, :]
         def L(wave):
             return self.getGrid(wave=wave)
+        def S(label):
+            return self.emis_grid[label]
         return eval(to_eval)
     
     
@@ -159,6 +171,7 @@ class EmisGrid(object):
             return None
         L = lambda lam: self.getGrid(wave=lam)
         I = lambda i, j: self.getGrid(i, j)
+        S = lambda label: self.getGrid(label)
         if to_eval is None:
             if wave1 != -1:
                 lev_i1, lev_j1 = self.atom.getTransition(wave1)
@@ -205,6 +218,7 @@ class EmisGrid(object):
         Y = self.tem2D
         L = lambda lam: self.getGrid(wave=lam)
         I = lambda i, j: self.getGrid(i, j)
+        S = lambda label: self.getGrid(label=label)
         try:
             diag_map = eval(to_eval)
         except:
@@ -364,12 +378,12 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
                     for spec in spec_list:
                         atoms.append(elem + str(spec)) 
     for atom in atoms:
-        elem, spec = parseAtom(atom)
-        file_ = '{0}/emis_{1}{2}.pypic'.format(pypic_path, elem, spec)
+        elem, spec, rec = parseAtom2(atom)
         if atomDict is not None:
             atomObj = atomDict[atom]
         else:
             atomObj = None
+        file_ = '{0}/emis_{1}{2}{3}.pypic'.format(pypic_path, elem, spec, rec)
         if restore:
             if os.path.exists(file_):
                 try:

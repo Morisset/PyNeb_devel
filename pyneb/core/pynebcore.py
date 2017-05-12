@@ -3223,6 +3223,9 @@ class RecAtom(object):
             if label_str is None:
                 ij = self.getTransition(wave)
                 label = '{}_{}'.format(ij[0], ij[1])
+        if label is None:
+            res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
+            return res
         label_str = self._getLabelStr(label, warn=False)
         if label_str is None:
             log_.warn('Wrong label {0}'.format(label), calling=self.calling)

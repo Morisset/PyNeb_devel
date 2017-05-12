@@ -178,6 +178,34 @@ def parseAtom(atom):
                 cont = False
     return iso+str.capitalize(elem), spec
 
+def parseAtom2(atom):
+    '''
+    Parses an atom label into the element and spectrum parts
+    '''
+
+    iso = ''
+    elem = ''
+    spec = ''
+    cont = True
+    firstdigit = True
+    for l in atom:
+        if l.isalpha() and cont:
+            elem += l
+            firstdigit = False
+        elif l.isdigit():
+            if firstdigit:
+                iso += l
+            else:
+                spec += l
+                cont = False
+    if atom[-1] == 'r':
+        rec = 'r'
+    else:
+        rec = ''
+    return iso+str.capitalize(elem), spec, rec
+
+
+
 
 def strExtract(text, par1=None, par2=None): 
     """

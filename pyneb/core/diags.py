@@ -7,7 +7,7 @@ and an expression for the uncertainty on the line ratio as a function of the unc
 """
 import numpy as np
 import pyneb as pn
-from pyneb.utils.misc import int_to_roman, parseAtom
+from pyneb.utils.misc import int_to_roman, parseAtom, parseAtom2
 from pyneb.utils.init import BLEND_LIST
 
 diags_dict = {}
@@ -30,6 +30,7 @@ diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7319A+")+B("7330
 #diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7325A+"))', 'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7325A+")])')
 diags_dict['[OII] 3727+/7325+b'] = ('O2', '(L(3726)+L(3729))/(I(4,2)+I(4,3)+I(5,2)+I(5,3))',
               'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")),BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+"))])')
+diags_dict['OII 4649.13/4089.29'] = ('O2r', "S('4649.13A')/S('4089.29A')", "RMS([E('4649.13A'), E('4089.29A')])")
 diags_dict['[OIII] 4363/5007'] = ('O3', 'L(4363)/L(5007)', 'RMS([E(5007), E(4363)])')
 diags_dict['[OIII] 4363/5007+'] = ('O3', 'L(4363)/(L(5007)+L(4959))', 'RMS([E(5007)*L(5007)/(L(5007)+L(4959)), E(4959)*L(4959)/(L(5007)+L(4959)), E(4363)])')
 diags_dict['[OIII] 5007/88m'] = ('O3', 'L(5007)/L(883000)', 'RMS([E(883000), E(5007)])')
@@ -378,10 +379,14 @@ class Diagnostics(object):
             full_label = atom + '_' + label
             corrIntens = obs.getLine(label=full_label).corrIntens
             return corrIntens
-        
+        def S(label):
+            full_label = atom + '_' + label
+            corrIntens = obs.getLine(label=full_label).corrIntens
+            return corrIntens
+            
         for label in diags_dict:
             atom, diag_expression, error = diags_dict[label]
-            sym, spec = parseAtom(atom)
+            sym, spec, rec = parseAtom2(atom)
             try:
                 diag_value = eval(diag_expression)
                 if atom not in self.atomDict:
@@ -389,6 +394,7 @@ class Diagnostics(object):
                 self.addDiag(label)
             except Exception as ex:
                 pass
+                #print(diag_expression)
         pn.log_.level = old_level
     
     
@@ -469,6 +475,8 @@ class Diagnostics(object):
                 return emis_grids[atom].getGrid(lev_i=i, lev_j=j)
             def L(wave):
                 return emis_grids[atom].getGrid(wave=wave)
+            def S(label):
+                return emis_grids[atom].getGrid(label=label)
             def B(label, I=I, L=L):
                 full_label = atom + '_' + label
                 if full_label in BLEND_LIST:
@@ -477,13 +485,15 @@ class Diagnostics(object):
                     self.log_.warn('{0} not in BLEND_LIST'.format(full_label), calling=self.calling)
                     return None
                 return eval(to_eval)
+            print(diag[1])
+            diag_map = eval(diag[1])
             try:
                 diag_map = eval(diag[1])
             except:
                 diag_map = None
                 self.log_.warn('diag {0} {1} not used'.format(diag[0], diag[1]), calling=self.calling)
             if diag_map is not None:
-                sym, spec = parseAtom(atom)
+                sym, spec, rec = parseAtom2(atom)
                 def I(i, j):
                     wave = emis_grids[atom].atom.wave_Ang[i - 1, j - 1]
                     corrIntens = obs.getLine(sym, spec, wave).corrIntens
@@ -497,6 +507,15 @@ class Diagnostics(object):
                         return corrIntens
                     else:
                         return corrIntens[i_obs]
+                def S(label):
+                    full_label = atom + '_' + label 
+                    corrIntens = obs.getLine(label=full_label).corrIntens
+                    print(label)
+                    print(full_label)
+                    if i_obs is None:
+                        return corrIntens
+                    else:
+                        return corrIntens[i_obs]                    
                 def B(label):
                     full_label = atom + '_' + label
                     corrIntens = obs.getLine(label=full_label).corrIntens
