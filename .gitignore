@@ -12,6 +12,8 @@ PyNeb_Handbook_files/
 **reference_manual_latex/
 *.aux
 *.out
+pypics/
+observations*.dat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
