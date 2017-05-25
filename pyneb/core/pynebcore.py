@@ -2736,7 +2736,7 @@ class RecAtom(object):
         else:
             self.NIST = None
             self.NLevels = 0
-
+            self.wave_Ang = None
 
     def _test_lev(self, level):
         """
@@ -2746,6 +2746,8 @@ class RecAtom(object):
             - level        selected atom level
 
         """       
+        if self.NLevels == 0:
+            self.log_.error('No levels defined', calling=self.calling)
         if level < -1 or level == 0 or level > self.NLevels:
             self.log_.error('Wrong value for level: {0}, maximum = {1}'.format(level, self.NLevels),
                             calling=self.calling)
@@ -2998,6 +3000,8 @@ class RecAtom(object):
             - maxErrorm: tolerance if the input wavelength is in micron
                             
         """
+        if self.wave_Ang is None:
+            return(None)
         if str(wave)[-1] == 'A':
             inputWave = float(wave[:-1])
             label = '{0}_{1}'.format(self.atom, wave)
@@ -3062,7 +3066,10 @@ class RecAtom(object):
                 
         """ 
         res = self._Transition(wave, maxErrorA = maxErrorA, maxErrorm = maxErrorm)
-        return(res[0], res[1])
+        if res is None:
+            return(None)
+        else:
+            return(res[0], res[1])
         
         
     def printTransition(self, wave):
@@ -3078,13 +3085,14 @@ class RecAtom(object):
                 
         """
         closestTransition = self._Transition(wave)
-        relativeError = closestTransition[3] / closestTransition[2] - 1
-        print('Input wave: {0:.1F}'.format(closestTransition[3]))
-        print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
-        print('Relative error: {0:.0E} '.format(relativeError))
-        print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
-        return
-    
+        if closestTransition is None:
+            print('No wavelengths defined')
+        else:
+            relativeError = closestTransition[3] / closestTransition[2] - 1
+            print('Input wave: {0:.1F}'.format(closestTransition[3]))
+            print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
+            print('Relative error: {0:.0E} '.format(relativeError))
+            print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
               
     def printSources(self):
         
@@ -3093,7 +3101,7 @@ class RecAtom(object):
             
     def getSources(self):
         
-        return self.sources
+        return(self.sources)
     
     def getEnergy(self, level= -1, unit='1/Ang'):
         """
@@ -3148,15 +3156,21 @@ class RecAtom(object):
 
         """
         if np.isreal(label):
-            label_str = '{0:.1f}'.format(label)
+            label_str0 = '{0:.0f}'.format(label)
+            label_str1 = '{0:.1f}'.format(label)
+            label_str2 = '{0:.2f}'.format(label)
         else:
-            label_str = str(label)
-        if label_str not in self.labels:
+            label_str0 = label_str1 = label_str2 = str(label)
+        if label_str0 in self.labels:
+            return label_str0
+        elif label_str1 in self.labels:
+            return label_str1
+        elif label_str2 in self.labels:
+            return label_str2
+        else:
             if warn:
-                log_.warn('Label {0} not in {1}.'.format(label_str, self.recFitsFile), calling=self.calling)
+                log_.warn('Label {0} not in {1}.'.format(label, self.recFitsFile), calling=self.calling)
             return None
-        else:
-            return label_str
         
         
     def getEmissivity(self, tem, den, lev_i=None, lev_j=None, wave=None, label=None,
@@ -3324,8 +3338,11 @@ class RecAtom(object):
         except:
             self.log_.error('Unable to eval {0}'.format(to_eval), calling=self.calling)
             return None
+        if emis is not None:
         #int_ratio is in units of Hb = Hbeta keyword
-        ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+        else:
+            ionAbundance = None
         return ionAbundance
     
     
