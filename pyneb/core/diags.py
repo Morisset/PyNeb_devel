@@ -30,7 +30,8 @@ diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7319A+")+B("7330
 #diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7325A+"))', 'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7325A+")])')
 diags_dict['[OII] 3727+/7325+b'] = ('O2', '(L(3726)+L(3729))/(I(4,2)+I(4,3)+I(5,2)+I(5,3))',
               'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")),BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+"))])')
-diags_dict['OII 4649.13/4089.29'] = ('O2r', "S('4649.13A')/S('4089.29A')", "RMS([E('4649.13A'), E('4089.29A')])")
+diags_dict['OII 4649.13/4089.29'] = ('O2r', "S('4649.13')/S('4089.29')", "RMS([SE('4649.13'), SE('4089.29')])")
+diags_dict['OII 4649.13/4661.63'] = ('O2r', "S('4649.13')/S('4661.63')", "RMS([SE('4649.13'), SE('4661.63')])")
 diags_dict['[OIII] 4363/5007'] = ('O3', 'L(4363)/L(5007)', 'RMS([E(5007), E(4363)])')
 diags_dict['[OIII] 4363/5007+'] = ('O3', 'L(4363)/(L(5007)+L(4959))', 'RMS([E(5007)*L(5007)/(L(5007)+L(4959)), E(4959)*L(4959)/(L(5007)+L(4959)), E(4363)])')
 diags_dict['[OIII] 5007/88m'] = ('O3', 'L(5007)/L(883000)', 'RMS([E(883000), E(5007)])')
@@ -380,7 +381,7 @@ class Diagnostics(object):
             corrIntens = obs.getLine(label=full_label).corrIntens
             return corrIntens
         def S(label):
-            full_label = atom + '_' + label
+            full_label = atom + '_' + label + 'A'
             corrIntens = obs.getLine(label=full_label).corrIntens
             return corrIntens
             
@@ -390,7 +391,10 @@ class Diagnostics(object):
             try:
                 diag_value = eval(diag_expression)
                 if atom not in self.atomDict:
-                    self.atomDict[atom] = pn.Atom(atom=atom)
+                    if rec == 'r':
+                        self.atomDict[atom] = pn.RecAtom(atom=sym+spec)
+                    else:
+                        self.atomDict[atom] = pn.Atom(atom=atom)
                 self.addDiag(label)
             except Exception as ex:
                 pass
@@ -426,7 +430,7 @@ class Diagnostics(object):
             pn.log_.warn('Try to add clabel in undefined label {0}'.format(label), calling=self.calling)
     
     
-    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None):
+    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True):
         """
         PLotting tool to generate Te-Ne diagrams.
         
@@ -442,6 +446,7 @@ class Diagnostics(object):
             - i_obs         reference for the observation to be plotted, in case there is more than one
                             in the obs object
             - alpha         Transparency for the error bands in the plot
+            - error_band    Boolean: plot [default] an error band
             
         """
         if not pn.config.INSTALLED['plt']: 
@@ -485,7 +490,6 @@ class Diagnostics(object):
                     self.log_.warn('{0} not in BLEND_LIST'.format(full_label), calling=self.calling)
                     return None
                 return eval(to_eval)
-            print(diag[1])
             diag_map = eval(diag[1])
             try:
                 diag_map = eval(diag[1])
@@ -508,10 +512,8 @@ class Diagnostics(object):
                     else:
                         return corrIntens[i_obs]
                 def S(label):
-                    full_label = atom + '_' + label 
+                    full_label = atom + '_' + label + 'A'
                     corrIntens = obs.getLine(label=full_label).corrIntens
-                    print(label)
-                    print(full_label)
                     if i_obs is None:
                         return corrIntens
                     else:
@@ -548,6 +550,13 @@ class Diagnostics(object):
                             return err
                         else:
                             return err[i_obs]
+                    def SE(label):
+                        full_label = atom + '_' + label + 'A'
+                        err = obs.getLine(label=full_label).corrError
+                        if i_obs is None:
+                            return err
+                        else:
+                            return err[i_obs]                        
                     if quad is True:
                         RMS = lambda err: np.sqrt((np.asarray(err) ** 2.).sum())
                     else:
@@ -555,10 +564,10 @@ class Diagnostics(object):
                     tol_value = eval(diag[2])
                     col_dic = {'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
                                'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}
-                    col = col_dic[atom[:-1]]
+                    col = col_dic[sym]
                     style_dic = {'1':'-', '2':'--', '3':':', '4':'-.', '5':'-', '6':'--'}
-                    style = style_dic[atom[-1]]
-                    if tol_value > 0.:
+                    style = style_dic[spec]
+                    if tol_value > 0. and error_band:
                         levels = [(1 - tol_value) * diag_value, (1 + tol_value) * diag_value]
                         CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
@@ -567,7 +576,7 @@ class Diagnostics(object):
                     if len(diag) >= 4:
                         fmt = diag[3]
                     else:
-                        fmt = '[{0}{1}]'.format(atom[0:-1], int_to_roman(int(atom[-1])))
+                        fmt = '[{0}{1}]'.format(sym, int_to_roman(int(spec)))
                     ax.clabel(CS, inline=True, fmt=fmt, fontsize=15, colors=col)
                     if type(diag_value) is np.ndarray:
                         diag_value = diag_value[0]
