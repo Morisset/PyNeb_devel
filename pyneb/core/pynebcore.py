@@ -1862,7 +1862,7 @@ class Atom(object):
             lev_i, lev_j = self.getTransition(wave)
         NLevels = self.NLevels
         if lev_i > NLevels or lev_j > NLevels:
-            log_.error('The number of levels {} does not allow getting this emissivity. Consider changing the atomic data'.format(NLevels),
+            log_.error('The number of levels {} does not allow getting this emissivity ({}-{}). Consider changing the atomic data'.format(NLevels,lev_i, lev_j),
                           calling=self.calling) 
         if product:
             n_tem = tem.size
@@ -2736,7 +2736,7 @@ class RecAtom(object):
         else:
             self.NIST = None
             self.NLevels = 0
-
+            self.wave_Ang = None
 
     def _test_lev(self, level):
         """
@@ -2746,6 +2746,8 @@ class RecAtom(object):
             - level        selected atom level
 
         """       
+        if self.NLevels == 0:
+            self.log_.error('No levels defined', calling=self.calling)
         if level < -1 or level == 0 or level > self.NLevels:
             self.log_.error('Wrong value for level: {0}, maximum = {1}'.format(level, self.NLevels),
                             calling=self.calling)
@@ -2998,6 +3000,8 @@ class RecAtom(object):
             - maxErrorm: tolerance if the input wavelength is in micron
                             
         """
+        if self.wave_Ang is None:
+            return(None)
         if str(wave)[-1] == 'A':
             inputWave = float(wave[:-1])
             label = '{0}_{1}'.format(self.atom, wave)
@@ -3062,7 +3066,10 @@ class RecAtom(object):
                 
         """ 
         res = self._Transition(wave, maxErrorA = maxErrorA, maxErrorm = maxErrorm)
-        return(res[0], res[1])
+        if res is None:
+            return(None)
+        else:
+            return(res[0], res[1])
         
         
     def printTransition(self, wave):
@@ -3078,13 +3085,14 @@ class RecAtom(object):
                 
         """
         closestTransition = self._Transition(wave)
-        relativeError = closestTransition[3] / closestTransition[2] - 1
-        print('Input wave: {0:.1F}'.format(closestTransition[3]))
-        print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
-        print('Relative error: {0:.0E} '.format(relativeError))
-        print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
-        return
-    
+        if closestTransition is None:
+            print('No wavelengths defined')
+        else:
+            relativeError = closestTransition[3] / closestTransition[2] - 1
+            print('Input wave: {0:.1F}'.format(closestTransition[3]))
+            print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
+            print('Relative error: {0:.0E} '.format(relativeError))
+            print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
               
     def printSources(self):
         
@@ -3093,7 +3101,7 @@ class RecAtom(object):
             
     def getSources(self):
         
-        return self.sources
+        return(self.sources)
     
     def getEnergy(self, level= -1, unit='1/Ang'):
         """
@@ -3148,15 +3156,21 @@ class RecAtom(object):
 
         """
         if np.isreal(label):
-            label_str = '{0:.1f}'.format(label)
+            label_str0 = '{0:.0f}'.format(label)
+            label_str1 = '{0:.1f}'.format(label)
+            label_str2 = '{0:.2f}'.format(label)
         else:
-            label_str = str(label)
-        if label_str not in self.labels:
+            label_str0 = label_str1 = label_str2 = str(label)
+        if label_str0 in self.labels:
+            return label_str0
+        elif label_str1 in self.labels:
+            return label_str1
+        elif label_str2 in self.labels:
+            return label_str2
+        else:
             if warn:
-                log_.warn('Label {0} not in {1}.'.format(label_str, self.recFitsFile), calling=self.calling)
+                log_.warn('Label {0} not in {1}.'.format(label, self.recFitsFile), calling=self.calling)
             return None
-        else:
-            return label_str
         
         
     def getEmissivity(self, tem, den, lev_i=None, lev_j=None, wave=None, label=None,
@@ -3223,6 +3237,9 @@ class RecAtom(object):
             if label_str is None:
                 ij = self.getTransition(wave)
                 label = '{}_{}'.format(ij[0], ij[1])
+        if label is None:
+            res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
+            return res
         label_str = self._getLabelStr(label, warn=False)
         if label_str is None:
             log_.warn('Wrong label {0}'.format(label), calling=self.calling)
@@ -3278,7 +3295,7 @@ class RecAtom(object):
             He2.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
             He1.getIonAbundance(100, 1.5e4, 100., wave=5016)
             He1.getIonAbundance(100, 1.5e4, 100., label="5016.0")
-            He1.getIonAbundance(100, 1.5e4, 100., to_eval='A(5016)')
+            He1.getIonAbundance(100, 1.5e4, 100., to_eval='S(5016)')
             He1.getIonAbundance(np.array([100, 150]), np.array([1.5e4, 1.2e4]), np.array([100., 120]), 
                 label="10830.0")
             
@@ -3310,19 +3327,22 @@ class RecAtom(object):
             if wave != -1:
                 to_eval = 'L({0})'.format(wave)
             elif label is not None:
-                to_eval = 'A("{0}")'.format(label)
+                to_eval = 'S("{0}")'.format(label)
             else:
                 to_eval = 'I({0}, {1})'.format(lev_i, lev_j)
         I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
         L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
-        A = lambda label: self.getEmissivity(tem, den, label=label, product=False)
+        S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
         try:
             emis = eval(to_eval)
         except:
             self.log_.error('Unable to eval {0}'.format(to_eval), calling=self.calling)
             return None
+        if emis is not None:
         #int_ratio is in units of Hb = Hbeta keyword
-        ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+        else:
+            ionAbundance = None
         return ionAbundance
     
     
@@ -4154,17 +4174,21 @@ class Observation(object):
         """    
         if obsName is not None:
             if obsName in self.names:
-                obsIndex = self.names.index(obsName)
+                obsIndex = np.array((self.names.index(obsName)))
             else:
                 self.log_.error('Name {} is not an Observation name'.format(obsName))
                 return None
         else:
             obsIndex = np.arange(self.n_obs)
         for line in self.lines:
-            if returnObs:
-                print(line.label, line.obsIntens[obsIndex])
+            if isinstance(line.corrIntens[obsIndex], float):
+                to_print = np.array((line.corrIntens[obsIndex],))
             else:
-                print(line.label, line.corrIntens[obsIndex])
+                to_print = line.corrIntens[obsIndex]
+            if returnObs:
+                print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
+            else:
+                print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
     
             
     def def_EBV(self, label1="H1_6563A", label2="H1_4861A", r_theo=2.85):
