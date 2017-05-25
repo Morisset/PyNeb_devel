@@ -1862,7 +1862,7 @@ class Atom(object):
             lev_i, lev_j = self.getTransition(wave)
         NLevels = self.NLevels
         if lev_i > NLevels or lev_j > NLevels:
-            log_.error('The number of levels {} does not allow getting this emissivity. Consider changing the atomic data'.format(NLevels),
+            log_.error('The number of levels {} does not allow getting this emissivity ({}-{}). Consider changing the atomic data'.format(NLevels,lev_i, lev_j),
                           calling=self.calling) 
         if product:
             n_tem = tem.size
