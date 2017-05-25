@@ -3281,7 +3281,7 @@ class RecAtom(object):
             He2.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
             He1.getIonAbundance(100, 1.5e4, 100., wave=5016)
             He1.getIonAbundance(100, 1.5e4, 100., label="5016.0")
-            He1.getIonAbundance(100, 1.5e4, 100., to_eval='A(5016)')
+            He1.getIonAbundance(100, 1.5e4, 100., to_eval='S(5016)')
             He1.getIonAbundance(np.array([100, 150]), np.array([1.5e4, 1.2e4]), np.array([100., 120]), 
                 label="10830.0")
             
@@ -3313,12 +3313,12 @@ class RecAtom(object):
             if wave != -1:
                 to_eval = 'L({0})'.format(wave)
             elif label is not None:
-                to_eval = 'A("{0}")'.format(label)
+                to_eval = 'S("{0}")'.format(label)
             else:
                 to_eval = 'I({0}, {1})'.format(lev_i, lev_j)
         I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
         L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
-        A = lambda label: self.getEmissivity(tem, den, label=label, product=False)
+        S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
         try:
             emis = eval(to_eval)
         except:
@@ -4157,17 +4157,21 @@ class Observation(object):
         """    
         if obsName is not None:
             if obsName in self.names:
-                obsIndex = self.names.index(obsName)
+                obsIndex = np.array((self.names.index(obsName)))
             else:
                 self.log_.error('Name {} is not an Observation name'.format(obsName))
                 return None
         else:
             obsIndex = np.arange(self.n_obs)
         for line in self.lines:
-            if returnObs:
-                print(line.label, line.obsIntens[obsIndex])
+            if isinstance(line.corrIntens[obsIndex], float):
+                to_print = np.array((line.corrIntens[obsIndex],))
             else:
-                print(line.label, line.corrIntens[obsIndex])
+                to_print = line.corrIntens[obsIndex]
+            if returnObs:
+                print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
+            else:
+                print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
     
             
     def def_EBV(self, label1="H1_6563A", label2="H1_4861A", r_theo=2.85):
