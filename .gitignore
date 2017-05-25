@@ -12,6 +12,8 @@ PyNeb_Handbook_files/
 **reference_manual_latex/
 *.aux
 *.out
+pypics/
+observations*.dat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -58,3 +60,5 @@ nosetests.xml
 coverage.xml
 *.cover
 
+
+docs/Notebooks/smc24.dat
