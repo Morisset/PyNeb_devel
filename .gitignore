@@ -60,3 +60,5 @@ nosetests.xml
 coverage.xml
 *.cover
 
+
+docs/Notebooks/smc24.dat
