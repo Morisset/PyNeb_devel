@@ -53,9 +53,9 @@ PyNeb is provided as it is. No warranty at all.
 Manual
 ======
 
-* The manuals are `HERE <https://github.com/Morisset/PyNeb_devel/tree/master/pyneb/docs>`_.
+* The manuals are `HERE <https://github.com/Morisset/PyNeb_devel/tree/master/docs>`_.
 
-* The HowTo user guide, reference manual and developer manual are accessible from `HERE <http://132.248.1.102/PyNeb/>`_.
+* The reference manual is accessible from `HERE <https://morisset.github.io/PyNeb_Manual/html/index.html>`_.
 
 Discussion Groups
 =================
