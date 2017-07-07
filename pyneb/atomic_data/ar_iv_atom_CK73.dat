@@ -1,0 +1,14 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 
+0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+7.71e-02 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+9.60e-03 2.33e-05 0.00e+00 0.00e+00 0.00e+00 
+9.70e-01 6.78e-01 1.22e-01 0.00e+00 0.00e+00
+2.55e+00 9.08e-01 6.70e-01 4.97e-05 0.00e+00 
+*** Ar IV transition probabilities
+*** ATOM argon
+*** SPECTRUM 4
+*** N_LEVELS 5
+*** SOURCE2 S. J. Czyzak and T. K. Krueger, MNRAS 126, 177–194 (1963) 
+*** NOTE2 All A values
+*** GSCONFIG p3
