@@ -3452,7 +3452,11 @@ def getAtomDict(atom_list=None, elem_list=None, spec_list=None, only_coll=False,
             try:
                 this_atom = RecAtom(elem, spec, **kwargs)
                 if this_atom.is_valid:
-                    all_atoms[atom+'r'] = this_atom
+                    if atom[-1] != 'r':
+                        add_r = 'r'
+                    else:
+                        add_r = ''
+                    all_atoms[atom+add_r] = this_atom
                 log_.message('Including ' + atom, calling='getAtomDict')
             except:
                 log_.message(atom + ' not found', calling='getAtomDict')
