@@ -3723,7 +3723,7 @@ Corrected error: {0.corrError}""".format(self))
 
 class Observation(object):
     def __init__(self, obsFile=None, fileFormat='lines_in_cols', delimiter=None, err_default=0.10,
-                 corrected=False, errIsRelative=True):
+                 corrected=False, errIsRelative=True, correcLaw='F99'):
         """
         Define the observation object, which is a collection of observated intensities of one or more
         emission lines for one or more objects, with the corresponding errors.
@@ -3740,6 +3740,7 @@ class Observation(object):
                                 (default: False)
             - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
                                 are in the same unit as the intensity (default: True)
+            - correcLaw   ['F99'] extinction law used to correct the observed lines.
 
         Example:
             Read a file containing corrected intensities:
@@ -3752,7 +3753,7 @@ class Observation(object):
         self.calling = 'Observation'
         self.lines = []
         self.names = []
-        self.extinction = RedCorr()
+        self.extinction = RedCorr(law=correcLaw)
         self.corrected = corrected
         if self.corrected:
             self.extinction.law = 'No correction'
@@ -4186,9 +4187,15 @@ class Observation(object):
             obsIndex = np.arange(self.n_obs)
         for line in self.lines:
             if isinstance(line.corrIntens[obsIndex], float):
-                to_print = np.array((line.corrIntens[obsIndex],))
+                if returnObs:
+                    to_print = np.array((line.obsIntens[obsIndex],))
+                else:
+                    to_print = np.array((line.corrIntens[obsIndex],))
             else:
-                to_print = line.corrIntens[obsIndex]
+                if returnObs:
+                    to_print = line.obsIntens[obsIndex]
+                else:
+                    to_print = line.corrIntens[obsIndex]
             if returnObs:
                 print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
             else:
