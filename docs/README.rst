@@ -9,5 +9,6 @@ IV. `The Recombination lines <Notebooks/PyNeb_manual_4.ipynb>`_
 V. `The extinction correction <Notebooks/PyNeb_manual_5.ipynb>`_
 VI. `The Observations <Notebooks/PyNeb_manual_6.ipynb>`_
 VII. `The Diagnostic diagrams and determination of Te-Ne <Notebooks/PyNeb_manual_7.ipynb>`_
+VIIb. `The determination of ionic abundances <Notebooks/PyNeb_manual_7b.ipynb>`_
 VIII. `ICFs and elemental abundances <Notebooks/PyNeb_manual_8.ipynb>`_
 IX. `Some examples <Notebooks/Some_examples.ipynb>`_
