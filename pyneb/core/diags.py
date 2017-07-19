@@ -25,6 +25,8 @@ diags_dict['[OI] 5577/6302'] = ('O1', 'L(5577)/L(6300)', 'RMS([E(6300), E(5577)]
 diags_dict['[OI] 5577/6300'] = ('O1', 'L(5577)/L(6300)', 'RMS([E(6300), E(5577)])')
 diags_dict['[OI] 5577/6300+'] = ('O1', 'L(5577)/(L(6300)+L(6364))', 'RMS([E(6300)*L(6300)/(L(6300)+L(6364)), E(6364)*L(6364)/(L(6300)+L(6364)), E(5577)])')
 diags_dict['[OII] 3726/3729'] = ('O2', 'L(3726)/L(3729)', 'RMS([E(3729), E(3726)])')
+diags_dict['[OII] 3727+/7325+c'] =  ('O2', '(B("3727A+"))/(B("7319A+")+B("7330A+"))',
+            'RMS([BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")), BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+")), BE("3727A+")])')
 diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7319A+")+B("7330A+"))',
               'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")),BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+"))])')
 #diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7325A+"))', 'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7325A+")])')
@@ -368,7 +370,6 @@ class Diagnostics(object):
         if not isinstance(obs, pn.Observation):
             pn.log_.error('The argument must be an Observation object', calling=self.calling + 'addDiagsFromObs')
         old_level = pn.log_.level
-        pn.log_.level = 1
         def I(i, j):
             wave = atom.wave_Ang[i - 1, j - 1]
             corrIntens = obs.getLine(sym, spec, wave).corrIntens
@@ -388,8 +389,12 @@ class Diagnostics(object):
         for label in diags_dict:
             atom, diag_expression, error = diags_dict[label]
             sym, spec, rec = parseAtom2(atom)
-            try:
+            if label == '[OII] 3727+/7325+c':
                 diag_value = eval(diag_expression)
+            try:
+                pn.log_.level = 1
+                diag_value = eval(diag_expression)
+                pn.log_.level = old_level
                 if atom not in self.atomDict:
                     if rec == 'r':
                         self.atomDict[atom] = pn.RecAtom(atom=sym+spec)
@@ -397,10 +402,9 @@ class Diagnostics(object):
                         self.atomDict[atom] = pn.Atom(atom=atom)
                 self.addDiag(label)
             except Exception as ex:
-                pass
-                #print(diag_expression)
-        pn.log_.level = old_level
-    
+                pn.log_.level = old_level
+                pn.log_.debug('Diag not valid {} {}'.format(label, diag_expression))
+                
     
     def setAtoms(self, atom_dic):
         """
@@ -569,7 +573,9 @@ class Diagnostics(object):
                     style = style_dic[spec]
                     if tol_value > 0. and error_band:
                         levels = [(1 - tol_value) * diag_value, (1 + tol_value) * diag_value]
-                        CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
+                        if levels[0] < levels[1]:
+                            #pn.log_.debug('{} levels {}'.format(label, levels), calling=self.calling)
+                            CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
                     ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
                     ax.set_ylabel(r'T$_{\rm e}$ [K]')
