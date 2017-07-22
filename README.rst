@@ -61,3 +61,8 @@ Discussion Groups
 =================
 * https://groups.google.com/forum/#!forum/pyneb
 * Send a mail to the group: pyneb@googlegroups.com
+
+Acknowledgements
+================
+
+This project is partly supported by grants DGAPA/PAPIIT-107215 and CONACyT-CB2015-254132.
