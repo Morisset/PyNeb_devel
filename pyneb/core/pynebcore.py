@@ -3732,8 +3732,15 @@ class Observation(object):
         
         Parameters:
             - obsFile       name of the file containing the observations. May be a file object or a file name 
-            - fileFormat    lines_in_cols or lines_in_row depending on how the wavelengths are ordered 
-                                (default: lines_in_cols)
+            - fileFormat    format of the data file, depending on how the wavelengths are ordered.
+                            Available formats are :
+                            - 'lines_in_cols' : Each object is on a different row. Each column corresponds to a given emission line. 
+                               Line labels with tailing "e" are for errors on line intensities.
+                            - 'lines_in_cols2' : Each object is on a different row. Same as 'lines_in_cols' but using genfromtxt to read the file.
+                               Allows undefined values.
+                            - 'lines_in_rows' : Each object is on a different column. Each row corresponds to a given emission line.
+                            - 'lines_in_rows_err_cols' : Each object is on a different column. Each row corresponds to a given emission line. 
+                               For each object (eg. "IC418"), an additional column (named eg "errIC418") contains the errors on the line intensities.
             - delimiter     character separating entries 
             - err_default   default uncertainty assumed on intensities. Will overwrite the error from the file.
             - corrected     Boolean. True if the observed intensities are already corrected from extinction
@@ -4202,7 +4209,7 @@ class Observation(object):
                 print('{:10}'.format(line.label), ' '.join(('{:8.3f}'.format(l) for l in to_print)))
     
             
-    def def_EBV(self, label1="H1_6563A", label2="H1_4861A", r_theo=2.85):
+    def def_EBV(self, label1="H1r_6563A", label2="H1r_4861A", r_theo=2.85):
         """
         Define the extinction parameter using the ratio of 2 lines.
         Calls extinction.setCorr to set the EBV and cHbeta according to the parameters.
@@ -4305,8 +4312,12 @@ class Observation(object):
                 self.addMonteCarloObs(i_obs=i, N=N)
             log_.message('Leaving', calling='addMonteCarloObs')
         else:
-            intens = np.array([self.getIntens()[label] for label in self.lineLabels])[:,i_obs] # n_lines
-            error = np.array([self.getError()[label] for label in self.lineLabels])[:,i_obs]
+            if self.corrected:
+                returnObs=False
+            else:
+                returnObs=True
+            intens = np.array([self.getIntens(returnObs=returnObs)[label] for label in self.lineLabels])[:,i_obs] # n_lines
+            error = np.array([self.getError(returnObs=returnObs)[label] for label in self.lineLabels])[:,i_obs]
             all_new_obs = np.random.standard_normal((N, n_lines))
             
             for i in range(N):
