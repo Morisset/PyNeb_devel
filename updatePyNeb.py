@@ -17,7 +17,7 @@ md.create_zipfile('pyneb/docs/html', '../../../dist/PyNeb_{0}_documentation'.for
 
 #md.run('python setup.py sdist upload')
 
-#md.run('python setup.py sdist bdist_wheel')
+#md.run('python setup.py sdist bdist_wheel --universal')
 #md.run('twine upload dist/*')
 
 md.run('python setup.py sdist')
