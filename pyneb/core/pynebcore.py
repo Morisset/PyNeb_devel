@@ -483,10 +483,12 @@ class _AtomDataAscii(object):
                 number = com.split('NOTE')[1]
                 notes[number] = self.comments[com]
         for key in sources_str:
-            try:
-                sources.append('{0}: {1}: {2}'.format(self.atom, notes[key], sources_str[key])) 
-            except:
-                sources.append('{0}: {1}'.format(self.atom, sources[key]))
+            source = '{0}: '.format(self.atom)
+            if key in notes:
+                source += '{0}: '.format(notes[key])
+            if key in sources_str:
+                source += '{0}: '.format(sources_str[key])
+            sources.append(source) 
         return sources
 
     def printSources(self):
