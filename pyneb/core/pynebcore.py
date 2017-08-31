@@ -1041,10 +1041,12 @@ class _CollDataAscii(object):
                 number = com.split('NOTE')[1]
                 notes[number] = self.comments[com]
         for key in sources_dic:
-            try:
-                sources.append('{0}: {1}: {2}'.format(self.atom, notes[key], sources_dic[key])) 
-            except:
-                sources.append('{0}: {1}'.format(self.atom, sources[key]))
+            source = '{0}: '.format(self.atom)
+            if key in notes:
+                source += '{0}: '.format(notes[key])
+            if key in sources_dic:
+                source += '{0}: '.format(sources_dic[key])
+            sources.append(source) 
         return sources
                 
     def printSources(self):
