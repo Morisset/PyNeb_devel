@@ -830,19 +830,22 @@ See Morton (Ap. J. Suppl. 77, 119) for the formula used
 REVISION HISTORY
 Written W. Landsman November 1991
 Converted to IDL V5.0 W. Landsman September 1997
+Adding option to apply only between pn.config.vactoair_low_wl and pn.config.vactoair_high_wl
     """
-    
-    sigma2 = (1.e4/wave)**2. #Convert to wavenumber squared
+    wave_arr = np.asarray(wave)
+    sigma2 = (1.e4/wave_arr)**2. #Convert to wavenumber squared
     
     # Compute conversion factor
     
     fact = 1. + 6.4328e-5 + 2.94981e-2/(146.-sigma2) + 2.5540e-4/(41.-sigma2)
     
-    fact = fact*(wave >= 2000.) + 1.*(wave < 2000.)
+    mask_ok = (wave_arr >= pn.config.vactoair_low_wl) & (wave_arr <= pn.config.vactoair_high_wl)
+    fact = np.ones_like(wave_arr)
+    fact[mask_ok] = 1. + 6.4328e-5 + 2.94981e-2/(146.-sigma2[mask_ok]) + 2.5540e-4/(41.-sigma2[mask_ok])
     
-    wave = wave*fact #Convert Wavelength
+    wave_arr = wave_arr*fact #Convert Wavelength
     
-    return wave
+    return wave_arr
 
 
 
@@ -898,14 +901,17 @@ Written, D. Lindler 1982
 Documentation W. Landsman Feb. 1989
 Converted to IDL V5.0 W. Landsman September 1997
     """
+    wave_arr = np.asarray(wave)
 
-    wave2 = wave**2.
-    fact = 1. + 2.735182e-4 + 131.4182/wave2 + 2.76249e8/wave2**2.
-    fact = fact * ( wave >= 2000. ) + 1.*( wave < 2000. )
+    wave2 = wave_arr**2.
+    mask_ok = (wave_arr >= pn.config.vactoair_low_wl) & (wave_arr <= pn.config.vactoair_high_wl)
+    fact = np.ones_like(wave_arr)
+
+    fact[mask_ok] = 1. + 2.735182e-4 + 131.4182/wave2[mask_ok]  + 2.76249e8/wave2[mask_ok] **2.
     
     # Convert wavelengths
     
-    wave = wave/fact
+    wave_arr = wave_arr/fact
     
-    return wave
+    return wave_arr
 

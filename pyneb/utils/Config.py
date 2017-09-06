@@ -110,6 +110,9 @@ class _Config(object):
         self.set_noExtrapol(False)
                     
         self.__pypic_path = None
+        
+        self.vactoair_low_wl = 2000. # UV in vacuum
+        self.vactoair_high_wl = 1e30 # no upper limit, IR in air!!!
                 
     def set_noExtrapol(self, value):
         self._noExtrapol = bool(value)
@@ -180,5 +183,7 @@ class _Config(object):
         self._use_mp = True
     
     def unuse_multiprocs(self):
-        self._use_mp = False    
+        self._use_mp = False
+        
+        
             
