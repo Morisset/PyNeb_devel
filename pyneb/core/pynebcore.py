@@ -349,7 +349,7 @@ class _AtomDataAscii(object):
         self.log_.message('Reading atom data from {0}'.format(self.atomFile), calling=self.calling)
 
     
-        self.E_in_vacuum = False
+        self.E_in_vacuum = True
         # Read data from ascii file
         #
         # Read energies and stat weights 
@@ -439,6 +439,8 @@ class _AtomDataAscii(object):
         if 'VACUUM' in self.comments:
             if self.comments['VACUUM'] == '1':
                 self.E_in_vacuum = True
+            elif self.comments['VACUUM'] == '0':
+                self.E_in_vacuum = False
     
     def initWaves(self):
         """
