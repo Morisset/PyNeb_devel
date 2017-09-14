@@ -2711,13 +2711,13 @@ class RecAtom(object):
             self.IP = -1
         
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
-        file_type = self.recFitsFile.split('.')[-1]
+        self.file_type = self.recFitsFile.split('.')[-1]
         self.useNIST = False
-        if file_type == 'fits':
+        if self.file_type == 'fits':
             self._loadFit()
-        elif file_type == 'hdf5':
+        elif self.file_type == 'hdf5':
             self._loadHDF5()
-        elif file_type == 'func':
+        elif self.file_type == 'func':
             self._loadFunctions()
         else:
             self.is_valid = False
@@ -2909,10 +2909,8 @@ class RecAtom(object):
         """
         read functions to compute emissivities from formulae
         """
+        self.useNIST = False        
         
-        temp = np.linspace(1000, 20000, 20)
-        dens = np.logspace(1, 5, 15)
-        self._RecombData = Table()
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
             log_.error('No func data for atom: {0}'.format(self.atom), calling=self.calling)
@@ -2921,76 +2919,82 @@ class RecAtom(object):
         with open(self.recFitsFullPath, 'r') as f:
             self._funcType = f.readline().strip()
             source = f.readline()
-        try:
-            data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None)
-        except:
-            data = None
-        if data is not None:
-            t2d, d2d = np.meshgrid(temp, dens)
-            self._RecombData.add_column(Column(t2d, name='TEMP'))
-            self._RecombData.add_column(Column(np.log10(d2d), name='DENS'))
-            if self._funcType == 'PEQ1991':
-                self.useNIST = False
-                for dd in data:
-                    case = dd[2]
-                    if case == self.case:
-                        lamb = dd[1]*10. # Angstrom
-                        a = dd[3]
-                        b = dd[4]
-                        c = dd[5]
-                        d = dd[6]
-                        Br = dd[7]
-                        z = self.spec 
-                        t = 1e-4 * t2d / z**2
-                        alpha = 1e-13 * z * a * t**b / (1. + c * t**d)
-                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
-                        E_erg = E_Ryd * CST.RYD2ERG   #erg
-                        emis = Br * alpha * E_erg
-                        self._RecombData.add_column(Column(emis, name=dd[0]))
-            elif self._funcType == 'S94':
-                self.useNIST = False
-                for dd in data:
-                    case = dd[2]
-                    if case == self.case:
-                        lamb = dd[1]*10. # Angstrom
-                        a = dd[3]
-                        b = dd[4]
-                        c = dd[5]
-                        d = dd[6]
-                        t = 1e-4 * t2d 
-                        alpha = 1e-14 * a * t**b *(1. + c*(1.-t) + d*(1.-t)**2)
-                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
-                        E_erg = E_Ryd * CST.RYD2ERG   #erg
-                        emis = alpha * E_erg
-                        self._RecombData.add_column(Column(emis, name=dd[0]))
-            elif self._funcType == 'KSDN1998':
-                self.useNIST = False
-                for dd in data:
-                    case = dd[17]
-                    if case == self.case:
-                        lamb = dd[18]*10. # Angstrom
-                        a = dd[19]
-                        b = dd[20]
-                        c = dd[21]
-                        d = dd[22]
-                        f = dd[23]
-                        t = 1e-4 * t2d 
-                        alpha = 1e-14 * a * t**f *(1. + b*(1.-t) + c*(1.-t)**2 + d*(1.-t)**3)
-                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
-                        E_erg = E_Ryd * CST.RYD2ERG   #erg
-                        emis = alpha * E_erg
-                        self._RecombData.add_column(Column(emis, name='{:6.1f}+'.format(lamb)))
-                            
-        self.labels = tuple([l for l in self._RecombData.dtype.names if l not in ('TEMP', 'DENS')])         
-        if '_' in self._RecombData.dtype.names[0]:
+        if self._funcType == 'PEQ1991':
+            try:
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                                     usecols = (0,1,2,3,4,5,6,7), 
+                                     names='label, lamb, case, a, b, c, d, Br')
+            except:
+                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            data = data[data['case'] == self.case]
+            data['lamb'] *= 10  # Angstrom
+            self.labels = data['label']
+            def emis_func(label, temp, log_dens):
+                mask = data['label'] == label
+                if mask.sum() == 1:
+                    d = data[mask]
+                    z = self.spec 
+                    t = 1e-4 * temp / z**2
+                    alpha = 1e-13 * z * d['a'] * t**d['b'] / (1. + d['c'] * t**d['d'])
+                    E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    emis = d['Br'] * alpha * E_erg
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))
+        elif self._funcType == 'S94':
+            try:
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                                     names='label, lamb, case, a, b, c, d')
+            except:
+                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            data = data[data['case'] == self.case]
+            data['lamb'] *= 10  # Angstrom
+            self.labels = data['label']
+            def emis_func(label, temp, log_dens):
+                mask = data['label'] == label
+                if mask.sum() == 1:
+                    d = data[mask]
+                    t = 1e-4 * temp 
+                    alpha = 1e-14 * d['a'] * t**d['b'] *(1. + d['c']*(1.-t) + d['d']*(1.-t)**2)
+                    E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    emis = alpha * E_erg
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))
+        elif self._funcType == 'KSDN1998':
+            try:
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                                     usecols = (17, 18, 19, 20, 21, 22, 23), 
+                                     names='case, lamb, a, b, c, d, f')
+            except:
+                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            data = data[data['case'] == self.case]
+            data['lamb'] *= 10  # Angstrom
+            self.labels = np.array(['{:6.1f}+'.format(lamb) for lamb in data['lamb']])
+            def emis_func(label, temp, log_dens):
+                mask = self.labels == label
+                if mask.sum() == 1:
+                    d = data[mask]
+                    t = 1e-4 * temp 
+                    alpha = alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
+                    E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    emis = alpha * E_erg
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))
+
+        self.func_data = data 
+        if '_' in self.labels[0]:
             self.label_type = 'transitions'
-        elif '+' in self._RecombData.dtype.names[0]:
+        elif '+' in self.labels[0]:
             self.label_type = 'wavelengths'
         else:
             self.label_type = 'wavelengths'
-        self.temp = self._RecombData['TEMP']
-        self.log_dens = self._RecombData['DENS']
         self.sources.append(source)
+        self.emis_func = emis_func
         log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadTotRecombination(self):
@@ -3273,27 +3277,31 @@ class RecAtom(object):
         if not self._checkLabel(label_str):
             log_.warn('Wrong label {0}'.format(label_str), calling=self.calling)
             return None
-        enu = self._RecombData[label_str]
-            
-        logd = np.log10(deng)
-        temp_min = np.min(self.temp)
-        temp_max = np.max(self.temp)
-        log_dens_min = np.min(self.log_dens)
-        log_dens_max = np.max(self.log_dens)
-        tt = (logd < log_dens_min)
-        if np.ndim(logd) == 0: 
-            if tt == True:
-                logd = log_dens_min
+        
+        if self.file_type == 'func':
+            res = self.emis_func(label_str, temg, deng)
         else:
-            logd[tt] = log_dens_min
-        tt = (logd > log_dens_max)
-        if np.ndim(logd) == 0:
-            if tt == True:
-                logd = log_dens_max
-        else:
-            logd[tt] = log_dens_max
-        res = interpolate.griddata((self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
-                                   (temg, logd), method=method)
+            enu = self._RecombData[label_str]
+                
+            logd = np.log10(deng)
+            temp_min = np.min(self.temp)
+            temp_max = np.max(self.temp)
+            log_dens_min = np.min(self.log_dens)
+            log_dens_max = np.max(self.log_dens)
+            tt = (logd < log_dens_min)
+            if np.ndim(logd) == 0: 
+                if tt == True:
+                    logd = log_dens_min
+            else:
+                logd[tt] = log_dens_min
+            tt = (logd > log_dens_max)
+            if np.ndim(logd) == 0:
+                if tt == True:
+                    logd = log_dens_max
+            else:
+                logd[tt] = log_dens_max
+            res = interpolate.griddata((self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
+                                       (temg, logd), method=method)
         return res
 
 
