@@ -2910,7 +2910,7 @@ class RecAtom(object):
         read functions to compute emissivities from formulae
         """
         
-        temp = np.linspace(100, 20000, 20)
+        temp = np.linspace(1000, 20000, 20)
         dens = np.logspace(1, 5, 15)
         self._RecombData = Table()
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
