@@ -2910,7 +2910,7 @@ class RecAtom(object):
         read functions to compute emissivities from formulae
         """
         
-        temp = np.linspace(1000, 20000, 20)
+        temp = np.linspace(100, 20000, 20)
         dens = np.logspace(1, 5, 15)
         self._RecombData = Table()
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
@@ -2963,7 +2963,24 @@ class RecAtom(object):
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = alpha * E_erg
                         self._RecombData.add_column(Column(emis, name=dd[0]))
-        
+            elif self._funcType == 'KSDN1998':
+                self.useNIST = False
+                for dd in data:
+                    case = dd[17]
+                    if case == self.case:
+                        lamb = dd[18]*10. # Angstrom
+                        a = dd[19]
+                        b = dd[20]
+                        c = dd[21]
+                        d = dd[22]
+                        f = dd[23]
+                        t = 1e-4 * t2d 
+                        alpha = 1e-14 * a * t**f *(1. + b*(1.-t) + c*(1.-t)**2 + d*(1.-t)**3)
+                        E_Ryd = 1./(lamb * 1e-8 * CST.RYD)
+                        E_erg = E_Ryd * CST.RYD2ERG   #erg
+                        emis = alpha * E_erg
+                        self._RecombData.add_column(Column(emis, name='{:6.1f}+'.format(lamb)))
+                            
         self.labels = tuple([l for l in self._RecombData.dtype.names if l not in ('TEMP', 'DENS')])         
         if '_' in self._RecombData.dtype.names[0]:
             self.label_type = 'transitions'
@@ -3099,6 +3116,9 @@ class RecAtom(object):
             print('Closest wave found: {0:.1F}'.format(closestTransition[2]))
             print('Relative error: {0:.0E} '.format(relativeError))
             print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
+
+    def grep_labels(self, str):
+        return [l for l in self.labels if str in l]
               
     def printSources(self):
         

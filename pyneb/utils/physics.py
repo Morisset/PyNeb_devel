@@ -22,6 +22,7 @@ class CST(object):
 
 Z = {}
 Z["H"] = 1
+Z['D'] = 1
 Z["He"] = 2
 #Z["3He"] = 2
 Z["Li"] = 3
@@ -277,6 +278,7 @@ IP['He2r'] = 54.41778
 sym2name = {
             'H': 'hydrogen',
             '3He': 'helium',
+            'D': 'deuterium',
             'He': 'helium',
             'Li': 'lithium',
             'Be': 'beryllium',
@@ -784,6 +786,9 @@ _predefinedDataFileDict['PYNEB_17_01']['O6'] = {'rec' : 'o_vi_rec_P91.func'}
 _predefinedDataFileDict['PYNEB_17_01']['Ar3']['atom'] = 'ar_iii_atom_MB09.dat'
 _predefinedDataFileDict['PYNEB_17_01']['Ar3']['coll'] = 'ar_iii_coll_MB09.dat'
 _predefinedDataFileDict['PYNEB_17_01']['Ne5']['coll'] = 'ne_v_coll_DPNP13.dat'
+
+_predefinedDataFileDict['PYNEB_17_02'] = _predefinedDataFileDict['PYNEB_17_01'].copy()
+_predefinedDataFileDict['PYNEB_17_02']['Ne2'] = {'rec' : 'ne_ii_rec_KSDN98.func'}
 
 # Next release, check with JGR:
 # ['Kr6'] = {'atom': 'kr_vi_atom_B05.dat', 'coll': 'kr_vi_coll_B16.dat'}

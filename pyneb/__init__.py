@@ -26,7 +26,7 @@ except:
 from .utils.manage_atomic_data import _ManageAtomicData
 atomicData = _ManageAtomicData()
 
-atomicData.defaultDict = 'PYNEB_17_01'
+atomicData.defaultDict = 'PYNEB_17_02'
 atomicData.resetDataFileDict()
 
 from .core.pynebcore import Atom, RecAtom, getAtomDict, getRecEmissivity, EmissionLine, Observation, \
