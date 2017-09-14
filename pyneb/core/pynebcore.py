@@ -2907,7 +2907,8 @@ class RecAtom(object):
 
     def _loadFunctions(self):
         """
-        read functions to compute emissivities from formulae
+        read functions to compute emissivities from formulae.
+        Define the emis_func function
         """
         self.useNIST = False        
         
@@ -2978,14 +2979,15 @@ class RecAtom(object):
                 if mask.sum() == 1:
                     d = data[mask]
                     t = 1e-4 * temp 
-                    alpha = alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
+                    alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = alpha * E_erg
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
-
+        else:
+            self.log_.error('{} is not a valid function label'.format(self._funcType))
         self.func_data = data 
         if '_' in self.labels[0]:
             self.label_type = 'transitions'
@@ -2994,7 +2996,7 @@ class RecAtom(object):
         else:
             self.label_type = 'wavelengths'
         self.sources.append(source)
-        self.emis_func = emis_func
+        self._emis_func = emis_func
         log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadTotRecombination(self):
@@ -3121,8 +3123,11 @@ class RecAtom(object):
             print('Relative error: {0:.0E} '.format(relativeError))
             print('Transition: {0[0]} -> {0[1]}'.format(closestTransition))
 
-    def grep_labels(self, str):
-        return [l for l in self.labels if str in l]
+    def grepLabels(self, str_):
+        """
+        Return all the labels containing str_
+        """
+        return [l for l in self.labels if str_ in l]
               
     def printSources(self):
         
@@ -3279,7 +3284,7 @@ class RecAtom(object):
             return None
         
         if self.file_type == 'func':
-            res = self.emis_func(label_str, temg, deng)
+            res = self._emis_func(label_str, temg, deng)
         else:
             enu = self._RecombData[label_str]
                 
