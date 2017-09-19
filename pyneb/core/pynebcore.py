@@ -2986,6 +2986,46 @@ class RecAtom(object):
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
+        elif self._funcType == 'KSDN1998mult':
+            try:
+                file_ = self.recFitsFullPath
+                datamaster = []
+                data = []
+                with open(file_, 'r') as f:
+                    foo = f.readline()
+                    foo = f.readline()
+                    foo = f.readline()
+                    for line in f.readlines():
+                        spl = line.split()
+                        if len(spl) == 25:
+                            if spl[17] == self.case:
+                                datamaster.append(spl)
+                        elif len(spl) == 14:
+                            data.append(spl)
+                datamaster = np.array(datamaster)
+                data = np.array(data)
+            except:
+                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            self.labels = np.array(['{:8.3f}'.format(float(m[12])*10) for m in data])
+            def emis_func(label, temp, log_dens):
+                mask = self.labels == label
+                if mask.sum() == 1:
+                    dd = data[mask][0]
+                    master = datamaster[datamaster[:,0] == dd[0]][0]
+                    t = 1e-4 * temp
+                    a = float(master[19])
+                    b = float(master[20])
+                    c = float(master[21])
+                    d = float(master[22])
+                    f = float(master[23])
+                    alpha = 1e-14 * a * t**f *(1. + b*(1.-t) + c*(1.-t)**2 + d*(1.-t)**3)
+                    E_Ryd = 1./(float(dd[12]) * 10 * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    Br = float(dd[13])
+                    emis = alpha * E_erg * Br
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))       
         else:
             self.log_.error('{} is not a valid function label'.format(self._funcType))
         self.func_data = data 

@@ -2,7 +2,7 @@ KSDN1998
 SOURCE 	Kisielius, R.; Storey, P. J.; Davey, A. R.; Neale, L. T. 1998 1998A&AS..133..257K
 # last occurence of 333.7 changed into 333.6
 # last occurence of 309.5 changed into 309.4
-#   N SP1 LP1 PP1 n1 l1 S1 L1 P1 SP2 LP2 PP2 n2 l2 S2 L2 P2 Case  Lambda        a          b          c          d         f    FitErr 
+#   N  SP1 LP1 PP1 n1 l1 S1 L1 P1 SP2 LP2 PP2 n2 l2 S2 L2 P2 Case  Lambda        a          b          c          d         f    FitErr 
     1    3   1   0  7 d   4  3  0   3   1   0  7 p   4  2  1 A     5790.2      0.279     -0.870     -0.096     -0.022    -1.5770   0.09  
     2    3   1   0  7 d   4  3  0   3   1   0  7 p   4  2  1 B     5790.2      0.281     -0.893     -0.083     -0.014    -1.6000   0.05  
     3    3   1   0  6 d   4  3  0   3   1   0  6 p   4  2  1 A     3527.9      0.637     -0.876     -0.092     -0.022    -1.6047   0.09  

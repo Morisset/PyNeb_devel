@@ -231,7 +231,7 @@ class _ManageAtomicData(object):
         for dir in self._DataFilePaths:
             files = os.listdir(dir)
             for file in files:
-                if (('.fits' in file) or ('.hdf5' in file) or ('.dat' in file) ) and (atom_str in file):
+                if (('.fits' in file) or ('.func' in file) or ('.hdf5' in file) or ('.dat' in file) ) and (atom_str in file):
                     for dt in data_types:
                         if dt in file:
                             file_list.append(file)
