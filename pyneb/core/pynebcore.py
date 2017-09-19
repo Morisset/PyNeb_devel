@@ -2966,66 +2966,49 @@ class RecAtom(object):
                     self.log_.error('{} is not a valid label'.format(label))
         elif self._funcType == 'KSDN1998':
             try:
-                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
-                                     usecols = (17, 18, 19, 20, 21, 22, 23), 
-                                     names='case, lamb, a, b, c, d, f')
+                d1 = np.genfromtxt(self.recFitsFullPath, skip_header=5, skip_footer=38, dtype=None,
+                                   usecols = (0, 17, 18, 19, 20, 21, 22, 23), 
+                                   names='ID, case, lamb, a, b, c, d, f')
+                d2 = np.genfromtxt(self.recFitsFullPath, skip_header=5+215, skip_footer=0, dtype=None,
+                                   usecols = (0, 12, 13), 
+                                   names='ID, lamb, Br')
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
-            data = data[data['case'] == self.case]
-            data['lamb'] *= 10  # Angstrom
-            self.labels = np.array(['{:6.1f}+'.format(lamb) for lamb in data['lamb']])
+            d1 = d1[d1['case'] == self.case]
+            d1['lamb'] *= 10  # Angstrom
+            d2['lamb'] *= 10  # Angstrom
+            data = [d1, d2]
+            labels1 = np.array(['{:.1f}+'.format(lamb) for lamb in d1['lamb']])
+            labels2 = np.array(['{:.3f}'.format(lamb) for lamb in d2['lamb']])
+            self.labels = np.append(labels1, labels2)
             def emis_func(label, temp, log_dens):
-                mask = self.labels == label
-                if mask.sum() == 1:
-                    d = data[mask]
-                    t = 1e-4 * temp 
-                    alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
-                    E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
-                    E_erg = E_Ryd * CST.RYD2ERG   #erg
-                    emis = alpha * E_erg
-                    return emis
+                if label[-1] == '+':
+                    mask = labels1 == label
+                    if mask.sum() == 1:
+                        d = d1[mask]
+                        t = 1e-4 * temp 
+                        alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
+                        E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
+                        E_erg = E_Ryd * CST.RYD2ERG   #erg
+                        emis = alpha * E_erg
+                        return emis
+                    else:
+                        self.log_.error('{} is not a valid label'.format(label))
                 else:
-                    self.log_.error('{} is not a valid label'.format(label))
-        elif self._funcType == 'KSDN1998mult':
-            try:
-                file_ = self.recFitsFullPath
-                datamaster = []
-                data = []
-                with open(file_, 'r') as f:
-                    foo = f.readline()
-                    foo = f.readline()
-                    foo = f.readline()
-                    for line in f.readlines():
-                        spl = line.split()
-                        if len(spl) == 25:
-                            if spl[17] == self.case:
-                                datamaster.append(spl)
-                        elif len(spl) == 14:
-                            data.append(spl)
-                datamaster = np.array(datamaster)
-                data = np.array(data)
-            except:
-                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
-            self.labels = np.array(['{:8.3f}'.format(float(m[12])*10) for m in data])
-            def emis_func(label, temp, log_dens):
-                mask = self.labels == label
-                if mask.sum() == 1:
-                    dd = data[mask][0]
-                    master = datamaster[datamaster[:,0] == dd[0]][0]
-                    t = 1e-4 * temp
-                    a = float(master[19])
-                    b = float(master[20])
-                    c = float(master[21])
-                    d = float(master[22])
-                    f = float(master[23])
-                    alpha = 1e-14 * a * t**f *(1. + b*(1.-t) + c*(1.-t)**2 + d*(1.-t)**3)
-                    E_Ryd = 1./(float(dd[12]) * 10 * 1e-8 * CST.RYD)
-                    E_erg = E_Ryd * CST.RYD2ERG   #erg
-                    Br = float(dd[13])
-                    emis = alpha * E_erg * Br
-                    return emis
-                else:
-                    self.log_.error('{} is not a valid label'.format(label))       
+                    mask = labels2 == label
+                    if mask.sum() == 1:
+                        dd2 = d2[mask]
+                        mask1 = (d1['ID'] == dd2['ID']) | (d1['ID'] == dd2['ID']+1)
+                        
+                        dd1 = d1[mask1]
+                        t = 1e-4 * temp
+                        alpha = 1e-14 * dd1['a'] * t**dd1['f'] *(1. + dd1['b']*(1.-t) + dd1['c']*(1.-t)**2 + dd1['d']*(1.-t)**3)
+                        E_Ryd = 1./(dd2['lamb'] * 1e-8 * CST.RYD)
+                        E_erg = E_Ryd * CST.RYD2ERG   #erg
+                        emis = alpha * E_erg * dd2['Br']
+                        return emis
+                    else:
+                        self.log_.error('{} is not a valid label'.format(label))       
         else:
             self.log_.error('{} is not a valid function label'.format(self._funcType))
         self.func_data = data 
