@@ -2667,7 +2667,7 @@ class Atom(object):
 
 class RecAtom(object):
     
-    def __init__(self, elem=None, spec=None, atom=None, case='B'):
+    def __init__(self, elem=None, spec=None, atom=None, case='B', extrapolate=False):
         """
         RecAtom class. Used to manage recombination data and compute emissivities.
         
@@ -2677,13 +2677,14 @@ class RecAtom(object):
         Parameters:
             - elem          symbol of the selected element
             - spec          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-         
+            - extrapolate: use the function outside the validity range [False]
         """
         self.log_ = log_
         self.type = 'rec'
         self.is_valid = True
         self.gs = None
         self.case = case
+        self.extrapolate = extrapolate
         self.sources = []
         if atom is not None:
             self.atom = str.capitalize(atom)
@@ -2940,6 +2941,11 @@ class RecAtom(object):
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = d['Br'] * alpha * E_erg
+                    if not self.extrapolate:
+                        if np.ndim(t) == 0:
+                            t = np.asarray([t])
+                        mask = t < 0.004
+                        emis[mask] = np.nan
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -2961,6 +2967,11 @@ class RecAtom(object):
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = alpha * E_erg
+                    if not self.extrapolate:
+                        if np.ndim(t) == 0:
+                            t = np.asarray([t])
+                        mask = t < 0.5
+                        emis[mask] = np.nan
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -2991,6 +3002,11 @@ class RecAtom(object):
                         E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = alpha * E_erg
+                        if not self.extrapolate:
+                            if np.ndim(t) == 0:
+                                t = np.asarray([t])
+                            mask = t < 0.1
+                            emis[mask] = np.nan
                         return emis
                     else:
                         self.log_.error('{} is not a valid label'.format(label))
@@ -2999,19 +3015,23 @@ class RecAtom(object):
                     if mask.sum() == 1:
                         dd2 = d2[mask]
                         mask1 = (d1['ID'] == dd2['ID']) | (d1['ID'] == dd2['ID']+1)
-                        
                         dd1 = d1[mask1]
                         t = 1e-4 * temp
                         alpha = 1e-14 * dd1['a'] * t**dd1['f'] *(1. + dd1['b']*(1.-t) + dd1['c']*(1.-t)**2 + dd1['d']*(1.-t)**3)
                         E_Ryd = 1./(dd2['lamb'] * 1e-8 * CST.RYD)
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = alpha * E_erg * dd2['Br']
+                        if not self.extrapolate:
+                            if np.ndim(t) == 0:
+                                t = np.asarray([t])
+                            mask = t < 0.1
+                            emis[mask] = np.nan
                         return emis
                     else:
                         self.log_.error('{} is not a valid label'.format(label))       
         else:
             self.log_.error('{} is not a valid function label'.format(self._funcType))
-        self.func_data = data 
+        self._func_data = data 
         if '_' in self.labels[0]:
             self.label_type = 'transitions'
         elif '+' in self.labels[0]:
