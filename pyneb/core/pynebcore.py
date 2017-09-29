@@ -2931,7 +2931,7 @@ class RecAtom(object):
             data = data[data['case'] == self.case]
             data['lamb'] *= 10  # Angstrom
             self.labels = data['label']
-            def emis_func(label, temp, log_dens):
+            def emis_func(label, temp, dens):
                 mask = data['label'] == label
                 if mask.sum() == 1:
                     d = data[mask]
@@ -2949,7 +2949,7 @@ class RecAtom(object):
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
-        elif self._funcType == 'S94':
+        elif self._funcType == 'S94': # O II
             try:
                 data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
                                      names='label, lamb, case, a, b, c, d')
@@ -2958,7 +2958,7 @@ class RecAtom(object):
             data = data[data['case'] == self.case]
             data['lamb'] *= 10  # Angstrom
             self.labels = data['label']
-            def emis_func(label, temp, log_dens):
+            def emis_func(label, temp, dens):
                 mask = data['label'] == label
                 if mask.sum() == 1:
                     d = data[mask]
@@ -2975,7 +2975,58 @@ class RecAtom(object):
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
-        elif self._funcType == 'KSDN1998':
+        elif self._funcType == 'FSL11': # N II
+            try:
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                                     usecols = (0, 1, 2, 3,4,5,6,7,8,9, 10,13), 
+                                     names='case, mult, lamb, a, b, c, d, e, f, g, h, dens')
+            except:
+                self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            data = data[data['case'] == self.case]
+            self.labels = np.array(['{:.2f}'.format(lamb) for lamb in data['lamb']])
+            def emis_func(label, temp, dens): 
+                temp = np.array(temp)
+                dens = np.array(dens)
+                mask2 = (self.labels == label) & (data['dens'] == 2)
+                mask3 = (self.labels == label) & (data['dens'] == 3)
+                mask4 = (self.labels == label) & (data['dens'] == 4)
+                mask5 = (self.labels == label) & (data['dens'] == 5)
+                if mask2.sum() == 1:
+                    d2 = data[mask2]
+                    d3 = data[mask3]
+                    d4 = data[mask4]
+                    d5 = data[mask5]
+                    t = 1e-4 * temp
+                    alpha_gen = lambda d, t: 10**(d['a']+d['b']*t+d['c']*t**2+
+                                              (d['d']+d['e']*t+d['f']*t**2)*np.log10(t)+
+                                              d['g']*(np.log10(t))**2+d['h']/t-15)
+                    alpha2 = alpha_gen(d2, t)
+                    alpha3 = alpha_gen(d3, t)
+                    alpha4 = alpha_gen(d4, t)
+                    alpha5 = alpha_gen(d5, t)
+                    
+                    alpha = np.zeros_like(temp)
+                    
+                    mask = dens <= 10**2
+                    alpha[mask] = alpha2[mask]
+                    mask = dens >= 10**5
+                    alpha[mask] = alpha5[mask]
+                    mask = (dens > 10**2) & (dens <= 10**3)
+                    alpha[mask] = alpha3[mask] * (np.log10(dens[mask]) - 2) + alpha2[mask] * (3 - np.log10(dens[mask]))
+                    mask = (dens > 10**3) & (dens <= 10**4)
+                    alpha[mask] = alpha4[mask] * (np.log10(dens[mask]) - 3) + alpha3[mask] * (4 - np.log10(dens[mask]))
+                    mask = (dens > 10**4) & (dens <= 10**5)
+                    alpha[mask] = alpha5[mask] * (np.log10(dens[mask]) - 4) + alpha4[mask] * (5 - np.log10(dens[mask]))
+                    
+                    E_Ryd = 1./(d2['lamb'] * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    emis = alpha * E_erg
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))
+               
+            
+        elif self._funcType == 'KSDN1998': # Ne II
             try:
                 d1 = np.genfromtxt(self.recFitsFullPath, skip_header=5, skip_footer=38, dtype=None,
                                    usecols = (0, 17, 18, 19, 20, 21, 22, 23), 
@@ -2992,7 +3043,7 @@ class RecAtom(object):
             labels1 = np.array(['{:.1f}+'.format(lamb) for lamb in d1['lamb']])
             labels2 = np.array(['{:.3f}'.format(lamb) for lamb in d2['lamb']])
             self.labels = np.append(labels1, labels2)
-            def emis_func(label, temp, log_dens):
+            def emis_func(label, temp, dens):
                 if label[-1] == '+':
                     mask = labels1 == label
                     if mask.sum() == 1:
