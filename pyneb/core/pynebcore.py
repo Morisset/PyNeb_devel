@@ -2984,9 +2984,15 @@ class RecAtom(object):
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
             self.labels = np.array(['{:.2f}'.format(lamb) for lamb in data['lamb']])
-            def emis_func(label, temp, dens): 
-                temp = np.array(temp)
-                dens = np.array(dens)
+            def emis_func(label, temp, dens):
+                if np.ndim(temp) == 0:
+                    temp = np.array([temp])
+                else:
+                    temp = np.array(temp)
+                if np.ndim(dens) == 0:
+                    dens = np.array([dens])
+                else:
+                    dens = np.array(dens)
                 mask2 = (self.labels == label) & (data['dens'] == 2)
                 mask3 = (self.labels == label) & (data['dens'] == 3)
                 mask4 = (self.labels == label) & (data['dens'] == 4)
