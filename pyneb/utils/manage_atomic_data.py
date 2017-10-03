@@ -494,7 +494,7 @@ You may mean one of these files: {1}""".format(data_file, av_data),
                         elif pn.config.Chianti_version_main == '8':
                             coll_file = '{0}/{1}/{2}/{2}.scups'.format(self.Chianti_path, elem, atom)
                         else:
-                            pn.config.error('Unknown version of Chianti {}'.format(pn.config.Chianti_version))
+                            pn.log_.error('Unknown version of Chianti {}'.format(pn.config.Chianti_version))
                         atom_file = '{0}/{1}/{2}/{2}.wgfa'.format(self.Chianti_path, elem, atom)
                         if os.path.exists(coll_file): 
                             self.ChiantiIONS['coll'].append(atom)
