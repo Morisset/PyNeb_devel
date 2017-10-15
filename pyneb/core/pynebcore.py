@@ -2983,7 +2983,7 @@ class RecAtom(object):
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
-            self.labels = np.array(['{:.2f}'.format(lamb) for lamb in data['lamb']])
+            labels = np.array(['{:.2f}'.format(lamb) for lamb in data['lamb']])
             def emis_func(label, temp, dens):
                 if np.ndim(temp) == 0:
                     temp = np.array([temp])
@@ -2993,10 +2993,10 @@ class RecAtom(object):
                     dens = np.array([dens])
                 else:
                     dens = np.array(dens)
-                mask2 = (self.labels == label) & (data['dens'] == 2)
-                mask3 = (self.labels == label) & (data['dens'] == 3)
-                mask4 = (self.labels == label) & (data['dens'] == 4)
-                mask5 = (self.labels == label) & (data['dens'] == 5)
+                mask2 = (labels == label) & (data['dens'] == 2)
+                mask3 = (labels == label) & (data['dens'] == 3)
+                mask4 = (labels == label) & (data['dens'] == 4)
+                mask5 = (labels == label) & (data['dens'] == 5)
                 if mask2.sum() == 1:
                     d2 = data[mask2]
                     d3 = data[mask3]
@@ -3030,7 +3030,7 @@ class RecAtom(object):
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
-               
+            self.labels= np.unique(labels)
             
         elif self._funcType == 'KSDN1998': # Ne II
             try:
