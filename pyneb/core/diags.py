@@ -162,7 +162,7 @@ class Diagnostics(object):
     It is also the class that plots the diagnostic Te-Ne diagrams.
 
     """    
-    def __init__(self, addAll=False, OmegaInterp='Cheb'):
+    def __init__(self, addAll=False, OmegaInterp='Cheb', NLevels=None):
         """
         Diagnostics constructor
         
@@ -182,6 +182,7 @@ class Diagnostics(object):
         # The dictionary containing the atoms used for the diagnostics        
         self.atomDict = {}
         self.OmegaInterp = OmegaInterp
+        self.NLevels = NLevels
         if addAll:
             self.addAll()
 
@@ -327,7 +328,7 @@ class Diagnostics(object):
                             'or an ion, or a wave range. label={0}, diag_tuple={1}, atom={2}, wave_range={3}'.format(label, diag_tuple, atom, wave_range),
                             calling=self.calling + '.addDiag')
         if atom not in self.atomDict and (type(label) is not list):
-            self.atomDict[atom] = pn.Atom(parseAtom(atom)[0], parseAtom(atom)[1])
+            self.atomDict[atom] = pn.Atom(parseAtom(atom)[0], parseAtom(atom)[1], NLevels=self.NLevels)
                
                
     def addAll(self):
@@ -399,7 +400,7 @@ class Diagnostics(object):
                     if rec == 'r':
                         self.atomDict[atom] = pn.RecAtom(atom=sym+spec)
                     else:
-                        self.atomDict[atom] = pn.Atom(atom=atom)
+                        self.atomDict[atom] = pn.Atom(atom=atom, NLevels=self.NLevels)
                 self.addDiag(label)
             except Exception as ex:
                 pn.log_.level = old_level
@@ -630,14 +631,14 @@ class Diagnostics(object):
         atom_tem = self.diags[diag_tem][0]
         elem_tem, spec_tem = parseAtom(atom_tem)
         if atom_tem not in self.atomDict:
-            self.atomDict[atom_tem] = pn.Atom(elem_tem, spec_tem, self.OmegaInterp)
+            self.atomDict[atom_tem] = pn.Atom(elem_tem, spec_tem, self.OmegaInterp, NLevels=self.NLevels)
         atom_tem = self.atomDict[atom_tem]
         if diag_den not in self.diags:
             self.addDiag(diag_den)
         atom_den = self.diags[diag_den][0]
         elem_den, spec_den = parseAtom(self.diags[diag_den][0])
         if (atom_den) not in self.atomDict:
-            self.atomDict[atom_den] = pn.Atom(elem_den, spec_den, self.OmegaInterp)
+            self.atomDict[atom_den] = pn.Atom(elem_den, spec_den, self.OmegaInterp, NLevels=self.NLevels)
         atom_den = self.atomDict[atom_den]
         eval_tem = self.diags[diag_tem][1]
         eval_den = self.diags[diag_den][1]
