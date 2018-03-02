@@ -18,7 +18,7 @@ class EmisGrid(object):
     """
 
     def __init__(self, elem=None, spec=None, n_tem=100, n_den=100, tem_min=5000., tem_max=20000.,
-                 den_min=10., den_max=1.e8, restore_file=None, atomObj=None, **kwargs):
+                 den_min=10., den_max=1.e8, restore_file=None, atomObj=None, NLevels=None, **kwargs):
 
         """
         Container for the emission line intensity grids depending on Te and Ne.
@@ -48,7 +48,7 @@ class EmisGrid(object):
             self.elem = old['elem']
             self.spec = old['spec']
             if atomObj is None:
-                self.atom = Atom(elem=self.elem, spec=self.spec, **kwargs)
+                self.atom = Atom(elem=self.elem, spec=self.spec, NLevels=NLevels, **kwargs)
             else:
                 self.atom = atomObj
             if self.atom.atomFitsFile != old['atomFitsFile']:
@@ -70,7 +70,7 @@ class EmisGrid(object):
             if atomObj is None:
                 self.elem = elem
                 self.spec = spec
-                self.atom = Atom(elem, spec, **kwargs)
+                self.atom = Atom(elem, spec, NLevels=NLevels, **kwargs)
             else:
                 self.atom = atomObj
                 self.elem = self.atom.elem
