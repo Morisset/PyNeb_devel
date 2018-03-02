@@ -1,9 +1,9 @@
 import pyneb as pn
 
 def getTemDen_helper(inQ, outQ, atom, lev_i1, lev_j1, lev_i2, lev_j2,
-         wave1, wave2, maxError, method, log, start_x, end_x, to_eval, nCut, maxIter):
+         wave1, wave2, maxError, method, log, start_x, end_x, to_eval, nCut, maxIter,NLevels=None):
     ''' multiprocessing helper for getTemDen'''
-    thisAtom = pn.Atom(atom=atom)
+    thisAtom = pn.Atom(atom=atom,NLevels=NLevels)
     for inputs in iter(inQ.get, 'STOP'):
         jobid = inputs[0]
         int_ratio = inputs[1]
