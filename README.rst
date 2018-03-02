@@ -31,17 +31,13 @@ You may find useful to download, install and upgrade PyNeb using `pip <http://ww
 
 For example:
 
-* pip install PyNeb
+* pip install -U PyNeb
 
-Note you MAY need --user if you installed python without Anaconda or Canopy
+Note: you MAY need --user if you installed python without Anaconda or Canopy
 
-Updates use the same command. You can also use:
+Updates use the same command.
 
-* easy_install PyNeb
-
-Note you MAY need --user if you installed python without Anaconda or Canopy
-
-To use the devel package (at your own risks!!!):
+To use the development package (at your own risks!!!):
 
 * pip install -U git+https://github.com/Morisset/PyNeb_devel.git
 
@@ -53,9 +49,9 @@ PyNeb is provided as it is. No warranty at all.
 Manual
 ======
 
-* The manuals are `HERE <https://github.com/Morisset/PyNeb_devel/tree/master/docs>`_.
+* The manuals are here: `<https://github.com/Morisset/PyNeb_devel/tree/master/docs>`_.
 
-* The reference manual is accessible from `HERE <https://morisset.github.io/PyNeb_Manual/html/index.html>`_.
+* The reference manual is accessible from `<https://morisset.github.io/PyNeb_Manual/html/index.html>`_.
 
 Discussion Groups
 =================
