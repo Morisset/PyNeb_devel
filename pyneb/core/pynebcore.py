@@ -2145,7 +2145,7 @@ class Atom(object):
         gTDProcesses = []
         for i in range(Nprocs):
             p = Process(target=getTemDen_helper, args=(gTDWorkerQ, gTDDoneQ, self.atom, lev_i1, lev_j1, lev_i2, lev_j2,
-                  wave1, wave2, maxError, method, log, start_x, end_x, to_eval, nCut, maxIter))
+                  wave1, wave2, maxError, method, log, start_x, end_x, to_eval, nCut, maxIter, self.NLevels))
             p.start()
             gTDProcesses.append(p)
         log_.message('processes started', calling=self.calling + '.getTemDenMP')
@@ -2220,7 +2220,7 @@ class Atom(object):
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
 
-    def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, Hbeta=100.):
+    def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, Hbeta=100., tem_HI=None):
         """
         Compute the ionic abundance relative to H+ given the intensity of a line or sum of lines, 
         the temperature, and the density. 
@@ -2248,8 +2248,12 @@ class Atom(object):
             - to_eval      expression to be evaluated. Takes precedence on wave if set, 
                             ignored otherwise.
             - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
+            
+            - tem_HI       HI temperature. If not set, tem is used.
         
         """
+        if tem_HI is None:
+            tem_HI = tem
         self._test_lev(lev_i)
         self._test_lev(lev_j)
         if np.ndim(tem) != np.ndim(den):
@@ -2273,7 +2277,7 @@ class Atom(object):
             self.log_.error('Unable to eval {0}'.format(to_eval), calling=self.calling)
             return None
         #int_ratio is in units of Hb = Hbeta keyword
-        ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+        ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False) / emis))
         return ionAbundance
     
 
