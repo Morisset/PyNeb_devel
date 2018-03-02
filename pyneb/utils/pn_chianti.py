@@ -131,7 +131,7 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
     Splups is the result of _chianti_tools.splupsRead(ion_chianti), can be passed to avoid reloading it
     NLevelsMax reduce the number of levels considered.
     """
-    pn.log_.message('NLevels = {}'.format(NLevels), calling='Chianti_getOmega')
+    pn.log_.debug('NLevels = {}'.format(NLevels), calling='Chianti_getOmega')
     temp=np.asarray(tem)
     if Splups is None:
         if pn.config.Chianti_version_main == '8':
