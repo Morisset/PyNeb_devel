@@ -3415,7 +3415,7 @@ class RecAtom(object):
 
 
     def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, label=None,
-                        to_eval=None, Hbeta=100.):
+                        to_eval=None, Hbeta=100., tem_HI=None):
         """
         Compute the ionic abundance relative to H+ given the temperature, the density and the 
             intensity of a line or sum of lines.
@@ -3454,9 +3454,12 @@ class RecAtom(object):
             - to_eval      expression to be evaluated. Takes precedence on wave if set, 
                             ignored otherwise.
             - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
+            - tem_HI       HI temperature. If not set, tem is used.
 
         
         """
+        if tem_HI is None:
+            tem_HI = tem
         if np.ndim(tem) != np.ndim(den):
             self.log_.error('ten and den must have the same shape', calling=self.calling)
             return None
@@ -3483,7 +3486,7 @@ class RecAtom(object):
             return None
         if emis is not None:
         #int_ratio is in units of Hb = Hbeta keyword
-            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem, den, 4, 2, atom='H1', product=False) / emis))
+            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False) / emis))
         else:
             ionAbundance = None
         return ionAbundance
