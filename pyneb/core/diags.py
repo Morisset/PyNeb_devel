@@ -391,7 +391,11 @@ class Diagnostics(object):
             atom, diag_expression, error = diags_dict[label]
             sym, spec, rec = parseAtom2(atom)
             if label == '[OII] 3727+/7325+c':
-                diag_value = eval(diag_expression)
+                try:
+                    diag_value = eval(diag_expression)
+                except Exception as ex:
+                    pn.log_.level = old_level
+                    pn.log_.debug('Diag not valid {} {}'.format(label, diag_expression))
             try:
                 pn.log_.level = 1
                 diag_value = eval(diag_expression)
