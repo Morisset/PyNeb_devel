@@ -56,7 +56,7 @@ def G(ion,T):
     elif ion.upper()=='HE2':
         nu = phy.c / (WAV_HE2_IONIZ*1.e-10)
     else:
-        print 'Unrecognized ion: %s' % ion
+        print('Unrecognized ion: %s' % ion)
         return None
 
     return quad(integrand, phy.h*nu/(phy.k*T), np.Inf)[0]
@@ -83,14 +83,14 @@ class Zanstra():
            flux density for a given stellar (black-body) temperature T.
         '''
 
-        return self.ionScale * pow(T,3) * G(self.ion, T) * (np.exp(2.665e+4/T) - 1)
+        return self.ionScale * T**3 * G(self.ion, T) * (np.exp(2.665e+4/T) - 1)
 
 
     def Func(self, T):
         '''Return the discriminant of the stellar Zanstra temperature function.
             '''
 
-        r_obs = pow(10,self.logFlux) / (FLUX_MAG0 * pow(10,-self.magStar/2.5))
+        r_obs = 10**self.logFlux / (FLUX_MAG0 * 10**(-self.magStar/2.5))
         return r_obs - self.z_ratio(T)
 
 
