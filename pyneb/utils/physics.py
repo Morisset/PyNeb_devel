@@ -790,6 +790,10 @@ _predefinedDataFileDict['PYNEB_17_01']['Ne5']['coll'] = 'ne_v_coll_DPNP13.dat'
 _predefinedDataFileDict['PYNEB_17_02'] = _predefinedDataFileDict['PYNEB_17_01'].copy()
 _predefinedDataFileDict['PYNEB_17_02']['Ne2']['rec'] = 'ne_ii_rec_KSDN98.func'
 
+_predefinedDataFileDict['PYNEB_18_01'] = _predefinedDataFileDict['PYNEB_17_02'].copy()
+_predefinedDataFileDict['PYNEB_18_01']['Te3'] = {'rec' : 'te_iii_atom_M18.dat',
+                                                 'coll': 'te_iii_coll_M18.dat'}
+
 # Next release, check with JGR:
 # ['Kr6'] = {'atom': 'kr_vi_atom_B05.dat', 'coll': 'kr_vi_coll_B16.dat'}
 # ['Se3']['coll'] = 'se_iii_coll_B16.dat'
