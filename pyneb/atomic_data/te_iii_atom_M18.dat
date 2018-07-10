@@ -1,0 +1,13 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 
+0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+1.94e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 
+1.209e-02 5.2e-01 0.00e+00 0.00e+00 0.00e+00 
+1.062e-04 5.141e+0 5.266e+00 0.00e+00 0.00e+00
+0.00e+00 6.797e+01 7.098e+00 7.902e+00 0.00e+00 
+*** Ti III transition probabilities
+*** ATOM tellurium
+*** SPECTRUM 3
+*** N_LEVELS 5
+*** SOURCE1 Madonna et al, 2018, ApJ 861, 8
+*** NOTE1 All A values
