@@ -2927,9 +2927,10 @@ class RecAtom(object):
             source = f.readline()
         if self._funcType == 'PEQ1991':
             try:
-                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2,
                                      usecols = (0,1,2,3,4,5,6,7), 
-                                     names='label, lamb, case, a, b, c, d, Br')
+                                     names='label, lamb, case, a, b, c, d, Br', 
+                                     dtype="U5, f8, U1, f8, f8, f8, f8, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
@@ -2955,8 +2956,9 @@ class RecAtom(object):
                     self.log_.error('{} is not a valid label'.format(label))
         elif self._funcType == 'S94': # O II
             try:
-                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
-                                     names='label, lamb, case, a, b, c, d')
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2,  
+                                     names='label, lamb, case, a, b, c, d',
+                                     dtype="U5, f8, U1, f8, f8, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
@@ -2979,11 +2981,40 @@ class RecAtom(object):
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
+        elif self._funcType == 'D00': # C II
+            try:
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2,  
+                                     names='ID, case, lamb, a, b, c, d, f',
+                                     dtype="i, U1, f8, f8, f8, f8, f8, f8")
+            except:
+                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
+            data = data[data['case'] == self.case]
+            data['lamb'] *= 10  # Angstrom
+            self.labels = np.array(['{:.1f}'.format(lamb) for lamb in data['lamb']])
+            def emis_func(label, temp, dens):
+                mask = self.labels == label
+                if mask.sum() == 1:
+                    d = data[mask]
+                    t = 1e-4 * temp 
+                    alpha = 1e-14 * d['a'] * t**d['f'] *(1. + d['b']*(1.-t) + 
+                                     d['c']*(1.-t)**2 + d['d']*(1.-t)**3)
+                    E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
+                    E_erg = E_Ryd * CST.RYD2ERG   #erg
+                    emis = alpha * E_erg
+                    if not self.extrapolate:
+                        if np.ndim(t) == 0:
+                            t = np.asarray([t])
+                        mask = (t < 0.5) & (t > 2.0)
+                        emis[mask] = np.nan
+                    return emis
+                else:
+                    self.log_.error('{} is not a valid label'.format(label))
         elif self._funcType == 'FSL11': # N II
             try:
-                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, dtype=None, 
+                data = np.genfromtxt(self.recFitsFullPath, skip_header=2, 
                                      usecols = (0, 1, 2, 3,4,5,6,7,8,9, 10,13), 
-                                     names='case, mult, lamb, a, b, c, d, e, f, g, h, dens')
+                                     names='case, mult, lamb, a, b, c, d, e, f, g, h, dens', 
+                                     dtype="U1, f8, f8, f8, f8, f8, f8, f8, f8, f8, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
@@ -3038,12 +3069,14 @@ class RecAtom(object):
             
         elif self._funcType == 'KSDN1998': # Ne II
             try:
-                d1 = np.genfromtxt(self.recFitsFullPath, skip_header=5, skip_footer=38, dtype=None,
+                d1 = np.genfromtxt(self.recFitsFullPath, skip_header=5, skip_footer=38, 
                                    usecols = (0, 17, 18, 19, 20, 21, 22, 23), 
-                                   names='ID, case, lamb, a, b, c, d, f')
-                d2 = np.genfromtxt(self.recFitsFullPath, skip_header=5+215, skip_footer=0, dtype=None,
+                                   names='ID, case, lamb, a, b, c, d, f',
+                                   dtype="i4, U1, f8, f8, f8, f8, f8, f8")
+                d2 = np.genfromtxt(self.recFitsFullPath, skip_header=5+215, skip_footer=0, 
                                    usecols = (0, 12, 13), 
-                                   names='ID, lamb, Br')
+                                   names='ID, lamb, Br',
+                                   dtype="i4, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             d1 = d1[d1['case'] == self.case]
@@ -3101,7 +3134,8 @@ class RecAtom(object):
             self.label_type = 'wavelengths'
         self.sources.append(source)
         self._emis_func = emis_func
-        log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
+        log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), 
+                     calling=self.calling)
 
     def _loadTotRecombination(self):
         """
