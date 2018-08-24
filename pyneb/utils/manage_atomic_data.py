@@ -632,7 +632,6 @@ def readNIST(NISTfile,NLevels=None):
             d['J'] = '{0:.1f}'.format(float(d['J'].split(',')[0]))
         else:
             d['J'] = '{0:.1f}'.format(float(d['J']))
-        print(d)
     data = data[data['energy'].argsort()]
     data = data.astype([('conf', 'U23'), ('term', 'U9'), ('J', 'float'), ('energy', 'float'), ('ref', 'U10')])
     if NLevels is not None:
