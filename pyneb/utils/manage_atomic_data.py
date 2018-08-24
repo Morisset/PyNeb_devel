@@ -576,7 +576,7 @@ def extract_flt(str_):
     if len(str_) > 0:
         if str_[0] in('(', '['):
             str_ = str_[1:]
-    for l in bs(str_):
+    for l in str_.decode():
         if l.isdigit() or l == '.':
             res += l
         else:
