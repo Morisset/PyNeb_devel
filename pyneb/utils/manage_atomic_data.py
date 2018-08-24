@@ -601,7 +601,7 @@ def readNIST(NISTfile,NLevels=None):
     """
     data = np.genfromtxt(NISTfile, comments = '-', 
                     delimiter = '|', names = 'conf, term, J, energy, ref', 
-                    dtype=('U23', 'U9', 'U4', 'U20', 'U10'), autostrip=True,
+                    dtype=('U23', 'U9', 'U4', 'float', 'U10'), autostrip=True,
                     converters = {'energy':extract_flt})
     mask = data['J'] != ''
     data = data[mask]
@@ -632,7 +632,7 @@ def readNIST(NISTfile,NLevels=None):
             d['J'] = '{0:.1f}'.format(float(d['J'].split(',')[0]))
         else:
             d['J'] = '{0:.1f}'.format(float(d['J']))
-           
+        print(d)
     data = data[data['energy'].argsort()]
     data = data.astype([('conf', 'U23'), ('term', 'U9'), ('J', 'float'), ('energy', 'float'), ('ref', 'U10')])
     if NLevels is not None:
