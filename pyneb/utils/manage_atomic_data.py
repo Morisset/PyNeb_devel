@@ -525,7 +525,8 @@ You may mean one of these files: {1}""".format(data_file, av_data),
     
     def read_gsconf(self):
         try:
-            gsconf = np.genfromtxt(execution_path('../atomic_data/levels/gsconfs.dat'), names=['atom', 'gsconf'], dtype=None)
+            gsconf = np.genfromtxt(execution_path('../atomic_data/levels/gsconfs.dat'), 
+                                   names=['atom', 'gsconf'], dtype='U5, U5')
             self.gsconf = {gs['atom']:gs['gsconf'] for gs in gsconf}
         except:
             self.gsconf = {}
@@ -600,40 +601,40 @@ def readNIST(NISTfile,NLevels=None):
     """
     data = np.genfromtxt(NISTfile, comments = '-', 
                     delimiter = '|', names = 'conf, term, J, energy, ref', 
-                    dtype=('a23', 'a9', 'a4', 'float', 'a10'), autostrip=True,
-                    converters = {'energy':extract_flt, 'J':bs, 'conf':bs, 'term': bs, 'ref':bs})
-    mask = data['J'] != bs('')
+                    dtype=('U23', 'U9', 'U4', 'U20', 'U10'), autostrip=True,
+                    converters = {'energy':extract_flt})
+    mask = data['J'] != ''
     data = data[mask]
-    previous_ref = bs('')
-    previous_conf = bs('')
-    previous_term = bs('')
+    previous_ref = ''
+    previous_conf = ''
+    previous_term = ''
     for d in data:
-        if d['conf'] == bs(''):
+        if d['conf'] == '':
             d['conf'] = previous_conf
         else:
             previous_conf = d['conf']
-        if d['term'] == bs(''):
+        if d['term'] == '':
             d['term'] = previous_term
         else:
             previous_term = d['term']
-        if d['ref'] == bs(''):
+        if d['ref'] == '':
             d['ref'] = previous_ref
         else:
             previous_ref = d['ref']
             
-        if bs('?') in d['J']:
-            d['J'] = bs(d['J']).split('?')[0]
-        if d['J'] == bs(''):
+        if '?' in d['J']:
+            d['J'] = d['J'].split('?')[0]
+        if d['J'] == '':
             d['J'] = 0.
-        elif bs('/') in d['J']:
-            d['J'] = '{0:.1f}'.format(float(bs(d['J']).split('/')[0]) / float(bs(d['J']).split('/')[1]))
-        elif bs(',') in d['J']:
-            d['J'] = '{0:.1f}'.format(float(bs(d['J']).split(',')[0]))
+        elif '/' in d['J']:
+            d['J'] = '{0:.1f}'.format(float(d['J'].split('/')[0]) / float(d['J'].split('/')[1]))
+        elif ',' in d['J']:
+            d['J'] = '{0:.1f}'.format(float(d['J'].split(',')[0]))
         else:
-            d['J'] = '{0:.1f}'.format(float(bs(d['J'])))
+            d['J'] = '{0:.1f}'.format(float(d['J']))
            
     data = data[data['energy'].argsort()]
-    data = data.astype([('conf', 'a23'), ('term', 'a9'), ('J', 'float'), ('energy', 'float'), ('ref', 'a10')])
+    data = data.astype([('conf', 'U23'), ('term', 'U9'), ('J', 'float'), ('energy', 'float'), ('ref', 'U10')])
     if NLevels is not None:
         data = data[0:NLevels]
     return data
