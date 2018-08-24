@@ -568,13 +568,14 @@ For any moderately or highly excited line.
 
 def extract_flt(str_):
     """
+    Input is a bytes (py3) or a string (py2)
     Return the first float in str_, removing the no digit (and no dot) leading part of it.
     Ex:
-    extract_flt('123.00?') -> 123.00
+    extract_flt('(123.00?') -> 123.00
     """
     res = ''
     if len(str_) > 0:
-        if str_[0] in('(', '['):
+        if str_.decode()[0] in ('(', '['):
             str_ = str_[1:]
     for l in str_.decode():
         if l.isdigit() or l == '.':
@@ -586,14 +587,13 @@ def extract_flt(str_):
     else:
         return float(res)
 
-
 def readNIST(NISTfile,NLevels=None):
     """
     The NIST levels file must be obtained from this page:
         http://physics.nist.gov/PhysRefData/ASD/levels_form.html
     with the following options:
         Level Units: cm-1
-        Format output: ASCIIda
+        Format output: ASCII
         Display output: in its entirely
         Energy ordered
         Level Information: Principal configuration, Principal term, Level, J
