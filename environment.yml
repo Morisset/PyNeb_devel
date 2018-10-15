@@ -7,3 +7,5 @@ dependencies:
   - h5py
   - pandas
   - astropy
+  - pip:
+     - pyneb
