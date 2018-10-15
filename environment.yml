@@ -4,7 +4,6 @@ dependencies:
   - numpy
   - matplotlib
   - scipy
-  - multiprocessing
   - h5py
   - pandas
   - astropy
