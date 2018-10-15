@@ -1,0 +1,10 @@
+name: pyneb
+dependencies:
+  - python
+  - numpy
+  - matplotlib
+  - scipy
+  - multiprocessing
+  - h5py
+  - pandas
+  - astropy
