@@ -10,7 +10,7 @@ elif pn.config.Chianti_version_main == '7':
 from . import _chianti_constants as const
 from .physics import sym2name, vactoair
 from .manage_atomic_data import getLevelsNIST, atom2chianti
-from .misc import parseAtom, bs
+from .misc import parseAtom
 
 def Chianti_getA(ion_chianti, NLevels=None):
     """
@@ -80,9 +80,9 @@ def get_levs_order(atom, NLevels=None):
         if i_N > this_NLevels:
             break
         
-        term = remove_stars(bs(E['term']))
+        term = remove_stars(E['term'])
 
-        c1 = remove_stars(bs(E['conf']))
+        c1 = remove_stars(E['conf'])
         
         c12 = remove_par(c1)
         c123 = change_2pto1p(c12)

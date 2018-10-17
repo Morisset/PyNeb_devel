@@ -36,15 +36,18 @@ except:
 """
     
 
+
+# It seems we do not need anymore bs to deal with strings between py2 and py3
 if sys.version_info.major < 3:
     def bs(x):
         return x
 else:
     def bs(x):
-        if type(x) is bytes or type(x) is np.bytes_:
+        if isinstance(x, bytes):
             return x.decode(encoding='UTF-8')
-        elif type(x) is str or type(x) is np.str_:
+        elif isinstance(x, str):
             return x.encode(encoding='UTF-8')
+
             
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
@@ -462,7 +465,7 @@ def addRand(N, list_, list_errors=None, lowlim=None):
     if N != 0:
         # initialize the new list with the values of list_
         to_extend = []
-        for i in xrange(len(list_)):
+        for i in range(len(list_)):
             if list_errors is None:
                 to_extend.extend([list_[i]] * N)
             else:

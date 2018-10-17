@@ -2,7 +2,7 @@ import os
 import pyneb as pn
 import numpy as np
 import re
-from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract, bs
+from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract
 from .init import ELEM_LIST, SPEC_LIST
 from .physics import _predefinedDataFileDict
 
