@@ -7,7 +7,6 @@ import numpy as np
 if pn.config.INSTALLED['plt']:
     import matplotlib as mpl
     import matplotlib.pyplot as plt
-    import matplotlib.ticker
     from matplotlib.ticker import MaxNLocator
 
 from pyneb.utils.misc import int_to_roman, parseAtom
@@ -131,7 +130,7 @@ class DataPlot(object):
             pn.log_.error('Matplotlib not installed!', calling=self.calling)
         plt.figure(fignum, figsize=figsize)
         plt.clf()
-        ax = plt.subplot(111, axisbg='Ivory')
+        ax = plt.subplot(111)
         x = np.arange(atom_n_max * (atom_n_max - 1) / 2.)
         ticks = x
         # Inventory of markers. Chosen to be distinguished even when overlapped
@@ -222,8 +221,7 @@ class DataPlot(object):
         for j in range(2, atom_n_max+1):
             for i in range(1, j):
                 y = lgA[:, j-1, i-1]
-                ax = plt.subplot(atom_n_max - 1, atom_n_max - 1, (atom_n_max-1)*(j-2) + i,
-                                 axisbg='#FFFFE0')
+                ax = plt.subplot(atom_n_max - 1, atom_n_max - 1, (atom_n_max-1)*(j-2) + i)
                 ax.set_xticks(x)
                 plt.xlim((min(x)-0.5, max(x)+0.5))
                 ax.yaxis.set_major_locator(MaxNLocator(max_y_ticks-1))
@@ -307,7 +305,7 @@ class DataPlot(object):
                     if fig is None:
                         fig = plt.figure(fignum, figsize=figsize)
                     plt.clf()
-                    ax = plt.subplot(111, axisbg='#FFFFE0')
+                    ax = plt.subplot(111)
                     fig.subplots_adjust(top=0.9)
                     # Physical levels = array levels + 1
                     x = np.asarray(lo_indexes) + 1
@@ -416,8 +414,7 @@ class DataPlot(object):
                         # The subplots are arranged in rows and columns according to the upper and lower levels
  
                         ax = plt.subplot(coll_n_max-1, coll_n_max-1, 
-                                         (coll_n_max-1) * (j - 2) + i,
-                                         axisbg='#FFFFE0')
+                                         (coll_n_max-1) * (j - 2) + i)
                         if (i <= data['atom'].collNLevels) and (j <= data['atom'].collNLevels):
                             y_dots = data['atom'].getOmega(tem_points, j, i)
                             try:
