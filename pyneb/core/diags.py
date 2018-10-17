@@ -483,6 +483,7 @@ class Diagnostics(object):
         X = np.log10(emis_grids[list(emis_grids.keys())[0]].den2D)
         Y = emis_grids[list(emis_grids.keys())[0]].tem2D
         for label in self.diags:
+            self.log_.message('plotting {0}'.format(label), calling=self.calling)
             diag = self.diags[label]
             atom = diag[0]
             def I(i, j):
@@ -582,17 +583,22 @@ class Diagnostics(object):
                             #pn.log_.debug('{} levels {}'.format(label, levels), calling=self.calling)
                             CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
-                    ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
-                    ax.set_ylabel(r'T$_{\rm e}$ [K]')
-                    if len(diag) >= 4:
-                        fmt = diag[3]
-                    else:
-                        fmt = '[{0}{1}]'.format(sym, int_to_roman(int(spec)))
-                    ax.clabel(CS, inline=True, fmt=fmt, fontsize=15, colors=col)
-                    if type(diag_value) is np.ndarray:
-                        diag_value = diag_value[0]
-                    self.log_.message('plotting {0}: {1} = {2:.2} with error of {3:.2} %'.format(fmt, label, diag_value, tol_value * 100),
-                                      calling=self.calling)
+                    try:
+                        ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
+                        ax.set_ylabel(r'T$_{\rm e}$ [K]')
+                        if len(diag) >= 4:
+                            fmt = diag[3]
+                        else:
+                            fmt = '[{0}{1}]'.format(sym, int_to_roman(int(spec)))
+                        ax.clabel(CS, inline=True, fmt=fmt, fontsize=15, colors=col)
+                        if type(diag_value) is np.ndarray:
+                            diag_value = diag_value[0]
+                        self.log_.message('plotted {0}: {1} = {2:.2} with error of {3:.2} %'.format(fmt, label, diag_value, tol_value * 100),
+                                          calling=self.calling)
+                    except:
+                        self.log_.message('NOT plotted {0} {1}'.format(fmt, label),
+                                          calling=self.calling)
+                        
         
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
