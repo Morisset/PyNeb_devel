@@ -3560,12 +3560,12 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
     else:
         if (atom == 'H1') and (lev_i == 4) and (lev_j == 2):
             log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
-            return getHbEmissivity(tem)
+            return getHbEmissivity(tem, den)
         else:
             log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
 
 
-def getHbEmissivity(tem= -1):
+def getHbEmissivity(tem= -1, den=1.):
     """ 
     Compute Hbeta emissivity in erg/s/(N(H+)*N(e-)) for a given temperature with the formula 
         by Aller (1984)
@@ -3577,12 +3577,26 @@ def getHbEmissivity(tem= -1):
         - tem     electronic temperature in K
 
     """ 
+#    tem4 = np.asarray(tem) * 1.0e-4
+#    j_hb = 1.387 / pow(tem4, 0.983) / pow(10., 0.0424 / tem4) * 1.e-25
+#
+#    # Remove jhb for tem4 < 0 or tem4 > 1e2
+#    ((tem4 < 0.) | (tem4 > 1e2)).choose(j_hb, -1)
+#
+#    return j_hb
+    
     tem4 = np.asarray(tem) * 1.0e-4
-    j_hb = 1.387 / pow(tem4, 0.983) / pow(10., 0.0424 / tem4) * 1.e-25
-
-    # Remove jhb for tem4 < 0 or tem4 > 1e2
-    ((tem4 < 0.) | (tem4 > 1e2)).choose(j_hb, -1)
-
+    j_hb = 1.387e-25 / tem4**0.983 / 10.**(0.0424 / tem4)
+    
+    j_hb_500 = 10**(-23.95 + 0.00013*np.log10(den)**4.0)
+    j_hb_3000 = 1.387e-25 / .3**0.983 / 10.**(0.0424 / .3)
+    a = (j_hb_3000 - j_hb_500) / (1./3000 - 1./500.)
+    b = j_hb_3000 - a / 3000.
+    j_hb_low = a / np.asarray(tem) + b
+    
+    j_hb = (tem4 < 0.3).choose(j_hb, j_hb_low)
+    j_hb = ((tem4 < .0) | (tem4 > 1e2)).choose(j_hb, -1)
+    
     return j_hb
 
 
