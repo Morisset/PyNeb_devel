@@ -3443,8 +3443,8 @@ class RecAtom(object):
                     logd = log_dens_max
             else:
                 logd[tt] = log_dens_max
-            res = interpolate.griddata((self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
-                                       (temg, logd), method=method)
+            res = interpolate.griddata((1./self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
+                                       (1./temg, logd), method=method)
         return res
 
 
