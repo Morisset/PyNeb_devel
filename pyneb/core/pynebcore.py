@@ -2853,7 +2853,6 @@ class RecAtom(object):
 
         """
         
-        
         header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
         for record in header.items():
             if 'SOURCE' in record[0]:
@@ -3445,6 +3444,22 @@ class RecAtom(object):
                 logd[tt] = log_dens_max
             res = interpolate.griddata((1./self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
                                        (1./temg, logd), method=method)
+            if "h_i_rec_SH95" in self.recFitsFile:
+                if (temg < temp_min).sum() != 0 and self.extrapolate:
+                    log_.warn('Linear extrapolation on low Te', calling=self.calling)
+                    masklowte = temg < temp_min
+                    temp_min2 = np.min(self.temp[self.temp > temp_min])
+                    
+                    em_min = self.getEmissivity(temp_min, deng[masklowte].ravel(),
+                                                lev_i=lev_i, lev_j=lev_j, wave=wave, 
+                                                label=label, method=method)
+                    em_min2 = self.getEmissivity(temp_min2, deng[masklowte].ravel(),
+                                                lev_i=lev_i, lev_j=lev_j, wave=wave, 
+                                                label=label, method=method)
+                    a = (em_min - em_min2) / (1./temp_min - 1./temp_min2)
+                    b = em_min - a / temp_min
+                    em = a / temg[masklowte].ravel() + b
+                    res[masklowte]=em
         return res
 
 
