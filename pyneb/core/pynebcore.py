@@ -1680,6 +1680,7 @@ class Atom(object):
     
             for i_tem in range(n_tem):
                 for i_den in range(n_den):
+                    pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
                     try:
                         pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
                     #except np.linalg.LinAlgError:
@@ -2220,7 +2221,8 @@ class Atom(object):
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
 
-    def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, Hbeta=100., tem_HI=None):
+    def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, 
+                        Hbeta=100., tem_HI=None, extrapHbeta=False):
         """
         Compute the ionic abundance relative to H+ given the intensity of a line or sum of lines, 
         the temperature, and the density. 
@@ -2277,7 +2279,11 @@ class Atom(object):
             self.log_.error('Unable to eval {0}'.format(to_eval), calling=self.calling)
             return None
         #int_ratio is in units of Hb = Hbeta keyword
-        ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False) / emis))
+        if extrapHbeta:
+            HbEmis = getHbEmissivity(tem= tem_HI, den=den)
+        else:
+            HbEmis = getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False)
+        ionAbundance = ((int_ratio / Hbeta) * (HbEmis / emis))
         return ionAbundance
     
 
