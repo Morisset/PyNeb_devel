@@ -2,6 +2,8 @@ import pickle
 import sys
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy import optimize
+
 from .pynebcore import RecAtom
 from ..utils.physics import CST
 from ..utils.misc import execution_path
@@ -24,7 +26,7 @@ class Continuum(object):
     def make_cont_Ercolano(self, tem, case, wl):
         """
         Adapted from http://adsabs.harvard.edu/abs/2006MNRAS.372.1875E
-        tem ¨: electron temperature [K]. Can not be an array. In case of tem array, use get_continuum
+        tem : electron temperature [K]. Can not be an array. In case of tem array, use get_continuum
         case: one of "H", "He1", "He2"
         wl: wavelength [Angstrom]. May be a float or a numpy array
         return the continuum [erg/s.cm3/A]
@@ -229,7 +231,7 @@ class Continuum(object):
         
         return cont.squeeze()
     
-    def BJ(self, tem, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2'):
+    def BJ_HI(self, tem, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2'):
         """
         tem: temperature [K]. May be a float or an iterable
         den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
@@ -238,6 +240,7 @@ class Continuum(object):
         wl_bbj, wl_abj: wavelengths below and above the jump resp. Defaults are 3643 and 3861.
         HI_label: reference HI line to normalize the jump. Default is 11_2
         
+        return the Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
         """
         
         fl_bbj, fl_abj = self.get_continuum(tem = tem, den = den, He1_H = He1_H, 
@@ -249,4 +252,43 @@ class Continuum(object):
         BJ_HI = (fl_bbj - fl_abj) / HI
         return BJ_HI
     
+    def T_BJ(self, BJ_HI, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2',
+             T_min=5e2, T_max=3e4):
+        """
+        BJ_HI: Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
+        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
+        He1_H and He2_H: He+/H+ and He++/H+ abundances.
+        
+        wl_bbj, wl_abj: wavelengths below and above the jump resp. Defaults are 3643 and 3861.
+        HI_label: reference HI line to normalize the jump. Default is 11_2
+        
+        T_min, T_max: limits for the root finding exploration
+        
+        return temperature [K] corresponding to the jump
+        """
+        try:
+            _ = (e for e in BJ_HI)
+            BJ_iterable = True
+        except TypeError:
+            BJ_iterable = False
+            
+        def f2minimize(tem, BJ_HI):
+            f = self.BJ_HI(tem, den=den, He1_H=He1_H, He2_H=He2_H, wl_bbj = wl_bbj, wl_abj=wl_abj, HI_label=HI_label) - BJ_HI
+            return f
+            
+        if BJ_iterable:
+            T_BJ = np.array(list(map(lambda bjhi: optimize.brentq(f2minimize, T_min, T_max, args=bjhi), BJ_HI))).T
+            return T_BJ.squeeze()
+        else:
+            T_BJ = optimize.brentq(f2minimize, 5e2, 3e4, args=BJ_HI)
+            return T_BJ
+
     
+    def T_BJ_Liu(self, BJ_H11, He1_H, He2_H):
+        """
+        From Liu, X.-W., Luo, S.-G., Barlow, M. J., Danziger, I. J., & Storey, P. J.
+        2001, MNRAS, 327, 141-168
+
+        """
+        T = 368 * (1 + 0.259 * He1_H + 3.409 * He2_H) * (BJ_H11)**(-3./2)
+        return T
