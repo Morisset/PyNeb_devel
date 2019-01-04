@@ -17,7 +17,7 @@ class CST(object):
     RYD2ERG = HPLANCK * CLIGHT * RYD
     KCOLLRATE = np.sqrt(2 * PI / BOLTZMANN) * (HPLANCK / (2 * PI))**2 / EMASS**1.5 # constant of collisional rate equation
     BOLTZMANN_eVK = 8.617343e-5 # Boltzmann constant in eV/K
-    
+    RYD_erg =  2.179872325e-11 # HPLANCK * CLIGHT * RYD
     HBETA = 4861.3316598713955
 
 Z = {}
