@@ -5,12 +5,16 @@ from scipy.interpolate import interp1d
 from .pynebcore import RecAtom
 from ..utils.physics import CST
 from ..utils.misc import execution_path
-    
+
+
+
 class Continuum(object):
     
     def __init__(self, wl_min = 3500, wl_max = 4000):
         """
-        
+        Part of the PyNeb library.
+        Mainly based on pySSN library        
+        Adapted by V. Gomez-Llanos and C. Morisset, 2018
         """
         self.wl_min = wl_min
         self.wl_max = wl_max
