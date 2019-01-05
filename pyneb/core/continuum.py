@@ -21,12 +21,12 @@ class Continuum(object):
         """
         self.BE = None
         self.__HI_case = None
-        self.set_HI_case('B')
+        self._set_HI_case('B')
         
     def _set_HI_case(self, case='B'):
         """
-        Define the case (A or B) to be hused for HI normalization line.
-        Not sure that the Free-nbound coefficients from Ercolano & Storey 2006 take case A option into account.
+        Define the case (A or B) to be used for HI normalization line.
+        Not sure that the Free-bound coefficients from Ercolano & Storey 2006 take case A option into account.
         """            
         if case != self.__HI_case:
             if case == 'A':
@@ -238,7 +238,7 @@ class Continuum(object):
 
     def get_continuum(self, tem, den, He1_H=0., He2_H=0., wl=np.arange(3500, 4000, 1), 
                       cont_HI=True, cont_HeI=True, cont_HeII=True, 
-                      cont_2p=True, cont_ff=True):
+                      cont_2p=True, cont_ff=True, HI_label='11_2'):
         """
         tem: temperature [K]. May be a float or an iterable
         den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
@@ -248,7 +248,8 @@ class Continuum(object):
             cont_Hi, cont_HeI, cont_HeII: using B. Ercolano 2006 data
             cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
             cont_ff: Free-Free, from Storey & Hummer 1991
-        return the resulting continuum [erg/s.cm3/A]
+        HI_label: HI label to normalize the continuum. If None, no normalization is done. Default 11_2
+        return the resulting continuum. Unit [A-1] if normalized, [erg/s.cm3/A] otherwise 
         """
         try:
             _ = (e for e in tem)
@@ -259,19 +260,25 @@ class Continuum(object):
                 den = np.ones_like(tem) * den
         except TypeError:
             T_iterable = False
-                        
+        if HI_label is None:
+            norm = 1.0
+        else:
+            if self.HI is None:
+                self.HI = RecAtom('H',1)
+            norm = self.HI.getEmissivity(tem, den, label = HI_label, product=False)
+            
         if T_iterable:
             cont = np.array(list(map(lambda t, d: self._get_continuum1(t, d, He1_H=He1_H, He2_H=He2_H, wl=wl, 
                                                                        cont_HI=cont_HI, cont_HeI=cont_HeI, 
                                                                        cont_HeII=cont_HeII, 
                                                                        cont_2p=cont_2p, cont_ff=cont_ff), 
                                      tem, den))).T
-            return cont.squeeze()
+            return cont.squeeze()/norm
         else:
             cont = self._get_continuum1(tem, den, He1_H=He1_H, He2_H=He2_H, wl=wl, 
                                         cont_HI=cont_HI, cont_HeI=cont_HeI, cont_HeII=cont_HeII, 
                                         cont_2p=cont_2p, cont_ff=cont_ff)
-            return cont
+            return cont/norm
     
     def BJ_HI(self, tem, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2'):
         """
@@ -286,12 +293,10 @@ class Continuum(object):
         """
         
         fl_bbj, fl_abj = self.get_continuum(tem = tem, den = den, He1_H = He1_H, 
-                                            He2_H = He2_H, wl = np.array([wl_bbj, wl_abj]))
+                                            He2_H = He2_H, wl = np.array([wl_bbj, wl_abj]),
+                                            HI_label=HI_label)
         
-        if self.HI is None:
-            self.HI = RecAtom('H',1)
-        HI = self.HI.getEmissivity(tem, den, label = HI_label)
-        BJ_HI = (fl_bbj - fl_abj) / HI
+        BJ_HI = fl_bbj - fl_abj
         return BJ_HI
     
     def T_BJ(self, BJ_HI, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2',
