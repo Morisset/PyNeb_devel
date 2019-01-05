@@ -264,7 +264,7 @@ class Continuum(object):
             norm = 1.0
         else:
             if self.HI is None:
-                self.HI = RecAtom('H',1)
+                self.HI = pn.RecAtom('H',1)
             norm = self.HI.getEmissivity(tem, den, label = HI_label, product=False)
             
         if T_iterable:
