@@ -12,14 +12,12 @@ from ..utils.misc import execution_path
 
 class Continuum(object):
     
-    def __init__(self, wl_min = 3500, wl_max = 4000):
+    def __init__(self):
         """
         Part of the PyNeb library.
         Mainly based on pySSN library        
         Adapted by V. Gomez-Llanos and C. Morisset, 2018
         """
-        self.wl_min = wl_min
-        self.wl_max = wl_max
         self.HI = None
         self.BE = None
         
@@ -192,7 +190,7 @@ class Continuum(object):
                         He2_H* 2.0**2. / np.sqrt(tem_HeII) * np.exp(-CST.HPLANCK*CST.CLIGHT*1e8/wl/CST.BOLTZMANN/tem_HeII) * gff_HeII))
         return FF_cont
     
-    def get_continuum(self, tem, den, He1_H=0., He2_H=0., wl=None, 
+    def _get_continuum1(self, tem, den, He1_H=0., He2_H=0., wl=None, 
                       cont_HI=True, cont_HeI=True, cont_HeII=True, 
                       cont_2p=True, cont_ff=True):
         """
@@ -205,31 +203,57 @@ class Continuum(object):
             cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
         return the resulting continuum [erg/s.cm3/A]
         """
+
+        cont = 0.
+        if cont_HI:
+            cont += self.make_cont_Ercolano(tem = tem, case = 'H', wl = wl)
+        if cont_HeI and He1_H > 0.:
+            cont += He1_H * self.make_cont_Ercolano(tem = tem, case = 'He1', wl = wl)
+        if cont_HeII and He2_H > 0:
+            cont += He2_H * self.make_cont_Ercolano(tem = tem, case = 'He2', wl = wl)
+        if cont_2p:
+            cont += self.two_photon(tem = tem, den = den, wl = wl)
+        if cont_ff:
+            cont += self.FreeFree(tem = tem, wl = wl)
+        
+        return cont
+
+    def get_continuum(self, tem, den, He1_H=0., He2_H=0., wl=np.arange(3500, 4000, 1), 
+                      cont_HI=True, cont_HeI=True, cont_HeII=True, 
+                      cont_2p=True, cont_ff=True):
+        """
+        tem: temperature [K]. May be a float or an iterable
+        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
+        He1_H and He2_H: He+/H+ and He++/H+ abundances. Default = 0.0
+        wl: wavelengths: May be an array
+        type of continuum to take into acount defined a boolean, defaults are True:
+            cont_Hi, cont_HeI, cont_HeII: using B. Ercolano 2006 data
+            cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
+            cont_ff: Free-Free, from Storey & Hummer 1991
+        return the resulting continuum [erg/s.cm3/A]
+        """
         try:
             _ = (e for e in tem)
+            T_iterable = True
             try:
                 _ = (e for e in den)
             except:
                 den = np.ones_like(tem) * den
         except TypeError:
-            tem = np.array([tem])
-            den = np.array([den])
-
-        if wl is None:
-            wl = np.arange(self.wl_min, self.wl_max+1, 1)
-        cont = 0.
-        if cont_HI:
-            cont += np.array(list(map(lambda t:self.make_cont_Ercolano(tem = t, case = 'H', wl = wl ), tem))).T
-        if cont_HeI and He1_H > 0.:
-            cont += He1_H * np.array(list(map(lambda t: self.make_cont_Ercolano(tem = t, case = 'He1', wl = wl ), tem))).T
-        if cont_HeII and He2_H > 0:
-            cont += He2_H * np.array(list(map(lambda t: self.make_cont_Ercolano(tem = t, case = 'He2', wl = wl ), tem))).T
-        if cont_2p:
-            cont += np.array(list(map(lambda t, n: self.two_photon(tem = t, den = n, wl = wl), tem, den))).T
-        if cont_ff:
-            cont += np.array(list(map(lambda t: self.FreeFree(tem = t, wl = wl), tem))).T
-        
-        return cont.squeeze()
+            T_iterable = False
+                        
+        if T_iterable:
+            cont = np.array(list(map(lambda t, d: self._get_continuum1(t, d, He1_H=He1_H, He2_H=He2_H, wl=wl, 
+                                                                       cont_HI=cont_HI, cont_HeI=cont_HeI, 
+                                                                       cont_HeII=cont_HeII, 
+                                                                       cont_2p=cont_2p, cont_ff=cont_ff), 
+                                     tem, den))).T
+            return cont.squeeze()
+        else:
+            cont = self._get_continuum1(tem, den, He1_H=He1_H, He2_H=He2_H, wl=wl, 
+                                        cont_HI=cont_HI, cont_HeI=cont_HeI, cont_HeII=cont_HeII, 
+                                        cont_2p=cont_2p, cont_ff=cont_ff)
+            return cont
     
     def BJ_HI(self, tem, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2'):
         """
