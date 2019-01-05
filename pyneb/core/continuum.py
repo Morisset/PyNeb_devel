@@ -4,6 +4,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy import optimize
 
+import pyneb as pn
 from .pynebcore import RecAtom
 from ..utils.physics import CST
 from ..utils.misc import execution_path
@@ -18,8 +19,25 @@ class Continuum(object):
         Mainly based on pySSN library        
         Adapted by V. Gomez-Llanos and C. Morisset, 2018
         """
-        self.HI = None
         self.BE = None
+        self.__HI_case = None
+        self.set_HI_case('B')
+        
+    def _set_HI_case(self, case='B'):
+        """
+        Define the case (A or B) to be hused for HI normalization line.
+        Not sure that the Free-nbound coefficients from Ercolano & Storey 2006 take case A option into account.
+        """            
+        if case != self.__HI_case:
+            if case == 'A':
+                pn.atomicData.setDataFile('h_i_rec_SH95-caseA.hdf5')
+                self.HI = None
+            elif case == 'B':
+                pn.atomicData.setDataFile('h_i_rec_SH95.hdf5')
+                self.HI = None
+            else:
+                raise ValueError('Unkown case {}. Should be A or B'.format(case))
+            self.__HI_case = case
         
     def make_cont_Ercolano(self, tem, case, wl):
         """
