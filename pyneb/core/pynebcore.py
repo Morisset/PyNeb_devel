@@ -3026,13 +3026,13 @@ class RecAtom(object):
             labels = np.array(['{:.2f}'.format(lamb) for lamb in data['lamb']])
             def emis_func(label, temp, dens):
                 if np.ndim(temp) == 0:
-                    temp = np.array([temp])
+                    temp = np.array([temp], dtype=float)
                 else:
-                    temp = np.array(temp)
+                    temp = np.array(temp, dtype=float)
                 if np.ndim(dens) == 0:
-                    dens = np.array([dens])
+                    dens = np.array([dens], dtype=float)
                 else:
-                    dens = np.array(dens)
+                    dens = np.array(dens, dtype=float)
                 mask2 = (labels == label) & (data['dens'] == 2)
                 mask3 = (labels == label) & (data['dens'] == 3)
                 mask4 = (labels == label) & (data['dens'] == 4)
@@ -3051,7 +3051,7 @@ class RecAtom(object):
                     alpha4 = alpha_gen(d4, t)
                     alpha5 = alpha_gen(d5, t)
                     
-                    alpha = np.zeros_like(alpha2)
+                    alpha = np.zeros_like(temp)
                     
                     mask = dens <= 10**2
                     alpha[mask] = alpha2[mask]
@@ -3390,8 +3390,8 @@ class RecAtom(object):
             log_.error('Scipy not installed, no RecAtom emissivities available',
                           calling=self.calling)
             return None
-        tem = np.asarray(tem)
-        den = np.asarray(den)
+        tem = np.asarray(tem, dtype=float)
+        den = np.asarray(den, dtype=float)
         if product:
             if tem.size == 1 or den.size == 1:
                 temg = tem
