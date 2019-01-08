@@ -3017,9 +3017,9 @@ class RecAtom(object):
         elif self._funcType == 'FSL11': # N II
             try:
                 data = np.genfromtxt(self.recFitsFullPath, skip_header=2, 
-                                     usecols = (0, 1, 2, 3,4,5,6,7,8,9, 10,13), 
+                                     usecols = (0,1,2,3,4,5,6,7,8,9,10,13), 
                                      names='case, mult, lamb, a, b, c, d, e, f, g, h, dens', 
-                                     dtype="U1, f8, f8, f8, f8, f8, f8, f8, f8, f8, f8, f8")
+                                     dtype="U1, U1, f8, f8, f8, f8, f8, f8, f8, f8, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
             data = data[data['case'] == self.case]
@@ -3051,11 +3051,11 @@ class RecAtom(object):
                     alpha4 = alpha_gen(d4, t)
                     alpha5 = alpha_gen(d5, t)
                     
-                    alpha = np.zeros_like(temp)
+                    alpha = np.zeros_like(alpha2)
                     
                     mask = dens <= 10**2
                     alpha[mask] = alpha2[mask]
-                    mask = dens >= 10**5
+                    mask = dens > 10**5
                     alpha[mask] = alpha5[mask]
                     mask = (dens > 10**2) & (dens <= 10**3)
                     alpha[mask] = alpha3[mask] * (np.log10(dens[mask]) - 2) + alpha2[mask] * (3 - np.log10(dens[mask]))
@@ -3540,7 +3540,7 @@ class RecAtom(object):
             self.log_.error('Unable to eval {0}'.format(to_eval), calling=self.calling)
             return None
         if emis is not None:
-        #int_ratio is in units of Hb = Hbeta keyword
+            #int_ratio is in units of Hb = Hbeta keyword
             ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False) / emis))
         else:
             ionAbundance = None
