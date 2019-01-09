@@ -2954,12 +2954,11 @@ class RecAtom(object):
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = d['Br'] * alpha * E_erg
+                    single = False
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
                             single = True
                             t = np.asarray([t])
-                        else:
-                            single = False
                         mask = t < 0.004
                         emis[mask] = np.nan
                     if single:
@@ -2986,12 +2985,11 @@ class RecAtom(object):
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = alpha * E_erg
+                    single = False
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
                             single = True
                             t = np.asarray([t])
-                        else:
-                            single = False
                         mask = t < 0.5
                         emis[mask] = np.nan
                     if single:
@@ -3019,12 +3017,11 @@ class RecAtom(object):
                     E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = alpha * E_erg
+                    single = False
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
                             single = True
                             t = np.asarray([t])
-                        else:
-                            single = False
                         mask = (t < 0.5) & (t > 2.0)
                         emis[mask] = np.nan
                     if single:
@@ -3123,11 +3120,15 @@ class RecAtom(object):
                         E_Ryd = 1./(d['lamb'] * 1e-8 * CST.RYD)
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = alpha * E_erg
+                        single = False
                         if not self.extrapolate:
                             if np.ndim(t) == 0:
+                                single = True
                                 t = np.asarray([t])
                             mask = t < 0.1
                             emis[mask] = np.nan
+                        if single:
+                            emis = emis[0]
                         return emis
                     else:
                         self.log_.error('{} is not a valid label'.format(label))
@@ -3142,11 +3143,15 @@ class RecAtom(object):
                         E_Ryd = 1./(dd2['lamb'] * 1e-8 * CST.RYD)
                         E_erg = E_Ryd * CST.RYD2ERG   #erg
                         emis = alpha * E_erg * dd2['Br']
+                        single = False
                         if not self.extrapolate:
                             if np.ndim(t) == 0:
+                                single = True
                                 t = np.asarray([t])
                             mask = t < 0.1
                             emis[mask] = np.nan
+                        if single:
+                            emis = emis[0]
                         return emis
                     else:
                         self.log_.error('{} is not a valid label'.format(label))       
