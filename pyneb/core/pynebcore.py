@@ -2938,7 +2938,10 @@ class RecAtom(object):
                                      dtype="U5, f8, U1, f8, f8, f8, f8, f8, f8")
             except:
                 self.log_.error('Error reading {}'.format(self.recFitsFullPath))
-            data = data[data['case'] == self.case]
+            case_mask = data['case'] == self.case
+            if case_mask.sum() == 0:
+                self.log_.error('No data for this case {}'.format(self.case))
+            data = data[case_mask]
             data['lamb'] *= 10  # Angstrom
             self.labels = data['label']
             def emis_func(label, temp, dens):
@@ -2953,9 +2956,14 @@ class RecAtom(object):
                     emis = d['Br'] * alpha * E_erg
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
+                            single = True
                             t = np.asarray([t])
+                        else:
+                            single = False
                         mask = t < 0.004
                         emis[mask] = np.nan
+                    if single:
+                        emis = emis[0]
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -2980,9 +2988,14 @@ class RecAtom(object):
                     emis = alpha * E_erg
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
+                            single = True
                             t = np.asarray([t])
+                        else:
+                            single = False
                         mask = t < 0.5
                         emis[mask] = np.nan
+                    if single:
+                        emis = emis[0]
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -3008,9 +3021,14 @@ class RecAtom(object):
                     emis = alpha * E_erg
                     if not self.extrapolate:
                         if np.ndim(t) == 0:
+                            single = True
                             t = np.asarray([t])
+                        else:
+                            single = False
                         mask = (t < 0.5) & (t > 2.0)
                         emis[mask] = np.nan
+                    if single:
+                        emis = emis[0]
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -3027,8 +3045,10 @@ class RecAtom(object):
             def emis_func(label, temp, dens):
                 if np.ndim(temp) == 0:
                     temp = np.array([temp], dtype=float)
+                    single = True
                 else:
                     temp = np.array(temp, dtype=float)
+                    single = False
                 if np.ndim(dens) == 0:
                     dens = np.array([dens], dtype=float)
                 else:
@@ -3067,6 +3087,8 @@ class RecAtom(object):
                     E_Ryd = 1./(d2['lamb'] * 1e-8 * CST.RYD)
                     E_erg = E_Ryd * CST.RYD2ERG   #erg
                     emis = alpha * E_erg
+                    if single:
+                        emis = emis[0]
                     return emis
                 else:
                     self.log_.error('{} is not a valid label'.format(label))
@@ -3470,7 +3492,7 @@ class RecAtom(object):
 
 
     def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, label=None,
-                        to_eval=None, Hbeta=100., tem_HI=None):
+                        to_eval=None, Hbeta=100., tem_HI=None, den_HI=None):
         """
         Compute the ionic abundance relative to H+ given the temperature, the density and the 
             intensity of a line or sum of lines.
@@ -3510,11 +3532,13 @@ class RecAtom(object):
                             ignored otherwise.
             - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
             - tem_HI       HI temperature. If not set, tem is used.
-
+            - den_HI       HI density. If not set, den is used.
         
         """
         if tem_HI is None:
             tem_HI = tem
+        if den_HI is None:
+            den_HI = den
         if np.ndim(tem) != np.ndim(den):
             self.log_.error('ten and den must have the same shape', calling=self.calling)
             return None
@@ -3541,7 +3565,7 @@ class RecAtom(object):
             return None
         if emis is not None:
             #int_ratio is in units of Hb = Hbeta keyword
-            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False) / emis))
+            ionAbundance = ((int_ratio / Hbeta) * (getRecEmissivity(tem_HI, den_HI, 4, 2, atom='H1', product=False) / emis))
         else:
             ionAbundance = None
         return ionAbundance
