@@ -574,7 +574,10 @@ class Diagnostics(object):
                     tol_value = eval(diag[2])
                     col_dic = {'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
                                'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}
-                    col = col_dic[sym]
+                    if sym in col_dic:
+                        col = col_dic[sym]
+                    else:
+                        col = 'black'
                     style_dic = {'1':'-', '2':'--', '3':':', '4':'-.', '5':'-', '6':'--'}
                     style = style_dic[spec]
                     if tol_value > 0. and error_band:
