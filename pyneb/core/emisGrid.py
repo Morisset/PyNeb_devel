@@ -36,10 +36,12 @@ class EmisGrid(object):
             - den_min, den_max   limits for the electron density
             - restore_file       if set, the emissivities are loaded from this file, 
                                  otherwise (None) it is computed
+                                 If the tem or den table from the restored file does not match the given parameters,
+                                 a new grid is computed and self.compute_new_grid is set to True. The same applies
+                                 if the atomic data are not the same.
             - atomObj            an atom object. In this case, no need for elem and spec.
 
         """
-        #TODO Check the boundaries of the restored maps.
         self.log_ = log_
         self.calling = 'EmisGrid'
 
@@ -57,16 +59,42 @@ class EmisGrid(object):
             if self.atom.collFitsFile != old['collFitsFile']:
                 self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.collFitsFile, old['collFitsFile']),
                                 calling=self.calling)
-            self.tem = old['tem']
-            self.den = old['den']
-            self.n_tem = self.tem.size
-            self.n_den = self.den.size
-            self.tem_min = min(self.tem)
-            self.tem_max = max(self.tem)
-            self.den_min = min(self.den)
-            self.den_max = max(self.den)
-            self.emis_grid = old['emis_grid']
+            
+            self.compute_new_grid = False
+            if n_tem != len(old['tem']):
+                self.log_.warn('len(tem) does not match saved data. New grid is computed')
+                self.compute_new_grid = True
+            else:
+                if not np.isclose(tem_min, min(old['tem'])):
+                    self.log_.warn('Min(tem) does not match saved data. New grid is computed')
+                    self.compute_new_grid = True
+                if not np.isclose(tem_max, max(old['tem'])):
+                    self.log_.warn('Max(tem) does not match saved data. New grid is computed')
+                    self.compute_new_grid = True
+            if n_den != len(old['den']):
+                self.log_.warn('len(den) does not match saved data. New grid is computed')
+                self.compute_new_grid = True
+            else:
+                if not np.isclose(den_min, min(old['den'])):
+                    self.log_.warn('Min(den) does not match saved data. New grid is computed')
+                    self.compute_new_grid = True
+                if not np.isclose(den_max, max(old['den'])):
+                    self.log_.warn('Max(den) does not match saved data. New grid is computed')
+                    self.compute_new_grid = True
+            if not self.compute_new_grid:
+                self.tem = old['tem']
+                self.den = old['den']
+                self.n_tem = self.tem.size
+                self.n_den = self.den.size
+                self.tem_min = min(self.tem)
+                self.tem_max = max(self.tem)
+                self.den_min = min(self.den)
+                self.den_max = max(self.den)
+                self.emis_grid = old['emis_grid']
         else:
+            self.compute_new_grid = True
+            
+        if self.compute_new_grid:
             if atomObj is None:
                 self.elem = elem
                 self.spec = spec
@@ -94,6 +122,9 @@ class EmisGrid(object):
             except:
                 self.recFitsFile = None
             self.emis_grid = self.atom.getEmissivity(self.tem, self.den)
+            if restore_file is not None:
+                self.save(restore_file)
+                self.log_.message('%s saved to %s' % ((self.atom), restore_file), calling=self.calling)
             #self.emis_grid = np.empty((self.atom.NLevels, self.atom.NLevels, n_tem, n_den))
         
         self.den2D, self.tem2D = np.meshgrid(self.den, self.tem)
@@ -387,7 +418,9 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
         if restore:
             if os.path.exists(file_):
                 try:
-                    emis_grids[elem + spec] = EmisGrid(restore_file=file_, atomObj=atomObj)
+                    emis_grids[elem + spec] = EmisGrid(restore_file=file_, n_tem=n_tem, n_den=n_den, 
+                                                       tem_min=tem_min, tem_max=tem_max,
+                                                       den_min=den_min, den_max=den_max, atomObj=atomObj)
                     log_.message('Read %s' % file_, calling=calling)
                     compute_this = False
                 except:
