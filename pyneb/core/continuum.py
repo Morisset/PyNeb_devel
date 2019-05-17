@@ -236,7 +236,7 @@ class Continuum(object):
         
         return cont
 
-    def get_continuum(self, tem, den, He1_H=0., He2_H=0., wl=np.arange(3500, 4000, 1), 
+    def get_continuum(self, tem, den, He1_H=0., He2_H=0., wl=np.array([3500, 3600, 3700, 3800, 3900]), 
                       cont_HI=True, cont_HeI=True, cont_HeII=True, 
                       cont_2p=True, cont_ff=True, HI_label='11_2'):
         """
@@ -249,7 +249,13 @@ class Continuum(object):
             cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
             cont_ff: Free-Free, from Storey & Hummer 1991
         HI_label: HI label to normalize the continuum. If None, no normalization is done. Default 11_2
-        return the resulting continuum. Unit [A-1] if normalized, [erg/s.cm3/A] otherwise 
+        return the resulting continuum. Unit [A-1] if normalized, [erg/s.cm3/A] otherwise
+        
+        Exemple of use:
+            C = pn.Continuum()
+            wl = np.arange(3500, 4000, 1)
+            cont = C.get_continuum(tem=1e4, den=1e2, He1_H=0.08, He2_H=0.02, wl=wl)
+            plt.plot(wl, cont)
         """
         try:
             _ = (e for e in tem)
