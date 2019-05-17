@@ -34,6 +34,7 @@ from .core.pynebcore import Atom, RecAtom, getAtomDict, getRecEmissivity, Emissi
 from .core.icf import ICF 
 from .core.diags import Diagnostics, diags_dict
 from .core.emisGrid import EmisGrid, getEmisGridDict
+from .core.continuum import Continuum
 from .plot.plotAtomicData import DataPlot
 from .utils.physics import CST
 from .utils.saverestore import save, restore
