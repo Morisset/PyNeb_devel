@@ -110,8 +110,14 @@ class Continuum(object):
         wl: wavelength [Angstrom]. May be a float or a numpy array
         Return 2 photons continuum [erg/s.cm3/A]
         """
+        try:
+            _ = (e for e in wl)
+        except TypeError:
+            wl = np.array([wl])
         y = 1215.7 / wl
         A = 202.0 * (y * (1. - y) * (1. -(4. * y * (1 - y))**0.8) + 0.88 * ( y * (1 - y))**1.53 * (4. * y * (1 - y))**0.8)
+        mask = y > 1.0 # Thanks to Daniel Schaerer for pointing out this potential issue
+        A[mask] = 0.
         alfa_eff = 0.838e-13 * (tem / 1e4)**(-0.728) # fit DP de Osterbrock
         q = 5.31e-4 * (tem / 1e4)**(-0.17) # fit DP de Osterbrock
         n_crit = 8.226 / q
