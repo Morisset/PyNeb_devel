@@ -339,7 +339,7 @@ class Continuum(object):
             T_BJ = np.array(list(map(lambda bjhi: optimize.brentq(f2minimize, T_min, T_max, args=bjhi), BJ_HI))).T
             return T_BJ.squeeze()
         else:
-            T_BJ = optimize.brentq(f2minimize, 5e2, 3e4, args=BJ_HI)
+            T_BJ = optimize.brentq(f2minimize, T_min, T_max, args=BJ_HI)
             return T_BJ
 
     
