@@ -7,6 +7,8 @@ if pn.config.Chianti_version_main == '8':
     from . import _chianti_tools_8 as _chianti_tools
 elif pn.config.Chianti_version_main == '7':
     from . import _chianti_tools
+elif pn.config.Chianti_version_main == '9':
+    from . import _chianti_tools_9 as _chianti_tools
 from . import _chianti_constants as const
 from .physics import sym2name, vactoair
 from .manage_atomic_data import getLevelsNIST, atom2chianti
@@ -134,9 +136,10 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
     pn.log_.debug('NLevels = {}'.format(NLevels), calling='Chianti_getOmega')
     temp=np.asarray(tem)
     if Splups is None:
-        if pn.config.Chianti_version_main == '8':
+        if pn.config.Chianti_version_main == '9':
             Splups = _chianti_tools.scupsRead(ion_chianti)
-            print(Splups.keys())
+        elif pn.config.Chianti_version_main == '8':
+            Splups = _chianti_tools.scupsRead(ion_chianti)
         elif pn.config.Chianti_version_main == '7':
             Splups = _chianti_tools.splupsRead(ion_chianti)
     if NLevels is None:
@@ -172,7 +175,12 @@ def Chianti_getOmega(ion_chianti, tem, lev1=None, lev2=None, Splups=None, NLevel
                     isplups = isplups[0]
                 ttype=Splups["ttype"][isplups]
                 cups=Splups["cups"][isplups]
-                if pn.config.Chianti_version_main == '8':
+                if pn.config.Chianti_version_main == '9':
+                    nspl=Splups["ntemp"][isplups]
+                    dx=1./(float(nspl)-1.)
+                    xs = Splups['btemp'][isplups]
+                    splups=Splups["bscups"][isplups]
+                elif pn.config.Chianti_version_main == '8':
                     nspl=Splups["ntemp"][isplups]
                     dx=1./(float(nspl)-1.)
                     xs = Splups['btemp'][isplups]
@@ -457,7 +465,9 @@ class _CollChianti(object):
         self._loadChianti()
         
     def _loadChianti(self):
-        if pn.config.Chianti_version_main == '8':
+        if pn.config.Chianti_version_main == '9':
+            self.fullFileName = _chianti_tools.ion2filename(self.ion_chianti) + '.scups'
+        elif pn.config.Chianti_version_main == '8':
             self.fullFileName = _chianti_tools.ion2filename(self.ion_chianti) + '.scups'
         elif pn.config.Chianti_version_main == '7':
             self.fullFileName = _chianti_tools.ion2filename(self.ion_chianti) + '.splups'
@@ -469,7 +479,9 @@ class _CollChianti(object):
         
         self.Chianti_version = self.collPath.split('/')[-4]
         self.comments = {}
-        if pn.config.Chianti_version_main == '8':
+        if pn.config.Chianti_version_main == '9':
+            self.Splups = _chianti_tools.scupsRead(self.ion_chianti)
+        elif pn.config.Chianti_version_main == '8':
             self.Splups = _chianti_tools.scupsRead(self.ion_chianti)
         elif pn.config.Chianti_version_main == '7':
             self.Splups = _chianti_tools.splupsRead(self.ion_chianti)
@@ -597,7 +609,9 @@ class _CollChianti(object):
         sources = []
         sources.append('Omega-values from {0}'.format(self.Chianti_version))
         
-        if pn.config.Chianti_version_main == '8':
+        if pn.config.Chianti_version_main == '9':
+            refs = _chianti_tools.scupsRead(self.ion_chianti)
+        elif pn.config.Chianti_version_main == '8':
             refs = _chianti_tools.scupsRead(self.ion_chianti)
         elif pn.config.Chianti_version_main == '7':
             refs = _chianti_tools.splupsRead(self.ion_chianti)
