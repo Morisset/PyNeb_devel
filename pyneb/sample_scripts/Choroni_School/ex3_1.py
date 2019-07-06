@@ -52,7 +52,7 @@ def getIonAb(obs_file, Ne_O2, Ne_Ar4, T_N2, T_O3, printIonAb = True):
                 IP_used = 'L'                 
             ab = all_atoms[line.atom].getIonAbundance(line.corrIntens, temp, dens, to_eval=line.to_eval, Hbeta=100)
             if printIonAb:
-                print '{0:13s} {1} '.format(line.label, IP_used) + ' '.join(['{0:>8.4f}'.format(t) for t in ab * 1e6])
+                print('{0:13s} {1} '.format(line.label, IP_used) + ' '.join(['{0:>8.4f}'.format(t) for t in ab * 1e6]))
             if line.atom not in ab_dic:
                 ab_dic[line.atom] = []
             ab_dic[line.atom].append(ab)

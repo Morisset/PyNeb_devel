@@ -125,7 +125,7 @@ def p3(obs, Tlow, Tmid, Thigh, mean_dens, verbose=True):
             ab = all_atoms[line.atom].getIonAbundance(line.corrIntens, Te_dic[line.atom], mean_dens, 
                                                       to_eval=line.to_eval, Hbeta=100)
             if verbose:
-                print '{0:9s}'.format(line.label) + ' '.join(['{0:>8.2f}'.format(t) for t in 12 + np.log10(ab)])
+                print('{0:9s}'.format(line.label) + ' '.join(['{0:>8.2f}'.format(t) for t in 12 + np.log10(ab)]))
             ab_dic[line.atom] = ab
     return ab_dic
 
