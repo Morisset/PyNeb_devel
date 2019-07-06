@@ -1237,6 +1237,8 @@ class Atom(object):
             self.elem = parseAtom(self.atom)[0]
             self.spec = int(parseAtom(self.atom)[1])
         else:
+            if elem is None:
+                self.log_.error('At least elem or atom needs to be given', calling='Atom')
             if elem[0].isalpha():
                 self.elem = str.capitalize(elem)
             else:
