@@ -76,16 +76,16 @@ class _Config(object):
             self.INSTALLED['Stout'] = False
             self.Stout_dir = None
         try:
-            import pyfits
+            import astropy.io.fits as pyfits
+            self.INSTALLED['pyfits from astropy'] = True
             self.INSTALLED['pyfits'] = True
-            self.INSTALLED['pyfits from astropy'] = False
         except:
-            self.INSTALLED['pyfits'] = False
+            self.INSTALLED['pyfits from astropy'] = False 
             try:
-                import astropy.io.fits as pyfits
-                self.INSTALLED['pyfits from astropy'] = True
+                import pyfits
+                self.INSTALLED['pyfits'] = True
             except:
-                self.INSTALLED['pyfits from astropy'] = False
+                self.INSTALLED['pyfits'] = False
         try:
             import h5py
             self.INSTALLED['h5py'] = True
