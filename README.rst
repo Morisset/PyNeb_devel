@@ -37,9 +37,13 @@ Note: you MAY need --user if you installed python without Anaconda or Canopy
 
 Updates use the same command.
 
-To use the development package (at your own risks!!!):
+You can also install from the github repository:
 
 * pip install -U git+https://github.com/Morisset/PyNeb_devel.git
+
+To use the development branch (at your own risks!!!):
+
+* pip install -U git+https://github.com/Morisset/PyNeb_devel.git@devel
 
 Warranty
 ========
