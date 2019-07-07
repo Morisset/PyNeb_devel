@@ -13,7 +13,7 @@ In PyNeb, the atom is represented as an n-level atom. For given density and temp
 * plot and compare atomic data from different publications;
 * compute ionic abundances from line intensities and physical conditions;
 * compute elemental abundances from ionic abundances and icfs;
-* compute electron temeprature from Balemr jump, at any wavelength and normalized to any HI line.
+* compute electron temperature from Balmer/Pashen jump, at any wavelength and normalized to any HI line.
 
 PyNeb also incorporates emissivity tables or emissivities fits of recombination lines. 
 The interpolated emissivities can be used by any of the modules that rely on the n-level line emissivities to carry out the actions listed above.
