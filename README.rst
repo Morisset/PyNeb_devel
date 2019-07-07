@@ -17,7 +17,8 @@ Emission line ratios are used to self consistently determine electron temperatur
 Diagnostic diagrams can easily be plotted.
 Various ionization correction factors (ICFs) from the literarure are available to obtain total elemental abundances from the ionic abundances.
 Atomic data can easily be changed and updated.
-Additional tools are provided, like reddening determination and correction procedures.
+Additional tools are provided, like reddening determination and correction procedures, Balmer/Pashen jump 
+temperature determinations.
 
 Requirements
 ============
@@ -55,7 +56,8 @@ Manual
 
 * The manuals are here: `<https://github.com/Morisset/PyNeb_devel/tree/master/docs>`_.
 
-* The reference manual is accessible from `<https://morisset.github.io/PyNeb_Manual/html/index.html>`_.
+* The reference manual is accessible from `<https://morisset.github.io/PyNeb_Manual/html/index.html>`_. 
+It may appear a little bit out-of-date (v 1.1.2) for techincal reasons, but most of the tools did not change since then.
 
 Discussion Groups
 =================
