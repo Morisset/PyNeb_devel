@@ -2549,7 +2549,12 @@ class Atom(object):
             multiplets.append(level_multiplet) # append last multiplet
 # Mistakenly rounds off fractional J values. Corrected 26/12/2014            
 #            levelLabels = ['$^{{{0}}}${1}$_{{{2:.0f}}}$'.format(l['term'][0],l['term'][1],l['J']) for l in self.NIST]
-            levelLabels = ['$^{{{0}}}${1}$_{{{2}/{3}}}$'.format(bs(l['term'])[0], bs(l['term'])[1], Fraction(l['J']).numerator, Fraction(l['J']).denominator) for l in self.NIST]
+            levelLabels = []
+            for l in self.NIST:
+                if Fraction(l['J']).denominator == 1:
+                    levelLabels.append('$^{{{0}}}${1}$_{{{2}}}$'.format(l['term'][0], l['term'][1], Fraction(l['J']).numerator))
+                else:
+                    levelLabels.append('$^{{{0}}}${1}$_{{{2}/{3}}}$'.format(l['term'][0], l['term'][1], Fraction(l['J']).numerator, Fraction(l['J']).denominator))
         else:
             delta_e_max = 1.e-5  # Arbitrary limit to define hyperfine structure and identify multiplets 
             for i in np.arange(1, len(energies)):
