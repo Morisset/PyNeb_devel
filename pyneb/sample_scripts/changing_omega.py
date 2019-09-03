@@ -10,7 +10,7 @@ import pyneb as pn
 # Compute emission grids
 EM_O3 = pn.EmisGrid('O', 3, n_den=100, n_tem=100)
 EM_S2 = pn.EmisGrid('S', 2, n_den=100, n_tem=100)
-pn.atomicData.setDataFile('s_ii_coll_RBS96.fits')
+pn.atomicData.setDataFile('s_ii_coll_RBS96.dat')
 EM_S2_GR = pn.EmisGrid('S', 2, n_den=100, n_tem=100)
 pn.atomicData.resetDataFileDict()
 

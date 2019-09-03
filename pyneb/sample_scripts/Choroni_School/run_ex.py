@@ -4,6 +4,7 @@ import pyCloudy as pc
 import pyneb as pn
 
 #-------------------------------------- ex1_1 questions 1 to 8 ----------------------------------------------
+"""
 import ex1_1
 
 ex1_1.p1()  # answer to 1.1.1
@@ -118,7 +119,7 @@ plt.savefig('EquTermO2.pdf')
 import ex2_1
 
 """
-question 1 #
+# question 1 #
 """
 ions = ['C3', 'N1','N2', 'O1','O2', 'O3', 'Ne3', 'S2', 'S3','Cl3', 'Ar4']
 
@@ -127,7 +128,7 @@ for ion in ions:
     plt.savefig('{0}_energies.pdf'.format(ion))
 
 """
-question 2
+# question 2
 """
 # print the list of available plasma diagnostics  
 for diag in np.sort(pn.diags_dict.keys()):
@@ -166,7 +167,7 @@ import pyneb as pn
 import ex3_1
 
 """
-Question 1
+# Question 1
 """
 Ne_O2 = 10**3.4
 Ne_Ar4 = 10**3.8
@@ -174,22 +175,22 @@ T_N2 = 13400.
 T_O3 = 14500.
 
 """
-Question 2
+# Question 2
 """
 ion_ab_dic = ex3_1.getIonAb('IC2165.dat', Ne_O2, Ne_Ar4, T_N2, T_O3, printIonAb = True)
 
 """
-Question 3
+# Question 3
 """
 elem_abun = ex3_1.getElemAb(ion_ab_dic, printAb = True)
 
 """
-Question 4
+# Question 4
 """
 ion_ab_dic_UVIR = ex3_1.getIonAb('IC2165_IR.dat', Ne_O2, Ne_Ar4, T_N2, T_O3, printIonAb = True)
 elem_abun_UVIR = ex3_1.getElemAb(ion_ab_dic_UVIR, printAb = True)
 """
-Question 5
+# Question 5
 """
 pn.atomicData.setDataFileDict('IRAF_09')
 ion_ab_dic_IRAF = ex3_1.getIonAb('IC2165_IR.dat', Ne_O2, Ne_Ar4, T_N2, T_O3, printIonAb = True)
@@ -259,7 +260,7 @@ for ion in np.sort(pn.config.DataFiles.keys()):
 
 #-------------------------------------- ex4 ------------------------------------------------
 """
-STRONG LINE METHOD
+# STRONG LINE METHOD
 """
 
 import ex4_1
@@ -281,17 +282,17 @@ OoH_4 = ex4_1.get_OoH_4(Tlow, Thigh, mean_dens)
 plt.scatter(np.log10(OoH)+12, OoH_4, marker = 'd')
 #-------------------------------------- ex5 ------------------------------------------------
 """
-CLOUDY FIRST STEPS
+# CLOUDY FIRST STEPS
 """
 #-------------------------------------- ex6_1 ----------------------------------------------
 """
-CLOUDY WITHOUT PYCLOUDY
+# CLOUDY WITHOUT PYCLOUDY
 """
 import ex6_1
 import pyCloudy as pc
 
 """
-Question 6.1.1
+# Question 6.1.1
 """
 models_dir = 'CloudyModels' #Create this directory if necessary
 pc.config.cloudy_exe = '/usr/local/Cloudy/c10.00/cloudy.exe' # point to the location of Cloudy.exe
@@ -330,7 +331,7 @@ ex6_1.plot_Hb_Teff(models)
 # Another way is to ask every student to compute a model and to derive Hbeta/Q0 and we see the results.
 
 """
-Question 6.1.2
+# Question 6.1.2
 """
 # make some models changing input parameters
 ex6_1.make_mod(models_dir, name='M_61.2_1', Teff=5e4, qH=45, dens=3, r_in=17)
@@ -352,7 +353,7 @@ plt.figure(figsize=(9,9))
 ex6_1.plot_ion(models, elem='O', ion=1)
 
 """
-Question 6.1.3 
+# Question 6.1.3 
 """
 plt.figure(figsize=(9,9))
 ex6_1.plot_radial2(models[0], 'red')
@@ -363,7 +364,7 @@ ex6_1.plot_radial2(models[4], 'magenta')
 ex6_1.plot_radial2(models[5], 'yellow')
 
 """
-Question 6.1.4
+# Question 6.1.4
 """
 qH = 48.23
 r_in = 16
@@ -378,7 +379,7 @@ plt.figure(figsize=(9,9))
 ex6_1.plot_metals(models)
 
 """
-Question 6.1.5
+# Question 6.1.5
 """
 ex6_1.make_mod(models_dir, name='M_61.5_1', Teff=5e4, qH=qH, dens=2, r_in=r_in, nograins=False)
 ex6_1.make_mod(models_dir, name='M_61.5_2', Teff=5e4, qH=qH, dens=2, r_in=r_in, metals = 0.01, nograins=False)
@@ -395,20 +396,20 @@ ex6_1.plot_metals(modelsG)
 import ex6_2
 
 """
-Pregunta 1
+# Pregunta 1
 """
-print ex6_2.QH0(U_mean = 1e-2, Ne=1e2, ff=1, Te = 1e4)
+print(ex6_2.QH0(U_mean = 1e-2, Ne=1e2, ff=1, Te = 1e4))
 
 """
-Pregunta 2 : Run Starburst99...
-look at the quanta file:
- .10100E+07   52.652  -0.360   51.974  -0.850   48.593  -3.980   42.542
- .50100E+07   51.841  -1.029   50.830  -1.809   48.973  -3.339   42.345
+# Pregunta 2 : Run Starburst99...
+# look at the quanta file:
+#  .10100E+07   52.652  -0.360   51.974  -0.850   48.593  -3.980   42.542
+#  .50100E+07   51.841  -1.029   50.830  -1.809   48.973  -3.339   42.345
 """
 print('QHe1/QH0 at 1Myr = {0:.5}, at 5 Myr = {1:.5}'.format(10**(51.974 - 52.652), 10**(50.830 - 51.841)))
 
 """
-Pregunta 3
+# Pregunta 3
 """
 
 models_dir = 'CloudyModels'
@@ -416,20 +417,20 @@ ex6_2.make_model('M_ISB_008_1', models_dir, SED = 'table star "ISB_008.mod"', qH
 ex6_2.plot_model('M_ISB_008_1', models_dir)
 
 """
-Pregunta 4
+# Pregunta 4
 """
 for T in np.linspace(30000., 70000, 9):
     ex6_2.make_model('T_BB_{0:.0f}'.format(T/1e3), models_dir, SED = 'BB', qH=49.22, SED_params=T, n_zones=2, iterate=0)
 ex6_2.search_T('T_BB', models_dir)
 
 """
-Pregunta 5
+# Pregunta 5
 """
 ex6_2.make_model('M_BB_515', models_dir, SED = 'BB', qH=49.22, SED_params=51500)
 ex6_2.plot_model('M_BB_515', models_dir, style='--')
 
 """
-Pregunta 6
+# Pregunta 6
 """
 for T in np.linspace(30000., 46000, 9):
     ex6_2.make_model('T_WM_{0:.0f}'.format(T/1e3), models_dir, SED = 'table star "wmbasic.mod"', 
@@ -437,19 +438,19 @@ for T in np.linspace(30000., 46000, 9):
 ex6_2.search_T('T_WM', models_dir, SED = 'WM')
 
 """
-Pregunta 7
+# Pregunta 7
 """
 ex6_2.make_model('M_WM_420', models_dir, SED = 'table star "wmbasic.mod"', qH=49.22, SED_params=[42000, 4, -0.3])
 ex6_2.plot_model('M_WM_420', models_dir, style=':')
 
 """
-Pregunta 8
+# Pregunta 8
 """
 
 ex6_2.print_Xi('M_', models_dir)
 
 """
-Pregunta 9
+# Pregunta 9
 """
 ex6_2.plot_SED('M_', models_dir)
 
@@ -467,20 +468,20 @@ pc.print_make_file(models_dir)
 ex6_3.print_line_list(models_dir)
 
 """
-Pregunta 2
+# Pregunta 2
 """
 # this will run 56 models...
 # Do not forget to put the ISB_008.mod files in the models_dir directory.
 ex6_3.run_grid(models_dir, n_proc=3)
 
 """
-Pregunta 3
+# Pregunta 3
 """
 # this read some SDSS data
 ex6_3.plot_obs()
 
 """
-Pregunta 4
+# Pregunta 4
 """
 # reading all the models
 Ms = pc.load_models('/Users/christophemorisset/DATAS/Choroni/G', 
@@ -599,3 +600,4 @@ import ex7_3
 ex7_3.plot_2comp(tem1=1e4, tem2=1e4, dens1=3e2, dens2=5e5, mass1=1, mass2=5e-4)
         
 
+"""

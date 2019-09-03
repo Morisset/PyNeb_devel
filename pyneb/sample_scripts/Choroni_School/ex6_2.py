@@ -144,7 +144,7 @@ def search_T(name, models_dir = './', SED = 'BB'):
 def print_Xi(name, models_dir = './'):
     Ms = pc.load_models('{0}/{1}'.format(models_dir, name), read_emis = False)
     names = [M.model_name_s for M in Ms]
-    print names
+    print(names)
     print('H0/H:   {0:.2e} {1:.2e} {2:.2e}'.format(Ms[0].get_ab_ion_vol('H', 0), 
                                                    Ms[1].get_ab_ion_vol('H', 0), 
                                                    Ms[2].get_ab_ion_vol('H', 0)))
