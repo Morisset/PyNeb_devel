@@ -57,6 +57,7 @@ Manual
 * The manuals are here: `<https://github.com/Morisset/PyNeb_devel/tree/master/docs>`_.
 
 * The reference manual is accessible from `<https://morisset.github.io/PyNeb_Manual/html/index.html>`_. 
+
 It may appear a little bit out-of-date (v 1.1.2) for techincal reasons, but most of the tools did not change since then.
 
 Discussion Groups
