@@ -2826,7 +2826,7 @@ class RecAtom(object):
                 self._RecombData = hf5
                 log_.message('HDF5 data read from {} using Astropy.table'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         elif config.INSTALLED['h5py']:
             try:
                 hf5 = h5py.File(self.recFitsFullPath, 'r')
@@ -2834,7 +2834,7 @@ class RecAtom(object):
                 hf5.close()
                 log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         if self.atom in config.DataFiles:
             if self.recFitsFile not in config.DataFiles[self.atom]:
                 config.DataFiles[self.atom].append(self.recFitsFile)
