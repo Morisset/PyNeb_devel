@@ -36,10 +36,11 @@ from .core.diags import Diagnostics, diags_dict
 from .core.emisGrid import EmisGrid, getEmisGridDict
 from .core.continuum import Continuum
 from .plot.plotAtomicData import DataPlot
-from .utils.physics import CST
+from .utils.physics import CST, print_IPs
 from .utils.saverestore import save, restore
 from .utils.init import LINE_LABEL_LIST, BLEND_LIST
 from .utils.manage_atomic_data import getLevelsNIST
+from .utils.misc import ROOT_DIR
 from .extinction.red_corr import RedCorr
 
 log_.message('PyNeb ready.', calling='PyNeb')

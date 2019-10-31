@@ -132,6 +132,7 @@ Z["Sg"] = 106
 Z["Bh"] = 107
 Z["Hs"] = 108
 Z["Mt"] = 109
+Z["Ds"] = 110
 
 Z_inv = {}
 for k in Z.keys():
@@ -408,6 +409,10 @@ gsDict = {
             'd8': ['Ni3']
             }
 """
+
+def print_IPs(N_elems=20, N_ions=8):
+    for elem in sorted(IP_tmp, key= lambda x: Z[x])[0:N_elems]: 
+        print('{:<5}'.format(elem), ' '.join(['{:6.2f}'.format(ip) for ip in IP[elem][0:N_ions]])) 
 
 def gsFromAtom(atom, verbose=False):
     """
