@@ -48,7 +48,8 @@ else:
         elif isinstance(x, str):
             return x.encode(encoding='UTF-8')
 
-            
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+      
 def execution_path(filename):
     return os.path.join(os.path.dirname(sys._getframe(1).f_code.co_filename), filename)
 

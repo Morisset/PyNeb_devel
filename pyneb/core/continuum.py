@@ -7,7 +7,7 @@ from scipy import optimize
 import pyneb as pn
 from .pynebcore import RecAtom
 from ..utils.physics import CST
-from ..utils.misc import execution_path
+from ..utils.misc import ROOT_DIR
 
 
 
@@ -55,7 +55,7 @@ class Continuum(object):
         n_wl = len(wl)
         hnu =  CST.CLIGHT * 1e8 / wl * CST.HPLANCK  #!phy.c_ang_sec/wl*!phy.h
         if self.BE is None:
-            with open(execution_path('../atomic_data/coeff_ercolano.pickle'), 'rb') as handle:
+            with open(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano.pickle', 'rb') as handle:
                 if sys.version[0] == '2':
                     self.BE = pickle.load(handle)
                 else:

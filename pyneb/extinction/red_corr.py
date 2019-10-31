@@ -5,7 +5,8 @@ if pn.config.INSTALLED['plt']:
     import matplotlib.pyplot as plt
 if pn.config.INSTALLED['scipy']:
     from scipy import interpolate
-from pyneb.utils.misc import execution_path
+from ..utils.misc import ROOT_DIR
+
 
 def my_X2(wave, params=[5000., 1., 2., 3.]):
     return params[1] * (wave / params[0]) + params[2] * (wave / params[0]) ** -1 + params[3] * (wave / params[0]) ** -2
@@ -612,7 +613,7 @@ class RedCorr(object):
         w = np.asarray([wave]) # inv microns
         if self.E_BV == 0.:
             return np.ones_like(w)
-        f_tab = np.loadtxt(execution_path('Gal_Kaler.txt'))
+        f_tab = np.loadtxt(ROOT_DIR + '/extinction/Gal_Kaler.txt')
         f = np.interp(w, f_tab[:, 0], f_tab[:, 1])
         return np.squeeze(f * self.cHbeta / 0.4 / self.E_BV)
     
@@ -633,7 +634,7 @@ class RedCorr(object):
         """
         x = 1e4 / np.asarray([wave]) # inv microns
 
-        X_tab = np.loadtxt(execution_path('Gal_SM79.txt'))
+        X_tab = np.loadtxt(ROOT_DIR + '/extinction/Gal_SM79.txt')
         Xx = np.interp(x, X_tab[:, 0], X_tab[:, 1])
         return np.squeeze(Xx)
     
@@ -654,7 +655,7 @@ class RedCorr(object):
         """
         x = 1e4 / np.asarray([wave]) # inv microns
 
-        X_tab = np.loadtxt(execution_path('LMC_Gordon.txt'))
+        X_tab = np.loadtxt(ROOT_DIR + '/extinction/LMC_Gordon.txt')
         Xx = self.R_V * np.interp(x, X_tab[:, 0], X_tab[:, 1])
         return np.squeeze(Xx)
     
