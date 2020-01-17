@@ -507,7 +507,12 @@ You may mean one of these files: {1}""".format(data_file, av_data),
             except:
                 pn.log_.warn('File not found {}, no Chianti data available'.format(masterlist), 
                              calling='_initChianti')
-    def addAllChianti(self):
+    def addAllChianti(self, replace_all=False):
+        """
+        Adding all the Chianti file to the list of data available
+        replace_all: if True, replace already available data by the Chianti ones:
+            all the atoms will be Chianti (except HI, HeI and HeII)
+        """
         atoms = self.getAllAtoms()
         masterlist = '{0}/masterlist/masterlist.ions'.format(self.Chianti_path)
         try:
@@ -519,11 +524,12 @@ You may mean one of these files: {1}""".format(data_file, av_data),
         chianti_ions = [l[0:7].strip() for l in lines]
         chianti_ions = [i.capitalize().replace('_','') for i in chianti_ions if i[-1] != 'd']
         for cion in chianti_ions:
-            if cion not in atoms and cion not in ('H1', 'He1', 'He2'):
+            if (cion not in atoms or replace_all) and cion not in ('H1', 'He1', 'He2'):
                 try:
                     atfiles = self.getAllAvailableFiles(cion)
                     for atfile in atfiles:
-                        self.setDataFile(atfile)
+                        if atfile.split('.')[-1] == 'chianti':
+                            self.setDataFile(atfile)
                 except:
                     pass
     
