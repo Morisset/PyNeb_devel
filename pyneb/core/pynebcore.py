@@ -202,13 +202,14 @@ class _AtomDataFits(object):
         """
         sources = [] 
         header = self.AtomHeader
-        for i in range(len(header.items())):
-            if 'SOURCE' in header.items()[i][0]:
-                number = header.items()[i][0].lstrip('SOURCE')
+        
+        for item in header.items():
+            if 'SOURCE' in item[0]:
+                number = item[0].lstrip('SOURCE')
                 try:
-                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    sources.append(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + 'Atomic data:'+ header.get('SOURCE' + str(number)))
         return sources
     
     
@@ -708,13 +709,13 @@ class _CollDataFits(object):
         """
         sources = []
         header = self.CollHeader
-        for i in range(len(header.items())):
-            if 'SOURCE' in header.items()[i][0]:
-                number = header.items()[i][0].lstrip('SOURCE')
+        for item in header.items():
+            if 'SOURCE' in item[0]:
+                number = item[0].lstrip('SOURCE')
                 try:
-                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    sources.append(self.atom + ': ' + 'Collision strengths:', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + 'Collision strengths:'+ header.get('SOURCE' + str(number)))
         return sources
     
     def printSources(self):
@@ -737,9 +738,10 @@ class _CollDataFits(object):
         """
         self._test_lev(lev_i)
         self._test_lev(lev_j)
+        
         if (lev_i == -1):
             if (lev_j == -1):
-                ChebOrder = np.zeros([self.NLevels, self.NLevels])
+                ChebOrder = np.zeros([self.NLevels, self.NLevels], dtype='int')
                 for i in range(self.NLevels - 1):
                     lev_i = i + 1
                     j = i + 1
@@ -792,7 +794,7 @@ class _CollDataFits(object):
         if np.max(self._ChebOrder) == -1:
             return -1
         else:
-            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, np.max(self._ChebOrder)])
+            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, np.int(np.max(self._ChebOrder))])
             for i in range(self.NLevels - 1):
                 lev_i = i + 1
                 j = i + 1
