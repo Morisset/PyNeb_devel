@@ -2923,6 +2923,8 @@ class RecAtom(object):
                     self.sources.append(self.atom + ': ' + 'Atomic data:'+ header.get('SOURCE' + str(number)))
         
             
+        if self.recFitsFile.split('.')[0][-4:] == 'SH95':
+            self.useNIST = True
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadFunctions(self):
