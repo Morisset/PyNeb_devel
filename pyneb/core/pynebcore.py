@@ -2868,6 +2868,7 @@ class RecAtom(object):
 
         """
         
+        self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
         for record in header.items():
             if 'SOURCE' in record[0]:
@@ -2917,9 +2918,9 @@ class RecAtom(object):
             if 'SOURCE' in record[0]:
                 number = record[0].lstrip('SOURCE')
                 try:
-                    self.sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    self.sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    self.sources.append(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+                    self.sources.append(self.atom + ': ' + 'Atomic data:'+ header.get('SOURCE' + str(number)))
         
             
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
