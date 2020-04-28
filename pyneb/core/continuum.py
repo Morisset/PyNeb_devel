@@ -74,7 +74,7 @@ class Continuum(object):
                                   4.6, 4.7, 4.8, 4.9, 5. ])
             D = np.loadtxt(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano_He2.txt')
         else:
-            print('Invalid case {0}'.format(case), calling='make_cont_Ercolano')
+            print('Invalid case {0}'.format(case))
             return None
         if (tem < np.min(tab_T)) or (tem > np.max(tab_T)):
             print('Invalid temperature {0}'.format(tem))
