@@ -11,6 +11,7 @@ from __future__ import print_function
 import numpy as np
 import warnings
 import os
+import sys
 
 from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve, bs
@@ -4349,6 +4350,8 @@ class Observation(object):
             #names_locations = [name in self.names for name in data_tab.dtype.names]
             #errors_locations = [name[0:3] == 'err' for name in data_tab.dtype.names]
             for i, label in enumerate(data_tab['LINE']):
+                if sys.version_info.major >= 3:
+                    label = label.decode()
                 label = label.strip()
                 if label == 'cHbeta':
                     self.extinction.cHbeta = np.array([data_tab[i][name] for name in self.names])
