@@ -9,11 +9,6 @@ import numpy as np
 import pyneb as pn
 from pyneb.utils.misc import int_to_roman, parseAtom, parseAtom2
 from pyneb.utils.init import BLEND_LIST
-try:
-    from mwinai import manage_RM
-    mwinai_OK = True
-except:
-    mwinai_OK = False
 
 diags_dict = {}
 
@@ -191,7 +186,7 @@ class Diagnostics(object):
         if addAll:
             self.addAll()
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
-                                'verbose' : True, 
+                                'verbose' : False, 
                                 'scaling' : True}
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
@@ -729,46 +724,52 @@ class Diagnostics(object):
                 return None
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
-        if use_ANN and mwinai_OK:
-            
-            if start_tem == -1:
-                tem_min = 5000.
-            else:
-                tem_min = start_tem
-            if end_tem == -1:
-                tem_max = 20000.
-            else:
-                tem_max = end_tem
-            if start_den == -1:
-                den_min = 10.
-            else:
-                den_min = start_den
-            if end_den == -1:
-                den_max = 1e5
-            else:
-                den_max = end_den
-            # define emisGrid objects to generate Te-Ne emissionmaps
-            tem_EG = pn.EmisGrid(atomObj=atom_tem, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
-                                 den_min=den_min, den_max=den_max)
-            den_EG = pn.EmisGrid(atomObj=atom_den, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
-                                 den_min=den_min, den_max=den_max)
-            # compute emission line ratio maps in the Te-Ne space
-            tem_2D = tem_EG.getGrid(to_eval = eval_tem)
-            den_2D = den_EG.getGrid(to_eval = eval_den)
-            # X is a set of line ratio pairs
-            X = np.array((tem_2D.ravel(), den_2D.ravel())).T
-            # y is a set of corresponding Te-Ne pairs
-            y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
-            # Instantiate, init and train the ANN
-            self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-            self.ANN.init_RM(**self.ANN_init_kwargs)
-            self.ANN.train_RM()
-            # set the test values to the one we are looking for
-            self.ANN.set_test(np.array((value_tem, value_den)).T)
-            # predict the result and denormalize them
-            self.ANN.predict()
-            tem = self.ANN.pred[:,0]*1e4
-            den = 10**self.ANN.pred[:,1]
+        if use_ANN:
+            try:
+                from mwinai import manage_RM
+                mwinai_OK = True
+            except:
+                mwinai_OK = False
+                pn.log_.warn('MWINAI not installed')
+            if mwinai_OK:      
+                if start_tem == -1:
+                    tem_min = 5000.
+                else:
+                    tem_min = start_tem
+                if end_tem == -1:
+                    tem_max = 20000.
+                else:
+                    tem_max = end_tem
+                if start_den == -1:
+                    den_min = 10.
+                else:
+                    den_min = start_den
+                if end_den == -1:
+                    den_max = 1e5
+                else:
+                    den_max = end_den
+                # define emisGrid objects to generate Te-Ne emissionmaps
+                tem_EG = pn.EmisGrid(atomObj=atom_tem, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                den_EG = pn.EmisGrid(atomObj=atom_den, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                # compute emission line ratio maps in the Te-Ne space
+                tem_2D = tem_EG.getGrid(to_eval = eval_tem)
+                den_2D = den_EG.getGrid(to_eval = eval_den)
+                # X is a set of line ratio pairs
+                X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+                # y is a set of corresponding Te-Ne pairs
+                y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
+                # Instantiate, init and train the ANN
+                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+                self.ANN.init_RM(**self.ANN_init_kwargs)
+                self.ANN.train_RM()
+                # set the test values to the one we are looking for
+                self.ANN.set_test(np.array((value_tem, value_den)).T)
+                # predict the result and denormalize them
+                self.ANN.predict()
+                tem = self.ANN.pred[:,0]*1e4
+                den = 10**self.ANN.pred[:,1]
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
