@@ -190,6 +190,13 @@ class Diagnostics(object):
         self.NLevels = NLevels
         if addAll:
             self.addAll()
+        self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
+                                'verbose' : True, 
+                                'scaling' : True}
+        self.ANN_init_kwargs = {'solver' : 'lbfgs', 
+                                'activation' : 'tanh', 
+                                'hidden_layer_sizes' : (10, 30, 10), 
+                                'max_iter' : 20000}
 
 
     def getDiagFromLabel(self, label):
@@ -611,7 +618,7 @@ class Diagnostics(object):
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_mwinai=False):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_ANN=False):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -635,6 +642,10 @@ class Diagnostics(object):
         - maxError   maximum error in the calls to getTemDen, in %
         - start_tem, end_tem  lower and upper limit of the explored temperature range 
         - start_den, end_den  lower and upper limit of the explored density range 
+        - use_ANN    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
+                        manage_RM from mwinai library is used.
+                        the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
+                        self.ANN_init_kwargs dictionnaries.
     
         Example:
             tem, den = diags.getCrossTemDen('[OIII] 4363/5007', '[SII] 6731/6716', 0.0050, 1.0, 
@@ -718,7 +729,7 @@ class Diagnostics(object):
                 return None
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
-        if use_mwinai and mwinai_OK:
+        if use_ANN and mwinai_OK:
             
             if start_tem == -1:
                 tem_min = 5000.
@@ -733,29 +744,31 @@ class Diagnostics(object):
             else:
                 den_min = start_den
             if end_den == -1:
-                den_max = 1e8
+                den_max = 1e5
             else:
                 den_max = end_den
-            print(tem_min, tem_max, den_min, den_max)
+            # define emisGrid objects to generate Te-Ne emissionmaps
             tem_EG = pn.EmisGrid(atomObj=atom_tem, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
                                  den_min=den_min, den_max=den_max)
             den_EG = pn.EmisGrid(atomObj=atom_den, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
                                  den_min=den_min, den_max=den_max)
+            # compute emission line ratio maps in the Te-Ne space
             tem_2D = tem_EG.getGrid(to_eval = eval_tem)
             den_2D = den_EG.getGrid(to_eval = eval_den)
-            print(tem_2D.shape, den_2D.shape)
+            # X is a set of line ratio pairs
             X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+            # y is a set of corresponding Te-Ne pairs
             y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
-            print(X.shape)
-            print(y.shape)
-            RM = manage_RM(RM_type='SK_ANN', X_train=X, y_train=y, verbose=True, 
-                           scaling=True, random_seed=42)
-            RM.init_RM(solver='lbfgs', activation='tanh', hidden_layer_sizes=(10, 30, 10), max_iter=20000)
-            RM.train_RM()
-            RM.set_test(np.array((value_tem, value_den)).T)
-            RM.predict()
-            tem = RM.pred[:,0]*1e4
-            den = 10**RM.pred[:,1]
+            # Instantiate, init and train the ANN
+            self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+            self.ANN.init_RM(**self.ANN_init_kwargs)
+            self.ANN.train_RM()
+            # set the test values to the one we are looking for
+            self.ANN.set_test(np.array((value_tem, value_den)).T)
+            # predict the result and denormalize them
+            self.ANN.predict()
+            tem = self.ANN.pred[:,0]*1e4
+            den = 10**self.ANN.pred[:,1]
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
