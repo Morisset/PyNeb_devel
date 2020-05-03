@@ -185,6 +185,8 @@ class Diagnostics(object):
         self.NLevels = NLevels
         if addAll:
             self.addAll()
+        self.ANN_n_tem=30
+        self.ANN_n_den=30
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
                                 'scaling' : True}
@@ -641,6 +643,9 @@ class Diagnostics(object):
                         manage_RM from mwinai library is used.
                         the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
                         self.ANN_init_kwargs dictionnaries.
+                        self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
+                        used to train. May also be changed before calling getCrossTemDen
+
     
         Example:
             tem, den = diags.getCrossTemDen('[OIII] 4363/5007', '[SII] 6731/6716', 0.0050, 1.0, 
@@ -749,9 +754,13 @@ class Diagnostics(object):
                 else:
                     den_max = end_den
                 # define emisGrid objects to generate Te-Ne emissionmaps
-                tem_EG = pn.EmisGrid(atomObj=atom_tem, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
+                tem_EG = pn.EmisGrid(atomObj=atom_tem, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
                                      den_min=den_min, den_max=den_max)
-                den_EG = pn.EmisGrid(atomObj=atom_den, n_tem=30, n_den=30, tem_min=tem_min, tem_max=tem_max,
+                den_EG = pn.EmisGrid(atomObj=atom_den, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
                                      den_min=den_min, den_max=den_max)
                 # compute emission line ratio maps in the Te-Ne space
                 tem_2D = tem_EG.getGrid(to_eval = eval_tem)
