@@ -189,11 +189,14 @@ class Diagnostics(object):
         self.ANN_n_den=30
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
-                                'scaling' : True}
+                                'scaling' : True,
+                                'use_log' : True
+                                }
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
                                 'hidden_layer_sizes' : (10, 30, 10), 
-                                'max_iter' : 20000}
+                                'max_iter' : 20000
+                                }
 
 
     def getDiagFromLabel(self, label):
@@ -738,7 +741,7 @@ class Diagnostics(object):
                 pn.log_.warn('MWINAI not installed')
             if mwinai_OK:      
                 if start_tem == -1:
-                    tem_min = 5000.
+                    tem_min = 3000.
                 else:
                     tem_min = start_tem
                 if end_tem == -1:
@@ -750,7 +753,7 @@ class Diagnostics(object):
                 else:
                     den_min = start_den
                 if end_den == -1:
-                    den_max = 1e5
+                    den_max = 1e6
                 else:
                     den_max = end_den
                 # define emisGrid objects to generate Te-Ne emissionmaps
@@ -777,8 +780,16 @@ class Diagnostics(object):
                 self.ANN.set_test(np.array((value_tem, value_den)).T)
                 # predict the result and denormalize them
                 self.ANN.predict()
-                tem = self.ANN.pred[:,0]*1e4
-                den = 10**self.ANN.pred[:,1]
+                if self.ANN.isfin is None:
+                    tem = self.ANN.pred[:,0]*1e4
+                    den = 10**self.ANN.pred[:,1]
+                else:
+                    tem = np.zeros_like(value_tem) * -10
+                    tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
+                    den = np.zeros_like(value_tem) * -10
+                    den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+                tem[(tem<tem_min) | (tem>tem_max)] = np.nan
+                den[(den<den_min) | (den>den_max)] = np.nan
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
