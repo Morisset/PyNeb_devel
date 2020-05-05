@@ -618,7 +618,7 @@ class Diagnostics(object):
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_ANN=False):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_ANN=False, limit_res=False):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -648,6 +648,8 @@ class Diagnostics(object):
                         self.ANN_init_kwargs dictionnaries.
                         self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
                         used to train. May also be changed before calling getCrossTemDen
+        - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
+                     start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
 
     
         Example:
@@ -788,8 +790,9 @@ class Diagnostics(object):
                     tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
                     den = np.zeros_like(value_tem) * -10
                     den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
-                tem[(tem<tem_min) | (tem>tem_max)] = np.nan
-                den[(den<den_min) | (den>den_max)] = np.nan
+                if limit_res:
+                    tem[(tem<tem_min) | (tem>tem_max)] = np.nan
+                    den[(den<den_min) | (den>den_max)] = np.nan
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
