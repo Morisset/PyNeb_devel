@@ -740,7 +740,7 @@ class Diagnostics(object):
                 ai4neb_OK = True
             except:
                 ai4neb_OK = False
-                pn.log_.warn('MWINAI not installed')
+                pn.log_.error('ai4neb is not installed')
             if ai4neb_OK:      
                 if start_tem == -1:
                     tem_min = 3000.
