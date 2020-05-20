@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import interpolate
 import os
+import sys
 import re
 import pyneb as pn
 if pn.config.Chianti_version_main == '8':
@@ -39,9 +40,14 @@ def Chianti_getE(ion_chianti, NLevels=None):
     Es = _chianti_tools.elvlcRead(ion_chianti)
     if not 'j' in Es:
         return None
-    dtype = [('ecmth', '<f8'), ('ionS', 'S10'), ('term', 'S20'),  ('pretty', 'S30'), 
-             ('spd', 'S10'), ('ecm', '<f8'), ('j', '<f8'), ('l', '<i8'), ('erydth', '<f8'), 
-             ('conf', '<i8'), ('lvl', '<i8'), ('spin', '<i8'), ('eryd', '<f8'), ('mult', '<i8')]
+    if sys.version_info.major < 3:
+        dtype = [('ecmth', '<f8'), ('ionS', 'S10'), ('term', 'S20'),  ('pretty', 'S30'), 
+                 ('spd', 'S10'), ('ecm', '<f8'), ('j', '<f8'), ('l', '<i8'), ('erydth', '<f8'), 
+                 ('conf', '<i8'), ('lvl', '<i8'), ('spin', '<i8'), ('eryd', '<f8'), ('mult', '<i8')]
+    else:
+        dtype = [('ecmth', '<f8'), ('ionS', 'U10'), ('term', 'U20'),  ('pretty', 'U30'), 
+                 ('spd', 'U10'), ('ecm', '<f8'), ('j', '<f8'), ('l', '<i8'), ('erydth', '<f8'), 
+                 ('conf', '<i8'), ('lvl', '<i8'), ('spin', '<i8'), ('eryd', '<f8'), ('mult', '<i8')]        
     arr = np.recarray((len(Es['j']),), dtype=dtype)
     for k in Es.keys():
         if k not in ('status', 'ref', 'label', 'filename'):
@@ -278,7 +284,7 @@ class _AtomChianti(object):
             this_NLevels = None
         else:
             if self.Chianti2NIST is not None:
-                this_NLevels = np.max((self.NLevels, np.max(self.Chianti2NIST.values()[0:self.NLevels])))
+                this_NLevels = np.max((self.NLevels, np.max(list(self.Chianti2NIST.values())[0:self.NLevels])))
             else:
                 this_NLevels = self.NLevels
                 

@@ -185,6 +185,18 @@ class Diagnostics(object):
         self.NLevels = NLevels
         if addAll:
             self.addAll()
+        self.ANN_n_tem=30
+        self.ANN_n_den=30
+        self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
+                                'verbose' : False, 
+                                'scaling' : True,
+                                'use_log' : True
+                                }
+        self.ANN_init_kwargs = {'solver' : 'lbfgs', 
+                                'activation' : 'tanh', 
+                                'hidden_layer_sizes' : (10, 30, 10), 
+                                'max_iter' : 20000
+                                }
 
 
     def getDiagFromLabel(self, label):
@@ -606,7 +618,7 @@ class Diagnostics(object):
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_ANN=False, limit_res=False):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -630,6 +642,15 @@ class Diagnostics(object):
         - maxError   maximum error in the calls to getTemDen, in %
         - start_tem, end_tem  lower and upper limit of the explored temperature range 
         - start_den, end_den  lower and upper limit of the explored density range 
+        - use_ANN    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
+                        manage_RM from mwinai library is used.
+                        the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
+                        self.ANN_init_kwargs dictionnaries.
+                        self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
+                        used to train. May also be changed before calling getCrossTemDen
+        - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
+                     start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
+
     
         Example:
             tem, den = diags.getCrossTemDen('[OIII] 4363/5007', '[SII] 6731/6716', 0.0050, 1.0, 
@@ -713,49 +734,109 @@ class Diagnostics(object):
                 return None
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
-        den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
-                                 maxError=maxError, start_x=start_den, end_x=end_den)
-        
-        tem = atom_tem.getTemDen(value_tem, den=den, to_eval=eval_tem,
-                                 maxError=maxError, start_x=start_tem, end_x=end_tem)
-#        self.log_.debug('tem: ' + str(tem) + ' den:' + str(den), calling='getCrossTemDen')
-        no_conv = np.ones_like(den).astype(bool)
-        n_tot = np.asarray(value_tem).size
-        for i in np.arange(max_iter):
-            if type(tem) == type(1.):
-                tem_old = tem
-            else:
-                tem_old = tem.copy()
-            if type(den) == type(1.):
-                den_old = den
-            else:
-                den_old = den.copy()
-            
-            if n_tot > 1:
-                den[no_conv] = atom_den.getTemDen(value_den[no_conv], tem=tem_old[no_conv],
-                                                  to_eval=eval_den, start_x=start_den, end_x=end_den)
-                tem[no_conv] = atom_tem.getTemDen(value_tem[no_conv], den=den_old[no_conv],
-                                                  to_eval=eval_tem, start_x=start_tem, end_x=end_tem)
-            else:
-                den = atom_den.getTemDen(value_den, tem=tem_old, to_eval=eval_den, start_x=start_den, end_x=end_den)
-                tem = atom_tem.getTemDen(value_tem, den=den_old, to_eval=eval_tem, start_x=start_tem, end_x=end_tem)
-                
-            no_conv = ((abs(den_old - den) / den * 100) > tol_den) | ((abs(tem_old - tem) / tem * 100) > tol_tem)
-            if type(no_conv) == type(True):
-                n_no_conv = int(no_conv)
-            else:
-                n_no_conv = no_conv.sum()
-            
-            pn.log_.message('{0} (max={1}): not converged {2} of {3}.'.format(i, max_iter, n_no_conv, n_tot),
-                            calling=calling)
-            if n_no_conv == 0:
-                return tem, den
-        if n_tot == 1:
-            tem = np.nan
-            den = np.nan
+        if use_ANN:
+            try:
+                from ai4neb import manage_RM
+                ai4neb_OK = True
+            except:
+                ai4neb_OK = False
+                pn.log_.error('ai4neb is not installed')
+            if ai4neb_OK:      
+                if start_tem == -1:
+                    tem_min = 3000.
+                else:
+                    tem_min = start_tem
+                if end_tem == -1:
+                    tem_max = 20000.
+                else:
+                    tem_max = end_tem
+                if start_den == -1:
+                    den_min = 10.
+                else:
+                    den_min = start_den
+                if end_den == -1:
+                    den_max = 1e6
+                else:
+                    den_max = end_den
+                # define emisGrid objects to generate Te-Ne emissionmaps
+                tem_EG = pn.EmisGrid(atomObj=atom_tem, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                den_EG = pn.EmisGrid(atomObj=atom_den, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                # compute emission line ratio maps in the Te-Ne space
+                tem_2D = tem_EG.getGrid(to_eval = eval_tem)
+                den_2D = den_EG.getGrid(to_eval = eval_den)
+                # X is a set of line ratio pairs
+                X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+                # y is a set of corresponding Te-Ne pairs
+                y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
+                # Instantiate, init and train the ANN
+                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+                self.ANN.init_RM(**self.ANN_init_kwargs)
+                self.ANN.train_RM()
+                # set the test values to the one we are looking for
+                self.ANN.set_test(np.array((value_tem, value_den)).T)
+                # predict the result and denormalize them
+                self.ANN.predict()
+                if self.ANN.isfin is None:
+                    tem = self.ANN.pred[:,0]*1e4
+                    den = 10**self.ANN.pred[:,1]
+                else:
+                    tem = np.zeros_like(value_tem) * -10
+                    tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
+                    den = np.zeros_like(value_tem) * -10
+                    den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+                if limit_res:
+                    tem[(tem<tem_min) | (tem>tem_max)] = np.nan
+                    den[(den<den_min) | (den>den_max)] = np.nan
         else:
-            tem[no_conv] = np.nan
-            den[no_conv] = np.nan
+            den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
+                                     maxError=maxError, start_x=start_den, end_x=end_den)
+            
+            tem = atom_tem.getTemDen(value_tem, den=den, to_eval=eval_tem,
+                                     maxError=maxError, start_x=start_tem, end_x=end_tem)
+    #        self.log_.debug('tem: ' + str(tem) + ' den:' + str(den), calling='getCrossTemDen')
+            no_conv = np.ones_like(den).astype(bool)
+            n_tot = np.asarray(value_tem).size
+            for i in np.arange(max_iter):
+                if type(tem) == type(1.):
+                    tem_old = tem
+                else:
+                    tem_old = tem.copy()
+                if type(den) == type(1.):
+                    den_old = den
+                else:
+                    den_old = den.copy()
+                
+                if n_tot > 1:
+                    den[no_conv] = atom_den.getTemDen(value_den[no_conv], tem=tem_old[no_conv],
+                                                      to_eval=eval_den, start_x=start_den, end_x=end_den)
+                    tem[no_conv] = atom_tem.getTemDen(value_tem[no_conv], den=den_old[no_conv],
+                                                      to_eval=eval_tem, start_x=start_tem, end_x=end_tem)
+                else:
+                    den = atom_den.getTemDen(value_den, tem=tem_old, to_eval=eval_den, start_x=start_den, end_x=end_den)
+                    tem = atom_tem.getTemDen(value_tem, den=den_old, to_eval=eval_tem, start_x=start_tem, end_x=end_tem)
+                    
+                no_conv = ((abs(den_old - den) / den * 100) > tol_den) | ((abs(tem_old - tem) / tem * 100) > tol_tem)
+                if type(no_conv) == type(True):
+                    n_no_conv = int(no_conv)
+                else:
+                    n_no_conv = no_conv.sum()
+                
+                pn.log_.message('{0} (max={1}): not converged {2} of {3}.'.format(i, max_iter, n_no_conv, n_tot),
+                                calling=calling)
+                if n_no_conv == 0:
+                    return tem, den
+            if n_tot == 1:
+                tem = np.nan
+                den = np.nan
+            else:
+                tem[no_conv] = np.nan
+                den[no_conv] = np.nan
         return tem, den
     
     def getDiagLimits(self, diag):

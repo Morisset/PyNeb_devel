@@ -2,7 +2,7 @@ import os
 import pyneb as pn
 import numpy as np
 import re
-from .misc import execution_path, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract
+from .misc import ROOT_DIR, parseAtom, roman_to_int, multi_split, int_to_roman, strExtract
 from .init import ELEM_LIST, SPEC_LIST
 from .physics import _predefinedDataFileDict
 
@@ -16,21 +16,22 @@ class _ManageAtomicData(object):
     def __init__(self):
         self.log_ = pn.log_
         self.calling = '_ManageAtomicData'
+        self.root_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
         self._predefinedDataFileDict = _predefinedDataFileDict
         self.setDataFileDict()
         self.addDataFilePath()
-        self.addDataFilePath('../atomic_data_fits/', inPyNeb=True)
-        self.addDataFilePath('../atomic_data/', inPyNeb=True)
+        self.addDataFilePath('atomic_data_fits/', inPyNeb=True)
+        self.addDataFilePath('atomic_data/', inPyNeb=True)
         self.addDataFilePath('./')
         self._RecombData = {}
         self._initChianti()
-        self.read_gsconf()
-
+        self.read_gsconf()        
+        
     def includeFitsPath(self):
-        self.addDataFilePath('../atomic_data_fits/old_fits/', inPyNeb=True)
+        self.addDataFilePath('atomic_data_fits/old_fits/', inPyNeb=True)
 
     def removeFitsPath(self):
-        self.removeDataFilePath('../atomic_data_fits/old_fits/')
+        self.removeDataFilePath('atomic_data_fits/old_fits/')
         
     def getPredefinedDataFileDict(self, data_dict=None):
         """
@@ -106,7 +107,7 @@ class _ManageAtomicData(object):
         else:
             try:
                 if inPyNeb:
-                    self._DataFilePaths.append(execution_path(fits_dir))
+                    self._DataFilePaths.append(ROOT_DIR + '/' + fits_dir)
                 else:
                     self._DataFilePaths.append(os.path.abspath(fits_dir))
             except:
@@ -129,7 +130,7 @@ class _ManageAtomicData(object):
             except:
                 pass
             try:
-                self._DataFilePaths.remove(execution_path(fits_dir))
+                self._DataFilePaths.remove(ROOT_DIR + '/' + fits_dir)
             except:
                 pass
  
@@ -506,7 +507,12 @@ You may mean one of these files: {1}""".format(data_file, av_data),
             except:
                 pn.log_.warn('File not found {}, no Chianti data available'.format(masterlist), 
                              calling='_initChianti')
-    def addAllChianti(self):
+    def addAllChianti(self, replace_all=False):
+        """
+        Adding all the Chianti file to the list of data available
+        replace_all: if True, replace already available data by the Chianti ones:
+            all the atoms will be Chianti (except HI, HeI and HeII)
+        """
         atoms = self.getAllAtoms()
         masterlist = '{0}/masterlist/masterlist.ions'.format(self.Chianti_path)
         try:
@@ -518,17 +524,18 @@ You may mean one of these files: {1}""".format(data_file, av_data),
         chianti_ions = [l[0:7].strip() for l in lines]
         chianti_ions = [i.capitalize().replace('_','') for i in chianti_ions if i[-1] != 'd']
         for cion in chianti_ions:
-            if cion not in atoms and cion not in ('H1', 'He1', 'He2'):
+            if (cion not in atoms or replace_all) and cion not in ('H1', 'He1', 'He2'):
                 try:
                     atfiles = self.getAllAvailableFiles(cion)
                     for atfile in atfiles:
-                        self.setDataFile(atfile)
+                        if atfile.split('.')[-1] == 'chianti':
+                            self.setDataFile(atfile)
                 except:
                     pass
     
     def read_gsconf(self):
         try:
-            gsconf = np.genfromtxt(execution_path('../atomic_data/levels/gsconfs.dat'), 
+            gsconf = np.genfromtxt(ROOT_DIR + '/' + 'atomic_data/levels/gsconfs.dat', 
                                    names=['atom', 'gsconf'], dtype='U5, U5')
             self.gsconf = {gs['atom']:gs['gsconf'] for gs in gsconf}
         except:
@@ -656,7 +663,7 @@ def getLevelsNIST(atom, NLevels = None):
     spec = int_to_roman(int(spec)).lower()
     atom_str = '{0}_{1}'.format(elem, spec)
     level_file = '{0}_levels.dat'.format(atom_str)
-    file_ = execution_path('../atomic_data/levels/{0}'.format(level_file))
+    file_ = ROOT_DIR + '/' + 'atomic_data/levels/{0}'.format(level_file)
     if os.path.isfile(file_):
         data = readNIST(file_, NLevels=NLevels)
         pn.log_.message('Reading energies and stat weights from {0}'.format(level_file), calling='getLevelsNIST')

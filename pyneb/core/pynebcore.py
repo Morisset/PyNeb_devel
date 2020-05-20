@@ -11,6 +11,7 @@ from __future__ import print_function
 import numpy as np
 import warnings
 import os
+import sys
 
 from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve, bs
@@ -202,13 +203,14 @@ class _AtomDataFits(object):
         """
         sources = [] 
         header = self.AtomHeader
-        for i in range(len(header.items())):
-            if 'SOURCE' in header.items()[i][0]:
-                number = header.items()[i][0].lstrip('SOURCE')
+        
+        for item in header.items():
+            if 'SOURCE' in item[0]:
+                number = item[0].lstrip('SOURCE')
                 try:
-                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    sources.append(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + 'Atomic data:'+ header.get('SOURCE' + str(number)))
         return sources
     
     
@@ -708,13 +710,13 @@ class _CollDataFits(object):
         """
         sources = []
         header = self.CollHeader
-        for i in range(len(header.items())):
-            if 'SOURCE' in header.items()[i][0]:
-                number = header.items()[i][0].lstrip('SOURCE')
+        for item in header.items():
+            if 'SOURCE' in item[0]:
+                number = item[0].lstrip('SOURCE')
                 try:
-                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    sources.append(self.atom + ': ' + 'Collision strengths:', header.get('SOURCE' + str(number)))
+                    sources.append(self.atom + ': ' + 'Collision strengths:'+ header.get('SOURCE' + str(number)))
         return sources
     
     def printSources(self):
@@ -737,9 +739,10 @@ class _CollDataFits(object):
         """
         self._test_lev(lev_i)
         self._test_lev(lev_j)
+        
         if (lev_i == -1):
             if (lev_j == -1):
-                ChebOrder = np.zeros([self.NLevels, self.NLevels])
+                ChebOrder = np.zeros([self.NLevels, self.NLevels], dtype='int')
                 for i in range(self.NLevels - 1):
                     lev_i = i + 1
                     j = i + 1
@@ -792,7 +795,7 @@ class _CollDataFits(object):
         if np.max(self._ChebOrder) == -1:
             return -1
         else:
-            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, np.max(self._ChebOrder)])
+            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, np.int(np.max(self._ChebOrder))])
             for i in range(self.NLevels - 1):
                 lev_i = i + 1
                 j = i + 1
@@ -2826,7 +2829,7 @@ class RecAtom(object):
                 self._RecombData = hf5
                 log_.message('HDF5 data read from {} using Astropy.table'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         elif config.INSTALLED['h5py']:
             try:
                 hf5 = h5py.File(self.recFitsFullPath, 'r')
@@ -2834,7 +2837,7 @@ class RecAtom(object):
                 hf5.close()
                 log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         if self.atom in config.DataFiles:
             if self.recFitsFile not in config.DataFiles[self.atom]:
                 config.DataFiles[self.atom].append(self.recFitsFile)
@@ -2866,6 +2869,7 @@ class RecAtom(object):
 
         """
         
+        self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
         for record in header.items():
             if 'SOURCE' in record[0]:
@@ -2915,11 +2919,13 @@ class RecAtom(object):
             if 'SOURCE' in record[0]:
                 number = record[0].lstrip('SOURCE')
                 try:
-                    self.sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':', header.get('SOURCE' + str(number)))
+                    self.sources.append(self.atom + ': ' + header.get('NOTE' + str(number)) + ':'+ header.get('SOURCE' + str(number)))
                 except:
-                    self.sources.append(self.atom + ': ' + 'Atomic data:', header.get('SOURCE' + str(number)))
+                    self.sources.append(self.atom + ': ' + 'Atomic data:'+ header.get('SOURCE' + str(number)))
         
             
+        if self.recFitsFile.split('.')[0][-4:] == 'SH95':
+            self.useNIST = True
         log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadFunctions(self):
@@ -4344,6 +4350,8 @@ class Observation(object):
             #names_locations = [name in self.names for name in data_tab.dtype.names]
             #errors_locations = [name[0:3] == 'err' for name in data_tab.dtype.names]
             for i, label in enumerate(data_tab['LINE']):
+                if sys.version_info.major >= 3:
+                    label = label.decode()
                 label = label.strip()
                 if label == 'cHbeta':
                     self.extinction.cHbeta = np.array([data_tab[i][name] for name in self.names])
