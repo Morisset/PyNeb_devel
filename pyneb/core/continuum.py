@@ -113,6 +113,7 @@ class Continuum(object):
         wl: wavelength [Angstrom]. May be a float or a numpy array
         Return 2 photons continuum [erg/s.cm3/A]
         """
+        #ToDo : See Schirmer, M. 2016, PASP, 128, 114001 
         try:
             _ = (e for e in wl)
         except TypeError:
