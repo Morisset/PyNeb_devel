@@ -736,12 +736,12 @@ class Diagnostics(object):
             if type(value_den) == type([]): value_den = np.asarray(value_den)
         if use_ANN:
             try:
-                from mwinai import manage_RM
-                mwinai_OK = True
+                from ai4neb import manage_RM
+                ai4neb_OK = True
             except:
-                mwinai_OK = False
+                ai4neb_OK = False
                 pn.log_.warn('MWINAI not installed')
-            if mwinai_OK:      
+            if ai4neb_OK:      
                 if start_tem == -1:
                     tem_min = 3000.
                 else:
