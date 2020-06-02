@@ -1372,6 +1372,18 @@ class Atom(object):
         else:
             self.EnergyNLevels = None
         self.source = self.getSources()
+        self.ANN_n_temden=30
+        self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
+                                'verbose' : False, 
+                                'scaling' : True,
+                                'use_log' : True
+                                }
+        self.ANN_init_kwargs = {'solver' : 'lbfgs', 
+                                'activation' : 'tanh', 
+                                'hidden_layer_sizes' : (10, 10), 
+                                'max_iter' : 20000
+                                }
+        
             
     def getOmega(self, tem, lev_i= -1, lev_j= -1, wave= -1):
         """
@@ -2083,6 +2095,19 @@ class Atom(object):
                 return np.nan
 
             result = nsect_iter(_func, start_x, end_x, nCut, maxIter)
+            
+        elif method == 'ANN':
+            try:
+                from ai4neb import manage_RM
+                ai4neb_OK = True
+            except:
+                ai4neb_OK = False
+                self.log_.error('ai4neb is not installed')
+            if ai4neb_OK:
+                pass
+#                X_train =
+#                y_train = 
+#                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)            
             
         else:
             self.log_.error('ERROR in getTemDen: no valid method given', calling=self.calling)
