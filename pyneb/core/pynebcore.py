@@ -151,11 +151,11 @@ class _AtomDataFits(object):
             pass
         if 'SPECTRUM' in self.AtomHeader:
             if int(self.AtomHeader['SPECTRUM']) != self.spec:
-                log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
+                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
                                                                                                     self.spec), calling=self.calling)
         if 'ATOM' in self.AtomHeader:
             if self.AtomHeader['ATOM'] != sym2name[self.elem]:
-                log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
+                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)
                 
         #Read data
@@ -164,7 +164,7 @@ class _AtomDataFits(object):
         try:
             self.atomNLevels = self.AtomHeader['N_LEVELS']
         except:
-            log_.error('N_LEVELS is not set in {0}'.format(self.atomFitsFile))
+            self.log_.error('N_LEVELS is not set in {0}'.format(self.atomFitsFile))
             
         self.log_.message('NLevels of atomic data: {0}'.format(self.atomNLevels),
                           calling=self.calling)
@@ -370,7 +370,7 @@ class _AtomDataAscii(object):
                 self.comments[key] = com.split(key)[1].strip()
             A = at_data.copy()
             if A.shape[0] != A.shape[1]:
-                log_.error('Atomic data must be a NxN matrix', calling=self.calling) 
+                self.log_.error('Atomic data must be a NxN matrix', calling=self.calling) 
             if self.NLevels is not None:
                 A = A[0:self.NLevels, 0:self.NLevels]
             self.NLevels = A.shape[0]
@@ -420,7 +420,7 @@ class _AtomDataAscii(object):
                 source = source + web.format(ref[1:], self.elem, self.spec) + ')\n  + ' 
             self.comments['SOURCE'] = source[0:-5]
         elif need_NIST:
-            log_.error('NIST data are needed for this format of atomic data', calling=self.calling) 
+            self.log_.error('NIST data are needed for this format of atomic data', calling=self.calling) 
         
         self._Energy = energy
         self._StatWeight = stat_weight
@@ -432,11 +432,11 @@ class _AtomDataAscii(object):
             self.gs = 'unknown'
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
-                log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFile, self.comments['SPECTRUM'],
+                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFile, self.comments['SPECTRUM'],
                                                                                                     self.spec), calling=self.calling)
         if 'ATOM' in self.comments:
             if self.comments['ATOM'] != sym2name[self.elem]:
-                log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFile, self.comments['ATOM'],
+                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFile, self.comments['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)
         if 'VACUUM' in self.comments:
             if self.comments['VACUUM'] == '1':
@@ -660,7 +660,7 @@ class _CollDataFits(object):
                                                                                                     self.spec), calling=self.calling)
         if 'ATOM' in self.CollHeader:
             if self.CollHeader['ATOM'] != sym2name[self.elem]:
-                log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFitsFile, self.CollHeader['ATOM'],
+                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFitsFile, self.CollHeader['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)
                 
         #Read data
@@ -669,7 +669,7 @@ class _CollDataFits(object):
             try:
                 self.NLevels = self.CollHeader['N_LEVELS']
             except:
-                log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
+                self.log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
             
         self.log_.message('NLevels of collisional data: {0}'.format(self.NLevels),
                           calling=self.calling)
@@ -1029,11 +1029,11 @@ class _CollDataAscii(object):
            
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
-                log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFile, self.comments['SPECTRUM'],
+                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFile, self.comments['SPECTRUM'],
                                                                                                     self.spec), calling=self.calling)
         if 'ATOM' in self.comments:
             if self.comments['ATOM'] != sym2name[self.elem]:
-                log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFile, self.comments['ATOM'],
+                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFile, self.comments['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)        
         
     def getSources(self):
@@ -1295,7 +1295,7 @@ class Atom(object):
             self.AtomData = _AtomDataNone()
             self.is_valid = False
         else:
-            log_.error('Atom file extensions must be fits, dat or chianti')
+            self.log_.error('Atom file extensions must be fits, dat or chianti')
                     
         self.atomFile = self.AtomData.atomFile
         self.atomPath = self.AtomData.atomPath
@@ -1381,6 +1381,7 @@ class Atom(object):
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
                                 'hidden_layer_sizes' : (10, 10), 
+                                'tol' : 1e-6,
                                 'max_iter' : 20000
                                 }
         
@@ -1434,7 +1435,7 @@ class Atom(object):
                           (1 + delta_E/((kappa-1.5)*CST.BOLTZMANN_eVK*tem))**(-kappa)) * np.exp(delta_E/CST.BOLTZMANN_eVK/tem)
     
                 Omega = correc * OmegaMB
-                log_.message('Correcting for Kappa={0} by {1}'.format(kappa, correc), self.calling)
+                self.log_.message('Correcting for Kappa={0} by {1}'.format(kappa, correc), self.calling)
 
             to_return = np.squeeze(Omega)
         if 'COEFF' in self.CollData.comments:
@@ -1875,7 +1876,7 @@ class Atom(object):
             try:
                 res = eval(BLEND_LIST['{0}_{1}'.format(self.atom, wave)])
             except:
-                log_.warn('{0} is not understood'.format(wave), calling=self.calling + 'getEmissivity')
+                self.log_.warn('{0} is not understood'.format(wave), calling=self.calling + 'getEmissivity')
                 res = None
             return res
         self._test_lev(lev_i)
@@ -1886,7 +1887,7 @@ class Atom(object):
             lev_i, lev_j = self.getTransition(wave)
         NLevels = self.NLevels
         if lev_i > NLevels or lev_j > NLevels:
-            log_.error('The number of levels {} does not allow getting this emissivity ({}-{}). Consider changing the atomic data'.format(NLevels,lev_i, lev_j),
+            self.log_.error('The number of levels {} does not allow getting this emissivity ({}-{}). Consider changing the atomic data'.format(NLevels,lev_i, lev_j),
                           calling=self.calling) 
         if product:
             n_tem = tem.size
@@ -2068,6 +2069,7 @@ class Atom(object):
                     x1 = x[x_min - 1]
                     x2 = x[x_min + 1]
                     _iter = _iter + 1
+                    #print(x1, x2)
                     return nsect_recur(f, x1, x2, nCut=nCut, maxIter=maxIter, _iter=_iter)
 
             result = nsect_recur(_func, start_x, end_x, nCut, maxIter)
@@ -2095,20 +2097,7 @@ class Atom(object):
                 return np.nan
 
             result = nsect_iter(_func, start_x, end_x, nCut, maxIter)
-            
-        elif method == 'ANN':
-            try:
-                from ai4neb import manage_RM
-                ai4neb_OK = True
-            except:
-                ai4neb_OK = False
-                self.log_.error('ai4neb is not installed')
-            if ai4neb_OK:
-                pass
-#                X_train =
-#                y_train = 
-#                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)            
-            
+                        
         else:
             self.log_.error('ERROR in getTemDen: no valid method given', calling=self.calling)
             result = None
@@ -2124,7 +2113,7 @@ class Atom(object):
                   to_eval=None, nCut=30, maxIter=20):
         
         if not config.INSTALLED['mp']:
-            log_.error('_getTemDen_MP cannot be used in absence of multiprocessing package',
+            self.log_.error('_getTemDen_MP cannot be used in absence of multiprocessing package',
                           calling=self.calling)
             return None
         self._test_lev(lev_i1)
@@ -2159,18 +2148,18 @@ class Atom(object):
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
         
         Nprocs = config.Nprocs
-        log_.message('number of CPUs = {0}'.format(Nprocs), calling=self.calling + '.getTemDenMP')
+        self.log_.message('number of CPUs = {0}'.format(Nprocs), calling=self.calling + '.getTemDenMP')
         gTDWorkerQ = Queue()
         gTDDoneQ = Queue()
-        log_.message('Queues initialized', calling=self.calling + '.getTemDenMP')
+        self.log_.message('Queues initialized', calling=self.calling + '.getTemDenMP')
         jobid = 0
         for int_rat1, tem1, den1 in zip(int_ratio_ravel, tem_ravel, den_ravel):
             gTDWorkerQ.put((jobid, int_rat1, tem1, den1))
             jobid += 1
-        log_.message('put done', calling=self.calling + '.getTemDenMP')
+        self.log_.message('put done', calling=self.calling + '.getTemDenMP')
         #gTDWorkerQSize = gTDWorkerQ.qsize() # this crash on OSX
         gTDWorkerQSize = size
-        log_.message('Queue size {0}'.format(gTDWorkerQSize), calling=self.calling + '.getTemDenMP')
+        self.log_.message('Queue size {0}'.format(gTDWorkerQSize), calling=self.calling + '.getTemDenMP')
 
         
         gTDProcesses = []
@@ -2179,17 +2168,17 @@ class Atom(object):
                   wave1, wave2, maxError, method, log, start_x, end_x, to_eval, nCut, maxIter, self.NLevels))
             p.start()
             gTDProcesses.append(p)
-        log_.message('processes started', calling=self.calling + '.getTemDenMP')
+        self.log_.message('processes started', calling=self.calling + '.getTemDenMP')
 
         #
         result = []
         for i in range(gTDWorkerQSize):
             result.append(gTDDoneQ.get())
-        log_.message('Result obtained', calling=self.calling + '.getTemDenMP')
+        self.log_.message('Result obtained', calling=self.calling + '.getTemDenMP')
 
         for p in gTDProcesses:
             p.join(timeout=0.1)
-        log_.message('Joined', calling=self.calling + '.getTemDenMP')
+        self.log_.message('Joined', calling=self.calling + '.getTemDenMP')
 
         for i in range(Nprocs):
             gTDWorkerQ.put('STOP')
@@ -2198,6 +2187,101 @@ class Atom(object):
         return to_return.reshape(int_ratio.shape)
 
     
+    @profile
+    def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
+                  wave1= -1, wave2= -1, start_x= -1, end_x= -1, to_eval=None):
+        
+        try:
+            from ai4neb import manage_RM
+            ai4neb_OK = True
+        except:
+            ai4neb_OK = False
+            self.log_.error('ai4neb is not installed')
+            return None
+        
+        self._test_lev(lev_i1)
+        self._test_lev(lev_j1)
+        self._test_lev(lev_i2)
+        self._test_lev(lev_j2)
+        if wave1 != -1:
+            lev_i1, lev_j1 = self.getTransition(wave1)
+        if wave2 != -1:
+            lev_i2, lev_j2 = self.getTransition(wave2)
+
+        if to_eval is None:
+            to_eval = 'I(' + str(lev_i1) + ',' + str(lev_j1) + ')/I(' + str(lev_i2) + ',' + str(lev_j2) + ')'
+            
+        tem = np.asarray(tem)
+        den = np.asarray(den)
+
+            
+        X1_test = np.asarray(int_ratio).ravel()
+        if (tem == -1).any(): # Looking for Tem
+            if np.asarray(den).size == 1: # Single density
+                N_train = self.ANN_n_temden
+                X2_test = np.zeros_like(X1_test) + den
+                X2_train = np.zeros(N_train) + den
+            else: # Multiple densities
+                if np.asarray(den).shape != np.asarray(int_ratio).shape:
+                    self.log_.error('getTemDen: int_ratio and tem/den must have the same size', calling=self.calling)
+                    return None
+                N_train = self.ANN_n_temden**2
+                X2_test = np.asarray(den).ravel()
+                X2_train = np.min(den) + np.random.rand(N_train) * (np.max(den) - np.min(den)) 
+                
+            if start_x == -1:
+                start_x = min(self.getTemArray(keep_unit=False))
+            if end_x == -1:
+                end_x = max(self.getTemArray(keep_unit=False))
+            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
+            
+            def I(lev_i, lev_j):
+                return self.getEmissivity(tem=y_train, den=X2_train, lev_i= lev_i, lev_j= lev_j, product=False) 
+            def L(wave):
+                return self.getEmissivity(tem=y_train, den=X2_train, wave=wave, product=False) 
+            
+        elif (den == -1).any(): # Looking for density
+            if np.asarray(tem).size == 1:
+                N_train = self.ANN_n_temden
+                X2_test = np.zeros_like(X1_test) + tem
+                X2_train = np.zeros(N_train) + tem
+            else:
+                if np.asarray(tem).shape != np.asarray(int_ratio).shape:
+                    self.log_.error('getTemDen: int_ratio and tem/den must have the same size', calling=self.calling)
+                    return None
+                N_train = self.ANN_n_temden**2
+                X2_test = np.asarray(tem).ravel()
+                X2_train = np.min(tem) + np.random.rand(N_train) * (np.max(tem) - np.min(tem)) 
+            
+            if start_x == -1:
+                start_x = 1.e0
+            if end_x == -1:
+                end_x = 1e8
+            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
+            def I(lev_i, lev_j):
+                return self.getEmissivity(tem=X2_train, den=y_train, lev_i= lev_i, lev_j= lev_j, product=False) 
+            def L(wave):
+                return self.getEmissivity(tem=X2_train, den=y_train, wave=wave, product=False) 
+        else:
+            self.log_.error('getTemDen: one of tem or den must be unset', calling=self.calling)
+
+        X1_train = eval(to_eval)
+        X = np.array((X1_train, X2_train)).T
+        y = np.log10(y_train)
+        self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+        self.ANN.init_RM(**self.ANN_init_kwargs)
+        self.ANN.train_RM()
+        # set the test values to the one we are looking for
+        X_test = np.array((X1_test, X2_test)).T
+        self.ANN.set_test(X_test)
+        # predict the result and denormalize them
+        self.ANN.predict()
+        to_return = np.ones_like(int_ratio) * np.nan
+        to_return[self.ANN.isfin] = self.ANN.pred
+        to_return = 10**to_return
+        return to_return
+
+
     @profile
     def getTemDen(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
                   wave1= -1, wave2= -1, maxError=1.e-3, method='nsect_recur', log=True, start_x= -1, end_x= -1,
@@ -2241,8 +2325,11 @@ class Atom(object):
             - nCut        number of sections in which each step is cut. 2 would be dichotomy.
             - maxIter     maximum number of iterations
 
-        """        
-        if config._use_mp:
+        """
+        if method == 'ANN':
+            return self._getTemDen_ANN(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
+                  wave1=wave1, wave2=wave2, start_x=start_x, end_x=end_x, to_eval=to_eval)            
+        elif config._use_mp:
             return self._getTemDen_MP(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
@@ -2348,10 +2435,10 @@ class Atom(object):
             print('density = %6.1f cm-3' % den)
         print("")
         if printPop and ((tem is None) or (den is None)):
-            log_.warn('Cannot print populations as tem or den is missing', calling=self.calling)
+            self.log_.warn('Cannot print populations as tem or den is missing', calling=self.calling)
             printPop = False
         if printCrit and (tem is None):
-            log_.warn('Cannot print critical densities as tem is missing', calling=self.calling)
+            self.log_.warn('Cannot print critical densities as tem is missing', calling=self.calling)
             printCrit = False
         to_print = ''
         if printPop:
@@ -2495,7 +2582,7 @@ class Atom(object):
         if ax is None:
             f, ax = plt.subplots()
         if not config.INSTALLED['plt']: 
-            log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
+            self.log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
             return None
         tem = np.logspace(np.log10(tem_min), np.log10(tem_max), 1000)
         total_emis = np.zeros_like(tem)
@@ -2547,10 +2634,10 @@ class Atom(object):
         if ax is None:
             f, ax = plt.subplots()
         if unit not in ['eV', 'Ryd', '1/Ang']:
-            log_.error('Unit {0} not available'.format(unit))
+            self.log_.error('Unit {0} not available'.format(unit))
             return None
         if not config.INSTALLED['plt']: 
-            log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
+            self.log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
             return None
         color_list = ['b', 'r', 'y', 'c', 'm', 'g']
         energies = self.getEnergy(unit=unit)
@@ -2609,7 +2696,7 @@ class Atom(object):
                              '\nThe labels of levels {2} are displayed in the wrong order' + \
                              '\nAssumed statistical weights: {3}' + \
                              '\nStatistical weights of data: {4}\n'
-                    log_.warn(to_print.format(i_multi + 1, self.atom, multiplets[i_multi], 
+                    self.log_.warn(to_print.format(i_multi + 1, self.atom, multiplets[i_multi], 
                                                  stat_weights, [self.getStatWeight()[k] for k in multiplets[i_multi]]), 
                                  calling=self.calling + '.plot')
 
@@ -2841,10 +2928,10 @@ class RecAtom(object):
         """
         
         if not config.INSTALLED['h5py'] and not config.INSTALLED['astropy Table']:
-            log_.error('You need to install astropy (prefered) or h5py', calling=self.calling)
+            self.log_.error('You need to install astropy (prefered) or h5py', calling=self.calling)
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
-            log_.error('No hdf5 data for atom: {0}'.format(self.atom), calling=self.calling)
+            self.log_.error('No hdf5 data for atom: {0}'.format(self.atom), calling=self.calling)
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
 
@@ -2852,17 +2939,17 @@ class RecAtom(object):
             try:
                 hf5 = Table.read(self.recFitsFullPath, path='updated_data')
                 self._RecombData = hf5
-                log_.message('HDF5 data read from {} using Astropy.table'.format(self.recFitsFullPath), calling=self.calling)
+                self.log_.message('HDF5 data read from {} using Astropy.table'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
+                self.log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         elif config.INSTALLED['h5py']:
             try:
                 hf5 = h5py.File(self.recFitsFullPath, 'r')
                 self._RecombData = hf5['updated_data'].value
                 hf5.close()
-                log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
+                self.log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
             except:
-                log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
+                self.log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
         if self.atom in config.DataFiles:
             if self.recFitsFile not in config.DataFiles[self.atom]:
                 config.DataFiles[self.atom].append(self.recFitsFile)
@@ -2871,11 +2958,11 @@ class RecAtom(object):
         try:
             self.temp = self._RecombData['TEMP']
         except:
-            log_.error('No TEMP field in {0}'.format(self.recFitsFile))
+            self.log_.error('No TEMP field in {0}'.format(self.recFitsFile))
         try:
             self.log_dens = self._RecombData['DENS']
         except:
-            log_.error('No DENS field in {0}'.format(self.recFitsFile))
+            self.log_.error('No DENS field in {0}'.format(self.recFitsFile))
         self.labels = tuple([l for l in self._RecombData.dtype.names if l not in ('TEMP', 'DENS')])
         if '_' in self._RecombData.dtype.names[0]:
             self.label_type = 'transitions'
@@ -2885,7 +2972,7 @@ class RecAtom(object):
             self.sources.append(self._RecombData.meta['SOURCE'])
         if self.recFitsFile.split('.')[0][-4:] == 'SH95':
             self.useNIST = True
-        log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
+        self.log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
        
     def _loadFit(self):
         """
@@ -2909,13 +2996,13 @@ class RecAtom(object):
         
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
-            log_.error('No fits data for atom: {0}'.format(self.atom), calling=self.calling)
+            self.log_.error('No fits data for atom: {0}'.format(self.atom), calling=self.calling)
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         try:
             hdu = pyfits.open(self.recFitsFullPath)
         except:
-            log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
+            self.log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
         self._RecombData = hdu[1].data
         header = hdu[1].header
         hdu.close()
@@ -2927,11 +3014,11 @@ class RecAtom(object):
         try:
             self.temp = self._RecombData['TEMP']
         except:
-            log_.error('No TEMP field in {0}'.format(self.recFitsFile))
+            self.log_.error('No TEMP field in {0}'.format(self.recFitsFile))
         try:
             self.log_dens = self._RecombData['DENS']
         except:
-            log_.error('No DENS field in {0}'.format(self.recFitsFile))
+            self.log_.error('No DENS field in {0}'.format(self.recFitsFile))
         self.labels = self._RecombData.names
         del self.labels[self.labels.index('TEMP')]
         del self.labels[self.labels.index('DENS')]
@@ -2951,7 +3038,7 @@ class RecAtom(object):
             
         if self.recFitsFile.split('.')[0][-4:] == 'SH95':
             self.useNIST = True
-        log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
+        self.log_.message('{0} recombination data read from {1}'.format(self.atom, self.recFitsFile), calling=self.calling)
 
     def _loadFunctions(self):
         """
@@ -2962,7 +3049,7 @@ class RecAtom(object):
         
         self.recFitsFile = atomicData.getDataFile(self.atom, 'rec')
         if self.recFitsFile is None:
-            log_.error('No func data for atom: {0}'.format(self.atom), calling=self.calling)
+            self.log_.error('No func data for atom: {0}'.format(self.atom), calling=self.calling)
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         with open(self.recFitsFullPath, 'r') as f:
@@ -3204,7 +3291,7 @@ class RecAtom(object):
             self.label_type = 'wavelengths'
         self.sources.append(source)
         self._emis_func = emis_func
-        log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), 
+        self.log_.message('{0} recombination data built from {1}'.format(self.atom, self.recFitsFile), 
                      calling=self.calling)
 
     def _loadTotRecombination(self):
@@ -3412,7 +3499,7 @@ class RecAtom(object):
             return label_str2
         else:
             if warn:
-                log_.warn('Label {0} not in {1}.'.format(label, self.recFitsFile), calling=self.calling)
+                self.log_.warn('Label {0} not in {1}.'.format(label, self.recFitsFile), calling=self.calling)
             return None
         
         
@@ -3452,7 +3539,7 @@ class RecAtom(object):
         """
         
         if not config.INSTALLED['scipy']:
-            log_.error('Scipy not installed, no RecAtom emissivities available',
+            self.log_.error('Scipy not installed, no RecAtom emissivities available',
                           calling=self.calling)
             return None
         tem = np.asarray(tem, dtype=float)
@@ -3467,7 +3554,7 @@ class RecAtom(object):
                 deng = deng.T
         else:
             if tem.size != den.size:
-                log_.error('tem and den must have the same size', calling=self.calling)
+                self.log_.error('tem and den must have the same size', calling=self.calling)
                 return None
             else:
                 temg = tem
@@ -3485,10 +3572,10 @@ class RecAtom(object):
             return res
         label_str = self._getLabelStr(label, warn=False)
         if label_str is None:
-            log_.warn('Wrong label {0}'.format(label), calling=self.calling)
+            self.log_.warn('Wrong label {0}'.format(label), calling=self.calling)
             return None
         if not self._checkLabel(label_str):
-            log_.warn('Wrong label {0}'.format(label_str), calling=self.calling)
+            self.log_.warn('Wrong label {0}'.format(label_str), calling=self.calling)
             return None
         
         if self.file_type == 'func':
@@ -3517,7 +3604,7 @@ class RecAtom(object):
                                        (1./temg, logd), method=method)
             if "h_i_rec_SH95" in self.recFitsFile:
                 if (temg < temp_min).sum() != 0 and self.extrapolate:
-                    log_.warn('Linear extrapolation on low Te', calling=self.calling)
+                    self.log_.warn('Linear extrapolation on low Te', calling=self.calling)
                     masklowte = temg < temp_min
                     temp_min2 = np.min(self.temp[self.temp > temp_min])
                     
@@ -3647,10 +3734,10 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
                                                              method=method, wave=wave, product=product)
     else:
         if (atom == 'H1') and (lev_i == 4) and (lev_j == 2):
-            log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
+            self.log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
             return getHbEmissivity(tem, den)
         else:
-            log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
+            self.log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
 
 
 def getHbEmissivity(tem= -1, den=1.):
@@ -3949,7 +4036,7 @@ class EmissionLine(object):
 
         """
         if not isinstance(RC, RedCorr):
-            log_.error('Trying to correct with something that is not a RedCor object',
+            self.log_.error('Trying to correct with something that is not a RedCor object',
                           calling=self.calling)
             return None
         if self.wave > 0.0:
@@ -4369,7 +4456,7 @@ class Observation(object):
             self.names = [name for name in data_tab.dtype.names[1::] if name[0:3] != 'err']
             error_names = [name for name in data_tab.dtype.names if name[0:3] == 'err']
             if len(self.names) != len(error_names):
-                log_.error('Number of columns for intensities <> number of columns for errors',
+                self.log_.error('Number of columns for intensities <> number of columns for errors',
                               calling=self.calling)
                 return None
             #names_locations = [name in self.names for name in data_tab.dtype.names]
@@ -4507,10 +4594,10 @@ class Observation(object):
         line1 = self.getLine(label=label1)
         line2 = self.getLine(label=label2)
         if line1 is None:
-            log_.error('{0} is not a valid label or is not observed'.format(line1), calling=self.calling)
+            self.log_.error('{0} is not a valid label or is not observed'.format(line1), calling=self.calling)
             return None
         if line2 is None:
-            log_.error('{0} is not a valid label or is not observed'.format(line2), calling=self.calling)
+            self.log_.error('{0} is not a valid label or is not observed'.format(line2), calling=self.calling)
             return None
 
         obs_over_theo = (line1.obsIntens / line2.obsIntens) / r_theo 
@@ -4531,7 +4618,7 @@ class Observation(object):
             factor = 1.
         line_norm = self.getLine(label=line_label) 
         if line_norm is None:
-            log_.warn('No normalization possible as {0} not found'.format(line_label), calling=self.calling)
+            self.log_.warn('No normalization possible as {0} not found'.format(line_label), calling=self.calling)
             return None
         for line in self.lines:
             line._obsIntens_n = line.obsIntens / (line_norm.obsIntens * factor)
@@ -4551,7 +4638,7 @@ class Observation(object):
                 self.correctData(l, normWave=normWave)
         else:
             if not isinstance(line, EmissionLine):
-                log_.error('Trying to correct something that is not a line', calling=self.calling)
+                self.log_.error('Trying to correct something that is not a line', calling=self.calling)
                 return None  
             line.correctIntens(self.extinction, normWave=normWave)
 
@@ -4591,10 +4678,10 @@ class Observation(object):
         n_lines = self.n_lines
         n_obs = self.n_obs
         if i_obs is None:
-            log_.message('Entering', calling='addMonteCarloObs')
+            self.log_.message('Entering', calling='addMonteCarloObs')
             for i in range(n_obs):
                 self.addMonteCarloObs(i_obs=i, N=N)
-            log_.message('Leaving', calling='addMonteCarloObs')
+            self.log_.message('Leaving', calling='addMonteCarloObs')
         else:
             if self.corrected:
                 returnObs=False
