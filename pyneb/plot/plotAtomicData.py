@@ -372,9 +372,9 @@ class DataPlot(object):
         Parameters:
             - save     Boolean. Determine if the plot is automatically saved in a file (default: False)
             - figsize  List. figure size in inches (default: [18, 12])
-            - fignum   Figure Number
+            - fignum   Figure Number DEPRECATED!!!
             - scan_orders = None or (min_order, max_order) or (min_order, -1) to go until the max. DEPRECATED!!!
-
+            - fig: DEPRECATED!!!
         """
         if NLevels is None:
             coll_n_max = self.coll_n_max
@@ -384,15 +384,17 @@ class DataPlot(object):
         if not pn.config.INSTALLED['plt']:
             pn.log_.error('Matplotlib not installed!', calling=self.calling)
         if fig is None:
-            fig = plt.figure(fignum, figsize=figsize)
+            #fig = plt.figure(fignum, figsize=figsize)
+            fig, axes = plt.subplots(coll_n_max-1, coll_n_max-1, figsize=figsize)
         plt.autoscale(tight=False)
         # I need two 
         first = True
         first_done = False
-        plt.clf()
         
         legend_text = []
         legend_lines = []
+        
+        axes_plotaxis = np.zeros_like(axes, dtype=bool)            
 #        style_dic = ['-', '--', '-.', ':'] * 10
         for data in self.coll_data:
             # tem_points = tabulated temperature points (different for each data set)
@@ -412,9 +414,8 @@ class DataPlot(object):
                 for j in range(i + 1, coll_n_max+1):                
                         # N levels require an N-1 x N-1 array of plots
                         # The subplots are arranged in rows and columns according to the upper and lower levels
- 
-                        ax = plt.subplot(coll_n_max-1, coll_n_max-1, 
-                                         (coll_n_max-1) * (j - 2) + i)
+                        ax = axes[j-2, i-1]
+                        axes_plotaxis[j-2, i-1] = True
                         if (i <= data['atom'].collNLevels) and (j <= data['atom'].collNLevels):
                             y_dots = data['atom'].getOmega(tem_points, j, i)
                             try:
@@ -437,7 +438,7 @@ class DataPlot(object):
 # Draws vertical lines at selected temperature values (only once for each subplot, hence "first") 
                         if (first and (data['atom'].collNLevels == coll_n_max)):
                             for tem in self.ref_tem:
-                                plt.axvline(tem, c='blue', alpha=0.4, ls=':')
+                                ax.axvline(tem, c='blue', alpha=0.4, ls=':')
                             lbl = "$\Omega$" + "(" + str(j) + "," + str(i) + ")"
                             ax.text(0.95, 0.95, lbl, transform=ax.transAxes, ha="right", va="top")   
                             first_done = True                                 
@@ -460,13 +461,16 @@ class DataPlot(object):
                  color="#191970", fontsize=16, ha='center')
 #        plt.legend(legend_lines, legend_text, loc='upper right', borderpad=1, 
 #                   labelspacing=1, bbox_to_anchor=(1, 1 * coll_n_max))
-        plt.legend(legend_lines, legend_text, loc='upper right', borderpad=1, 
-                   labelspacing=1, bbox_to_anchor=(1, coll_n_max - 1))
+        axes[0, coll_n_max-2].legend(legend_lines, legend_text, loc='upper right', borderpad=1, 
+                   labelspacing=1)
+        for ax, ax_plt in zip(axes.ravel(), axes_plotaxis.ravel()):
+            if not ax_plt:
+                ax.set_axis_off()
         #plt.tight_layout()
         if save:
-            plt.savefig(self.atom_rom + "_CS.pdf")
+            fig.savefig(self.atom_rom + "_CS.pdf")
         
-        plt.show()
+        fig.show()
 
 
     def tem_in_K(self, tem_units, tem):
