@@ -4456,7 +4456,8 @@ class Observation(object):
             self.names = [name for name in data_tab.dtype.names[1::] if name[0:3] != 'err']
             error_names = [name for name in data_tab.dtype.names if name[0:3] == 'err']
             if len(self.names) != len(error_names):
-                self.log_.error('Number of columns for intensities <> number of columns for errors',
+                self.log_.error('Number of columns for intensities <> number of columns for errors {} {}'.format(self.names,
+                                                                                                                 error_names),
                               calling=self.calling)
                 return None
             #names_locations = [name in self.names for name in data_tab.dtype.names]
