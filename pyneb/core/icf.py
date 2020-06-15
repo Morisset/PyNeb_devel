@@ -213,13 +213,6 @@ class ICF(object):
 # wrong comment. Corrected 12 Dec 2014
 #                                      'comment': 'Based on a grid of photoionization models. To be used if both O4 and N5 detected'},
                                       'comment': 'Based on a grid of photoionization models. To be used if only O2 and O3 are detected'},
-                         'KB94_A1.10b': {'elem': 'N',
-                                     'atom': 'abun["N2"]',
-                                     'icf': 'elem_abun["KB94_A10b"]  / abun["O2"]',
-                                     'type': 'PNe',
-# wrong comment. Corrected 12 Dec 2014
-#                                      'comment': 'Based on a grid of photoionization models. To be used if both O4 and N5 detected'},
-                                      'comment': 'Based on a grid of photoionization models. To be used if only O2 and O3 are detected and no HeII is seen'},
                          'KB94_A6': {'elem': 'O',
                                      'atom': 'abun["O2"] + abun["O3"] + abun["O4"]',
                                       'icf': '1 / (1 - 0.95 * abun["N5"] / (abun["N2"] + abun["N3"] + abun["N4"] + abun["N5"]))',
