@@ -190,7 +190,8 @@ class Diagnostics(object):
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
                                 'scaling' : True,
-                                'use_log' : True
+                                'use_log' : True,
+                                'random_seed' : None
                                 }
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
@@ -618,7 +619,7 @@ class Diagnostics(object):
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1,use_ANN=False, limit_res=False):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1, use_ANN=False, limit_res=False, ANN=None):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -650,6 +651,8 @@ class Diagnostics(object):
                         used to train. May also be changed before calling getCrossTemDen
         - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
                      start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
+        - ANN        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
+                     In both casesm the ANN needs to already be trained
 
     
         Example:
@@ -741,43 +744,49 @@ class Diagnostics(object):
             except:
                 ai4neb_OK = False
                 pn.log_.error('ai4neb is not installed')
-            if ai4neb_OK:      
-                if start_tem == -1:
-                    tem_min = 3000.
+            if ai4neb_OK:
+                if ANN is None:
+                    if start_tem == -1:
+                        tem_min = 3000.
+                    else:
+                        tem_min = start_tem
+                    if end_tem == -1:
+                        tem_max = 20000.
+                    else:
+                        tem_max = end_tem
+                    if start_den == -1:
+                        den_min = 10.
+                    else:
+                        den_min = start_den
+                    if end_den == -1:
+                        den_max = 1e6
+                    else:
+                        den_max = end_den
+                    # define emisGrid objects to generate Te-Ne emissionmaps
+                    tem_EG = pn.EmisGrid(atomObj=atom_tem, 
+                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                         tem_min=tem_min, tem_max=tem_max,
+                                         den_min=den_min, den_max=den_max)
+                    den_EG = pn.EmisGrid(atomObj=atom_den, 
+                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                         tem_min=tem_min, tem_max=tem_max,
+                                         den_min=den_min, den_max=den_max)
+                    # compute emission line ratio maps in the Te-Ne space
+                    tem_2D = tem_EG.getGrid(to_eval = eval_tem)
+                    den_2D = den_EG.getGrid(to_eval = eval_den)
+                    # X is a set of line ratio pairs
+                    X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+                    # y is a set of corresponding Te-Ne pairs
+                    y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
+                    # Instantiate, init and train the ANN
+                    self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+                    self.ANN.init_RM(**self.ANN_init_kwargs)
+                    self.ANN.train_RM()
                 else:
-                    tem_min = start_tem
-                if end_tem == -1:
-                    tem_max = 20000.
-                else:
-                    tem_max = end_tem
-                if start_den == -1:
-                    den_min = 10.
-                else:
-                    den_min = start_den
-                if end_den == -1:
-                    den_max = 1e6
-                else:
-                    den_max = end_den
-                # define emisGrid objects to generate Te-Ne emissionmaps
-                tem_EG = pn.EmisGrid(atomObj=atom_tem, 
-                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                     tem_min=tem_min, tem_max=tem_max,
-                                     den_min=den_min, den_max=den_max)
-                den_EG = pn.EmisGrid(atomObj=atom_den, 
-                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                     tem_min=tem_min, tem_max=tem_max,
-                                     den_min=den_min, den_max=den_max)
-                # compute emission line ratio maps in the Te-Ne space
-                tem_2D = tem_EG.getGrid(to_eval = eval_tem)
-                den_2D = den_EG.getGrid(to_eval = eval_den)
-                # X is a set of line ratio pairs
-                X = np.array((tem_2D.ravel(), den_2D.ravel())).T
-                # y is a set of corresponding Te-Ne pairs
-                y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
-                # Instantiate, init and train the ANN
-                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-                self.ANN.init_RM(**self.ANN_init_kwargs)
-                self.ANN.train_RM()
+                    if type(ANN) is str:
+                        self.ANN = manage_RM(RM_filename=ANN)
+                    else:
+                        self.ANN = ANN
                 # set the test values to the one we are looking for
                 self.ANN.set_test(np.array((value_tem, value_den)).T)
                 # predict the result and denormalize them
