@@ -17,7 +17,7 @@ class DataPlot(object):
     
     """
     def __init__(self, elem=None, spec=None, all_data=[], atom=None, n_tem_points=10000, 
-                 ref_tem=None, OmegaInterp='Cheb',NLevels=None):
+                 ref_tem=None, OmegaInterp='linear',NLevels=None):
         """
     Parameters:
         - elem         atomic elem 

@@ -951,9 +951,10 @@ class _CollDataAscii(object):
         self.name = sym2name[self.elem]
         self.noExtrapol = noExtrapol
         self.calling = 'Atom ' + self.atom
-        if OmegaInterp != 'Linear':
-            self.log_.error('Ascii files does not support other interpolation than Linear', 
-                            calling = self.calling)
+        self.OmegaInterp = OmegaInterp
+#        if OmegaInterp != 'Linear':
+#            self.log_.error('Ascii files does not support other interpolation than Linear', 
+#                            calling = self.calling)
         
         self._loadAscii()
         #self.initOmegas(OmegaInterp=OmegaInterp)
@@ -1142,6 +1143,11 @@ class _CollDataAscii(object):
                 rightExtrapol = OmegaArray[-1]
             Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
                               left=leftExtrapol, right=rightExtrapol)
+            fOmega = interpolate.interp1d(self.getTemArray(), OmegaArray,
+                                          kind = self.OmegaInterp,
+                                          fill_value=(leftExtrapol, rightExtrapol),
+                                          bounds_error=False)
+            Omega = fOmega(tem_in_file_units)
         
         return np.squeeze(Omega)
     
@@ -1214,7 +1220,7 @@ class Atom(object):
     
     
     @profile
-    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False, NLevels=None):
+    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='linear', noExtrapol = False, NLevels=None):
         """
         Atom constructor
         
@@ -1222,7 +1228,12 @@ class Atom(object):
             - elem          symbol of the selected element
             - spec          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
             - atom          ion (e.g. 'O3').
-            - OmegaInterp   one of ('Cheb', 'Linear'). Default is Linear. "Cheb" works only for fits files. 
+            - OmegaInterp   option "kind" from scipy.interpolate.interp1d method: 
+                            ‘linear’, ‘nearest’, ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’, ‘next’, 
+                            where ‘zero’, ‘slinear’, ‘quadratic’ and ‘cubic’ refer to a spline interpolation of 
+                            zeroth, first, second or third order; ‘previous’ and ‘next’ simply return the 
+                            previous or next value of the point. 
+                            "Cheb" works only for fits files for historical reasons.
             - noExtrapol    if set to False (default), Omega will be extrapolated above and below
                             the highest and lowest temperatures where it is defined. If set to True
                             a NaN will be return.
@@ -1317,7 +1328,7 @@ class Atom(object):
                                          OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels)
         elif self.collFileType == 'dat':
             self.CollData = _CollDataAscii(elem=self.elem, spec=self.spec, atom=self.atom, 
-                                          OmegaInterp='Linear', noExtrapol = noExtrapol, NLevels=self.NLevels)
+                                          OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels)
         elif self.collFileType == 'chianti':
             self.CollData = _CollChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.collFileType == 'stout':
