@@ -1229,9 +1229,9 @@ class Atom(object):
             - spec          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
             - atom          ion (e.g. 'O3').
             - OmegaInterp   option "kind" from scipy.interpolate.interp1d method: 
-                            ‘linear’, ‘nearest’, ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’, ‘next’, 
-                            where ‘zero’, ‘slinear’, ‘quadratic’ and ‘cubic’ refer to a spline interpolation of 
-                            zeroth, first, second or third order; ‘previous’ and ‘next’ simply return the 
+                            'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous', 'next', 
+                            where 'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation of 
+                            zeroth, first, second or third order; 'previous' and 'next' simply return the 
                             previous or next value of the point. 
                             "Cheb" works only for fits files for historical reasons.
             - noExtrapol    if set to False (default), Omega will be extrapolated above and below
