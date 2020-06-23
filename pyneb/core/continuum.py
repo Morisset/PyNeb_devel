@@ -76,7 +76,7 @@ class Continuum(object):
         else:
             print('Invalid case {0}'.format(case))
             return None
-        if (tem < np.min(tab_T)) or (tem > np.max(tab_T)):
+        if (tem < np.min(tab_T)).any() or (tem > np.max(tab_T)).any():
             print('Invalid temperature {0}'.format(tem))
             return None
         
@@ -274,6 +274,15 @@ class Continuum(object):
                 _ = (e for e in den)
             except:
                 den = np.ones_like(tem) * den
+            try:
+                _ = (e for e in He1_H)
+            except:
+                He1_H = np.ones_like(tem) * He1_H
+            try:
+                _ = (e for e in He2_H)
+            except:
+                He2_H = np.ones_like(tem) * He2_H
+            
         except TypeError:
             T_iterable = False
         if HI_label is None:
@@ -284,11 +293,16 @@ class Continuum(object):
             norm = self.HI.getEmissivity(tem, den, label = HI_label, product=False)
             
         if T_iterable:
-            cont = np.array(list(map(lambda t, d: self._get_continuum1(t, d, He1_H=He1_H, He2_H=He2_H, wl=wl, 
-                                                                       cont_HI=cont_HI, cont_HeI=cont_HeI, 
-                                                                       cont_HeII=cont_HeII, 
-                                                                       cont_2p=cont_2p, cont_ff=cont_ff), 
-                                     tem, den))).T
+            cont = np.array(list(map(lambda t, d, He1_H_1,He2_H_1 : self._get_continuum1(t, d, 
+                                                                                  He1_H=He1_H_1, 
+                                                                                  He2_H=He2_H_1, 
+                                                                                  wl=wl, 
+                                                                                  cont_HI=cont_HI, 
+                                                                                  cont_HeI=cont_HeI, 
+                                                                                  cont_HeII=cont_HeII, 
+                                                                                  cont_2p=cont_2p, 
+                                                                                  cont_ff=cont_ff), 
+                                     tem, den, He1_H, He2_H))).T
             return cont.squeeze()/norm
         else:
             cont = self._get_continuum1(tem, den, He1_H=He1_H, He2_H=He2_H, wl=wl, 
