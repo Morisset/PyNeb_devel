@@ -2,6 +2,7 @@ import numpy as np
 from .misc import parseAtom, roman_to_int
 from glob import glob
 import pyneb as pn
+from copy import deepcopy
 
 class CST(object):
     BOLTZMANN = 1.3806488e-16 # erg/K - NIST 2010
@@ -752,7 +753,7 @@ _predefinedDataFileDict['PYNEB_14_02']={
                              'Rb6': {'atom': 'rb_vi_atom_BH86.dat', 'coll': 'rb_vi_coll_S97.dat'}
                              }
 
-_predefinedDataFileDict['PYNEB_14_03']=_predefinedDataFileDict['PYNEB_14_02'].copy()
+_predefinedDataFileDict['PYNEB_14_03'] = deepcopy(_predefinedDataFileDict['PYNEB_14_02'])
 _predefinedDataFileDict['PYNEB_14_03']['Fe4'] = {'atom': 'fe_iv_atom_FFRR08.dat', 'coll': 'fe_iv_coll_ZP97.dat'}
 _predefinedDataFileDict['PYNEB_14_03']['Fe5'] = {'atom': 'fe_v_atom_Nal00.dat', 'coll': 'fe_v_coll_BGMcL07.dat'}
 _predefinedDataFileDict['PYNEB_14_03']['Fe6'] = {'atom': 'fe_vi_atom_CP00.dat', 'coll': 'fe_vi_coll_CP99.dat'}
@@ -760,11 +761,11 @@ _predefinedDataFileDict['PYNEB_14_03']['Fe7'] = {'atom': 'fe_vii_atom_WB08.dat',
 _predefinedDataFileDict['PYNEB_14_03']['3He2'] = {'atom': '3he_ii_atom_cloudy.dat', 'coll': '3he_ii_coll_cloudy.dat'}
 _predefinedDataFileDict['PYNEB_14_03']['S3']['coll'] =  's_iii_coll_TG99.dat'
 
-_predefinedDataFileDict['PYNEB_16_01'] = _predefinedDataFileDict['PYNEB_14_03'].copy()
+_predefinedDataFileDict['PYNEB_16_01'] = deepcopy(_predefinedDataFileDict['PYNEB_14_03'])
 _predefinedDataFileDict['PYNEB_16_01']['Fe2'] = {'atom': 'fe_ii_atom_B15.dat', 'coll': 'fe_ii_coll_B15.dat'}
 _predefinedDataFileDict['PYNEB_16_01']['P2'] = {'atom': 'p_ii_atom_MZ82.dat', 'coll': 'p_ii_coll_T04.dat'}
 
-_predefinedDataFileDict['PYNEB_17_01'] = _predefinedDataFileDict['PYNEB_16_01'].copy()
+_predefinedDataFileDict['PYNEB_17_01'] = deepcopy(_predefinedDataFileDict['PYNEB_16_01'])
 _predefinedDataFileDict['PYNEB_17_01']['H1']['rec'] = 'h_i_rec_SH95.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He1']['rec'] = 'he_i_rec_Pal12-Pal13.hdf5'
 _predefinedDataFileDict['PYNEB_17_01']['He2']['rec'] = 'he_ii_rec_SH95.hdf5'
@@ -792,10 +793,10 @@ _predefinedDataFileDict['PYNEB_17_01']['Ar3']['atom'] = 'ar_iii_atom_MB09.dat'
 _predefinedDataFileDict['PYNEB_17_01']['Ar3']['coll'] = 'ar_iii_coll_MB09.dat'
 _predefinedDataFileDict['PYNEB_17_01']['Ne5']['coll'] = 'ne_v_coll_DPNP13.dat'
 
-_predefinedDataFileDict['PYNEB_17_02'] = _predefinedDataFileDict['PYNEB_17_01'].copy()
+_predefinedDataFileDict['PYNEB_17_02'] = deepcopy(_predefinedDataFileDict['PYNEB_17_01'])
 _predefinedDataFileDict['PYNEB_17_02']['Ne2']['rec'] = 'ne_ii_rec_KSDN98.func'
 
-_predefinedDataFileDict['PYNEB_18_01'] = _predefinedDataFileDict['PYNEB_17_02'].copy()
+_predefinedDataFileDict['PYNEB_18_01'] = deepcopy(_predefinedDataFileDict['PYNEB_17_02'])
 _predefinedDataFileDict['PYNEB_18_01']['Te3'] = {'atom' : 'te_iii_atom_M18.dat',
                                                  'coll': 'te_iii_coll_M18.dat'}
 
