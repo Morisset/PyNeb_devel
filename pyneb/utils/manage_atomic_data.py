@@ -200,6 +200,11 @@ class _ManageAtomicData(object):
 
         """
         file_list = []
+        used_files_list = []
+        used_files_dic = pn.atomicData.getDataFile()    
+        for a in used_files_dic: 
+            for k in used_files_dic[a]: 
+                used_files_list.append(used_files_dic[a][k])         
         if data_type is None:
             data_types = ['atom', 'coll', 'rec', 'trc']
         else:
@@ -211,10 +216,16 @@ class _ManageAtomicData(object):
             atom_str = '{0}_{1}_'.format(elem, spec)
             if atom2chianti(atom) in self.ChiantiIONS['atom']:
                 if 'atom' in data_types:
-                    file_list.append('{0}_{1}_atom.chianti'.format(elem, spec))
+                    ff = '{0}_{1}_atom.chianti'.format(elem, spec)
+                    if ff in used_files_list:
+                        ff = '* ' + ff
+                    file_list.append(ff)
             if atom2chianti(atom) in self.ChiantiIONS['coll']:
                 if 'coll' in data_types:
-                    file_list.append('{0}_{1}_coll.chianti'.format(elem, spec))
+                    ff = '{0}_{1}_coll.chianti'.format(elem, spec)
+                    if ff in used_files_list:
+                        ff = '* ' + ff
+                    file_list.append(ff)
         else:
             atom_str = '.'
             for atom in self.ChiantiIONS['atom']:
@@ -222,21 +233,28 @@ class _ManageAtomicData(object):
                 elem = elem.lower()
                 spec = int_to_roman(int(spec)).lower()
                 if 'atom' in data_types:
-                    file_list.append('{0}_{1}_atom.chianti'.format(elem, spec))
+                    ff = '{0}_{1}_atom.chianti'.format(elem, spec)
+                    if ff in used_files_list:
+                        ff = '* ' + ff
+                    file_list.append(ff)
             for atom in self.ChiantiIONS['coll']:
                 elem, spec = parseAtom(atom)
                 elem = elem.lower()
                 spec = int_to_roman(int(spec)).lower()
                 if 'coll' in data_types:
-                    file_list.append('{0}_{1}_coll.chianti'.format(elem, spec))
+                    ff = '{0}_{1}_coll.chianti'.format(elem, spec)
+                    if ff in used_files_list:
+                        ff = '* ' + ff
+                    file_list.append(ff)
         for dir in self._DataFilePaths:
             files = os.listdir(dir)
-            for file in files:
-                if (('.fits' in file) or ('.func' in file) or ('.hdf5' in file) or ('.dat' in file) ) and (atom_str in file):
+            for ff in files:
+                if (('.fits' in ff) or ('.func' in ff) or ('.hdf5' in ff) or ('.dat' in ff) ) and (atom_str in ff):
                     for dt in data_types:
-                        if dt in file:
-                            file_list.append(file)
-                            
+                        if dt in ff:
+                            if ff in used_files_list:
+                                ff = '* ' + ff
+                            file_list.append(ff)
         file_list.sort()
         return file_list
     
