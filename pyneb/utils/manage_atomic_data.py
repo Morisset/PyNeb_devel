@@ -189,7 +189,7 @@ class _ManageAtomicData(object):
                 print('{0} rec from {1} in {2}'.format(atom, rec_file , self.getDirForFile(rec_file)))
  
  
-    def getAllAvailableFiles(self, atom=None, data_type=None):
+    def getAllAvailableFiles(self, atom=None, data_type=None, mark_current=True):
         """
         Scan every directory in the list of paths, printing all the *atom*.fits, *atom*.dat,
             *coll*.fits and *rec*.fits files
@@ -197,6 +197,7 @@ class _ManageAtomicData(object):
         Parameters:
            - atom        atom name
            - data_type   either 'rec', 'atom', 'coll' or 'trc'
+           - mark_current: if True, a* is printed before the currently used datafile
 
         """
         file_list = []
@@ -217,13 +218,13 @@ class _ManageAtomicData(object):
             if atom2chianti(atom) in self.ChiantiIONS['atom']:
                 if 'atom' in data_types:
                     ff = '{0}_{1}_atom.chianti'.format(elem, spec)
-                    if ff in used_files_list:
+                    if ff in used_files_list and mark_current:
                         ff = '* ' + ff
                     file_list.append(ff)
             if atom2chianti(atom) in self.ChiantiIONS['coll']:
                 if 'coll' in data_types:
                     ff = '{0}_{1}_coll.chianti'.format(elem, spec)
-                    if ff in used_files_list:
+                    if ff in used_files_list and mark_current:
                         ff = '* ' + ff
                     file_list.append(ff)
         else:
@@ -234,7 +235,7 @@ class _ManageAtomicData(object):
                 spec = int_to_roman(int(spec)).lower()
                 if 'atom' in data_types:
                     ff = '{0}_{1}_atom.chianti'.format(elem, spec)
-                    if ff in used_files_list:
+                    if ff in used_files_list and mark_current:
                         ff = '* ' + ff
                     file_list.append(ff)
             for atom in self.ChiantiIONS['coll']:
@@ -243,7 +244,7 @@ class _ManageAtomicData(object):
                 spec = int_to_roman(int(spec)).lower()
                 if 'coll' in data_types:
                     ff = '{0}_{1}_coll.chianti'.format(elem, spec)
-                    if ff in used_files_list:
+                    if ff in used_files_list and mark_current:
                         ff = '* ' + ff
                     file_list.append(ff)
         for dir in self._DataFilePaths:
@@ -252,7 +253,7 @@ class _ManageAtomicData(object):
                 if (('.fits' in ff) or ('.func' in ff) or ('.hdf5' in ff) or ('.dat' in ff) ) and (atom_str in ff):
                     for dt in data_types:
                         if dt in ff:
-                            if ff in used_files_list:
+                            if ff in used_files_list and mark_current:
                                 ff = '* ' + ff
                             file_list.append(ff)
         file_list.sort()

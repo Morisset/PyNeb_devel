@@ -806,10 +806,10 @@ _predefinedDataFileDict['PYNEB_20_01']['Kr6'] = {'atom': 'kr_vi_atom_S17.dat',
                                                  'coll': 'kr_vi_coll_S17.dat'}
 _predefinedDataFileDict['PYNEB_20_01']['Se3'] = {'atom': 'se_iii_atom_S17.dat',
                                                  'coll': 'se_iii_coll_S17.dat'}
-
-# Next release, check with JGR:
-# ['Kr6'] = {'atom': 'kr_vi_atom_B05.dat', 'coll': 'kr_vi_coll_B16.dat'}
-# ['Se3']['coll'] = 'se_iii_coll_B16.dat'
+_predefinedDataFileDict['PYNEB_20_01']['Rb4'] = {'atom': 'rb_iv_atom_S16.dat',
+                                                 'coll': 'rb_iv_coll_S16.dat'}
+_predefinedDataFileDict['PYNEB_20_01']['Br5'] = {'atom': 'br_v_atom_M18.dat',
+                                                 'coll': 'br_v_coll_M18.dat'}
 
  
 def airtovac(wave):

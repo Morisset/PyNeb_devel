@@ -56,7 +56,7 @@ class DataPlot(object):
         atom_data = []
         coll_data = []
         if all_data == []:
-            all_data = pn.atomicData.getAllAvailableFiles(self.atom)
+            all_data = pn.atomicData.getAllAvailableFiles(self.atom, mark_current=False)
         i_colors = 0    
         for file_ in all_data:
             ID = file_.split('_')[-1]
