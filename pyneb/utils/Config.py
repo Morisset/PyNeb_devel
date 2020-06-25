@@ -30,6 +30,8 @@ class _Config(object):
         self.log_ = my_logging()
         self.calling = '_Config'
         
+        self.allFiles = {}
+        
         self.INSTALLED = {}
         try:
             import matplotlib.pyplot as plt
@@ -184,5 +186,9 @@ class _Config(object):
     def unuse_multiprocs(self):
         self._use_mp = False
         
-        
+    def add2allFiles(self, atom, file):
+        if atom not in self.allFiles:
+            self.allFiles[atom] = [file]
+        elif file not in self.allFiles[atom]:
+            self.allFiles[atom].append(file)
             

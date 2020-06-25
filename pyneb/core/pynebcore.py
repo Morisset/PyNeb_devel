@@ -1383,6 +1383,8 @@ class Atom(object):
         else:
             self.EnergyNLevels = None
         self.source = self.getSources()
+        config.add2allFiles(self.atom, self.atomFile)
+        config.add2allFiles(self.atom, self.collFile)
         self.ANN_n_temden=30
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
@@ -2887,6 +2889,8 @@ class RecAtom(object):
             self.NIST = None
             self.NLevels = 0
             self.wave_Ang = None
+            
+        config.add2allFiles(self.atom, self.recFitsFile)
 
     def _test_lev(self, level):
         """
