@@ -1,0 +1,12 @@
+Aij
+1/s 1/s 1/s 1/s 1/s 1/s 1/s
+0.00E+00  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+8.71E-02  0.00E+00  0.00E+00  0.00E+00  0.00E+00
+1.69E-04  1.42E-01  0.00E+00  0.00E+00  0.00E+00
+3.82E-04  8.08E-01  1.31E+00  0.00E+00  0.00E+00
+0.00E+00  1.76E+01  5.11E-01  3.38E+00  0.00E+00
+*** Se III  energy and Aij data
+*** N_LEVELS 5
+*** GSCONFIG p2
+*** SOURCE1	'Sterling et al.,2017, ApJ 840' 
+*** NOTE1  	'Transition Probabilities, A' 
