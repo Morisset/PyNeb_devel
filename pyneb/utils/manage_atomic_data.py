@@ -690,10 +690,10 @@ def getLevelsNIST(atom, NLevels = None):
     else:
         return None
     
-def getNIST(elem, ion, fileout=None):
+def _getNIST(elem, ion, fileout=None):
     """
     This will download the enegy levels from NIST and write them to a file
-    example: getNIST('O',3) write the o_iii_levels.dat file
+    example: _getNIST('O',3) write the o_iii_levels.dat file
     """
     
     try:
