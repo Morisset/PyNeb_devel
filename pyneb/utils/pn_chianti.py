@@ -4,6 +4,7 @@ import os
 import sys
 import re
 import pyneb as pn
+from copy import deepcopy
 if pn.config.Chianti_version_main == '8':
     from . import _chianti_tools_8 as _chianti_tools
 elif pn.config.Chianti_version_main == '7':
@@ -59,6 +60,7 @@ def Chianti_getE(ion_chianti, NLevels=None):
 def get_levs_order(atom, NLevels=None):
     """
     Returns a dictionary giving the correspondence of indices between NIST and Chianti energy level tables.
+    keys are NIST level, values are Chianti levels.
     
     """
     E_chianti = Chianti_getE(atom2chianti(atom))
@@ -290,7 +292,7 @@ class _AtomChianti(object):
                 
         Chianti_A = Chianti_getA(self.ion_chianti, NLevels=this_NLevels)
         if self.Chianti2NIST is not None:
-            Chianti_A_tmp = Chianti_A.copy()
+            Chianti_A_tmp = deepcopy(Chianti_A)
             for i_chianti in self.Chianti2NIST:
                 if self.Chianti2NIST[i_chianti] != i_chianti:
                     Chianti_A[i_chianti,:] = Chianti_A_tmp[self.Chianti2NIST[i_chianti],:]
@@ -499,7 +501,7 @@ class _CollChianti(object):
         self.Chianti2NIST = get_levs_order(self.atom, NLevels=self.NLevels)
         
         if self.Chianti2NIST is not None:
-            _CollArray_tmp = self._CollArray.copy()
+            _CollArray_tmp = deepcopy(self._CollArray)
             for i_chianti in self.Chianti2NIST:
                 if self.Chianti2NIST[i_chianti] != i_chianti:
                     self._CollArray[i_chianti,:,:] = _CollArray_tmp[self.Chianti2NIST[i_chianti],:,:]
@@ -570,7 +572,7 @@ class _CollChianti(object):
         if (lev_i == -1) and (lev_j == -1):
             Omega = Chianti_getOmega(self.ion_chianti, tem, Splups=self.Splups, NLevels=self.NLevels)
             if self.Chianti2NIST is not None:
-                Omega_tmp = Omega.copy()
+                Omega_tmp = deepcopy(Omega)
                 for i_chianti in self.Chianti2NIST:
                     if self.Chianti2NIST[i_chianti] != i_chianti:
                         Omega[i_chianti,:,:] = Omega_tmp[self.Chianti2NIST[i_chianti],:,:]
