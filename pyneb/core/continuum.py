@@ -293,10 +293,6 @@ class Continuum(object):
         else:
             if self.HI is None:
                 self.HI = pn.RecAtom('H',1)
-            try:
-                self.log_.debug('tem size: {}, den size: {}'.format(tem.shape, den.shape), calling='get_continuum')
-            except:
-                self.log_.debug('tem: {}, den: {}'.format(tem, den), calling='get_continuum')
             norm = self.HI.getEmissivity(tem, den, label = HI_label, product=False)
             
         if T_iterable:
