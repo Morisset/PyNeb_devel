@@ -5,6 +5,7 @@ from scipy.interpolate import interp1d
 from scipy import optimize
 
 import pyneb as pn
+from pyneb import log_
 from .pynebcore import RecAtom
 from ..utils.physics import CST
 from ..utils.misc import ROOT_DIR
@@ -22,6 +23,8 @@ class Continuum(object):
         self.BE = None
         self.__HI_case = None
         self._set_HI_case('B')
+        self.log_ = log_
+
         
     def _set_HI_case(self, case='B'):
         """
@@ -290,6 +293,10 @@ class Continuum(object):
         else:
             if self.HI is None:
                 self.HI = pn.RecAtom('H',1)
+            try:
+                self.log_.debug('tem size: {}, den size: {}'.format(tem.shape, den.shape), calling='get_continuum')
+            except:
+                self.log_.debug('tem: {}, den: {}'.format(tem, den), calling='get_continuum')
             norm = self.HI.getEmissivity(tem, den, label = HI_label, product=False)
             
         if T_iterable:
