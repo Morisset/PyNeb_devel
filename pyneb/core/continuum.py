@@ -367,7 +367,7 @@ class Continuum(object):
             
         if BJ_iterable:
             T_BJ = np.array(list(map(lambda i: optimize.brentq(f2minimize_i, T_min, T_max, args=i), np.arange(len(BJ_HI))))).T
-            return T_BJ.reshape(BJ_HI.shape)
+            return T_BJ.squeeze()
         else:
             T_BJ = optimize.brentq(f2minimize, T_min, T_max, args=BJ_HI)
             return T_BJ
