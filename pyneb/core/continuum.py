@@ -359,9 +359,13 @@ class Continuum(object):
         def f2minimize(tem, BJ_HI):
             f = self.BJ_HI(tem, den=den, He1_H=He1_H, He2_H=He2_H, wl_bbj = wl_bbj, wl_abj=wl_abj, HI_label=HI_label) - BJ_HI
             return f
+
+        def f2minimize_i(tem, i):
+            f = self.BJ_HI(tem, den=den[i], He1_H=He1_H[i], He2_H=He2_H[i], wl_bbj = wl_bbj, wl_abj=wl_abj, HI_label=HI_label) - BJ_HI[i]
+            return f
             
         if BJ_iterable:
-            T_BJ = np.array(list(map(lambda bjhi: optimize.brentq(f2minimize, T_min, T_max, args=bjhi), BJ_HI))).T
+            T_BJ = np.array(list(map(lambda i: optimize.brentq(f2minimize_i, T_min, T_max, args=i), np.arange(len(BJ_HI))))).T
             return T_BJ.squeeze()
         else:
             T_BJ = optimize.brentq(f2minimize, T_min, T_max, args=BJ_HI)
