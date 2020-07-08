@@ -363,7 +363,7 @@ class Continuum(object):
             
         if BJ_iterable:
             self.log_.debug('len(BJ_HI) = {}'.format(len(BJ_HI)), calling='T_BJ')
-            T_BJ = np.array(list(map(lambda i: optimize.brentq(f2minimize_i, T_min, T_max, args=i), np.arange(len(BJ_HI))))).T
+            T_BJ = np.array(list(map(lambda i: optimize.brentq(f2minimize_i, T_min, T_max, args=i), np.arange(len(BJ_HI.ravel()))))).T
             self.log_.debug('T_BJ = {}'.format(T_BJ), calling='T_BJ')
             return T_BJ
         else:
