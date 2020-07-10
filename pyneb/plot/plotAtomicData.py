@@ -238,8 +238,8 @@ class DataPlot(object):
         plt.gca().get_yaxis().get_major_formatter().set_useOffset(False)
         ax.set_xticks(x)
         
-        fig.text(.5, .05, "i (lower level)", fontsize=12, ha='center', color="#660066", va='top')
-        fig.text(.05, .5, "j (upper level)", ha='left', va='center', fontsize=12, color="#660066", rotation=90)
+        #fig.text(.5, .05, "i (lower level)", fontsize=12, ha='center', color="#660066", va='top')
+        #fig.text(.05, .5, "j (upper level)", ha='left', va='center', fontsize=12, color="#660066", rotation=90)
         title = "Available transition probabilities for {0} {1}".format(self.elem, int_to_roman(int(self.spec)))
         fig.text(.5, .95, title, color="#191970", fontsize=14, ha='center')
         for i, data in enumerate(self.atom_data):

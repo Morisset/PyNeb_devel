@@ -124,11 +124,6 @@ class _AtomDataFits(object):
         if self.atomFitsFile is None:
             self.log_.error('No atom data for ion {0}'.format(self.atom), calling=self.calling)
             return None
-        if self.atom in config.DataFiles:
-            if self.atomFitsFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.atomFitsFile)
-        else:
-            config.DataFiles[self.atom] = [self.atomFitsFile]
             
         self.atomPath = atomicData.getDirForFile(self.atomFile)
         self.atomFitsPath = self.atomPath
@@ -337,11 +332,6 @@ class _AtomDataAscii(object):
         if self.atomFile is None:
             self.log_.error('No atom data for ion {0}'.format(self.atom), calling=self.calling)
             return None
-        if self.atom in config.DataFiles:
-            if self.atomFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.atomFile)
-        else:
-            config.DataFiles[self.atom] = [self.atomFile]
             
         self.atomPath = atomicData.getDirForFile(self.atomFile)
         file_to_open = '{0}/{1}'.format(self.atomPath, self.atomFile)
@@ -634,11 +624,6 @@ class _CollDataFits(object):
             self.log_.error('No coll data for ion {0}'.format(self.atom), calling=self.calling)
             return None
         
-        if self.atom in config.DataFiles:
-            if self.collFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.collFile)
-        else:
-            config.DataFiles[self.atom] = [self.collFitsFile]
             
         self.collPath = atomicData.getDirForFile(self.collFile)
         self.collFitsPath = self.collPath 
@@ -986,11 +971,6 @@ class _CollDataAscii(object):
         if self.collFile is None:
             self.log_.error('No coll data for ion {0}'.format(self.atom), calling=self.calling)
             return None
-        if self.atom in config.DataFiles:
-            if self.collFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.collFile)
-        else:
-            config.DataFiles[self.atom] = [self.collFile]
             
         self.collPath = atomicData.getDirForFile(self.collFile)
         file_to_open = '{0}/{1}'.format(self.collPath, self.collFile)
@@ -1383,8 +1363,8 @@ class Atom(object):
         else:
             self.EnergyNLevels = None
         self.source = self.getSources()
-        config.add2allFiles(self.atom, self.atomFile)
-        config.add2allFiles(self.atom, self.collFile)
+        atomicData.add2usedFiles(self.atom, self.atomFile)
+        atomicData.add2usedFiles(self.atom, self.collFile)
         self.ANN_n_temden=30
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
@@ -2890,7 +2870,8 @@ class RecAtom(object):
             self.NLevels = 0
             self.wave_Ang = None
             
-        config.add2allFiles(self.atom, self.recFitsFile)
+        atomicData.add2usedFiles(self.atom, self.recFitsFile)
+
 
     def _test_lev(self, level):
         """
@@ -2965,11 +2946,6 @@ class RecAtom(object):
                 self.log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
             except:
                 self.log_.error('{0} recombination file not read'.format(self.recFitsFullPath), calling=self.calling)
-        if self.atom in config.DataFiles:
-            if self.recFitsFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.recFitsFile)
-        else:
-            config.DataFiles[self.atom] = [self.recFitsFile]
         try:
             self.temp = self._RecombData['TEMP']
         except:
@@ -3021,11 +2997,6 @@ class RecAtom(object):
         self._RecombData = hdu[1].data
         header = hdu[1].header
         hdu.close()
-        if self.atom in config.DataFiles:
-            if self.recFitsFile not in config.DataFiles[self.atom]:
-                config.DataFiles[self.atom].append(self.recFitsFile)
-        else:
-            config.DataFiles[self.atom] = [self.recFitsFile]
         try:
             self.temp = self._RecombData['TEMP']
         except:

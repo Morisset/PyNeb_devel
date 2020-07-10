@@ -26,7 +26,8 @@ class _ManageAtomicData(object):
         self._RecombData = {}
         self._initChianti()
         self.read_gsconf()        
-        
+        self.usedFiles = {} 
+    
     def includeFitsPath(self):
         self.addDataFilePath('atomic_data_fits/old_fits/', inPyNeb=True)
 
@@ -466,7 +467,7 @@ You may mean one of these files: {1}""".format(data_file, av_data),
                        
         """        
         self.calling = 'printAllSources'
-        if (type(at_set) == list) or (type(at_set) == tuple):
+        if (type(at_set) == list) or (type(at_set) == tuple) or at_set == '':
             at_dict = {}
             for item in at_set:
                 atom = parseAtom(item)[0]
@@ -560,6 +561,13 @@ You may mean one of these files: {1}""".format(data_file, av_data),
         except:
             self.gsconf = {}
         
+    def add2usedFiles(self, atom, file):
+        if atom not in self.usedFiles:
+            self.usedFiles[atom] = [file]
+        elif file not in self.usedFiles[atom]:
+            self.usedFiles[atom].append(file)
+
+
     def printPoem(self, yr=0):
         """
         Print one of Wiese et al. spectroscopic poems
