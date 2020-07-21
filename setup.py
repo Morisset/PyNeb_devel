@@ -32,7 +32,8 @@ setup(name='PyNeb',
 			     'atomic_data/*.dat',
 			     'atomic_data/*.func',
 			     'atomic_data/*.txt',
-			     'atomic_data/levels/*.dat'],
+			     'atomic_data/levels/*.dat',
+                 'atomic_data/deprecated/*.dat'],
                     'pyneb.extinction':['*.txt'],
                     'pyneb.plot':['level_diagrams/*.png']
                     }
