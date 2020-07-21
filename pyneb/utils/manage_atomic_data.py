@@ -33,6 +33,12 @@ class _ManageAtomicData(object):
 
     def removeFitsPath(self):
         self.removeDataFilePath('atomic_data_fits/old_fits/')
+
+    def includeDeprecatedPath(self):
+        self.addDataFilePath('atomic_data/deprecated/', inPyNeb=True)
+
+    def removeDeprecatedPath(self):
+        self.removeDataFilePath('atomic_data/deprecated/')
         
     def getPredefinedDataFileDict(self, data_dict=None):
         """
