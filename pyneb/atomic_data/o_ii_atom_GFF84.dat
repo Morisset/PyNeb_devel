@@ -1,0 +1,11 @@
+Aij
+1/s 1/s 1/s 1/s 1/s
+0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+3.588e-05 0.000e+00 0.000e+00 0.000e+00 0.000e+00
+1.500e-04 1.200e-07 0.000e+00 0.000e+00 0.000e+00
+5.170e-02 9.410e-02 5.453e-02 0.000e+00 0.000e+00
+2.070e-02 5.382e-02 8.930e-02 2.390e-11 0.000e+00
+*** ATOM oxygen
+*** SPECTRUM 2
+*** SOURCE3 Godefroid, Frose Fisher 1984 Journal of Physics B Atomic Molecular Physics, 17, 681-692
+*** NOTE3 All A-values for levels 1-5
