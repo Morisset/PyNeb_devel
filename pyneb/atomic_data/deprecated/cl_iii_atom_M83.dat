@@ -7,6 +7,7 @@ Aij
 7.5400001e-01 3.2300001e-01 3.1600001e-01 7.6500000e-06 0.0000000e+00 
 *** ATOM chlorine
 *** SPECTRUM 3
+*** NOTE1 renamed cl_iii_atom_MZ82a.dat from PYNEB_20_01
 *** SOURCE2 Mendoza, 1983, "Planetary Nebulae", 143
 *** NOTE2 All A values
 *** GSCONFIG p3
