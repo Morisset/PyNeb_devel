@@ -245,7 +245,7 @@ class Continuum(object):
         if cont_2p:
             cont += self.two_photon(tem = tem, den = den, wl = wl)
         if cont_ff:
-            cont += self.FreeFree(tem = tem, wl = wl)
+            cont += self.FreeFree(tem = tem, wl = wl, He1_H=He1_H, He2_H=He2_H)
         
         return cont
 
