@@ -1221,7 +1221,7 @@ class Atom(object):
         Usage:
             O3 = pn.Atom('O',3)
             N2 = pn.Atom(atom='N2')
-            S2 = pn.Atom(atom='S2', OmegaInterp='Linear')
+            S2 = pn.Atom(atom='S2', OmegaInterp='linear')
         """        
         self.log_ = log_
         self.type = 'coll'
