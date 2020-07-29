@@ -810,10 +810,12 @@ _predefinedDataFileDict['PYNEB_20_01']['Rb4'] = {'atom': 'rb_iv_atom_S16.dat',
                                                  'coll': 'rb_iv_coll_S16.dat'}
 _predefinedDataFileDict['PYNEB_20_01']['Br5'] = {'atom': 'br_v_atom_M18.dat',
                                                  'coll': 'br_v_coll_M18.dat'}
-_predefinedDataFileDict['PYNEB_20_01']['S2']['atom'] = 's_ii_atom_VVF96-MZ82a.dat'
-_predefinedDataFileDict['PYNEB_20_01']['Cl3']['atom'] = 'cl_iii_atom_MZ82a-KS86.dat'
 _predefinedDataFileDict['PYNEB_20_01']['S3']['atom'] = 's_iii_atom_FFTI06.dat'
-
+_predefinedDataFileDict['PYNEB_20_01']['O2']['atom'] = 'o_ii_atom_Z82-WFD96.dat'
+_predefinedDataFileDict['PYNEB_20_01']['Ne4']['atom'] = 'ne_iv_atom_GFF84.dat'
+_predefinedDataFileDict['PYNEB_20_01']['S2']['atom'] = 's_ii_atom_RGJ19.dat'
+_predefinedDataFileDict['PYNEB_20_01']['Cl3']['atom'] = 'cl_iii_atom_RGJ19.dat'
+_predefinedDataFileDict['PYNEB_20_01']['Ar4']['atom'] = 'ar_iv_atom_RGJ19.dat'
 
  
 def airtovac(wave):
