@@ -452,7 +452,9 @@ class _ManageAtomicData(object):
         else:
             av_data = self.getAllAvailableFiles(atom, data_type)
             self.log_.error("""Unknown file {0} or corresponding File path not included in list. 
-You may mean one of these files: {1}""".format(data_file, av_data),
+Your file may be deprecated: run pn.atomicData.includeDeprecatedPath() and try again.
+Or your file may be in the fits diectory: run pn.atomicData.includeFitsPath() and try again.                                  
+Or you may mean one of these files: {1}""".format(data_file, av_data),
                            calling=self.calling)
         if (atom == 'H1') and ('H1' in pn.atomicData._RecombData):
             del pn.atomicData._RecombData['H1']
