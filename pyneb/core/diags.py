@@ -800,8 +800,12 @@ class Diagnostics(object):
                     den = np.zeros_like(value_tem) * -10
                     den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
                 if limit_res:
-                    tem[(tem<tem_min) | (tem>tem_max)] = np.nan
-                    den[(den<den_min) | (den>den_max)] = np.nan
+                    mask = (tem<tem_min) | (tem>tem_max)
+                    tem[mask] = np.nan
+                    pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
+                    mask = (den<den_min) | (den>den_max)
+                    den[mask] = np.nan
+                    pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
