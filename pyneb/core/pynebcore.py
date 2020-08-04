@@ -1121,13 +1121,19 @@ class _CollDataAscii(object):
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
-            Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
-                              left=leftExtrapol, right=rightExtrapol)
-            fOmega = interpolate.interp1d(self.getTemArray(), OmegaArray,
-                                          kind = self.OmegaInterp,
-                                          fill_value=(leftExtrapol, rightExtrapol),
-                                          bounds_error=False)
-            Omega = fOmega(tem_in_file_units)
+            #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
+            #                 left=leftExtrapol, right=rightExtrapol)
+            if OmegaArray.size == 1:
+                if leftExtrapol is np.NAN:
+                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.NAN)
+                else:
+                    Omega = np.ones_like(self.getTemArray()) * OmegaArray
+            else:
+                fOmega = interpolate.interp1d(self.getTemArray(), OmegaArray,
+                                              kind = self.OmegaInterp,
+                                              fill_value=(leftExtrapol, rightExtrapol),
+                                              bounds_error=False)
+                Omega = fOmega(tem_in_file_units)
         
         return np.squeeze(Omega)
     
