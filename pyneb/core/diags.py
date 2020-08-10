@@ -745,23 +745,23 @@ class Diagnostics(object):
                 ai4neb_OK = False
                 pn.log_.error('ai4neb is not installed')
             if ai4neb_OK:
+                if start_tem == -1:
+                    tem_min = 3000.
+                else:
+                    tem_min = start_tem
+                if end_tem == -1:
+                    tem_max = 20000.
+                else:
+                    tem_max = end_tem
+                if start_den == -1:
+                    den_min = 10.
+                else:
+                    den_min = start_den
+                if end_den == -1:
+                    den_max = 1e6
+                else:
+                    den_max = end_den
                 if ANN is None:
-                    if start_tem == -1:
-                        tem_min = 3000.
-                    else:
-                        tem_min = start_tem
-                    if end_tem == -1:
-                        tem_max = 20000.
-                    else:
-                        tem_max = end_tem
-                    if start_den == -1:
-                        den_min = 10.
-                    else:
-                        den_min = start_den
-                    if end_den == -1:
-                        den_max = 1e6
-                    else:
-                        den_max = end_den
                     # define emisGrid objects to generate Te-Ne emissionmaps
                     tem_EG = pn.EmisGrid(atomObj=atom_tem, 
                                          n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
