@@ -5,6 +5,24 @@ PyNeb is available under the GNU licence providing you cite the developpers name
 * D. Shaw
 
 
+PyNeb uses part of Chiantipy:
+
+Utility functions, many for reading the CHIANTI database files.
+
+Copyright 2009, 2010 Kenneth P. Dere
+
+This software is distributed under the terms of the GNU General Public License
+that is found in the LICENSE file
+
+and
+ 
+FortranFormat  
+
+Written by Konrad Hinsen <hinsen@cnrs-orleans.fr>
+With contributions from Andreas Prlic <andreas@came.sbg.ac.at>
+last revision: 2006-6-23
+
+
 
 
                     GNU GENERAL PUBLIC LICENSE
