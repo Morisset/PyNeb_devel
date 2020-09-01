@@ -18,4 +18,19 @@ In PyNeb, the atom is represented as an n-level atom. For given density and temp
 PyNeb also incorporates emissivity tables or emissivities fits of recombination lines. 
 The interpolated emissivities can be used by any of the modules that rely on the n-level line emissivities to carry out the actions listed above.
 
+PyNeb uses part of Chiantipy:
+
+Utility functions, many for reading the CHIANTI database files.
+
+Copyright 2009, 2010 Kenneth P. Dere
+
+This software is distributed under the terms of the GNU General Public License
+that is found in the LICENSE file
+
+and
  
+FortranFormat  
+
+Written by Konrad Hinsen <hinsen@cnrs-orleans.fr>
+With contributions from Andreas Prlic <andreas@came.sbg.ac.at>
+last revision: 2006-6-23
