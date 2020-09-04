@@ -12,6 +12,9 @@ Copyright 2009, 2010 Kenneth P. Dere
 This software is distributed under the terms of the GNU General Public License that is found in the LICENSE file
 * FortranFormat: Written by Konrad Hinsen <hinsen@cnrs-orleans.fr> With contributions from Andreas Prlic <andreas@came.sbg.ac.at> last revision: 2006-6-23
 * FortranRecordReader.Copyright (c) 2011 Brendan Arnold under MIT licence.
+* Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
 
 
 
