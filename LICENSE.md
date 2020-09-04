@@ -1,4 +1,4 @@
-PyNeb is available under the GNU licence providing you cite the developpers names:
+PyNeb is available under the GNU licence (see below) providing you cite the developpers names:
 
 * Ch. Morisset (Instituto de Astronomia, Universidad Nacional Autonoma de Mexico)
 * V. Luridiana
@@ -11,6 +11,8 @@ PyNeb uses part of Chiantipy:
 Copyright 2009, 2010 Kenneth P. Dere
 This software is distributed under the terms of the GNU General Public License that is found in the LICENSE file
 * FortranFormat: Written by Konrad Hinsen <hinsen@cnrs-orleans.fr> With contributions from Andreas Prlic <andreas@came.sbg.ac.at> last revision: 2006-6-23
+* FortranRecordReader.Copyright (c) 2011 Brendan Arnold under MIT licence.
+
 
 
                     GNU GENERAL PUBLIC LICENSE
