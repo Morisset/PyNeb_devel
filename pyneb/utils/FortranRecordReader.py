@@ -3,6 +3,12 @@ import re
 import pdb
 import os
 
+"""
+FortranRecordReader. Copyright (c) 2011 Brendan Arnold under MIT licence.
+
+"""
+
+
 IS_PYTHON3 = sys.version_info[0] >= 3
 
 def _parser(tokens, version=None):
