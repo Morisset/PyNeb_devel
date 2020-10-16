@@ -1518,9 +1518,11 @@ class Atom(object):
             inputWave = wave
             label = '{0}_{1}A'.format(self.atom, int(wave))
             maxError = maxErrorA
-            
+        
+        self.log_.debug('{}'.format(label2levelDict))
         if label in label2levelDict:
             result = [label2levelDict[label][0], label2levelDict[label][1], inputWave, inputWave]
+            self.log_.debug('label2levelDict[{}] = {}'.format(label, label2levelDict[label]))
             return(result)
         
         j, i = np.unravel_index(np.argmin(abs(self.wave_Ang - inputWave)), self.wave_Ang.shape)
@@ -1846,7 +1848,7 @@ class Atom(object):
     @profile
     def getEmissivity(self, tem, den, lev_i= -1, lev_j= -1, wave= -1, product=True):
         """
-        Return the line emissivity of selected transition or complete array of emissivities
+        Return the line emissivity (in erg.s-1.cm3) of selected transition or complete array of emissivities
         The transition is selected by the argument wave (if given); 
         if wave is not supplied, it is selected by the upper and lower levels (lev_i and lev_j); 
         if neither is given, the whole array is computed
@@ -3498,7 +3500,7 @@ class RecAtom(object):
     def getEmissivity(self, tem, den, lev_i=None, lev_j=None, wave=None, label=None,
                       method='linear', product=True):
         """
-        Return the emissivity of a recombination line. The arguments used to 
+        Return the emissivity of a recombination line (erg.s-1.cm3). The arguments used to 
         define the line depend on whether the atom is an hydrogenoid or not. 
         In the first case, the transition can be specified either as a pair 
         of levels lev_i, lev_j or as a label. 

@@ -121,7 +121,7 @@ class EmisGrid(object):
                 self.recFitsFile = self.atom.recFitsFile
             except:
                 self.recFitsFile = None
-            self.emis_grid = self.atom.getEmissivity(self.tem, self.den)
+            self.emis_grid = self.atom.getEmissivity(self.tem, self.den) #(erg.s-1.cm3)
             if restore_file is not None:
                 self.save(restore_file)
                 self.log_.message('%s saved to %s' % ((self.atom), restore_file), calling=self.calling)
@@ -152,7 +152,7 @@ class EmisGrid(object):
 
     def getGrid(self, lev_i=None, lev_j=None, wave= -1, to_eval=None, label=None):
         """
-        2D array of a line emissivity for the (Te, Ne) values of a regularly spaced grid.
+        2D array of a line emissivity (erg.s-1.cm3) for the (Te, Ne) values of a regularly spaced grid.
         The line is specified either as the wavelength or the levels. An expression can also be used, 
         for example to_eval = 'L(5007)/L(4959)'
         
