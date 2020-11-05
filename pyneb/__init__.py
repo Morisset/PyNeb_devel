@@ -16,13 +16,14 @@ log_.message('Starting PyNeb version %s' % __version__, calling='PyNeb')
 
 if sys.version_info[0:2] < (2, 6):
     log_.warn('Python version >= 2.6 needed, seems you have {0}'.format(sys.version_info), calling='PyNeb')
+"""
 try:
     from numpy.version import version as numpy_version    
     if [int(n) for n in (numpy_version.split('.')[:3])] < [1, 5, 1] :
         log_.warn('Numpy version >= 1.5.1 needed, seems you have {0}'.format(numpy_version), calling='PyNeb')
 except:
     log_.warn('I do not understand what is your version of numpy: {0}, report this to PyNeb group'.format(numpy_version), calling='PyNeb')
-
+"""
 from .utils.manage_atomic_data import _ManageAtomicData
 atomicData = _ManageAtomicData()
 
