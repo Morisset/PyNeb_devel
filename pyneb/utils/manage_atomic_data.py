@@ -520,9 +520,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
                         elem = atom.split('_')[0]
                         if pn.config.Chianti_version_main == '7':
                             coll_file = '{0}/{1}/{2}/{2}.splups'.format(self.Chianti_path, elem, atom)
-                        elif pn.config.Chianti_version_main == '8':
-                            coll_file = '{0}/{1}/{2}/{2}.scups'.format(self.Chianti_path, elem, atom)
-                        elif pn.config.Chianti_version_main == '9':
+                        elif pn.config.Chianti_version_main in ('8', '9', '10'):
                             coll_file = '{0}/{1}/{2}/{2}.scups'.format(self.Chianti_path, elem, atom)
                         else:
                             pn.log_.error('Unknown version of Chianti {}'.format(pn.config.Chianti_version),
