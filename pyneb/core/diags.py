@@ -862,4 +862,38 @@ class Diagnostics(object):
         LDR = atom.getLowDensRatio(to_eval = to_eval)
         return(np.sort((LDR, HDR)))
     
-    
+    def eval_diag(self, label):
+        """
+
+        Parameters
+        ----------
+        label : diagnostic label(e.g. '[OIII] 4363/5007')
+            A string of a key included in the self.diags dictionnary.
+
+        Returns
+        -------
+        np.array
+            The evaluation of the diagnostic corresponding to the label.
+
+        """
+        if label not in self.diags:
+            self.log_.error('Unknown diagnostic: {}'.format(label), calling='eval_diag')
+        atom, diag_expression, error = self.diags[label]
+        sym, spec, rec = parseAtom2(atom)
+        def I(i, j):
+            wave = atom.wave_Ang[i - 1, j - 1]
+            corrIntens = obs.getLine(sym, spec, wave).corrIntens
+            return corrIntens
+        def L(wave):
+            corrIntens = obs.getLine(sym, spec, wave).corrIntens
+            return corrIntens
+        def B(label):
+            full_label = atom + '_' + label
+            corrIntens = obs.getLine(label=full_label).corrIntens
+            return corrIntens
+        def S(label):
+            full_label = atom + '_' + label + 'A'
+            corrIntens = obs.getLine(label=full_label).corrIntens
+            return corrIntens
+        diag_value = eval(diag_expression)
+        return diag_value    
