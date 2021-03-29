@@ -462,7 +462,7 @@ def elvlcRead(ions, filename = None, verbose=0,  useTh=1):
     fstring='i3,i6,a15,i3,i3,a3,f4.1,i3,4f15.2'
     elvlcFormat=FortranFormat(fstring)
     #
-    if type(filename) == NoneType:
+    if type(filename) == type(None):
         fname=ion2filename(ions)
         elvlname=fname+'.elvlc'
     else:
@@ -958,11 +958,13 @@ def splupsRead(ions, filename=0, prot=0, ci=0,  diel=0):
             else:
                 as1 = s1[i][45:].rstrip()
             nspl[i] = len(as1)/10
-            splupsFormat3 = FortranFormat(str(nspl[i])+'E10.2')
+            splupsFormat3 = FortranFormat(str(nspl[i])+'e10.2')
 #            splupsFormat3 = '(' + str(nspl[i]) + 'e10.3' + ')'
             inpt = FortranLine(as1, splupsFormat3)
-            spl1 = np.asarray(inpt[:], 'float64')
+#           spl1 = np.asarray(inpt[:], 'float64')
+            spl1 = np.asarray([ii for ii in as1.split()], 'float64')
             splups[i] = spl1
+            print(i, '::', type(as1), '::', nspl[i], '::', inpt, '::', spl1)
         #
         ref=[]
         for i in range(nsplups+1,len(s1)-1):
