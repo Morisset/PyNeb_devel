@@ -32,6 +32,7 @@ atomicData.resetDataFileDict()
 
 from .core.pynebcore import Atom, RecAtom, getAtomDict, getRecEmissivity, EmissionLine, Observation, \
     parseLineLabel, isValid
+from .core.pipeline import PipeLine
 from .core.icf import ICF 
 from .core.diags import Diagnostics, diags_dict
 from .core.emisGrid import EmisGrid, getEmisGridDict
