@@ -964,7 +964,6 @@ def splupsRead(ions, filename=0, prot=0, ci=0,  diel=0):
 #           spl1 = np.asarray(inpt[:], 'float64')
             spl1 = np.asarray([ii for ii in as1.split()], 'float64')
             splups[i] = spl1
-            print(i, '::', type(as1), '::', nspl[i], '::', inpt, '::', spl1)
         #
         ref=[]
         for i in range(nsplups+1,len(s1)-1):
