@@ -1,2 +1,2 @@
 # PyNeb version
-__version__ = '1.1.15b2'
+__version__ = '1.1.15b3'
