@@ -788,17 +788,20 @@ class Diagnostics(object):
                     else:
                         self.ANN = ANN
                 # set the test values to the one we are looking for
-                self.ANN.set_test(np.array((value_tem, value_den)).T)
+                shape = value_tem.shape
+                self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
                 # predict the result and denormalize them
                 self.ANN.predict()
                 if self.ANN.isfin is None:
                     tem = self.ANN.pred[:,0]*1e4
                     den = 10**self.ANN.pred[:,1]
                 else:
-                    tem = np.zeros_like(value_tem) * -10
+                    tem = np.zeros_like(value_tem.ravel()) * -10
                     tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
-                    den = np.zeros_like(value_tem) * -10
+                    den = np.zeros_like(value_tem.ravel()) * -10
                     den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+                tem = np.reshape(tem, shape)
+                den = np.reshape(den, shape)
                 if limit_res:
                     mask = (tem<tem_min) | (tem>tem_max)
                     tem[mask] = np.nan
