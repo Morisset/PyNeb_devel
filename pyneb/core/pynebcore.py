@@ -3950,10 +3950,13 @@ class EmissionLine(object):
         - label       line label in the standard PyNeb format
         - obsIntens   observed intensity
         - obsError    uncertainty on the observed intensity
+        - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
+                      are in the same unit as the intensity (default: True)
+        
     
     """ 
     def __init__(self, elem=None, spec=None, wave=None, blend=False, to_eval=None, label=None,
-                 obsIntens=None, obsError=None, corrected=False, _unit=None):
+                 obsIntens=None, obsError=None, corrected=False, _unit=None, errIsRelative=True):
         
         self.log_ = log_ 
         self.calling = 'EmissionLine'
@@ -4007,10 +4010,15 @@ class EmissionLine(object):
         if obsError is None:
             self.obsError = np.zeros_like(self.obsIntens)
         else:
-            self.obsError = np.asarray(obsError, dtype=float)
-
+            if errIsRelative:
+                self.obsError = np.asarray(obsError, dtype=float)
+            else:
+                self.obsError = np.asarray(obsError, dtype=float) / self.obsIntens
         if self.corrected:
-            self.corrError = np.asarray(self.obsError, dtype=float)
+            if errIsRelative:
+                self.corrError = np.asarray(self.obsError, dtype=float)
+            else:
+                self.corrError = np.asarray(self.obsError, dtype=float) / self.corrIntens
         else:
             self.corrError = np.zeros_like(self.obsError)
     ##            
@@ -4125,6 +4133,7 @@ class Observation(object):
         self.names = []
         self.extinction = RedCorr(law=correcLaw)
         self.corrected = corrected
+        self.MC_added = False
         if self.corrected:
             self.extinction.law = 'No correction'
         if obsFile is not None:
@@ -4148,7 +4157,7 @@ class Observation(object):
         if not isinstance(line, EmissionLine):            
             self.log_.error('Trying to add an inappropriate record to observations', calling=self.calling)
             return None
-        if self.corrected:
+        if self.corrected and not line.corrected:
             line.corrected = True
             self.correctData(line)
         self.lines.append(line)
@@ -4670,13 +4679,38 @@ class Observation(object):
         N: number of new observations to be added for each original observation.
         i_obs: used in case only a given observations needs to be treated
         """
+        if self.MC_added:
+            self.log_.error('Monte Carlo already applied to this observation', calling='addMonteCarloObs')
         n_lines = self.n_lines
         n_obs = self.n_obs
         if i_obs is None:
             self.log_.message('Entering', calling='addMonteCarloObs')
-            for i in range(n_obs):
-                self.addMonteCarloObs(i_obs=i, N=N)
+        
+            for l in self.lines:
+                l_ori = l.obsIntens
+                e_ori = l.obsError
+                l_new = np.repeat(l_ori[:, np.newaxis], N+1, axis=1)
+                e_new = np.repeat(e_ori[:, np.newaxis], N+1, axis=1)
+                norm = np.random.standard_normal(l_new.shape)
+                norm[:,0] = 0.                
+                l_new *= (1 + e_new * norm)
+                l.obsIntens = l_new.ravel()
+                l.obsError = e_new.ravel()
+                if self.corrected:
+                    l.corrIntens = l_new.ravel()
+                    l.corrError = e_new.ravel()
+                self.log_.debug('Adding MC to {}. {} {} {} {}'.format(l, l_new.shape, 
+                                                                      l_new.ravel().shape, 
+                                                                      l.obsIntens.shape,
+                                                                      l.corrIntens.shape), 
+                                calling='addMonteCarloObs')
+            new_names = np.repeat(np.asarray(self.names)[:, np.newaxis], N+1, axis=1)
+            MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
+            MC_names[0] = ''
+            self.names = np.core.defchararray.add(new_names , MC_names)
             self.log_.message('Leaving', calling='addMonteCarloObs')
+            self.MC_added = True
+        
         else:
             if self.corrected:
                 returnObs=False
@@ -4690,4 +4724,5 @@ class Observation(object):
                 new_obs = intens * (all_new_obs[i,:] * error + 1)
                 new_obs[new_obs < 0.] = 0.
                 self.addObs('{0}-MC-{1}'.format(self.names[i_obs], i), new_obs, error)
+            self.MC_added = True
     
