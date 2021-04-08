@@ -4045,7 +4045,7 @@ class EmissionLine(object):
             self.corrIntens = self.obsIntens * RC.getCorr(self.wave, normWave)     
         else:
             self.corrIntens = self.obsIntens
-        self.corrError = self.obsError
+        self.corrError = self.obsError # error is supposed to be relative.
         
         
     def addObs(self, newObsIntens, newObsError=None):
