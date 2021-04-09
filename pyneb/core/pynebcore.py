@@ -4692,8 +4692,8 @@ class Observation(object):
                 l_new = np.repeat(l_ori[:, np.newaxis], N+1, axis=1)
                 e_new = np.repeat(e_ori[:, np.newaxis], N+1, axis=1)
                 norm = np.random.standard_normal(l_new.shape)
-                norm[:,0] = 0.                
                 l_new *= (1 + e_new * norm)
+                l_new[:,0] = l_ori
                 l.obsIntens = l_new.ravel()
                 l.obsError = e_new.ravel()
                 if self.corrected:
