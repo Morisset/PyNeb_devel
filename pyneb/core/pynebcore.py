@@ -4552,6 +4552,8 @@ class Observation(object):
                                     
                                 err_fits_data = err_fits_hdu.data.ravel()
                             else:
+                                self.log_.message('No error file found for {}'.format(f.name),
+                                                  calling='Observation.readData')                                
                                 err_fits_data  = None
                             self.addLine(EmissionLine(label=lineID,
                                                       obsIntens=fits_data, 
