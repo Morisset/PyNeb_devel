@@ -12,6 +12,7 @@ import numpy as np
 import warnings
 import os
 import sys
+from pathlib import Path
 
 from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve, bs
@@ -35,6 +36,7 @@ if config.INSTALLED['mp']:
     from ..utils.multiprocs import getTemDen_helper
 if config.INSTALLED['pyfits from astropy']:
     import astropy.io.fits as pyfits
+    from astropy.wcs import WCS
 elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
@@ -4042,7 +4044,8 @@ class EmissionLine(object):
                           calling=self.calling)
             return None
         if self.wave > 0.0:
-            self.corrIntens = self.obsIntens * RC.getCorr(self.wave, normWave)     
+            with np.errstate(invalid='ignore'):
+                self.corrIntens = self.obsIntens * RC.getCorr(self.wave, normWave)     
         else:
             self.corrIntens = self.obsIntens
         self.corrError = self.obsError # error is supposed to be relative.
@@ -4094,7 +4097,7 @@ Corrected error: {0.corrError}""".format(self))
 
 class Observation(object):
     def __init__(self, obsFile=None, fileFormat='lines_in_cols', delimiter=None, err_default=0.10,
-                 corrected=False, errIsRelative=True, correcLaw='F99'):
+                 corrected=False, errIsRelative=True, correcLaw='F99', errStr='err'):
         """
         Define the observation object, which is a collection of observated intensities of one or more
         emission lines for one or more objects, with the corresponding errors.
@@ -4103,6 +4106,10 @@ class Observation(object):
         
         Parameters:
             - obsFile       name of the file containing the observations. May be a file object or a file name 
+                             If the fileFormat is 'fits_IFU', the obsFile keyword is of the form e.g.:
+                             'dir/ngc6778_MUSE_*.fits' where * is of the form O3_5007A.
+                             The associated error file must be named the same way, using errStr keyword value 
+                             e.g. dir/ngc6778_MUSE_O3_5007A_err.fits
             - fileFormat    format of the data file, depending on how the wavelengths are ordered.
                             Available formats are :
                             - 'lines_in_cols' : Each object is on a different row. Each column corresponds to a given emission line. 
@@ -4112,6 +4119,7 @@ class Observation(object):
                             - 'lines_in_rows' : Each object is on a different column. Each row corresponds to a given emission line.
                             - 'lines_in_rows_err_cols' : Each object is on a different column. Each row corresponds to a given emission line. 
                                For each object (eg. "IC418"), an additional column (named eg "errIC418") contains the errors on the line intensities.
+                            - 'fits_IFU': each emission line is stored into a fits file
             - delimiter     character separating entries 
             - err_default   default uncertainty assumed on intensities. Will overwrite the error from the file.
             - corrected     Boolean. True if the observed intensities are already corrected from extinction
@@ -4119,6 +4127,7 @@ class Observation(object):
             - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
                                 are in the same unit as the intensity (default: True)
             - correcLaw   ['F99'] extinction law used to correct the observed lines.
+            - errStr        - string used to identify error file when fileFormat is fits_IFU
 
         Example:
             Read a file containing corrected intensities:
@@ -4134,11 +4143,15 @@ class Observation(object):
         self.extinction = RedCorr(law=correcLaw)
         self.corrected = corrected
         self.MC_added = False
+        self.N_MC = 0
+        self.fits_shape = None
+        self.data_shape = None
         if self.corrected:
             self.extinction.law = 'No correction'
         if obsFile is not None:
             self.readData(obsFile=obsFile, fileFormat=fileFormat, delimiter=delimiter,
-                          err_default=err_default, corrected=corrected, errIsRelative=errIsRelative)
+                          err_default=err_default, corrected=corrected, errIsRelative=errIsRelative,
+                          errStr=errStr)
     ##            
     # @var log_
     # myloggin object
@@ -4299,7 +4312,7 @@ class Observation(object):
 
     
     def readData(self, obsFile, fileFormat='lines_in_cols', delimiter=None, err_default=0.10, corrected=False,
-                 errIsRelative=True):
+                 errIsRelative=True, errStr='err'):
         """
         Read observational data from an ascii file. The lines can be listed either in columns or in rows
         and the observed objects vary in the other direction. The uncertainty on the line intensities
@@ -4311,23 +4324,33 @@ class Observation(object):
         
  
         Parameters:
-            - obsFile        file containing the observations. May be a file object or a string 
+            - obsFile        file containing the observations. May be a file object or a string.
+                             If the fileFormat is 'fits_IFU', the obsFile keyword is of the form e.g.:
+                             'dir/ngc6778_MUSE_*.fits' where * is of the form O3_5007A.
+                             The associated error file must be named the same way, using errStr keyword value 
+                             e.g. dir/ngc6778_MUSE_O3_5007A_err.fits
             - fileFormat     emission lines vary across columns ('lines_in_cols', default) or 
                                 across rows ('lines_in_rows'), or across rows with errors in columns 
-                                ('lines_in_rows_err_cols')m in which case the column label must start with "err"
+                                ('lines_in_rows_err_cols') in which case the column label must start with "err"
+                                
+                                The format may also be 'fits_IFU', in which case each emission line comes
+                                from a different fits file
+                                
             - delimiter      field delimiter (default: None)  
             - err_default    default uncertainty on the line intensities
             - corrected      Boolean. True if the observed intensities are already corrected from extinction
                                  (default: False)
             - errIsRelative  Boolean. True if the errors are relative to the intensities, False if they
                                  are in the same unit as the intensity (default: False)
+            - errStr         string to identify the error file in case the fileFormat is fits_IFU.
 
         """    
-        format_list = ['lines_in_cols', 'lines_in_cols2', 'lines_in_rows', 'lines_in_rows_err_cols']
+        format_list = ['lines_in_cols', 'lines_in_cols2', 'lines_in_rows', 
+                       'lines_in_rows_err_cols', 'fits_IFU']
         if fileFormat not in format_list:
             self.log_.error('unknown format {0}'.format(fileFormat), calling='Observation.readData')
 
-        if type(obsFile) is str:
+        if type(obsFile) is str and fileFormat not in ('fits_IFU',):
             f = open(obsFile, 'r')
             closeAfterUse = True
         else:
@@ -4370,7 +4393,6 @@ class Observation(object):
                         self.log_.message('adding line {0}'.format(label), calling=self.calling)
                     except:
                         self.log_.warn('Impossible to add line'.format(label), calling=self.calling)
-                        
         elif fileFormat == 'lines_in_cols2':
             if closeAfterUse:
                 f.close()
@@ -4490,7 +4512,60 @@ class Observation(object):
                         self.log_.warn('Impossible to add line'.format(label), calling=self.calling)
                         print(label, intens, error)
         
-            
+        elif fileFormat == 'fits_IFU':
+            path = Path(obsFile)
+            dir_ = path.parent
+            pattern = path.name
+            files = dir_.glob(pattern)
+            self.log_.debug('path: {}, dir_: {}, pattern: {}'.format(path, dir_, pattern),
+                            calling='Observation.readData')
+            str1, str2 = pattern.split('*')
+            for f in files:
+                obs_file = f.name
+                if f.suffix == '.fits' and errStr not in obs_file:
+                    self.log_.debug('analysing {}'.format(f), calling='Observation.readData')
+                    lineID = strExtract(obs_file, str1, str2)
+                    spl = lineID.split('_')
+                    if len(spl) == 2:
+                        atom = spl[0]
+                        line = spl[1]
+                        if atom in LINE_LABEL_LIST:
+                            self.log_.message('Reading {}_{} from {}'.format(atom, line, f.name),
+                                              calling='Observation.readData')
+                            fits_hdu = pyfits.open(f)[0]
+                            fits_data = fits_hdu.data
+                            if self.fits_shape is None:
+                                self.fits_shape = fits_data.shape
+                            else:
+                                if fits_data.shape != self.fits_shape:
+                                    self.log_.error('data shape in file {} is {}. Previous shape was {}.'.format(
+                                                    f.name, fits_data.shape, self.fits_shape))
+                            fits_data = fits_data.ravel()
+                            err_file = dir_ / Path(f.stem+'_' + errStr + '.fits')
+                            if err_file.exists():
+                                self.log_.message('Reading error {}_{} from {}'.format(atom, line, err_file.name),
+                                                  calling='Observation.readData')
+                                err_fits_hdu = pyfits.open(err_file)[0]
+                                if err_fits_hdu.data.shape != self.fits_shape:
+                                    self.log_.error('error shape in file {} is {}. data shape is {}.'.format(
+                                                    err_file.name, err_fits_hdu.data.shape, self.fits_shape))
+                                    
+                                err_fits_data = err_fits_hdu.data.ravel()
+                            else:
+                                err_fits_data  = None
+                            self.addLine(EmissionLine(label=lineID,
+                                                      obsIntens=fits_data, 
+                                                      obsError=err_fits_data, 
+                                                      corrected=corrected, errIsRelative=errIsRelative))
+                            self.fits_header = fits_hdu.header
+                            self.wcs = WCS(fits_hdu.header).celestial
+                        else:
+                            self.log_.debug('atom {} not in LINE_LABEL_LIST'.format(atom), 
+                                            calling='Observation.readData')
+                    
+            self.names = ['{}_{}'.format(str1, i) for i in range(self.n_obs)]
+            self.data_shape = self.fits_shape
+
         if corrected:
             self.correctData()
             
@@ -4603,8 +4678,8 @@ class Observation(object):
         if line2 is None:
             self.log_.error('{0} is not a valid label or is not observed'.format(line2), calling=self.calling)
             return None
-
-        obs_over_theo = (line1.obsIntens / line2.obsIntens) / r_theo 
+        with np.errstate(divide='ignore'):
+            obs_over_theo = (line1.obsIntens / line2.obsIntens) / r_theo 
         self.extinction.setCorr(obs_over_theo, line1.wave, line2.wave)
         
  
@@ -4708,9 +4783,7 @@ class Observation(object):
             MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
             MC_names[0] = ''
             self.names = np.core.defchararray.add(new_names , MC_names)
-            self.log_.message('Leaving', calling='addMonteCarloObs')
-            self.MC_added = True
-        
+            self.log_.message('Leaving', calling='addMonteCarloObs')        
         else:
             if self.corrected:
                 returnObs=False
@@ -4724,5 +4797,15 @@ class Observation(object):
                 new_obs = intens * (all_new_obs[i,:] * error + 1)
                 new_obs[new_obs < 0.] = 0.
                 self.addObs('{0}-MC-{1}'.format(self.names[i_obs], i), new_obs, error)
-            self.MC_added = True
+        self.MC_added = True
+        self.N_MC = N
+        if self.fits_shape is not None:    
+            self.data_shape = (self.fits_shape[0], self.fits_shape[1], self.N_MC+1)
+        else:
+            self.data_shape = (self.N_MC+1)
     
+    def reshape(self, data):
+        """
+        Return data in shape of the original data (use with fits IFUs and/or MC)
+        """
+        return np.reshape(data, self.data_shape)
