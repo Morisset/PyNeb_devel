@@ -3558,8 +3558,10 @@ class RecAtom(object):
         if (lev_i is not None) and (lev_j is not None):
             label = '{0}_{1}'.format(lev_i, lev_j)
         if wave is not None:
-            label = '{0:.1f}'.format(wave)
-            label_str = self._getLabelStr(label, warn=False)
+            #label = '{0:.1f}'.format(wave)
+            #label_str = self._getLabelStr(label, warn=False)
+            label_str = self._getLabelStr(wave, warn=False)
+            label = label_str
             if label_str is None:
                 ij = self.getTransition(wave)
                 label = '{}_{}'.format(ij[0], ij[1])
@@ -3684,6 +3686,8 @@ class RecAtom(object):
         I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
         L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
         S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
+        
+        emis = eval(to_eval)
         try:
             emis = eval(to_eval)
         except:
@@ -4097,7 +4101,8 @@ Corrected error: {0.corrError}""".format(self))
 
 class Observation(object):
     def __init__(self, obsFile=None, fileFormat='lines_in_cols', delimiter=None, err_default=0.10,
-                 corrected=False, errIsRelative=True, correcLaw='F99', errStr='err'):
+                 corrected=False, errIsRelative=True, correcLaw='F99', errStr='err',
+                 addErrDefault = False):
         """
         Define the observation object, which is a collection of observated intensities of one or more
         emission lines for one or more objects, with the corresponding errors.
@@ -4128,6 +4133,7 @@ class Observation(object):
                                 are in the same unit as the intensity (default: True)
             - correcLaw   ['F99'] extinction law used to correct the observed lines.
             - errStr        - string used to identify error file when fileFormat is fits_IFU
+            - addErrDefault - if True, the default error is always quadratically added to the read error.
 
         Example:
             Read a file containing corrected intensities:
@@ -4142,6 +4148,7 @@ class Observation(object):
         self.names = []
         self.extinction = RedCorr(law=correcLaw)
         self.corrected = corrected
+        self.addErrDefault = addErrDefault
         self.MC_added = False
         self.N_MC = 0
         self.fits_shape = None
@@ -4174,6 +4181,15 @@ class Observation(object):
             line.corrected = True
             self.correctData(line)
         self.lines.append(line)
+        
+    def removeLine(self, lineLabel):
+        """
+        
+        """
+        
+        for l in self.lines:
+            if l.label == lineLabel:
+                self.lines.remove(l)
 
     def fillObs(self, lineLabel, default=np.nan):
         """
@@ -4214,6 +4230,33 @@ class Observation(object):
             else:
                 line.addObs(newObsIntens[i], newObsError[i])
         self.names.append(name)
+
+    def addSum(self, labelsToAdd, newLabel):
+        """
+        Add a new observation. The intensity is the sum of the intensities of 
+        the lines defined by the tupple labelsToAdd. The rror is the quadratic sum.
+        Example:
+            addSum(('O1r_7771A', 'O1r_7773A', 'O1r_7775A'), 'O1r_7773+')
+        """
+        
+        intenses = self.getIntens(returnObs=True)
+        errors = self.getError(returnObs=True)
+        I = intenses[labelsToAdd[0]]
+        E = errors[labelsToAdd[0]]
+        atom = labelsToAdd[0].split('_')[0]
+        
+        for label in labelsToAdd[1:]:
+            if label.split('_')[0] != atom:
+                self.log_.error('Can not add lines from different atoms {} and {}.'.format(
+                    label.split('_')[0],atom))
+            I += intenses[label]
+            E = np.sqrt(E**2 + errors[label]**2)
+        to_eval = 'S("{}")'.format(newLabel.split('_')[1])
+        newLine = EmissionLine(label=newLabel, obsIntens=I, obsError=E, 
+                                  corrected=False, errIsRelative=False, 
+                                  to_eval=to_eval)
+        self.addLine(newLine)
+        
 
     @property
     def lineLabels(self):
@@ -4381,6 +4424,8 @@ class Observation(object):
                         error = data_tab[i_error].astype(np.float32)
                         if not errIsRelative:
                             error = quiet_divide(error, intens)
+                        if self.addErrDefault:
+                            error = np.sqrt(error**2 + err_default**2)
                     except:
                         self.log_.message('No error found for line {0}'.format(label), calling=self.calling)
                         error = data_tab[1].astype(np.float32) * 0. + err_default
@@ -4417,6 +4462,8 @@ class Observation(object):
                             error = data_tab[label + 'e']
                             if not errIsRelative:
                                 error = error / intens
+                            if self.addErrDefault:
+                                error = np.sqrt(error**2 + err_default**2)
                         except:
                             self.log_.message('No error found for line {0}'.format(label), calling=self.calling)
                             error = np.ones_like(data_tab[label]) * err_default
@@ -4457,6 +4504,8 @@ class Observation(object):
                         error = data_tab[:, i_error]
                         if not errIsRelative:
                             error = error / intens
+                        if self.addErrDefault:
+                            error = np.sqrt(error**2 + err_default**2)
                     except:
                         self.log_.message('No error found for line {0}'.format(label), calling=self.calling)
                         error = np.ones_like(data_tab[:, 1]) * err_default
@@ -4500,6 +4549,8 @@ class Observation(object):
                     error = np.array([data_tab[i][name] for name in error_names])
                     if not errIsRelative:
                         error = error / intens
+                    if self.addErrDefault:
+                        error = np.sqrt(error**2 + err_default**2)
                     try:
                         line2add = EmissionLine(label=label, obsIntens=intens, obsError=error)
                     except:
@@ -4551,14 +4602,18 @@ class Observation(object):
                                                     err_file.name, err_fits_hdu.data.shape, self.fits_shape))
                                     
                                 err_fits_data = err_fits_hdu.data.ravel()
+                                if not errIsRelative:
+                                    err_fits_data = err_fits_data / fits_data
+                                if self.addErrDefault:
+                                    err_fits_data = np.sqrt(err_fits_data**2 + err_default**2)
                             else:
                                 self.log_.message('No error file found for {}'.format(f.name),
                                                   calling='Observation.readData')                                
-                                err_fits_data  = None
+                                err_fits_data  = np.ones_like(fits_data) * err_default
                             self.addLine(EmissionLine(label=lineID,
                                                       obsIntens=fits_data, 
                                                       obsError=err_fits_data, 
-                                                      corrected=corrected, errIsRelative=errIsRelative))
+                                                      corrected=corrected, errIsRelative=True))
                             self.fits_header = fits_hdu.header
                             self.wcs = WCS(fits_hdu.header).celestial
                         else:
