@@ -4126,14 +4126,14 @@ class Observation(object):
                                For each object (eg. "IC418"), an additional column (named eg "errIC418") contains the errors on the line intensities.
                             - 'fits_IFU': each emission line is stored into a fits file
             - delimiter     character separating entries 
-            - err_default   default uncertainty assumed on intensities. Will overwrite the error from the file.
+            - err_default   [0.10] default uncertainty assumed on intensities. Will overwrite the error from the file.
             - corrected     Boolean. True if the observed intensities are already corrected from extinction
                                 (default: False)
             - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
                                 are in the same unit as the intensity (default: True)
             - correcLaw   ['F99'] extinction law used to correct the observed lines.
             - errStr        - string used to identify error file when fileFormat is fits_IFU
-            - addErrDefault - if True, the default error is always quadratically added to the read error.
+            - addErrDefault - [False] if True, the default error is always quadratically added to the read error.
 
         Example:
             Read a file containing corrected intensities:
@@ -4234,7 +4234,7 @@ class Observation(object):
     def addSum(self, labelsToAdd, newLabel):
         """
         Add a new observation. The intensity is the sum of the intensities of 
-        the lines defined by the tupple labelsToAdd. The rror is the quadratic sum.
+        the lines defined by the tupple labelsToAdd. The error is the quadratic sum of the absolute errors.
         Example:
             addSum(('O1r_7771A', 'O1r_7773A', 'O1r_7775A'), 'O1r_7773+')
         """
@@ -4242,7 +4242,9 @@ class Observation(object):
         intenses = self.getIntens(returnObs=True)
         errors = self.getError(returnObs=True)
         I = intenses[labelsToAdd[0]]
-        E = errors[labelsToAdd[0]]
+        E = errors[labelsToAdd[0]] * I
+        
+        
         atom = labelsToAdd[0].split('_')[0]
         
         for label in labelsToAdd[1:]:
@@ -4250,10 +4252,11 @@ class Observation(object):
                 self.log_.error('Can not add lines from different atoms {} and {}.'.format(
                     label.split('_')[0],atom))
             I += intenses[label]
-            E = np.sqrt(E**2 + errors[label]**2)
+            E = np.sqrt(E**2 + (errors[label]*I)**2)
         to_eval = 'S("{}")'.format(newLabel.split('_')[1])
+        E = E / I
         newLine = EmissionLine(label=newLabel, obsIntens=I, obsError=E, 
-                                  corrected=False, errIsRelative=False, 
+                                  corrected=False, errIsRelative=True, 
                                   to_eval=to_eval)
         self.addLine(newLine)
         
