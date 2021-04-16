@@ -3865,7 +3865,7 @@ def getLineLabel(elem, spec, wave, blend=False):
 
     return atom_label, wave_label, line_label
 
-
+#%%
 def parseLineLabel(lineLabel):
     """
     Parse the line label to extract the substrings referring to the atom (elem, spec and atom)
@@ -3882,11 +3882,8 @@ def parseLineLabel(lineLabel):
     ##
     # @todo maybe rearrange the order so 1) it is compatible with getLineLabel, or 2) it lists all the strings first 
 
-    # determine if the line is a blend or not
-    if lineLabel[-1] == '+'  or lineLabel[-2] == '+':
-        blend = True
-    else:
-        blend = False
+    blend = False
+    wave_unit = 'A'
     # extract information on the atom
     elem_spec = strExtract(lineLabel, ' ', '_')
     elem, spec = parseAtom(elem_spec)
@@ -3895,22 +3892,25 @@ def parseLineLabel(lineLabel):
         if elem_spec[-1] == 'r':
             atom_label += 'r'
     # extract information on the wave
-    if blend:
-        try:
-            wave = float(strExtract(lineLabel[:-2], '_', ' '))
-        except:
-            wave = 0.
-    else:
-        try:
-            wave = float(strExtract(lineLabel[:-1], '_', ' '))
-        except:
-            wave = 0.
-    wave_label = strExtract(lineLabel, '_', ' ')
-    if lineLabel[-1] == 'm':
+    wave_label = lineLabel.split('_')[1]
+    wave = ''
+    for s in wave_label:
+        if s.isdigit() or s == '.':
+            wave += s
+        elif s == '+':
+            blend = True
+        elif s in ('A', 'm'):
+            wave_unit = s
+    try:
+        wave = float(wave)
+    except:
+        wave = 0.    
+    if wave_unit == 'm':
         wave = wave * 1.e4
     
     return elem, spec, atom_label, wave, wave_label, blend
 
+#%%
     
 def isValid(line_label):
     """
@@ -4049,7 +4049,9 @@ class EmissionLine(object):
             return None
         if self.wave > 0.0:
             with np.errstate(invalid='ignore'):
-                self.corrIntens = self.obsIntens * RC.getCorr(self.wave, normWave)     
+                self.corrIntens = self.obsIntens * RC.getCorr(self.wave, normWave)
+                self.log_.debug('Correcting {} with wave = {}'.format(self.label, self.wave),
+                                calling='EmissionLine.correctIntens')
         else:
             self.corrIntens = self.obsIntens
         self.corrError = self.obsError # error is supposed to be relative.
@@ -4231,12 +4233,12 @@ class Observation(object):
                 line.addObs(newObsIntens[i], newObsError[i])
         self.names.append(name)
 
-    def addSum(self, labelsToAdd, newLabel):
+    def addSum(self, labelsToAdd, newLabel, to_eval=None):
         """
         Add a new observation. The intensity is the sum of the intensities of 
         the lines defined by the tupple labelsToAdd. The error is the quadratic sum of the absolute errors.
         Example:
-            addSum(('O1r_7771A', 'O1r_7773A', 'O1r_7775A'), 'O1r_7773+')
+            addSum(('O1r_7771A', 'O1r_7773A', 'O1r_7775A'), 'O1r_7773A+', to_eval = 'S("7773+")')
         """
         
         intenses = self.getIntens(returnObs=True)
@@ -4253,7 +4255,8 @@ class Observation(object):
                     label.split('_')[0],atom))
             I += intenses[label]
             E = np.sqrt(E**2 + (errors[label]*I)**2)
-        to_eval = 'S("{}")'.format(newLabel.split('_')[1])
+        if to_eval is None:
+            to_eval = 'S("{}")'.format(newLabel.split('_')[1])
         E = E / I
         newLine = EmissionLine(label=newLabel, obsIntens=I, obsError=E, 
                                   corrected=False, errIsRelative=True, 
