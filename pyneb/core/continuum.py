@@ -77,11 +77,11 @@ class Continuum(object):
                                   4.6, 4.7, 4.8, 4.9, 5. ])
             D = np.loadtxt(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano_He2.txt')
         else:
-            print('Invalid case {0}'.format(case))
-            return None
+            self.log_.warn('Invalid case {0}'.format(case), calling='Continuum.make_cont_Ercolano')
+            return np.nan
         if (tem < np.min(tab_T)).any() or (tem > np.max(tab_T)).any():
-            print('Invalid temperature {0}'.format(tem))
-            return None
+            self.log_.warn('Invalid temperature {0}'.format(tem), calling='Continuum.make_cont_Ercolano')            
+            return np.nan
         
         BE_E_Ry = D[:,1]
         BE_E_erg = BE_E_Ry * CST.RYD_erg
