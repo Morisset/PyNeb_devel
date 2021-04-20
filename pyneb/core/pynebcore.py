@@ -3734,10 +3734,10 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
                                                              method=method, wave=wave, product=product)
     else:
         if (atom == 'H1') and (lev_i == 4) and (lev_j == 2):
-            self.log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
+            log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
             return getHbEmissivity(tem, den)
         else:
-            self.log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
+            log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
 
 
 def getHbEmissivity(tem= -1, den=1.):
@@ -3865,7 +3865,7 @@ def getLineLabel(elem, spec, wave, blend=False):
 
     return atom_label, wave_label, line_label
 
-#%%
+#%% parseLineLabel
 def parseLineLabel(lineLabel):
     """
     Parse the line label to extract the substrings referring to the atom (elem, spec and atom)
@@ -3910,7 +3910,7 @@ def parseLineLabel(lineLabel):
     
     return elem, spec, atom_label, wave, wave_label, blend
 
-#%%
+#%% Observations
     
 def isValid(line_label):
     """
@@ -4346,6 +4346,8 @@ class Observation(object):
             return sorted(self.lines, key=lambda line: line.atom + str(line.wave))
         elif crit == 'wave':
             return sorted(self.lines, key=lambda line: line.wave)
+        elif crit == 'mass':
+            return sorted(self.lines, key=lambda line: Z[line.elem])
         else:
             self.log_.error('crit = {0} is not valid'.format(crit), calling=self.calling + '.getSortedLines')
 
