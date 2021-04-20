@@ -4347,7 +4347,7 @@ class Observation(object):
         elif crit == 'wave':
             return sorted(self.lines, key=lambda line: line.wave)
         elif crit == 'mass':
-            return sorted(self.lines, key=lambda line: Z[line.elem])
+            return sorted(self.lines, key=lambda line: (Z[line.elem], line.spec, line.wave))
         else:
             self.log_.error('crit = {0} is not valid'.format(crit), calling=self.calling + '.getSortedLines')
 
