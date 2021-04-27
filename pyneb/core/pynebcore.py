@@ -4611,7 +4611,8 @@ class Observation(object):
                                     
                                 err_fits_data = err_fits_hdu.data.ravel()
                                 if not errIsRelative:
-                                    err_fits_data = err_fits_data / fits_data
+                                    with np.errstate(divide='ignore', invalid='ignore'):
+                                        err_fits_data = err_fits_data / fits_data
                                 if self.addErrDefault:
                                     err_fits_data = np.sqrt(err_fits_data**2 + err_default**2)
                             else:
@@ -4630,7 +4631,7 @@ class Observation(object):
                     
             self.names = ['{}_{}'.format(str1, i) for i in range(self.n_obs)]
             self.data_shape = self.fits_shape
-
+            
         if corrected:
             self.correctData()
             
