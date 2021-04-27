@@ -33,7 +33,7 @@ def plot_2comp(tem1=1e4, tem2=1e4, dens1=3e2, dens2=5e5, mass1=1, mass2=5e-4):
     for diag in pn.diags_dict:
         if diag[0:7] != '[FeIII]':
             diags.addDiag(diag)
-            print 'Adding', diag
+            print('Adding', diag)
     diags.addClabel('[SIII] 6312/9069', '[SIII]A')
     diags.addClabel('[OIII] 4363/5007', '[OIII]A')
     """    

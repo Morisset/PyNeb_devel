@@ -110,7 +110,7 @@ T_Spp = np.zeros ((n_vol_points, n_den_points))
 # can be changed
 for i, vol1 in enumerate(vol1grid):
     T_Opp[i], T_Spp[i] = TOandTS(den1=1e2, den2=den2grid, vol1=vol1, denDiag='O2')
-    print 'Computing row n.', i, 'of', n_vol_points
+    print('Computing row n.', i, 'of', n_vol_points)
 
 plt.figure(1)
 plt.subplot(2, 2, 1)

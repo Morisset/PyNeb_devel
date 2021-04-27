@@ -68,7 +68,7 @@ def writeAtom(input_file):
     # Read Es
     energy = all_data[0, :]
     NLevels = len(energy)
-    if units[0] is 'eV': 
+    if units[0] == 'eV': 
         energy = energy / (pn.CST.RYD_EV * pn.CST.RYD_ANG)
     # Read statistical weights
     stat_weight = all_data[1, :]
@@ -213,7 +213,7 @@ class Hdr(object):
     
 
     def show(self):
-        print self.hdu[self.ext].header
+        print(self.hdu[self.ext].header)
     
 
     def up(self, key, value):

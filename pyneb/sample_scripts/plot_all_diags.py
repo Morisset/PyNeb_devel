@@ -13,7 +13,7 @@ def plot_all(save=False):
         atom, diag_eval, err = diags_dict[diag]
         # Skip Fe III as they are so many
         if (atom in AA) and (atom != 'Fe3'):
-            print atom
+            print(atom)
             plt.figure()
             grid = pn.EmisGrid(atomObj=AA[atom])
             grid.plotContours(to_eval=diag_eval)
