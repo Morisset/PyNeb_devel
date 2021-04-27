@@ -98,28 +98,28 @@ def ab_ion5(atom, line, wave):
     ab_5 = np.log10(atom.getIonAbundance(emis3[line]/emis3['Hbeta']*100, temp_5, dens_S2_5, wave= wave))
     return ab_1, ab_2, ab_3, ab_4, ab_5
 
-print '   Dens1 = %.0f, Dens2 = %.0f,  Dens3 = %.0f,  Dens4 = %.0f,  Dens5 = %.0f' % \
-    (dens_S2_1, dens_S2_2, dens_S2_3, dens_S2_4, dens_S2_5)
-print '   Temp1 = %.0f, Temp2 = %.0f, Temp3 = %.0f, Temp4 = %.0f, Temp5 = %.0f' % \
-    (temp_1, temp_2, temp_3, temp_4, temp_5)
+print('   Dens1 = %.0f, Dens2 = %.0f,  Dens3 = %.0f,  Dens4 = %.0f,  Dens5 = %.0f' % \
+    (dens_S2_1, dens_S2_2, dens_S2_3, dens_S2_4, dens_S2_5))
+print('   Temp1 = %.0f, Temp2 = %.0f, Temp3 = %.0f, Temp4 = %.0f, Temp5 = %.0f' % \
+    (temp_1, temp_2, temp_3, temp_4, temp_5))
 
 for line in S2_lambda:
     ab_Sp1, ab_Sp2, ab_Sp3, ab_Sp4, ab_Sp5 = ab_ion5(S2, 'SII_'+str(line), line)        
-    print ' S+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
-        (line,ab_Sp1-Sp, ab_Sp2-Sp, ab_Sp3-Sp, ab_Sp4-Sp, ab_Sp5-Sp)
+    print(' S+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
+        (line,ab_Sp1-Sp, ab_Sp2-Sp, ab_Sp3-Sp, ab_Sp4-Sp, ab_Sp5-Sp))
 
 ab_Np1, ab_Np2, ab_Np3, ab_Np4, ab_Np5 = ab_ion5(N2, 'NII_6583', 6583)  
-print ' N+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
-        (6583,ab_Np1-Np, ab_Np2-Np, ab_Np3-Np, ab_Np4-Np, ab_Np5-Np)
+print(' N+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
+        (6583,ab_Np1-Np, ab_Np2-Np, ab_Np3-Np, ab_Np4-Np, ab_Np5-Np))
 
 ab_Op1, ab_Op2, ab_Op3, ab_Op4, ab_Op5 = ab_ion5(O2, 'OII_3726', 3726)  
-print ' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
-        (3726,ab_Op1-Op, ab_Op2-Op, ab_Op3-Op, ab_Op4-Op, ab_Op5-Op)
+print(' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
+        (3726,ab_Op1-Op, ab_Op2-Op, ab_Op3-Op, ab_Op4-Op, ab_Op5-Op))
 ab_Op1, ab_Op2, ab_Op3, ab_Op4, ab_Op5 = ab_ion5(O2, 'OII_3729', 3729)  
-print ' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
-        (3729,ab_Op1-Op, ab_Op2-Op, ab_Op3-Op, ab_Op4-Op, ab_Op5-Op)
+print(' O+%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
+        (3729,ab_Op1-Op, ab_Op2-Op, ab_Op3-Op, ab_Op4-Op, ab_Op5-Op))
 
 ab_Opp1, ab_Opp2, ab_Opp3, ab_Opp4, ab_Opp5 = ab_ion5(O3, 'OIII_5007', 5007)  
-print 'O++%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
-        (5007,ab_Opp1-Opp, ab_Opp2-Opp, ab_Opp3-Opp, ab_Opp4-Opp, ab_Opp5-Opp)
+print('O++%i : %.2f          %.2f         %.2f            %.2f           %.2f' % \
+        (5007,ab_Opp1-Opp, ab_Opp2-Opp, ab_Opp3-Opp, ab_Opp4-Opp, ab_Opp5-Opp))
 

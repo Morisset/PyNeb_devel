@@ -23,11 +23,11 @@ O2.name
 
 # inspect the header of atomic data file
 # print 'Atomic data header:'
-print O2.AtomData.AtomHeader 
+print(O2.AtomData.AtomHeader)
 
 # inspect the header of collisional data file
 # print 'Collisional header:'
-print O2.CollData.CollHeader 
+print(O2.CollData.CollHeader)
 
 # explore the atom: builtin data
 O2.gs # ground-state configuration
@@ -164,7 +164,7 @@ tem, den = diags.getCrossTemDen('[NII] 5755/6548', '[SII] 6731/6716', 50, 1.0,
                                 guess_tem=10000, tol_tem = 1., tol_den = 1., max_iter = 5)
 
 #TO BE CONTINUED FROM HERE
-print tem, den
+print(tem, den)
 
 #######################################################################
 # HANDLING OBSERVATIONS
