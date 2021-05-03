@@ -37,6 +37,7 @@ if config.INSTALLED['mp']:
 if config.INSTALLED['pyfits from astropy']:
     import astropy.io.fits as pyfits
     from astropy.wcs import WCS
+    from astropy.nddata.utils import Cutout2D
 elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
@@ -4104,7 +4105,7 @@ Corrected error: {0.corrError}""".format(self))
 class Observation(object):
     def __init__(self, obsFile=None, fileFormat='lines_in_cols', delimiter=None, err_default=0.10,
                  corrected=False, errIsRelative=True, correcLaw='F99', errStr='err',
-                 addErrDefault = False):
+                 addErrDefault = False, Cutout2D_position=None, Cutout2D_size=None):
         """
         Define the observation object, which is a collection of observated intensities of one or more
         emission lines for one or more objects, with the corresponding errors.
@@ -4136,6 +4137,7 @@ class Observation(object):
             - correcLaw   ['F99'] extinction law used to correct the observed lines.
             - errStr        - string used to identify error file when fileFormat is fits_IFU
             - addErrDefault - [False] if True, the default error is always quadratically added to the read error.
+            - Cutout2D_position, Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
 
         Example:
             Read a file containing corrected intensities:
@@ -4160,7 +4162,8 @@ class Observation(object):
         if obsFile is not None:
             self.readData(obsFile=obsFile, fileFormat=fileFormat, delimiter=delimiter,
                           err_default=err_default, corrected=corrected, errIsRelative=errIsRelative,
-                          errStr=errStr)
+                          errStr=errStr, 
+                          Cutout2D_position=Cutout2D_position, Cutout2D_size=Cutout2D_size)
     ##            
     # @var log_
     # myloggin object
@@ -4363,7 +4366,7 @@ class Observation(object):
 
     
     def readData(self, obsFile, fileFormat='lines_in_cols', delimiter=None, err_default=0.10, corrected=False,
-                 errIsRelative=True, errStr='err'):
+                 errIsRelative=True, errStr='err', Cutout2D_position=None, Cutout2D_size=None):
         """
         Read observational data from an ascii file. The lines can be listed either in columns or in rows
         and the observed objects vary in the other direction. The uncertainty on the line intensities
@@ -4394,6 +4397,7 @@ class Observation(object):
             - errIsRelative  Boolean. True if the errors are relative to the intensities, False if they
                                  are in the same unit as the intensity (default: False)
             - errStr         string to identify the error file in case the fileFormat is fits_IFU.
+            - Cutout2D_position, Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
 
         """    
         format_list = ['lines_in_cols', 'lines_in_cols2', 'lines_in_rows', 
@@ -4593,6 +4597,17 @@ class Observation(object):
                                               calling='Observation.readData')
                             fits_hdu = pyfits.open(f)[0]
                             fits_data = fits_hdu.data
+                            self.origin_fits_shape = fits_data.shape
+                            self.fits_header = fits_hdu.header
+                            self.wcs = WCS(fits_hdu.header).celestial
+                            if Cutout2D_position is not None:
+                                self.log_.debug('Cutout2D applied to data shape {}.'.format(fits_data.shape),
+                                                calling='Observation.readData')
+                                C2D = Cutout2D(data=fits_data, position=Cutout2D_position, 
+                                               size=Cutout2D_size, wcs=WCS(fits_hdu.header), mode='trim',
+                                               copy=True)
+                                fits_data = C2D.data
+                                self.wcs = C2D.wcs
                             if self.fits_shape is None:
                                 self.fits_shape = fits_data.shape
                             else:
@@ -4605,11 +4620,16 @@ class Observation(object):
                                 self.log_.message('Reading error {}_{} from {}'.format(atom, line, err_file.name),
                                                   calling='Observation.readData')
                                 err_fits_hdu = pyfits.open(err_file)[0]
-                                if err_fits_hdu.data.shape != self.fits_shape:
+                                if err_fits_hdu.data.shape != self.origin_fits_shape:
                                     self.log_.error('error shape in file {} is {}. data shape is {}.'.format(
                                                     err_file.name, err_fits_hdu.data.shape, self.fits_shape))
-                                    
-                                err_fits_data = err_fits_hdu.data.ravel()
+                                err_fits_data = err_fits_hdu.data
+                                if Cutout2D_position is not None:
+                                    C2D = Cutout2D(data=err_fits_data, position=Cutout2D_position, 
+                                                   size=Cutout2D_size, mode='trim',
+                                                   copy=True)
+                                    err_fits_data = C2D.data
+                                err_fits_data = err_fits_data.ravel()
                                 if not errIsRelative:
                                     with np.errstate(divide='ignore', invalid='ignore'):
                                         err_fits_data = err_fits_data / fits_data
@@ -4623,8 +4643,6 @@ class Observation(object):
                                                       obsIntens=fits_data, 
                                                       obsError=err_fits_data, 
                                                       corrected=corrected, errIsRelative=True))
-                            self.fits_header = fits_hdu.header
-                            self.wcs = WCS(fits_hdu.header).celestial
                         else:
                             self.log_.debug('atom {} not in LINE_LABEL_LIST'.format(atom), 
                                             calling='Observation.readData')
@@ -4811,7 +4829,7 @@ class Observation(object):
 
     
     
-    def addMonteCarloObs(self, N=0, i_obs=None):
+    def addMonteCarloObs(self, N=0, i_obs=None, random_seed=None):
         """
         Adding MonteCarlo random-gauss values of fake observations to an obs object.
         The names of the fake observations will be OriginalName-MC-n, n ranging from 0 to N-1
@@ -4819,6 +4837,7 @@ class Observation(object):
         Parameters:
         N: number of new observations to be added for each original observation.
         i_obs: used in case only a given observations needs to be treated
+        random_seed: [default] used to initialize the numpy random generator
         """
         if self.MC_added:
             self.log_.error('Monte Carlo already applied to this observation', calling='addMonteCarloObs')
@@ -4826,7 +4845,7 @@ class Observation(object):
         n_obs = self.n_obs
         if i_obs is None:
             self.log_.message('Entering', calling='addMonteCarloObs')
-        
+            np.random.seed(random_seed)
             for l in self.lines:
                 l_ori = l.obsIntens
                 e_ori = l.obsError
