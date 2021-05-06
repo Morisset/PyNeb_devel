@@ -4599,7 +4599,7 @@ class Observation(object):
                             fits_data = fits_hdu.data
                             self.origin_fits_shape = fits_data.shape
                             self.fits_header = fits_hdu.header
-                            self.wcs = WCS(fits_hdu.header).celestial
+                            self.wcs = WCS(self.fits_header).celestial
                             if Cutout2D_position is not None:
                                 self.log_.debug('Cutout2D applied to data shape {}.'.format(fits_data.shape),
                                                 calling='Observation.readData')
