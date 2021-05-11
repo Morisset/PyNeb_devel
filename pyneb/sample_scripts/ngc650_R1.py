@@ -5,7 +5,6 @@
 
 import matplotlib.pyplot as plt
 import pyneb as pn
-import sys
 import os
 
 
@@ -140,16 +139,16 @@ for ngc in ngc_list:
 		tem_O3 = all_atoms['O3'].getTemDen(i5007/i4363, den=100., wave1=5007, wave2=4363)
 
 	# Printout of physical conditions
-	print 'tem_O3: ', tem_O3
-	print 'tem_N2: ', tem_N2
-	print 'den_S2: ', den_S2
-	print 'den_Ar4: ', den_Ar4	
-	print 'den_S3:', den_S3
-	print 'den_Ne3: ', den_Ne3
-	print 'i4686: ', i4686
-	print 'i5876: ', i5876
-	print 'i6678: ', i6678 
-	print 'i4861: ', i4861	
+	print('tem_O3: ', tem_O3)
+	print('tem_N2: ', tem_N2)
+	print('den_S2: ', den_S2)
+	print('den_Ar4: ', den_Ar4)	
+	print('den_S3:', den_S3)
+	print('den_Ne3: ', den_Ne3)
+	print('i4686: ', i4686)
+	print('i5876: ', i5876)
+	print('i6678: ', i6678)
+	print('i4861: ', i4861)
 
 	# Calculation and printout of abundances
 	try:
@@ -159,10 +158,10 @@ for ngc in ngc_list:
 				ab2 = all_atoms[line.atom].getIonAbundance(line.corrIntens, tem_N2, den_S2, to_eval=line.to_eval)
 				ab3 = all_atoms[line.atom].getIonAbundance(line.corrIntens, tem_O3, den_Ar4, to_eval=line.to_eval)
 				ab4 = all_atoms[line.atom].getIonAbundance(line.corrIntens, tem_O3, den_Ne3, to_eval=line.to_eval)
-				print '{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in (ab)])
-				print '{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab2)])
-				print '{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab3)])
-				print '{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab4)])
+				print('{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in (ab)]))
+				print('{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab2)]))
+				print('{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab3)]))
+				print('{0:9s}'.format(line.label) + '  '.join(['{0:>20.10e}'.format(t) for t in  (ab4)]))
 			else:
 				pn.log_.warn('line from %s not used because ion not found' % line.atom, calling='ngc605_R1.py')
 		pn.log_.timer('Ending ngc605_R1.py', calling='ngc605_R1.py')

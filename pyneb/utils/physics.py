@@ -817,7 +817,10 @@ _predefinedDataFileDict['PYNEB_20_01']['S2']['atom'] = 's_ii_atom_RGJ19.dat'
 _predefinedDataFileDict['PYNEB_20_01']['Cl3']['atom'] = 'cl_iii_atom_RGJ19.dat'
 _predefinedDataFileDict['PYNEB_20_01']['Ar4']['atom'] = 'ar_iv_atom_RGJ19.dat'
 
- 
+_predefinedDataFileDict['PYNEB_21_01'] = deepcopy(_predefinedDataFileDict['PYNEB_20_01'])
+_predefinedDataFileDict['PYNEB_21_01']['C2']['rec'] = 'c_ii_rec_D00.func'
+
+
 def airtovac(wave):
     """
 Convert air wavelengths to vacuum wavelengths

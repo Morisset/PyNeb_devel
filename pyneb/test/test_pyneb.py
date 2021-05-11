@@ -93,7 +93,7 @@ def test_diag_list():
 def test_line_labels():
     """
     This tool scans all the lines from pn.LINE_LABEL_LIST, extract the wavelength and compare with the 
-    wavelength given by the corresponding atom for the corresponding transition. Is the difference is greater 
+    wavelength given by the corresponding atom for the corresponding transition. If the difference is greater 
     than 1AA for optical or 0.1mu for IR, it prints the information
     """
     for atom_str in pn.LINE_LABEL_LIST:
@@ -122,6 +122,45 @@ def test_line_labels():
                     if dif > 1.0:
                         print(atom, line)
                         assert dif < 1.0
+                        
+def test_label_ionabundance():
+    """
+    This tool test the different types of labels, wave and to_eval for Atom and RecAtom getIonabundance method
+    """
+    atom = pn.Atom('O', 3)
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, wave=5007)
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, wave=5007)')
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, lev_i= 4, lev_j= 2)
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, lev_i= 4, lev_j= 2)')
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, to_eval='L(5007)')
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, to_eval="L(5007)"')
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, to_eval='I(4, 2)')
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, to_eval="I(4, 2)"')
+        
+    atom = pn.RecAtom('O', 2)
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, wave=4649.13)
+    except:
+        print('Problem with O2.getIonAbundance(1., 1e4, 1e2, wave=4649.13)')
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, to_eval='L(4649.13)')
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, to_eval=L(4649.13)')
+    try:
+        res = atom.getIonAbundance(1., 1e4, 1e2, to_eval='S("4649.13")')
+    except:
+        print('Problem with O3.getIonAbundance(1., 1e4, 1e2, to_eval=S("4649.13")')
+        
+    
+    
 
 def test_atom_instanciation():
     """

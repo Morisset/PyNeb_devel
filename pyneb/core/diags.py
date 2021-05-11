@@ -25,8 +25,8 @@ diags_dict['[OI] 5577/6302'] = ('O1', 'L(5577)/L(6300)', 'RMS([E(6300), E(5577)]
 diags_dict['[OI] 5577/6300'] = ('O1', 'L(5577)/L(6300)', 'RMS([E(6300), E(5577)])')
 diags_dict['[OI] 5577/6300+'] = ('O1', 'L(5577)/(L(6300)+L(6364))', 'RMS([E(6300)*L(6300)/(L(6300)+L(6364)), E(6364)*L(6364)/(L(6300)+L(6364)), E(5577)])')
 diags_dict['[OII] 3726/3729'] = ('O2', 'L(3726)/L(3729)', 'RMS([E(3729), E(3726)])')
-diags_dict['[OII] 3727+/7325+c'] =  ('O2', '(B("3727A+"))/(B("7319A+")+B("7330A+"))',
-            'RMS([BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")), BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+")), BE("3727A+")])')
+#diags_dict['[OII] 3727+/7325+c'] =  ('O2', '(B("3727A+"))/(B("7319A+")+B("7330A+"))',
+#            'RMS([BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")), BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+")), BE("3727A+")])')
 diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7319A+")+B("7330A+"))',
               'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7319A+")*B("7319A+")/(B("7319A+")+B("7330A+")),BE("7330A+")*B("7330A+")/(B("7319A+")+B("7330A+"))])')
 #diags_dict['[OII] 3727+/7325+'] = ('O2', '(L(3726)+L(3729))/(B("7325A+"))', 'RMS([E(3726)*L(3726)/(L(3726)+L(3729)), E(3729)*L(3729)/(L(3726)+L(3729)),BE("7325A+")])')
@@ -788,17 +788,20 @@ class Diagnostics(object):
                     else:
                         self.ANN = ANN
                 # set the test values to the one we are looking for
-                self.ANN.set_test(np.array((value_tem, value_den)).T)
+                shape = value_tem.shape
+                self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
                 # predict the result and denormalize them
                 self.ANN.predict()
                 if self.ANN.isfin is None:
                     tem = self.ANN.pred[:,0]*1e4
                     den = 10**self.ANN.pred[:,1]
                 else:
-                    tem = np.zeros_like(value_tem) * -10
+                    tem = np.zeros_like(value_tem.ravel()) * -10
                     tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
-                    den = np.zeros_like(value_tem) * -10
+                    den = np.zeros_like(value_tem.ravel()) * -10
                     den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+                tem = np.reshape(tem, shape)
+                den = np.reshape(den, shape)
                 if limit_res:
                     mask = (tem<tem_min) | (tem>tem_max)
                     tem[mask] = np.nan
@@ -862,4 +865,38 @@ class Diagnostics(object):
         LDR = atom.getLowDensRatio(to_eval = to_eval)
         return(np.sort((LDR, HDR)))
     
-    
+    def eval_diag(self, label):
+        """
+
+        Parameters
+        ----------
+        label : diagnostic label(e.g. '[OIII] 4363/5007')
+            A string of a key included in the self.diags dictionnary.
+
+        Returns
+        -------
+        np.array
+            The evaluation of the diagnostic corresponding to the label.
+
+        """
+        if label not in self.diags:
+            self.log_.error('Unknown diagnostic: {}'.format(label), calling='eval_diag')
+        atom, diag_expression, error = self.diags[label]
+        sym, spec, rec = parseAtom2(atom)
+        def I(i, j):
+            wave = atom.wave_Ang[i - 1, j - 1]
+            corrIntens = obs.getLine(sym, spec, wave).corrIntens
+            return corrIntens
+        def L(wave):
+            corrIntens = obs.getLine(sym, spec, wave).corrIntens
+            return corrIntens
+        def B(label):
+            full_label = atom + '_' + label
+            corrIntens = obs.getLine(label=full_label).corrIntens
+            return corrIntens
+        def S(label):
+            full_label = atom + '_' + label + 'A'
+            corrIntens = obs.getLine(label=full_label).corrIntens
+            return corrIntens
+        diag_value = eval(diag_expression)
+        return diag_value    

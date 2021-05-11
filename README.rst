@@ -73,6 +73,7 @@ This project is partly supported by grants DGAPA/PAPIIT-107215 and CONACyT-CB201
 PyNeb uses part of Chiantipy:
 
 * Utility functions, many for reading the CHIANTI database files:
+
 Copyright 2009, 2010 Kenneth P. Dere
 This software is distributed under the terms of the GNU General Public License that is found in the LICENSE file
 

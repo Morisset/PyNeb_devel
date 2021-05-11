@@ -296,7 +296,8 @@ class RedCorr(object):
         f1 = np.log10(COR.getCorr(wave1))
         f2 = np.log10(COR.getCorr(wave2))
         if f1 != f2:
-            self.E_BV = 2.5 * np.log10(obs_over_theo) / (f1 - f2)
+            with np.errstate(invalid='ignore'):
+                self.E_BV = 2.5 * np.log10(obs_over_theo) / (f1 - f2)
         else:
             self.E_BV = 0.
         del COR
