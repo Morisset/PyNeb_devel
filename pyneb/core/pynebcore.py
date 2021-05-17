@@ -44,7 +44,9 @@ if config.INSTALLED['astropy Table']:
     from astropy.table import Table, Column
 elif config.INSTALLED['h5py']:
     import h5py
-
+if config.INSTALLED['ai4neb']:
+    from ai4neb import manage_RM
+    
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
 #profiler = 'cpu'
@@ -1374,6 +1376,7 @@ class Atom(object):
         self.source = self.getSources()
         atomicData.add2usedFiles(self.atom, self.atomFile)
         atomicData.add2usedFiles(self.atom, self.collFile)
+        
         self.ANN_n_temden=30
         self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
                                 'verbose' : False, 
@@ -1381,6 +1384,17 @@ class Atom(object):
                                 'use_log' : True
                                 }
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
+                                'activation' : 'tanh', 
+                                'hidden_layer_sizes' : (10, 10), 
+                                'tol' : 1e-6,
+                                'max_iter' : 20000
+                                }
+        self.ANN_Pop_inst_kwargs = {'RM_type' : 'SK_ANN', 
+                                'verbose' : False, 
+                                'scaling' : True,
+                                'use_log' : True
+                                }
+        self.ANN_Pop_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
                                 'hidden_layer_sizes' : (10, 10), 
                                 'tol' : 1e-6,
@@ -1628,6 +1642,37 @@ class Atom(object):
         return self.AtomData.getA(lev_i= lev_i, lev_j= lev_j)
         
     @profile
+    def _getPopulations_ANN(self, tem, den, product=True, NLevels=None):
+        """
+        Private method to obtain level population using Artificial Neuron Network.
+        """
+        if not config.INSTALLED['ai4neb']:
+            self.log_.error('_getPopulations_ANN cannot be used in absence of ai4neb package',
+                          calling=self.calling)
+            return None
+        
+        N = 5000
+        tem_min = 10**np.min(self.getTemArray())
+        tem_max = 10**np.max(self.getTemArray())
+        
+        tem_train = tem_min + (tem_max - tem_min) * np.random.rand(N)
+        den_train = 10**(1 + 5 * np.random.rand(N))
+        
+        pop_train = self.getPopulations(tem_train, den_train, product=False)
+        if NLevels is None:
+            n_levels = self.NLevels
+        else:
+            n_levels = NLevels
+        pop_train = pop_train[0:n_levels,:]
+        X = np.asarray((tem_train, den_train)).T
+        y = np.log10(pop_train).T
+        RM = manage_RM(X_train=X, y_train=y, **self.ANN_Pop_inst_kwargs)
+        RM.init_RM(**self.ANN_Pop_init_kwargs)
+        RM.train_RM()
+        
+
+
+    @profile
     def getPopulations(self, tem, den, product=True, NLevels=None):
         """
         Return array of populations at given temperature and density.
@@ -1845,11 +1890,10 @@ class Atom(object):
         if level != -1:
             return self._critDensity[level - 1]
         else:
-            return self._critDensity
-        
+            return self._critDensity        
         
     @profile
-    def getEmissivity(self, tem, den, lev_i= -1, lev_j= -1, wave= -1, product=True):
+    def getEmissivity(self, tem, den, lev_i= -1, lev_j= -1, wave= -1, product=True, use_ANN=False):
         """
         Return the line emissivity (in erg.s-1.cm3) of selected transition or complete array of emissivities
         The transition is selected by the argument wave (if given); 
@@ -2195,14 +2239,11 @@ class Atom(object):
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
                   wave1= -1, wave2= -1, start_x= -1, end_x= -1, to_eval=None):
         
-        try:
-            from ai4neb import manage_RM
-            ai4neb_OK = True
-        except:
-            ai4neb_OK = False
-            self.log_.error('ai4neb is not installed')
+        if not config.INSTALLED['ai4neb']:
+            self.log_.error('_getTemDen_ANN cannot be used in absence of ai4neb package',
+                          calling=self.calling)
             return None
-        
+
         self._test_lev(lev_i1)
         self._test_lev(lev_j1)
         self._test_lev(lev_i2)
@@ -2343,7 +2384,7 @@ class Atom(object):
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
 
     def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, 
-                        Hbeta=100., tem_HI=None, extrapHbeta=False):
+                        Hbeta=100., tem_HI=None, extrapHbeta=False, use_ANN=False):
         """
         Compute the ionic abundance relative to H+ given the intensity of a line or sum of lines, 
         the temperature, and the density. 
@@ -2373,6 +2414,8 @@ class Atom(object):
             - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
             
             - tem_HI       HI temperature. If not set, tem is used.
+            - extrapHbeta [False] if set to True, Hbeta is extrapolated at low Te using Aller 82 function
+            - use_ANN [False] if set to True, use Machine Learning to compute line emissivities
         
         """
         if tem_HI is None:
@@ -2392,8 +2435,8 @@ class Atom(object):
             if wave != -1:
                 lev_i, lev_j = self.getTransition(wave)     
             to_eval = 'I(' + str(lev_i) + ',' + str(lev_j) + ')' 
-        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
-        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
+        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False, use_ANN=use_ANN)
+        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False, use_ANN=use_ANN)
         try:
             emis = eval(to_eval)
         except:
@@ -3601,22 +3644,21 @@ class RecAtom(object):
                 logd[tt] = log_dens_max
             res = interpolate.griddata((1./self.temp.ravel(), self.log_dens.ravel()), enu.ravel(),
                                        (1./temg, logd), method=method)
-            if "h_i_rec_SH95" in self.recFitsFile:
-                if (temg < temp_min).sum() != 0 and self.extrapolate:
-                    self.log_.warn('Linear extrapolation on low Te', calling=self.calling)
-                    masklowte = temg < temp_min
-                    temp_min2 = np.min(self.temp[self.temp > temp_min])
-                    
-                    em_min = self.getEmissivity(temp_min, deng[masklowte].ravel(),
-                                                lev_i=lev_i, lev_j=lev_j, wave=wave, 
-                                                label=label, method=method)
-                    em_min2 = self.getEmissivity(temp_min2, deng[masklowte].ravel(),
-                                                lev_i=lev_i, lev_j=lev_j, wave=wave, 
-                                                label=label, method=method)
-                    a = (em_min - em_min2) / (1./temp_min - 1./temp_min2)
-                    b = em_min - a / temp_min
-                    em = a / temg[masklowte].ravel() + b
-                    res[masklowte]=em
+            if (temg < temp_min).sum() != 0 and self.extrapolate:
+                masklowte = temg < temp_min
+                temp_min2 = np.min(self.temp[self.temp > temp_min])
+                
+                em_min = self.getEmissivity(temp_min, deng[masklowte].ravel(),
+                                            lev_i=lev_i, lev_j=lev_j, wave=wave, 
+                                            label=label, method=method)
+                em_min2 = self.getEmissivity(temp_min2, deng[masklowte].ravel(),
+                                            lev_i=lev_i, lev_j=lev_j, wave=wave, 
+                                            label=label, method=method)
+                a = (em_min - em_min2) / (1./temp_min - 1./temp_min2)
+                b = em_min - a / temp_min
+                em = a / temg[masklowte].ravel() + b
+                self.log_.warn('{}/Te + {} extrapolation on low Te'.format(a, b), calling=self.calling)
+                res[masklowte]=em
         return res
 
 
@@ -3735,7 +3777,7 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
                                                              method=method, wave=wave, product=product)
     else:
         if (atom == 'H1') and (lev_i == 4) and (lev_j == 2):
-            log_.warn('Scipy is missing, {0} returning Hbeta'.format(calling), calling)
+            log_.warn('Scipy is missing, {0} returning Hbeta from Aller 84'.format(calling), calling)
             return getHbEmissivity(tem, den)
         else:
             log_.error('Only Hbeta emissivity available, as scipy not installed', calling)
