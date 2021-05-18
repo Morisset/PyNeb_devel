@@ -100,6 +100,11 @@ class _Config(object):
             self.INSTALLED['cvxopt'] = True
         except:
             self.INSTALLED['cvxopt'] = False
+        try:
+            from ai4neb import manage_RM
+            self.INSTALLED['ai4neb'] = True
+        except:
+            self.INSTALLED['ai4neb'] = False
         
         self.DataFiles = {}
             
