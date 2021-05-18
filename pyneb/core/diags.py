@@ -9,6 +9,9 @@ import numpy as np
 import pyneb as pn
 from pyneb.utils.misc import int_to_roman, parseAtom, parseAtom2
 from pyneb.utils.init import BLEND_LIST
+from pyneb import config
+if config.INSTALLED['ai4neb']:
+    from ai4neb import manage_RM
 
 diags_dict = {}
 
@@ -619,7 +622,8 @@ class Diagnostics(object):
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1, use_ANN=False, limit_res=False, ANN=None):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1, use_ANN=False, 
+                       limit_res=False, ANN=None):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -738,77 +742,74 @@ class Diagnostics(object):
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
         if use_ANN:
-            try:
-                from ai4neb import manage_RM
-                ai4neb_OK = True
-            except:
-                ai4neb_OK = False
-                pn.log_.error('ai4neb is not installed')
-            if ai4neb_OK:
-                if start_tem == -1:
-                    tem_min = 3000.
+            if not config.INSTALLED['ai4neb']:
+                self.log_.error('_getPopulations_ANN cannot be used in absence of ai4neb package',
+                              calling=self.calling)
+                return None
+            if start_tem == -1:
+                tem_min = 3000.
+            else:
+                tem_min = start_tem
+            if end_tem == -1:
+                tem_max = 20000.
+            else:
+                tem_max = end_tem
+            if start_den == -1:
+                den_min = 10.
+            else:
+                den_min = start_den
+            if end_den == -1:
+                den_max = 1e6
+            else:
+                den_max = end_den
+            if ANN is None:
+                # define emisGrid objects to generate Te-Ne emissionmaps
+                tem_EG = pn.EmisGrid(atomObj=atom_tem, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                den_EG = pn.EmisGrid(atomObj=atom_den, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                # compute emission line ratio maps in the Te-Ne space
+                tem_2D = tem_EG.getGrid(to_eval = eval_tem)
+                den_2D = den_EG.getGrid(to_eval = eval_den)
+                # X is a set of line ratio pairs
+                X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+                # y is a set of corresponding Te-Ne pairs
+                y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
+                # Instantiate, init and train the ANN
+                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+                self.ANN.init_RM(**self.ANN_init_kwargs)
+                self.ANN.train_RM()
+            else:
+                if type(ANN) is str:
+                    self.ANN = manage_RM(RM_filename=ANN)
                 else:
-                    tem_min = start_tem
-                if end_tem == -1:
-                    tem_max = 20000.
-                else:
-                    tem_max = end_tem
-                if start_den == -1:
-                    den_min = 10.
-                else:
-                    den_min = start_den
-                if end_den == -1:
-                    den_max = 1e6
-                else:
-                    den_max = end_den
-                if ANN is None:
-                    # define emisGrid objects to generate Te-Ne emissionmaps
-                    tem_EG = pn.EmisGrid(atomObj=atom_tem, 
-                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                         tem_min=tem_min, tem_max=tem_max,
-                                         den_min=den_min, den_max=den_max)
-                    den_EG = pn.EmisGrid(atomObj=atom_den, 
-                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                         tem_min=tem_min, tem_max=tem_max,
-                                         den_min=den_min, den_max=den_max)
-                    # compute emission line ratio maps in the Te-Ne space
-                    tem_2D = tem_EG.getGrid(to_eval = eval_tem)
-                    den_2D = den_EG.getGrid(to_eval = eval_den)
-                    # X is a set of line ratio pairs
-                    X = np.array((tem_2D.ravel(), den_2D.ravel())).T
-                    # y is a set of corresponding Te-Ne pairs
-                    y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
-                    # Instantiate, init and train the ANN
-                    self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-                    self.ANN.init_RM(**self.ANN_init_kwargs)
-                    self.ANN.train_RM()
-                else:
-                    if type(ANN) is str:
-                        self.ANN = manage_RM(RM_filename=ANN)
-                    else:
-                        self.ANN = ANN
-                # set the test values to the one we are looking for
-                shape = value_tem.shape
-                self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
-                # predict the result and denormalize them
-                self.ANN.predict()
-                if self.ANN.isfin is None:
-                    tem = self.ANN.pred[:,0]*1e4
-                    den = 10**self.ANN.pred[:,1]
-                else:
-                    tem = np.zeros_like(value_tem.ravel()) * -10
-                    tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
-                    den = np.zeros_like(value_tem.ravel()) * -10
-                    den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
-                tem = np.reshape(tem, shape)
-                den = np.reshape(den, shape)
-                if limit_res:
-                    mask = (tem<tem_min) | (tem>tem_max)
-                    tem[mask] = np.nan
-                    pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
-                    mask = (den<den_min) | (den>den_max)
-                    den[mask] = np.nan
-                    pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
+                    self.ANN = ANN
+            # set the test values to the one we are looking for
+            shape = value_tem.shape
+            self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
+            # predict the result and denormalize them
+            self.ANN.predict()
+            if self.ANN.isfin is None:
+                tem = self.ANN.pred[:,0]*1e4
+                den = 10**self.ANN.pred[:,1]
+            else:
+                tem = np.zeros_like(value_tem.ravel()) * -10
+                tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
+                den = np.zeros_like(value_tem.ravel()) * -10
+                den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+            tem = np.reshape(tem, shape)
+            den = np.reshape(den, shape)
+            if limit_res:
+                mask = (tem<tem_min) | (tem>tem_max)
+                tem[mask] = np.nan
+                pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
+                mask = (den<den_min) | (den>den_max)
+                den[mask] = np.nan
+                pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
@@ -865,14 +866,14 @@ class Diagnostics(object):
         LDR = atom.getLowDensRatio(to_eval = to_eval)
         return(np.sort((LDR, HDR)))
     
-    def eval_diag(self, label):
+    def eval_diag(self, label, obs):
         """
 
         Parameters
         ----------
         label : diagnostic label(e.g. '[OIII] 4363/5007')
             A string of a key included in the self.diags dictionnary.
-
+        obs : an Observation object 
         Returns
         -------
         np.array
