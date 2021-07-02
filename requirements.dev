@@ -15,3 +15,4 @@ black
 flake8
 mypy
 pylint
+pydata-sphinx-theme
