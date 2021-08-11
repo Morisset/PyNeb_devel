@@ -3608,7 +3608,8 @@ class RecAtom(object):
             label = label_str
             if label_str is None:
                 ij = self.getTransition(wave)
-                label = '{}_{}'.format(ij[0], ij[1])
+                if ij is not None:
+                    label = '{}_{}'.format(ij[0], ij[1])
         if label is None:
             res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
             return res
@@ -4029,7 +4030,10 @@ class EmissionLine(object):
                 self.is_valid = True
                 if to_eval is None:
                     if self.blend:
-                        self.to_eval = BLEND_LIST[self.label]
+                        if self.waveLabel in LINE_LABEL_LIST[self.atom]:
+                            self.to_eval = 'S("'+ str(self.waveLabel) + '")'
+                        else:
+                            self.to_eval = BLEND_LIST[self.label]
                     else: 
                         self.to_eval = 'L(' + str(self.wave) + ')'
                 else:
@@ -4038,6 +4042,7 @@ class EmissionLine(object):
                 self.is_valid = False
                 self.to_eval = None
                 self.log_.warn('line {0} for atom {1} not valid'.format(self.waveLabel, self.atom), calling=self.calling)
+                print(self.waveLabel, LINE_LABEL_LIST[self.atom])
         else:
                 self.is_valid = False
                 self.to_eval = None
