@@ -4914,7 +4914,7 @@ class Observation(object):
             new_names = np.repeat(np.asarray(self.names)[:, np.newaxis], N+1, axis=1)
             MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
             MC_names[0] = ''
-            self.names = np.core.defchararray.add(new_names , MC_names)
+            self.names = np.core.defchararray.add(new_names , MC_names).tolist()[0]
             self.log_.message('Leaving', calling='addMonteCarloObs')        
         else:
             if self.corrected:
