@@ -222,7 +222,7 @@ class EmisGrid(object):
         plt.show()
 
 
-    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20,
+    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20, levels=None,
                       linestyles='-', clabels=True, log_levels=True, title=None, ax=None, **kwargs):
         """
         Plot a contour map of the diagnostic defined by to_eval.
@@ -235,6 +235,7 @@ class EmisGrid(object):
             - low_levels, high_levels   limit levels for the contour. If not set, the limit of the 
                                         ratio values are used.
             - n_levels                  number of levels (20 is the default)
+            - levels                    list or tuple of levels [None]
             - linestyles                used for the contour lines (default: solid line)
             - clabels                   Boolean. Controls if line labels are printed (default: True)
             - log_levels                Boolean. If True (default), the log of the line ratio is used.
@@ -261,12 +262,14 @@ class EmisGrid(object):
             high_level = np.max(np.log10(diag_map))
         if log_levels:
             Z = np.log10(diag_map)
-            levels = np.linspace(low_level, high_level, n_levels)
+            if levels is None:
+                levels = np.linspace(low_level, high_level, n_levels)
             if title is None:
                 title = '[%s%s]: log(%s)' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         else:
             Z = diag_map
-            levels = 10. ** (np.linspace(low_level, high_level, n_levels))
+            if levels is None:
+                levels = 10. ** (np.linspace(low_level, high_level, n_levels))
             if title is None:
                 title = '[%s%s]: %s' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         
