@@ -20,18 +20,22 @@ class DataPlot(object):
                  ref_tem=None, OmegaInterp='linear',NLevels=None):
         """
     Parameters:
-        - elem         atomic elem 
-        - spec       ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-        - atom        e.g. 'O3'
-        - all_data       dictionary of all_data to be compared (see above for format)
-        - [n_tem_points] number of points in the fit (default=100; increase if fit is not smooth)
-        - [ref_tem]      array of temperature values to be signaled in the plots
-        - OmegaInterp    interpolating function between Omega values ('Cheb' [default], 'Linear')
+        elem:         atomic elem 
+        spec:       ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+        atom:        e.g. 'O3'
+        all_data:       dictionary of all_data to be compared (see above for format)
+        n_tem_points: number of points in the fit (default=100; increase if fit is not smooth)
+        ref_tem:      array of temperature values to be signaled in the plots
+        OmegaInterp:    interpolating function between Omega values ('Cheb' [default], 'Linear')
     
-    Example:
+    **Example:**
+        
         dataplot = pn.DataPlot('O', 3) # initializes the plot
+        
         dataplot.plotA() # transition probabilities plot 
+        
         dataplot.plotRelA() # relative transition probabilities plot
+        
         dataplot.plotOmega() # collision strength plot    
 
         
@@ -116,10 +120,10 @@ class DataPlot(object):
         """
         Plot the log of the A values of each data set 
         
-        Parameters:
-            - save     if True, saves the plot in a file
-            - figsize  figure size (default: [18, 12])
-            - fignum    figure Number
+        **Parameters:**
+            save:     if True, saves the plot in a file
+            figsize:  figure size (default: [18, 12])
+            fignum:    figure Number
 
         """
         if NLevels is None:
@@ -187,9 +191,9 @@ class DataPlot(object):
         Plot the log of the A values of each data set 
         
         Parameters:
-            - save     if True, saves the plot in a file
-            - figsize  figure size (default: [18, 12])
-            - fignum    figure Number
+            save:     if True, saves the plot in a file
+            figsize:  figure size (default: [18, 12])
+            fignum:    figure Number
 
         """
         if NLevels is None:
@@ -259,10 +263,10 @@ class DataPlot(object):
         Plot the relative difference of the A of each data set with respect to the reference one
 
         Parameters:
-            - ref_data       reference data set for comparing transition probabilities (default=first data ID)
-            - save           if True, save the plot in a file (default: False)
-            - figsize        figure size (default: [18, 12])
-            - fignum         figure number
+            ref_data:       reference data set for comparing transition probabilities (default=first data ID)
+            save:           if True, save the plot in a file (default: False)
+            figsize:        figure size (default: [18, 12])
+            fignum:         figure number
 
         """
         if NLevels is None:
@@ -370,11 +374,11 @@ class DataPlot(object):
         Plot the tabulated collision strengths of each data set and the fit that is performed by PyNeb
         
         Parameters:
-            - save     Boolean. Determine if the plot is automatically saved in a file (default: False)
-            - figsize  List. figure size in inches (default: [18, 12])
-            - fignum   Figure Number DEPRECATED!!!
-            - scan_orders = None or (min_order, max_order) or (min_order, -1) to go until the max. DEPRECATED!!!
-            - fig: DEPRECATED!!!
+            save:     Boolean. Determine if the plot is automatically saved in a file (default: False)
+            figsize:  List. figure size in inches (default: [18, 12])
+            fignum:   Figure Number DEPRECATED!!!
+            scan_orders: = None or (min_order, max_order) or (min_order, -1) to go until the max. DEPRECATED!!!
+            fig: DEPRECATED!!!
         """
         if NLevels is None:
             coll_n_max = self.coll_n_max
@@ -478,8 +482,8 @@ class DataPlot(object):
         Convert the temperature from the unit of the fits file into K
 
         Parameters:
-            - tem_units     'log(K)' or 'K/1000'
-            - tem           temperature
+            tem_units:     'log(K)' or 'K/1000'
+            tem:           temperature
         """
         
         if (tem_units == "log(K)"):
