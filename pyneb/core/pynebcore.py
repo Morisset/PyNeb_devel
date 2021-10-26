@@ -1536,10 +1536,10 @@ class Atom(object):
             label = '{0}_{1}A'.format(self.atom, int(wave))
             maxError = maxErrorA
         
-        self.log_.debug('{}'.format(label2levelDict))
+        #self.log_.debug('{}'.format(label2levelDict), calling='_Transition')
         if label in label2levelDict:
             result = [label2levelDict[label][0], label2levelDict[label][1], inputWave, inputWave]
-            self.log_.debug('label2levelDict[{}] = {}'.format(label, label2levelDict[label]))
+            #self.log_.debug('label2levelDict[{}] = {}'.format(label, label2levelDict[label]),calling='_Transition')
             return(result)
         
         j, i = np.unravel_index(np.argmin(abs(self.wave_Ang - inputWave)), self.wave_Ang.shape)
