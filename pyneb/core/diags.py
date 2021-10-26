@@ -455,7 +455,10 @@ class Diagnostics(object):
             pn.log_.warn('Try to add clabel in undefined label {0}'.format(label), calling=self.calling)
     
     
-    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True):
+    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True,
+             return_CS=False, 
+             col_dic={'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
+                      'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'},):
         """
         PLotting tool to generate Te-Ne diagrams.
         
@@ -472,6 +475,8 @@ class Diagnostics(object):
                             in the obs object
             - alpha         Transparency for the error bands in the plot
             - error_band    Boolean: plot [default] an error band
+            - return_CS     [False] If True, return a list of the contour plots
+            - col_dic       Colors for the different ions.
             
         """
         if not pn.config.INSTALLED['plt']: 
@@ -498,6 +503,7 @@ class Diagnostics(object):
             f = plt.gcf()
         X = np.log10(emis_grids[list(emis_grids.keys())[0]].den2D)
         Y = emis_grids[list(emis_grids.keys())[0]].tem2D
+        CSs = []
         for label in self.diags:
             self.log_.message('plotting {0}'.format(label), calling=self.calling)
             diag = self.diags[label]
@@ -588,8 +594,6 @@ class Diagnostics(object):
                     else:
                         RMS = lambda err: (np.asarray(err)).sum() 
                     tol_value = eval(diag[2])
-                    col_dic = {'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
-                               'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}
                     if sym in col_dic:
                         col = col_dic[sym]
                     else:
@@ -601,7 +605,9 @@ class Diagnostics(object):
                         if levels[0] < levels[1]:
                             #pn.log_.debug('{} levels {}'.format(label, levels), calling=self.calling)
                             CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
+                            CSs.append(CS)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
+                    CSs.append(CS)
                     try:
                         ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
                         ax.set_ylabel(r'T$_{\rm e}$ [K]')
@@ -617,8 +623,9 @@ class Diagnostics(object):
                     except:
                         self.log_.message('NOT plotted {0} {1}'.format(fmt, label),
                                           calling=self.calling)
-                        
-        
+            
+        if return_CS:
+            return CSs
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
