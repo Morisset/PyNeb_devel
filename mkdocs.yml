@@ -1,0 +1,24 @@
+site_name: PyNeb
+site_url: http://research.iac.es/proyecto/PyNeb/
+
+theme:
+  name: "material"
+
+plugins:
+  
+  - mkdocstrings
+
+nav:
+  - Home: 'index.md'
+  - 'API reference':
+      - 'Core':
+        - 'Continuum': 'api_reference/core/continuum.md'
+        - 'Diags': 'api_reference/core/diags.md'
+        - 'EmisGrid': 'api_reference/core/emisGrid.md'
+        - 'ICF': 'api_reference/core/icf.md'
+        - 'PyNebCore': 'api_reference/core/pynebcore.md'
+      - 'Extinction':
+        - 'Red Corr': 'api_reference/extinction/red_corr.md'
+      - 'Plot':
+        - 'Plot Atomic Data': 'api_reference/plot/plot_atomic_data.md'
+      

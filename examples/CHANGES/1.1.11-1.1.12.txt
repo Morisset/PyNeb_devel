@@ -1,0 +1,4 @@
+* Adding  Tayal 2017 OIII As and Omegas
+* Create s_iii_coll_TZS19.dat and s_iii_atom_TZS19.dat
+* Change Omega plotting routine
+* Add Analog Neural Network to the getTemDen method

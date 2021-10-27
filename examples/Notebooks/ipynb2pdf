@@ -1,0 +1,17 @@
+NEW: when using ipython 2.0, the book is not avalaible anymore!!! Use report instead (less nice, but shorter). 
+Actually we will use a customized version of report that change sections to chapters. It requires mytemplate.tplx
+
+ipython nbconvert --to latex --template mytemplate --post PDF PyNeb_Handbook
+
+
+OLD:
+
+ipython nbconvert --to latex --template book --post PDF PyNeb_Handbook
+
+This makes the tex file and the pdf. But, as we want the following inbetween, better not to put the --post PDF and compile the PDF by hand later.
+
+To add after the last usepackage:
+\usepackage{chngcntr}
+\counterwithin{chapter}{part}
+
+Don't forget to change the authors names.
