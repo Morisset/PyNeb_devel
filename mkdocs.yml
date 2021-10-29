@@ -6,12 +6,7 @@ theme:
 
 plugins:
   
-  - mkdocstrings:
-      handlers:
-        python:
-          setup_commands:
-              - import sys
-              - sys.path.append('./')
+  - mkdocstrings
 
 nav:
   - Home: 'index.md'
