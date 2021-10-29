@@ -1,5 +1,9 @@
 ::: pyneb.core.continuum
-    handler: python
+    handler:
+        python:
+            setup_commands:
+            - import sys
+            - sys.path.append("src")
     rendering:
         show_root_heading: false
     selection:
