@@ -3,7 +3,7 @@
         python:
             setup_commands:
             - import sys
-            - sys.path.append("src")
+            - sys.path.append("pyneb")
     rendering:
         show_root_heading: false
     selection:
