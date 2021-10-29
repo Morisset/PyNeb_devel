@@ -1,4 +1,4 @@
-::: pyneb.core.continuum
+::: pyneb.Continuum
     handler: python
     rendering:
         show_root_heading: false
