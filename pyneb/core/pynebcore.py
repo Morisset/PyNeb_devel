@@ -3731,7 +3731,6 @@ class RecAtom(object):
         L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
         S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
         
-        emis = eval(to_eval)
         try:
             emis = eval(to_eval)
         except:
