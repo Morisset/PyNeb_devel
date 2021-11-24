@@ -344,7 +344,11 @@ class Diagnostics(object):
                             'or an ion, or a wave range. label={0}, diag_tuple={1}, atom={2}, wave_range={3}'.format(label, diag_tuple, atom, wave_range),
                             calling=self.calling + '.addDiag')
         if atom not in self.atomDict and (type(label) is not list):
-            self.atomDict[atom] = pn.Atom(parseAtom(atom)[0], parseAtom(atom)[1], NLevels=self.NLevels)
+            this_atom, this_spec, this_rec = parseAtom2(atom)
+            if this_rec == '':
+                self.atomDict[atom] = pn.Atom(this_atom, this_spec, NLevels=self.NLevels)
+            elif this_rec == 'r':
+                self.atomDict[atom] = pn.RecAtom(this_atom, this_spec)
                
                
     def addAll(self):
@@ -677,14 +681,14 @@ class Diagnostics(object):
         if diag_tem not in self.diags:
             self.addDiag(diag_tem)
         atom_tem = self.diags[diag_tem][0]
-        elem_tem, spec_tem = parseAtom(atom_tem)
+        elem_tem, spec_tem, rec = parseAtom2(atom_tem)
         if atom_tem not in self.atomDict:
             self.atomDict[atom_tem] = pn.Atom(elem_tem, spec_tem, self.OmegaInterp, NLevels=self.NLevels)
         atom_tem = self.atomDict[atom_tem]
         if diag_den not in self.diags:
             self.addDiag(diag_den)
         atom_den = self.diags[diag_den][0]
-        elem_den, spec_den = parseAtom(self.diags[diag_den][0])
+        elem_den, spec_den, rec = parseAtom2(self.diags[diag_den][0])
         if (atom_den) not in self.atomDict:
             self.atomDict[atom_den] = pn.Atom(elem_den, spec_den, self.OmegaInterp, NLevels=self.NLevels)
         atom_den = self.atomDict[atom_den]
