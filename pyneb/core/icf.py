@@ -982,11 +982,7 @@ class ICF(object):
         # List of all existing atoms. Necessary to initialize the ionic abundance dictionary
         if icf_family is not None:
             icf_list = [icf for icf in self.all_icfs.keys() if icf_family in icf]
-        atom_list = []
-        for elem in ELEM_LIST:
-            for spec in SPEC_LIST:
-                atom_list.append(elem + str(spec)) 
-        atom_list.extend(['He2', 'He3', 'He1r', 'He2r', 'O2r'])
+        atom_list = list(pn.LINE_LABEL_LIST.keys())
     
         # Initialize the ionic abundances so that the code does not crash when a specific abundance is invoked
         # TODO : Check that the same ion is not present as collisional and recombination !!
@@ -994,16 +990,28 @@ class ICF(object):
         for atom in atom_list:
             # Set those abundances which are different from 0. These determine which ICFs can be computed        
             if atom in atom_abun:
-                if atom[-1] == 'r':
-                    elem, spec = parseAtom(atom[:-1])
-                    atomc = elem + str(int(spec)+1)
-                    if (not use_coll) or (atomc not in atom_abun):
-                        abun[atomc] = atom_abun[atom]
+                if atom == 'He1r':
+                    abun['He2'] = atom_abun[atom]
+                elif atom == 'He2r':
+                    abun['He3'] = atom_abun[atom]
                 else:
-                    elem, spec = parseAtom(atom)
-                    atomr = elem + str(int(spec)-1) + 'r'
-                    if use_coll or (atomr not in atom_abun):
-                        abun[atom] = atom_abun[atom]
+                    abun[atom] = atom_abun[atom]
+                # if atom[-1] == 'r':
+                #     elem, spec = parseAtom(atom[:-1])
+                #     atomc = elem + str(int(spec)+1)
+                #     if (not use_coll) or (atomc not in atom_abun):
+                #         abun[atomc] = atom_abun[atom]
+                #         print('1',atom, atomc)
+                #     else:
+                #         print('2',atom, atomc)
+                # else:
+                #     elem, spec = parseAtom(atom)
+                #     atomr = elem + str(int(spec)-1) + 'r'
+                #     if use_coll or (atomr not in atom_abun):
+                #         abun[atom] = atom_abun[atom]
+                #         print('3',atom, atom)
+                #     else:
+                #         print('4',atom, atom)
             else:
                 abun[atom] = absentIon
         self.abun = abun
@@ -1024,7 +1032,7 @@ class ICF(object):
                 try:
                     atom_value = eval(atom)
                 except:
-                    pn.log_.warn('Unable to eval {}'.format(atom))
+                    pn.log_.warn('Unable to eval {}'.format(atom), calling=self.calling + '.getElemAbundance')
                 if self.all_icfs[icf_label]['elem'] is not None:
                     pn.log_.debug('Doing {}'.format(icf_label), calling='ICF')
                     this_icf = self.all_icfs[icf_label]
