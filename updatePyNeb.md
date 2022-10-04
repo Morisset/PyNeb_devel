@@ -1,4 +1,4 @@
-When a new release is planned, perform the following actions:
+### When a new release is planned, perform the following actions:
 
 Prepare the release
 =============
