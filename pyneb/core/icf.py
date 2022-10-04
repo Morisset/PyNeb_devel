@@ -806,19 +806,21 @@ class ICF(object):
         Add a new icf
         
         Parameters:
-            - label    a label which identifies the new ICF. The suggested format for the label is "R_E.N", 
+            label:    a label which identifies the new ICF. The suggested format for the label is "R_E.N", 
                         where R is a reference to the paper, E to the equation in the paper and the optional 
                         key N is an indication of the higher ion need to compute the icf.  
-            - elem     element whose abundance is computed
-            - atom     ion or ions whose abundance is multiplied by the icf to get the elemenmt abundance
-            - icf      the correcting expression
-            - type_     object class to which the icf is appliable (e.g. "PNe", "HII")
-            - comment  additional comment, relevant to icf usage
-            - ref      bibliographic reference, if any
-            - url      URL of the source paper, if any
+            elem:     element whose abundance is computed
+            atom:     ion or ions whose abundance is multiplied by the icf to get the elemenmt abundance
+            icf:      the correcting expression
+            type_:     object class to which the icf is appliable (e.g. "PNe", "HII")
+            comment:  additional comment, relevant to icf usage
+            ref:      bibliographic reference, if any
+            url:      URL of the source paper, if any
             
-        Usage:
+        **Usage:**
+        
             icf=pn.ICF()
+        
             icf.addICF(label='TEST_1',
                         elem='Ne',
                         atom ='abun["Ne2"] + abun["Ne3"]',
@@ -843,14 +845,15 @@ class ICF(object):
     
     
     def delICF(self, label):
-        """
-        Delete an existing icf (only for current session)
+        """Delete an existing icf (only for current session)
         
         Parameters:
-            - label    the label which identifies the new ICF. 
+            label:    the label which identifies the new ICF. 
             
-        Usage:
+        **Usage:**
+            
             icf=pn.ICF()
+            
             icf.delICF(label='TEST_1')
 
         """
@@ -862,12 +865,14 @@ class ICF(object):
         Return complete information on the required icf or paper
         
         Parameters:
-            label    label of selected ICF recipe or paper
-            filter   string with initials of required fields (substring of 'licores'; all by default)   
+            label (str):    label of selected ICF recipe or paper
+            filter (str):   string with initials of required fields (substring of 'licores'; all by default)   
             
-        Usage:
-        icf=pn.ICF()
-        icf.printInfo('Ial06_20a')
+        **Usage:**
+            
+            icf=pn.ICF()
+            
+            icf.printInfo('Ial06_20a')
                  
         """        
         for item in self.all_icfs:
@@ -883,11 +888,10 @@ class ICF(object):
    
     
     def getReference(self, label): 
-        """ 
-        Return the reference of the selected ICF recipe 
+        """ Return the reference of the selected ICF recipe 
         
         Parameters:
-            - label    label of selected ICF recipe or paper
+            label (str): label of selected ICF recipe or paper
 
         """        
         paper = label.split('_')[0]
@@ -901,11 +905,10 @@ class ICF(object):
    
     
     def getURL(self, label): 
-        """ 
-        Return the ADS URL of the selected ICF recipe 
+        """ Return the ADS URL of the selected ICF recipe 
         
         Parameters:
-            label    label of selected ICF recipe or paper
+            label (str): label of selected ICF recipe or paper
 
         """        
         paper = label.split('_')[0]
@@ -923,7 +926,7 @@ class ICF(object):
         Return the analytical expression of the selected ICF 
         
         Parameters:
-            label    label of selected ICF expression
+            label(str) label of selected ICF expression
 
         """
         
@@ -941,7 +944,7 @@ class ICF(object):
         Return the kind of object for which the selected ICF is suitable. 
         
         Parameters:
-            label    label of selected ICF expression
+            label(str): label of selected ICF expression
 
         """
         return self.all_icfs[label]['type']
@@ -952,7 +955,7 @@ class ICF(object):
         Return the comment associated to the selected ICF. 
         
         Parameters:
-            label    label of selected ICF expression
+            label(str): label of selected ICF expression
 
         """
         return self.all_icfs[label]['comment']
@@ -965,15 +968,17 @@ class ICF(object):
         Store the result in ICF.elem_abund
         
         Parameters: 
-           - atom_abun    a dictionary of ionic abundances
-           - icf_list     a list of selected ICFs (default: all)
-           - icf_family   a string common to all the icf one want to use, e.g. "DIMS14"
-           - use_coll     In case both collision lines and recombination lines abundances exists:
+           atom_abun:    a dictionary of ionic abundances
+           icf_list:     a list of selected ICFs (default: all)
+           icf_family:   a string common to all the icf one want to use, e.g. "DIMS14"
+           use_coll:     In case both collision lines and recombination lines abundances exists:
                            if True (default), use collision line ionic abundance, if false use recombination ones
-           - use_MC       If True and if the ICF definition includes error informations, the ICF will be multiplied
+           use_MC:       If True and if the ICF definition includes error informations, the ICF will be multiplied
                            by some factor taking into account the error.
-        Usage:
+        **Usage:**
+            
             atom_abun = {'O2': 0.001, 'O3': 0.002, 'Ne3': 1.2e-5}
+            
             getElemAbundance(atom_abun)
          
         """
@@ -1096,6 +1101,8 @@ class ICF(object):
             strategy: dictionary of the ICF to apply in order to obtain elemental abundances.
                 example: strategy = {'He':['direct_He.2', 'PTPR92_21'], 
                                    'N': 'KB94_A1.10'}
+        
+        **Usage:**
             final_abund = icf.getElemAbundanceFromStrategy(ion_ab_dic, icf_strategies)
         """
         

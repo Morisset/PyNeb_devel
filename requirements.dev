@@ -1,9 +1,10 @@
 # dev utils
-ipdb
 ipython
 
 # docs
-sphinx
+mkdocs
+mkdocs-material
+mkdocstrings
 
 # tests
 codecov

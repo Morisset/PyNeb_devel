@@ -165,13 +165,19 @@ class Diagnostics(object):
     It is also the class that plots the diagnostic Te-Ne diagrams.
 
     """    
-    def __init__(self, addAll=False, OmegaInterp='Cheb', NLevels=None):
+    def __init__(self, addAll:bool=False, OmegaInterp:str='Cheb', NLevels=None):
         """
         Diagnostics constructor
         
         Parameters:
-            - addAll        switch to include all defined diagnostics (default = False)
-            - OmegaInterp   parameter sent to Atom, default is 'Cheb', other can be 'linear'
+            addAll: Switch to include all defined diagnostics
+            OmegaInterp: Parameter sent to Atom 
+                
+                **Options:**
+                    
+                * 'Cheb'
+                * 'linear'
+            NLevels: 
             
         """
         self.log_ = pn.log_ 
@@ -205,14 +211,15 @@ class Diagnostics(object):
 
     def getDiagFromLabel(self, label):
         """
-        Return the definition of a diagnostic (the 3 or 4 elements tuple)
-        
-        Usage:
-            diags.getDiagFromLabel('[NII] 5755/6548')
-        
         Parameters:
-            -label a diagnostic label 
+            label(str): a diagnostic label 
             
+        Returns:
+            Return the definition of a diagnostic (the 3 or 4 elements tuple)
+        
+        **Usage:**
+            
+            diags.getDiagFromLabel('[NII] 5755/6548') 
         """
         if label in self.diags:
             return self.diags[label]
@@ -222,72 +229,86 @@ class Diagnostics(object):
 
         
     def getDiags(self):
-        """
-        Return the definitions (tuples) of all the diagnostics defined in the Object.
-        No parameter.
-        
+        """Return the definitions (tuples) of all the diagnostics defined in the Object.
         """
         return [self.getDiagFromLabel(label) for label in self.diags]
 
             
     def getDiagLabels(self):
-        """
-        Return the labels of all the diagnostics defined in the Object
-        No parameter.
-        
-        """
+        """Return the labels of all the diagnostics defined in the Object"""
         return self.diags.keys()    
 
     
     def getAllDiags(self):
-        """
-        Return the definitions (tuples) of all the possible diagnostics.
-        No parameter.
+        """Return the definitions (tuples) of all the possible diagnostics.
         
+        Returns:
+            (tuples): All possible diagnostics.
         """
         return diags_dict
 
             
     def getAllDiagLabels(self):
-        """
-        Return the labels of all the possible diagnostics.
-        No parameter.
-        
+        """Return the labels of all the possible diagnostics.
         """
         return diags_dict.keys()    
 
     
     def getUniqueAtoms(self):
-        """
-        Return a numpy.ndarray of the ions needed by the diagnostics. Unique is applied to the list before returning.
-        No parameter.
+        """Return a numpy.ndarray of the ions needed by the diagnostics. Unique is applied to the list before returning.
         
+        Returns:
+            (np.ndarray): Ions needed by the diagnostics
         """
         return np.unique([self.diags[d][0] for d in self.diags if self.diags[d] is not None])
     
     
     def addDiag(self, label=None, diag_tuple=None, atom=None, wave_range=None):
-        """
-        Add diagnostics to the list of available diagnostics. It can either be one of the built-in diagnostics,
+        """Add diagnostics to the list of available diagnostics.
+        
+        It can either be one of the built-in diagnostics,
         a new, user-defined one, or a subset of the built-in diagnostics corresponding to a given atom or wavelength.
         
         Parameters:
-            - label        a string or a list of strings describing the diagnostic, e.g. '[OIII] 4363/5007'. 
-                           If it is not a key of diags_dict (a diagnostic define by PyNeb), diag_tuple must also be specified
-            - diag_tuple   a 3 elements tuple containing:
+            label  (str) or (list): A string or a list of strings describing the diagnostic
+                
+                **Example:**
+                   
+                   - '[OIII] 4363/5007'
+                   
+                If it is not a key of diags_dict (a diagnostic define by PyNeb), diag_tuple must also be specified
+                
+            diag_tuple   a 3 elements tuple containing:
                            + the atom, e.g. 'Ar5'
                            + the algebraic description of the diagnostic, in terms of line wavelengths or blends or levels, 
                              e.g. '(L(6435)+L(7006))/L(4626)'
                            + the algebraic description of the error, e.g. 
                              'RMS([E(6435)*L(6435)/(L(6435)+L(7006)), E(7006)*L(7006)/(L(6435)+L(7006)), E(4626)])'
-            - atom         the selected atom, e.g. 'O3'
-            - wave_range   the selected wavelength range
+            atom (str): The selected atom.
+                
+                **Example:**
+                    
+                - 'O3'
+                    
+            wave_range: the selected wavelength range
             
-        Usage:
-        diags.addDiag('[OIII] 4363/5007')
-        diags.addDiag('[OIII] 5007/51m', ('O3', 'L(5007)/L(51800)', 'RMS([E(51800), E(5007)])'))
-        diags.addDiag(atom='O3')
-        diags.addDiag(wave_range=[4000, 6000])
+        
+        **Usage:**
+            ```python
+            diags.addDiag('[OIII] 4363/5007')
+            ```
+            
+            ```python
+            diags.addDiag('[OIII] 5007/51m', ('O3', 'L(5007)/L(51800)', 'RMS([E(51800), E(5007)])'))
+            ```
+            
+            ```python
+            diags.addDiag(atom='O3')
+            ```
+            
+            ```python
+            diags.addDiag(wave_range=[4000, 6000])
+            ```
 
         """
         if type(label) is list:
@@ -352,10 +373,7 @@ class Diagnostics(object):
                
                
     def addAll(self):
-        """
-        Insert all the possible diagnostics in the Object (no parameters)
-        
-        """
+        """Insert all the possible diagnostics in the Object"""
         for label in diags_dict:
             self.addDiag(label)
             
@@ -364,8 +382,8 @@ class Diagnostics(object):
         """
         Remove a diagnostic, based on its label.
         
-        Parameter:
-            - label  the label of the diagnostic ('all': removes all the diagnostics)
+        Parameters:
+            label (str): The label of the diagnostic ('all': removes all the diagnostics)
 
         """
         if label == 'all':
@@ -378,14 +396,14 @@ class Diagnostics(object):
     
     
     def addDiagsFromObs(self, obs):
-        """
-        Add all the possible diagnostics that can be computed from an Observation object
-        
-        Usage:
-            diags.addDiagsFromObs(obs)
+        """Add all the possible diagnostics that can be computed from an Observation object
             
-        Parameter:
-            obs     an Observation object
+        Parameters:
+            obs : An Observation object
+            
+        **Usage:**
+        
+            diags.addDiagsFromObs(obs)
         """
         
         if not isinstance(obs, pn.Observation):
@@ -432,10 +450,16 @@ class Diagnostics(object):
                 
     
     def setAtoms(self, atom_dic):
-        """
-        Define the dictionary containing the atoms used for the diagnostics.
-        A dictionary of atom instantiations refereed by atom strings, for example:
-        {'O3': pn.Atom('O', 3)}
+        """Define the dictionary containing the atoms used for the diagnostics.
+        
+        A dictionary of atom instantiations refereed by atom strings, for 
+        
+        Parameters:
+        
+            atom_dic : a dictionary of Atom instances, indexed by atom strings.
+                    **Example:**
+        
+                        {'O3': pn.Atom('O', 3)}
         
         """
         if type(atom_dic) != type({}):
@@ -449,8 +473,11 @@ class Diagnostics(object):
     
     
     def addClabel(self, label, clabel):
-        """
-        Add an alternative label to a diagnostic that can be used when plotting diagnostic diagrams.
+        """Add an alternative label to a diagnostic that can be used when plotting diagnostic diagrams.
+        
+        Parameters:
+            label (str):
+            clabel (str):
         
         """
         if label in self.diags:
@@ -460,28 +487,26 @@ class Diagnostics(object):
     
     
     def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True,
-             return_CS=False, 
+    return_CS=False, 
              col_dic={'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
-                      'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'},):
-        """
-        PLotting tool to generate Te-Ne diagrams.
-        
-        Usage:
-            diags.plot(emisgrids, obs, i_obs=3)
-            
+                      'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}):
+        """Plotting tool to generate Te-Ne diagrams.
+    
         Parameters:
-            - emis_grids    A dictionary of EmisGrid objects refereed by their atom strings (e.g. 'O3')
+            emis_grids:    A dictionary of EmisGrid objects refereed by their atom strings (e.g. 'O3')
                             This can for example be the output of pn.getEmisGridDict()
-            - obs           A pn.Observation object that is supposed to contain the line intensities
+            obs:           A pn.Observation object that is supposed to contain the line intensities
                             used for the plot (corrected intensities).
-            - quad          If True (default) the sum of the error is quadratic,otherwise is linear.
-            - i_obs         reference for the observation to be plotted, in case there is more than one
+            quad:          If True (default) the sum of the error is quadratic,otherwise is linear.
+            i_obs:         reference for the observation to be plotted, in case there is more than one
                             in the obs object
-            - alpha         Transparency for the error bands in the plot
-            - error_band    Boolean: plot [default] an error band
-            - return_CS     [False] If True, return a list of the contour plots
-            - col_dic       Colors for the different ions.
+            alpha:         Transparency for the error bands in the plot
+            error_band:    Boolean: plot [default] an error band
             
+            return_CS     [False] If True, return a list of the contour plots
+            col_dic       Colors for the different ions.            
+        **Usage:**
+            diags.plot(emisgrids, obs, i_obs=3)
         """
         if not pn.config.INSTALLED['plt']: 
             pn.log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
@@ -642,35 +667,35 @@ class Diagnostics(object):
     
         Parameters:
     
-        - diag_tem   temperature-sensitive diagnostic line ratio
-        - diag_den   density-sensitive diagnostic line ratio
-        - value_tem  value of the temperature-sensitive diagnostic
-        - value_den  value of the density-sensitive diagnostic
-        - obs        np.Observation object. Values for observed temperature and density diagnostics are
-                        taken from it if value_tem and value_den are None
-        - i_obs      index of the observations to be used from obs. 
-                        If None, all the observations are considered.
-                        May be a boolean array
-        - guess_tem  temperature assumed in the first iteration, in K
-        - tol_tem    tolerance of the temperature result, in %
-        - tol_den    tolerance of the density result, in %
-        - max_iter   maximum number of iterations to be performed, after which the function will throw a result
-        - maxError   maximum error in the calls to getTemDen, in %
-        - start_tem, end_tem  lower and upper limit of the explored temperature range 
-        - start_den, end_den  lower and upper limit of the explored density range 
-        - use_ANN    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
-                        manage_RM from mwinai library is used.
-                        the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
-                        self.ANN_init_kwargs dictionnaries.
-                        self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
-                        used to train. May also be changed before calling getCrossTemDen
-        - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
-                     start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
-        - ANN        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
-                     In both cases the ANN needs to have already be trained
-
+            diag_tem:   temperature-sensitive diagnostic line ratio
+            diag_den:   density-sensitive diagnostic line ratio
+            value_tem:  value of the temperature-sensitive diagnostic
+            value_den:  value of the density-sensitive diagnostic
+            obs:        np.Observation object. Values for observed temperature and density diagnostics are
+                            taken from it if value_tem and value_den are None
+            i_obs:      index of the observations to be used from obs. 
+                            If None, all the observations are considered.
+                            May be a boolean array
+            guess_tem:  temperature assumed in the first iteration, in K
+            tol_tem:    tolerance of the temperature result, in %
+            tol_den:    tolerance of the density result, in %
+            max_iter:   maximum number of iterations to be performed, after which the function will throw a result
+            maxError:   maximum error in the calls to getTemDen, in %
+            start_tem:, end_tem  lower and upper limit of the explored temperature range 
+            start_den:, end_den  lower and upper limit of the explored density range 
+            use_ANN:    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
+                            manage_RM from mwinai library is used.
+                            the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
+                            self.ANN_init_kwargs dictionnaries.
+                            self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
+                            used to train. May also be changed before calling getCrossTemDen
+            limit_res:  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
+                        start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
+            ANN:        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
+                        In both casesm the ANN needs to already be trained
     
-        Example:
+        **Example:**
+            
             tem, den = diags.getCrossTemDen('[OIII] 4363/5007', '[SII] 6731/6716', 0.0050, 1.0, 
                         guess_tem=10000, tol_tem = 1., tol_den = 1., max_iter = 5)
 
@@ -868,8 +893,7 @@ class Diagnostics(object):
         return tem, den
     
     def getDiagLimits(self, diag):
-        """
-        Return the low and high density values for a given diagnostic
+        """Return the low and high density values for a given diagnostic
         """
         atom = self.atomDict[self.diags[diag][0]]
         to_eval = self.diags[diag][1]
@@ -879,16 +903,14 @@ class Diagnostics(object):
     
     def eval_diag(self, label, obs):
         """
-
         Parameters
         ----------
-        label : diagnostic label(e.g. '[OIII] 4363/5007')
-            A string of a key included in the self.diags dictionnary.
-        obs : an Observation object 
+            label : diagnostic label(e.g. '[OIII] 4363/5007')
+                A string of a key included in the self.diags dictionnary.
+            obs : an Observation object 
         Returns
         -------
-        np.array
-            The evaluation of the diagnostic corresponding to the label.
+            (np.array): The evaluation of the diagnostic corresponding to the label.
 
         """
         if label not in self.diags:
