@@ -65,3 +65,5 @@ docs/Notebooks/smc24.dat
 .vscode/
 
 site/
+
+venv/
