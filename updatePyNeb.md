@@ -19,6 +19,10 @@ Once the devel branch is validated and passed all the tests:
 * update the version removing the beta indices
 * Merge it to the master branch
 
+Make a new release tab on the github server
+==============================
+
+
 Publish the new version on the pypi server
 =============================
 
@@ -27,7 +31,7 @@ Publish the new version on the pypi server
 
     python setup.py sdist
 
-* Run the following to upload the tar file to pypi server. ==Update the value of the distribution:==
+* Run the following to upload the tar file to pypi server. **Update the value of the distribution in {0}:**
 
     twine upload dist/PyNeb-{0}.tar.gz
 
