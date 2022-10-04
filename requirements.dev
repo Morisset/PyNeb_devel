@@ -1,0 +1,18 @@
+# dev utils
+ipython
+
+# docs
+mkdocs
+mkdocs-material
+mkdocstrings
+
+# tests
+codecov
+pytest
+pytest-cov
+
+# static analysis and style
+black
+flake8
+mypy
+pylint

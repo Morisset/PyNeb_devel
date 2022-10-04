@@ -28,6 +28,7 @@ class my_logging(object):
             - calling [str] description of the calling module
             - file_ [str] file to store the events (default is None).
             - print_time [boolean] if True, the event is printed with date-time (Default is False).
+            - no_exit: if True, issue a PyNeberror in case of error, else exit the program
 
         """
         self.log_ = {}

@@ -24,23 +24,30 @@ class EmisGrid(object):
         Container for the emission line intensity grids depending on Te and Ne.
 
         Usage:
-            O3map = pn.EmisGrid('O', 3, n_tem=30, n_den=30)
-            O3map = pn.EmisGrid(restore_file='plot/O3_10k.pypic') # Recovers the map from a previous computation
+            
 
         Parameters:
-            - elem               element (e.g. 'O')
-            - spec               spectrum (e.g. 3)
-            - n_tem              number of points of the electron temperature sample
-            - n_den              number of points of the electron density sample
-            - tem_min, tem_max   limits for the electron temperature
-            - den_min, den_max   limits for the electron density
-            - restore_file       if set, the emissivities are loaded from this file, 
+           elem:               element (e.g. 'O')
+           spec:               spectrum (e.g. 3)
+           n_tem:              number of points of the electron temperature sample
+           n_den:              number of points of the electron density sample
+           tem_min: minimum limit for the electron temperature
+           tem_max: maximum limit for the electron temperature
+           den_min: minimum limit for the electron density
+           den_max: maximum limit for the electron density
+           restore_file:       if set, the emissivities are loaded from this file, 
                                  otherwise (None) it is computed
                                  If the tem or den table from the restored file does not match the given parameters,
                                  a new grid is computed and self.compute_new_grid is set to True. The same applies
                                  if the atomic data are not the same.
-            - atomObj            an atom object. In this case, no need for elem and spec.
+           atomObj:            an atom object. In this case, no need for elem and spec.
 
+        **Usage:**
+            
+            O3map = pn.EmisGrid('O', 3, n_tem=30, n_den=30)
+            
+            O3map = pn.EmisGrid(restore_file='plot/O3_10k.pypic') # Recovers the map from a previous computation
+        
         """
         self.log_ = log_
         self.calling = 'EmisGrid'
@@ -53,13 +60,17 @@ class EmisGrid(object):
                 self.atom = Atom(elem=self.elem, spec=self.spec, NLevels=NLevels, **kwargs)
             else:
                 self.atom = atomObj
-            if self.atom.atomFitsFile != old['atomFitsFile']:
-                self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.atomFitsFile, old['atomFitsFile']),
-                                calling=self.calling)
-            if self.atom.collFitsFile != old['collFitsFile']:
-                self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.collFitsFile, old['collFitsFile']),
-                                calling=self.calling)
-            
+            if self.atom.type == 'coll':
+                if self.atom.atomFitsFile != old['atomFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.atomFitsFile, old['atomFitsFile']),
+                                    calling=self.calling)
+                if self.atom.collFitsFile != old['collFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.collFitsFile, old['collFitsFile']),
+                                    calling=self.calling)
+            elif self.atom.type == 'rec':
+                if self.atom.recFitsFile != old['recFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.recFitsFile, old['recFitsFile']),
+                                    calling=self.calling)
             self.compute_new_grid = False
             if n_tem != len(old['tem']):
                 self.log_.warn('len(tem) does not match saved data. New grid is computed')
@@ -147,7 +158,8 @@ class EmisGrid(object):
 
         """
         save(file_, emis_grid=self.emis_grid, tem=self.tem, den=self.den, elem=self.elem,
-             spec=self.spec, atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile)
+             spec=self.spec, 
+             atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile, recFitsFile=self.recFitsFile)
 
 
     def getGrid(self, lev_i=None, lev_j=None, wave= -1, to_eval=None, label=None):
@@ -157,9 +169,10 @@ class EmisGrid(object):
         for example to_eval = 'L(5007)/L(4959)'
         
         Parameters:
-            - lev_i, lev_j   levels for the emission line
-            - wave           wavelength
-            - to_eval        algebraic expression of the line combination to evaluate
+            lev_i: level i for the emission line
+            lev_j: level j for the emission line
+            wave:           wavelength
+            to_eval:        algebraic expression of the line combination to evaluate
         
         """
         if wave != -1:
@@ -190,11 +203,15 @@ class EmisGrid(object):
             O3map.plotImage(wave1=4363, wave2=5007)
             
         Parameters:
-            - to_eval                         algebraic expression of the line combination to draw. May combine L(lambda) and I(i,j).
-            - lev_i1, lev_i2, lev_j1, lev_j2  levels of the a lines in case of simple line ratio plot.
-            - wave1, wave2                    wavelengths of the two lines in case of simple line ratio plot.
-            - cblabel                         a title for the colorbar
-            - **kwargs                        any other parameter will be sent to contourf and pcolor
+            to_eval:                         algebraic expression of the line combination to draw. May combine L(lambda) and I(i,j).
+            lev_i1: levels of the a lines in case of simple line ratio plot.
+            lev_i2: levels of the a lines in case of simple line ratio plot.
+            lev_j1: levels of the a lines in case of simple line ratio plot.
+            lev_j2: levels of the a lines in case of simple line ratio plot.
+            wave1: wavelengths of the two lines in case of simple line ratio plot.
+            wave2: wavelengths of the two lines in case of simple line ratio plot.
+            cblabel:                         a title for the colorbar
+            **kwargs:                        any other parameter will be sent to contourf and pcolor
 
         """
         if not config.INSTALLED['plt']:
@@ -222,7 +239,7 @@ class EmisGrid(object):
         plt.show()
 
 
-    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20,
+    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20, levels=None,
                       linestyles='-', clabels=True, log_levels=True, title=None, ax=None, **kwargs):
         """
         Plot a contour map of the diagnostic defined by to_eval.
@@ -231,16 +248,15 @@ class EmisGrid(object):
             O3map.plotContours('L(4363)/L(5007)')
         
         Parameters:
-            - to_eval                   algebraic definition of the line ratio to contour-plot
-            - low_levels, high_levels   limit levels for the contour. If not set, the limit of the 
-                                        ratio values are used.
-            - n_levels                  number of levels (20 is the default)
-            - linestyles                used for the contour lines (default: solid line)
-            - clabels                   Boolean. Controls if line labels are printed (default: True)
-            - log_levels                Boolean. If True (default), the log of the line ratio is used.
-            - title                     plot title
-            - **kwargs                  sent to plt.contour
-            
+            to_eval:                   algebraic definition of the line ratio to contour-plot
+            low_levels: limit levels for the contour. If not set, the limit of the ratio values are used.
+            high_levels: limit levels for the contour. If not set, the limit of the ratio values are used.
+            n_levels:                  number of levels (20 is the default)
+            linestyles:                used for the contour lines (default: solid line)
+            clabels:                   Boolean. Controls if line labels are printed (default: True)
+            log_levels:                Boolean. If True (default), the log of the line ratio is used.
+            title:                     plot title
+            **kwargs:                  sent to plt.contour            
         """ 
         if not config.INSTALLED['plt']:
             log_.error('Matplotlib not available', calling=self.calling)
@@ -261,12 +277,14 @@ class EmisGrid(object):
             high_level = np.max(np.log10(diag_map))
         if log_levels:
             Z = np.log10(diag_map)
-            levels = np.linspace(low_level, high_level, n_levels)
+            if levels is None:
+                levels = np.linspace(low_level, high_level, n_levels)
             if title is None:
                 title = '[%s%s]: log(%s)' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         else:
             Z = diag_map
-            levels = 10. ** (np.linspace(low_level, high_level, n_levels))
+            if levels is None:
+                levels = 10. ** (np.linspace(low_level, high_level, n_levels))
             if title is None:
                 title = '[%s%s]: %s' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         
@@ -288,20 +306,22 @@ class EmisGrid(object):
         Plot the diagnostic defined by to_eval as a function of either Ne or Te, with the other
         variable as a parameter.
         
-        Usage:
-            o3grid.plotLineRatio('L(4363)/L(5007)', par='den')
-            s2grid.plotLineRatio('I(2,1)/I(3,1)', par='tem', par_low=5000, par_high=20000, n_par=4)
-        
         Parameters:
-            - to_eval      algebraic definition of the line ratio to contour-plot
-            - par          quantity to be used as a parameter (either 'den' or 'tem')
-            - par_low      lowest limit of the parameter range
-            - par_high     highest limit of the parameter range
-            - n_par        number of parameter's values (default: 10)
-            - linestyles   used for the contour lines (default: solid)
-            - title        plot title
-            - legend       Boolean. If True, write legend title (default: True) 
-            - **kwargs     sent to plt.contour
+            to_eval:      algebraic definition of the line ratio to contour-plot
+            par:          quantity to be used as a parameter (either 'den' or 'tem')
+            par_low:      lowest limit of the parameter range
+            par_high:     highest limit of the parameter range
+            n_par:        number of parameter's values (default: 10)
+            linestyles:   used for the contour lines (default: solid)
+            title:        plot title
+            legend:       Boolean. If True, write legend title (default: True) 
+            **kwargs:     sent to plt.contour
+            
+        **Usage:**
+        
+            o3grid.plotLineRatio('L(4363)/L(5007)', par='den')
+            
+            s2grid.plotLineRatio('I(2,1)/I(3,1)', par='tem', par_low=5000, par_high=20000, n_par=4)
             
         """ 
         if not config.INSTALLED['plt']:
@@ -361,28 +381,36 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
     """
     Return a dictionary of EmisGrid objects referred to by their atom string (e.g. 'O3').
     
-    Usage:
-        emisgrids = pn.getEmisGridDict(['C', 'N', 'O'], [2, 3], save=True)
-        emisgrids = pn.getEmisGridDict(atom_list=['N2', 'O2', 'O3'], pypic_path='/tmp/pypics/',
-                        den_max = 1e6)
-        emisgrids = pn.getEmisGridDict(atomDict=diags.atomDict)
-
+    
     Parameters:
-        - elem_list         list of elements
-        - spec_list         list of spectrum values (integers)
-        - atom_list         list of atoms (e.g. ['N2', 'O3'])
-        - restore           Boolean. If True (default), the program will search for a previously computed grid.
+        elem_list:         list of elements
+        spec_list:         list of spectrum values (integers)
+        atom_list:         list of atoms (e.g. ['N2', 'O3'])
+        restore:           Boolean. If True (default), the program will search for a previously computed grid.
                             If not found, it will compute the EmisGrid (unless computeIfAbsent is set to False)
-        - pypic_path        directory where to look for the pypic emissivity files. It defaults to pn.config.pypic_path, 
+        pypic_path:        directory where to look for the pypic emissivity files. It defaults to pn.config.pypic_path, 
                             which is defined when the PyNeb session begins and corresponds to $HOME/.pypics if
                             the ENVIRONMENT variable HOME is accessible or to /tmp/pypics otherwise
-        - n_tem, n_den      number of points in the Te and Ne samples resp. 
-        - tem_min, tem_max, den_min, den_max    limits for Te and Ne
-        - save              Boolean. If True (default), the emissivity grid will be saved. It has no effect if the 
+        n_tem:      number of points in the Te  samples resp. 
+        n_den:      number of points in the Ne samples resp. 
+        tem_min: minimum Te value
+        tem_max: maximum Te value
+        den_min: minimum Ne value
+        den_max: maximum Ne value
+        save (bool): If True (default), the emissivity grid will be saved. It has no effect if the 
                             EmisGrid has just been restored.
-        - atomDict          dictionary of Atom objects
-        - computeIfAbsent   If the file to restore is absent and this parameter is True (default), the 
-                            EmisGrid is computed
+        atomDict:          dictionary of Atom objects
+        computeIfAbsent (bool):   If the file to restore is absent and this parameter is True, the EmisGrid is computed
+                            
+    **Usage:**
+        
+        emisgrids = pn.getEmisGridDict(['C', 'N', 'O'], [2, 3], save=True)
+        
+        emisgrids = pn.getEmisGridDict(atom_list=['N2', 'O2', 'O3'], pypic_path='/tmp/pypics/',
+                        den_max = 1e6)
+        
+        emisgrids = pn.getEmisGridDict(atomDict=diags.atomDict)
+
             
     """
     if pypic_path is None:
@@ -418,7 +446,7 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
         if restore:
             if os.path.exists(file_):
                 try:
-                    emis_grids[elem + spec] = EmisGrid(restore_file=file_, n_tem=n_tem, n_den=n_den, 
+                    emis_grids[elem + spec + rec] = EmisGrid(restore_file=file_, n_tem=n_tem, n_den=n_den, 
                                                        tem_min=tem_min, tem_max=tem_max,
                                                        den_min=den_min, den_max=den_max, atomObj=atomObj)
                     log_.message('Read %s' % file_, calling=calling)

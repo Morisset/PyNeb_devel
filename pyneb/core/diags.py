@@ -9,6 +9,9 @@ import numpy as np
 import pyneb as pn
 from pyneb.utils.misc import int_to_roman, parseAtom, parseAtom2
 from pyneb.utils.init import BLEND_LIST
+from pyneb import config
+if config.INSTALLED['ai4neb']:
+    from ai4neb import manage_RM
 
 diags_dict = {}
 
@@ -162,13 +165,19 @@ class Diagnostics(object):
     It is also the class that plots the diagnostic Te-Ne diagrams.
 
     """    
-    def __init__(self, addAll=False, OmegaInterp='Cheb', NLevels=None):
+    def __init__(self, addAll:bool=False, OmegaInterp:str='Cheb', NLevels=None):
         """
         Diagnostics constructor
         
         Parameters:
-            - addAll        switch to include all defined diagnostics (default = False)
-            - OmegaInterp   parameter sent to Atom, default is 'Cheb', other can be 'linear'
+            addAll: Switch to include all defined diagnostics
+            OmegaInterp: Parameter sent to Atom 
+                
+                **Options:**
+                    
+                * 'Cheb'
+                * 'linear'
+            NLevels: 
             
         """
         self.log_ = pn.log_ 
@@ -202,14 +211,15 @@ class Diagnostics(object):
 
     def getDiagFromLabel(self, label):
         """
-        Return the definition of a diagnostic (the 3 or 4 elements tuple)
-        
-        Usage:
-            diags.getDiagFromLabel('[NII] 5755/6548')
-        
         Parameters:
-            -label a diagnostic label 
+            label(str): a diagnostic label 
             
+        Returns:
+            Return the definition of a diagnostic (the 3 or 4 elements tuple)
+        
+        **Usage:**
+            
+            diags.getDiagFromLabel('[NII] 5755/6548') 
         """
         if label in self.diags:
             return self.diags[label]
@@ -219,72 +229,86 @@ class Diagnostics(object):
 
         
     def getDiags(self):
-        """
-        Return the definitions (tuples) of all the diagnostics defined in the Object.
-        No parameter.
-        
+        """Return the definitions (tuples) of all the diagnostics defined in the Object.
         """
         return [self.getDiagFromLabel(label) for label in self.diags]
 
             
     def getDiagLabels(self):
-        """
-        Return the labels of all the diagnostics defined in the Object
-        No parameter.
-        
-        """
+        """Return the labels of all the diagnostics defined in the Object"""
         return self.diags.keys()    
 
     
     def getAllDiags(self):
-        """
-        Return the definitions (tuples) of all the possible diagnostics.
-        No parameter.
+        """Return the definitions (tuples) of all the possible diagnostics.
         
+        Returns:
+            (tuples): All possible diagnostics.
         """
         return diags_dict
 
             
     def getAllDiagLabels(self):
-        """
-        Return the labels of all the possible diagnostics.
-        No parameter.
-        
+        """Return the labels of all the possible diagnostics.
         """
         return diags_dict.keys()    
 
     
     def getUniqueAtoms(self):
-        """
-        Return a numpy.ndarray of the ions needed by the diagnostics. Unique is applied to the list before returning.
-        No parameter.
+        """Return a numpy.ndarray of the ions needed by the diagnostics. Unique is applied to the list before returning.
         
+        Returns:
+            (np.ndarray): Ions needed by the diagnostics
         """
         return np.unique([self.diags[d][0] for d in self.diags if self.diags[d] is not None])
     
     
     def addDiag(self, label=None, diag_tuple=None, atom=None, wave_range=None):
-        """
-        Add diagnostics to the list of available diagnostics. It can either be one of the built-in diagnostics,
+        """Add diagnostics to the list of available diagnostics.
+        
+        It can either be one of the built-in diagnostics,
         a new, user-defined one, or a subset of the built-in diagnostics corresponding to a given atom or wavelength.
         
         Parameters:
-            - label        a string or a list of strings describing the diagnostic, e.g. '[OIII] 4363/5007'. 
-                           If it is not a key of diags_dict (a diagnostic define by PyNeb), diag_tuple must also be specified
-            - diag_tuple   a 3 elements tuple containing:
+            label  (str) or (list): A string or a list of strings describing the diagnostic
+                
+                **Example:**
+                   
+                   - '[OIII] 4363/5007'
+                   
+                If it is not a key of diags_dict (a diagnostic define by PyNeb), diag_tuple must also be specified
+                
+            diag_tuple   a 3 elements tuple containing:
                            + the atom, e.g. 'Ar5'
                            + the algebraic description of the diagnostic, in terms of line wavelengths or blends or levels, 
                              e.g. '(L(6435)+L(7006))/L(4626)'
                            + the algebraic description of the error, e.g. 
                              'RMS([E(6435)*L(6435)/(L(6435)+L(7006)), E(7006)*L(7006)/(L(6435)+L(7006)), E(4626)])'
-            - atom         the selected atom, e.g. 'O3'
-            - wave_range   the selected wavelength range
+            atom (str): The selected atom.
+                
+                **Example:**
+                    
+                - 'O3'
+                    
+            wave_range: the selected wavelength range
             
-        Usage:
-        diags.addDiag('[OIII] 4363/5007')
-        diags.addDiag('[OIII] 5007/51m', ('O3', 'L(5007)/L(51800)', 'RMS([E(51800), E(5007)])'))
-        diags.addDiag(atom='O3')
-        diags.addDiag(wave_range=[4000, 6000])
+        
+        **Usage:**
+            ```python
+            diags.addDiag('[OIII] 4363/5007')
+            ```
+            
+            ```python
+            diags.addDiag('[OIII] 5007/51m', ('O3', 'L(5007)/L(51800)', 'RMS([E(51800), E(5007)])'))
+            ```
+            
+            ```python
+            diags.addDiag(atom='O3')
+            ```
+            
+            ```python
+            diags.addDiag(wave_range=[4000, 6000])
+            ```
 
         """
         if type(label) is list:
@@ -341,14 +365,15 @@ class Diagnostics(object):
                             'or an ion, or a wave range. label={0}, diag_tuple={1}, atom={2}, wave_range={3}'.format(label, diag_tuple, atom, wave_range),
                             calling=self.calling + '.addDiag')
         if atom not in self.atomDict and (type(label) is not list):
-            self.atomDict[atom] = pn.Atom(parseAtom(atom)[0], parseAtom(atom)[1], NLevels=self.NLevels)
+            this_atom, this_spec, this_rec = parseAtom2(atom)
+            if this_rec == '':
+                self.atomDict[atom] = pn.Atom(this_atom, this_spec, NLevels=self.NLevels)
+            elif this_rec == 'r':
+                self.atomDict[atom] = pn.RecAtom(this_atom, this_spec)
                
                
     def addAll(self):
-        """
-        Insert all the possible diagnostics in the Object (no parameters)
-        
-        """
+        """Insert all the possible diagnostics in the Object"""
         for label in diags_dict:
             self.addDiag(label)
             
@@ -357,8 +382,8 @@ class Diagnostics(object):
         """
         Remove a diagnostic, based on its label.
         
-        Parameter:
-            - label  the label of the diagnostic ('all': removes all the diagnostics)
+        Parameters:
+            label (str): The label of the diagnostic ('all': removes all the diagnostics)
 
         """
         if label == 'all':
@@ -371,14 +396,14 @@ class Diagnostics(object):
     
     
     def addDiagsFromObs(self, obs):
-        """
-        Add all the possible diagnostics that can be computed from an Observation object
-        
-        Usage:
-            diags.addDiagsFromObs(obs)
+        """Add all the possible diagnostics that can be computed from an Observation object
             
-        Parameter:
-            obs     an Observation object
+        Parameters:
+            obs : An Observation object
+            
+        **Usage:**
+        
+            diags.addDiagsFromObs(obs)
         """
         
         if not isinstance(obs, pn.Observation):
@@ -425,10 +450,16 @@ class Diagnostics(object):
                 
     
     def setAtoms(self, atom_dic):
-        """
-        Define the dictionary containing the atoms used for the diagnostics.
-        A dictionary of atom instantiations refereed by atom strings, for example:
-        {'O3': pn.Atom('O', 3)}
+        """Define the dictionary containing the atoms used for the diagnostics.
+        
+        A dictionary of atom instantiations refereed by atom strings, for 
+        
+        Parameters:
+        
+            atom_dic : a dictionary of Atom instances, indexed by atom strings.
+                    **Example:**
+        
+                        {'O3': pn.Atom('O', 3)}
         
         """
         if type(atom_dic) != type({}):
@@ -442,8 +473,11 @@ class Diagnostics(object):
     
     
     def addClabel(self, label, clabel):
-        """
-        Add an alternative label to a diagnostic that can be used when plotting diagnostic diagrams.
+        """Add an alternative label to a diagnostic that can be used when plotting diagnostic diagrams.
+        
+        Parameters:
+            label (str):
+            clabel (str):
         
         """
         if label in self.diags:
@@ -452,24 +486,27 @@ class Diagnostics(object):
             pn.log_.warn('Try to add clabel in undefined label {0}'.format(label), calling=self.calling)
     
     
-    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True):
-        """
-        PLotting tool to generate Te-Ne diagrams.
-        
-        Usage:
-            diags.plot(emisgrids, obs, i_obs=3)
-            
+    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True,
+    return_CS=False, 
+             col_dic={'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
+                      'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}):
+        """Plotting tool to generate Te-Ne diagrams.
+    
         Parameters:
-            - emis_grids    A dictionary of EmisGrid objects refereed by their atom strings (e.g. 'O3')
+            emis_grids:    A dictionary of EmisGrid objects refereed by their atom strings (e.g. 'O3')
                             This can for example be the output of pn.getEmisGridDict()
-            - obs           A pn.Observation object that is supposed to contain the line intensities
+            obs:           A pn.Observation object that is supposed to contain the line intensities
                             used for the plot (corrected intensities).
-            - quad          If True (default) the sum of the error is quadratic,otherwise is linear.
-            - i_obs         reference for the observation to be plotted, in case there is more than one
+            quad:          If True (default) the sum of the error is quadratic,otherwise is linear.
+            i_obs:         reference for the observation to be plotted, in case there is more than one
                             in the obs object
-            - alpha         Transparency for the error bands in the plot
-            - error_band    Boolean: plot [default] an error band
+            alpha:         Transparency for the error bands in the plot
+            error_band:    Boolean: plot [default] an error band
             
+            return_CS     [False] If True, return a list of the contour plots
+            col_dic       Colors for the different ions.            
+        **Usage:**
+            diags.plot(emisgrids, obs, i_obs=3)
         """
         if not pn.config.INSTALLED['plt']: 
             pn.log_.error('Matplotlib not available, no plot', calling=self.calling + '.plot')
@@ -495,6 +532,7 @@ class Diagnostics(object):
             f = plt.gcf()
         X = np.log10(emis_grids[list(emis_grids.keys())[0]].den2D)
         Y = emis_grids[list(emis_grids.keys())[0]].tem2D
+        CSs = []
         for label in self.diags:
             self.log_.message('plotting {0}'.format(label), calling=self.calling)
             diag = self.diags[label]
@@ -585,8 +623,6 @@ class Diagnostics(object):
                     else:
                         RMS = lambda err: (np.asarray(err)).sum() 
                     tol_value = eval(diag[2])
-                    col_dic = {'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
-                               'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}
                     if sym in col_dic:
                         col = col_dic[sym]
                     else:
@@ -598,7 +634,9 @@ class Diagnostics(object):
                         if levels[0] < levels[1]:
                             #pn.log_.debug('{} levels {}'.format(label, levels), calling=self.calling)
                             CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
+                            CSs.append(CS)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
+                    CSs.append(CS)
                     try:
                         ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
                         ax.set_ylabel(r'T$_{\rm e}$ [K]')
@@ -614,12 +652,14 @@ class Diagnostics(object):
                     except:
                         self.log_.message('NOT plotted {0} {1}'.format(fmt, label),
                                           calling=self.calling)
-                        
-        
+            
+        if return_CS:
+            return CSs
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
-                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1, use_ANN=False, limit_res=False, ANN=None):
+                       start_tem= -1, end_tem= -1, start_den= -1, end_den= -1, use_ANN=False, 
+                       limit_res=False, ANN=None):
         """
         Cross-converge the temperature and density derived from two sensitive line ratios, by inputting the quantity 
         derived with one line ratio into the other and then iterating.
@@ -627,35 +667,35 @@ class Diagnostics(object):
     
         Parameters:
     
-        - diag_tem   temperature-sensitive diagnostic line ratio
-        - diag_den   density-sensitive diagnostic line ratio
-        - value_tem  value of the temperature-sensitive diagnostic
-        - value_den  value of the density-sensitive diagnostic
-        - obs        np.Observation object. Values for observed temperature and density diagnostics are
-                        taken from it if value_tem and value_den are None
-        - i_obs      index of the observations to be used from obs. 
-                        If None, all the observations are considered.
-                        May be a boolean array
-        - guess_tem  temperature assumed in the first iteration, in K
-        - tol_tem    tolerance of the temperature result, in %
-        - tol_den    tolerance of the density result, in %
-        - max_iter   maximum number of iterations to be performed, after which the function will throw a result
-        - maxError   maximum error in the calls to getTemDen, in %
-        - start_tem, end_tem  lower and upper limit of the explored temperature range 
-        - start_den, end_den  lower and upper limit of the explored density range 
-        - use_ANN    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
-                        manage_RM from mwinai library is used.
-                        the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
-                        self.ANN_init_kwargs dictionnaries.
-                        self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
-                        used to train. May also be changed before calling getCrossTemDen
-        - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
-                     start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
-        - ANN        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
-                     In both casesm the ANN needs to already be trained
-
+            diag_tem:   temperature-sensitive diagnostic line ratio
+            diag_den:   density-sensitive diagnostic line ratio
+            value_tem:  value of the temperature-sensitive diagnostic
+            value_den:  value of the density-sensitive diagnostic
+            obs:        np.Observation object. Values for observed temperature and density diagnostics are
+                            taken from it if value_tem and value_den are None
+            i_obs:      index of the observations to be used from obs. 
+                            If None, all the observations are considered.
+                            May be a boolean array
+            guess_tem:  temperature assumed in the first iteration, in K
+            tol_tem:    tolerance of the temperature result, in %
+            tol_den:    tolerance of the density result, in %
+            max_iter:   maximum number of iterations to be performed, after which the function will throw a result
+            maxError:   maximum error in the calls to getTemDen, in %
+            start_tem:, end_tem  lower and upper limit of the explored temperature range 
+            start_den:, end_den  lower and upper limit of the explored density range 
+            use_ANN:    if True, an Analogic Neural Network will be used for the determination of Te and Ne.
+                            manage_RM from mwinai library is used.
+                            the hyper_parameters can be set-up with the self.ANN_inst_kwargs and
+                            self.ANN_init_kwargs dictionnaries.
+                            self.ANN_n_tem=30 and self.ANN_n_den=30 are the number of Te and Ne
+                            used to train. May also be changed before calling getCrossTemDen
+            limit_res:  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
+                        start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
+            ANN:        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
+                        In both casesm the ANN needs to already be trained
     
-        Example:
+        **Example:**
+            
             tem, den = diags.getCrossTemDen('[OIII] 4363/5007', '[SII] 6731/6716', 0.0050, 1.0, 
                         guess_tem=10000, tol_tem = 1., tol_den = 1., max_iter = 5)
 
@@ -666,14 +706,14 @@ class Diagnostics(object):
         if diag_tem not in self.diags:
             self.addDiag(diag_tem)
         atom_tem = self.diags[diag_tem][0]
-        elem_tem, spec_tem = parseAtom(atom_tem)
+        elem_tem, spec_tem, rec = parseAtom2(atom_tem)
         if atom_tem not in self.atomDict:
             self.atomDict[atom_tem] = pn.Atom(elem_tem, spec_tem, self.OmegaInterp, NLevels=self.NLevels)
         atom_tem = self.atomDict[atom_tem]
         if diag_den not in self.diags:
             self.addDiag(diag_den)
         atom_den = self.diags[diag_den][0]
-        elem_den, spec_den = parseAtom(self.diags[diag_den][0])
+        elem_den, spec_den, rec = parseAtom2(self.diags[diag_den][0])
         if (atom_den) not in self.atomDict:
             self.atomDict[atom_den] = pn.Atom(elem_den, spec_den, self.OmegaInterp, NLevels=self.NLevels)
         atom_den = self.atomDict[atom_den]
@@ -738,77 +778,74 @@ class Diagnostics(object):
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
         if use_ANN:
-            try:
-                from ai4neb import manage_RM
-                ai4neb_OK = True
-            except:
-                ai4neb_OK = False
-                pn.log_.error('ai4neb is not installed')
-            if ai4neb_OK:
-                if start_tem == -1:
-                    tem_min = 3000.
+            if not config.INSTALLED['ai4neb']:
+                self.log_.error('_getPopulations_ANN cannot be used in absence of ai4neb package',
+                              calling=self.calling)
+                return None
+            if start_tem == -1:
+                tem_min = 3000.
+            else:
+                tem_min = start_tem
+            if end_tem == -1:
+                tem_max = 20000.
+            else:
+                tem_max = end_tem
+            if start_den == -1:
+                den_min = 10.
+            else:
+                den_min = start_den
+            if end_den == -1:
+                den_max = 1e6
+            else:
+                den_max = end_den
+            if ANN is None:
+                # define emisGrid objects to generate Te-Ne emissionmaps
+                tem_EG = pn.EmisGrid(atomObj=atom_tem, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                den_EG = pn.EmisGrid(atomObj=atom_den, 
+                                     n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
+                                     tem_min=tem_min, tem_max=tem_max,
+                                     den_min=den_min, den_max=den_max)
+                # compute emission line ratio maps in the Te-Ne space
+                tem_2D = tem_EG.getGrid(to_eval = eval_tem)
+                den_2D = den_EG.getGrid(to_eval = eval_den)
+                # X is a set of line ratio pairs
+                X = np.array((tem_2D.ravel(), den_2D.ravel())).T
+                # y is a set of corresponding Te-Ne pairs
+                y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
+                # Instantiate, init and train the ANN
+                self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+                self.ANN.init_RM(**self.ANN_init_kwargs)
+                self.ANN.train_RM()
+            else:
+                if type(ANN) is str:
+                    self.ANN = manage_RM(RM_filename=ANN)
                 else:
-                    tem_min = start_tem
-                if end_tem == -1:
-                    tem_max = 20000.
-                else:
-                    tem_max = end_tem
-                if start_den == -1:
-                    den_min = 10.
-                else:
-                    den_min = start_den
-                if end_den == -1:
-                    den_max = 1e6
-                else:
-                    den_max = end_den
-                if ANN is None:
-                    # define emisGrid objects to generate Te-Ne emissionmaps
-                    tem_EG = pn.EmisGrid(atomObj=atom_tem, 
-                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                         tem_min=tem_min, tem_max=tem_max,
-                                         den_min=den_min, den_max=den_max)
-                    den_EG = pn.EmisGrid(atomObj=atom_den, 
-                                         n_tem=self.ANN_n_tem, n_den=self.ANN_n_den, 
-                                         tem_min=tem_min, tem_max=tem_max,
-                                         den_min=den_min, den_max=den_max)
-                    # compute emission line ratio maps in the Te-Ne space
-                    tem_2D = tem_EG.getGrid(to_eval = eval_tem)
-                    den_2D = den_EG.getGrid(to_eval = eval_den)
-                    # X is a set of line ratio pairs
-                    X = np.array((tem_2D.ravel(), den_2D.ravel())).T
-                    # y is a set of corresponding Te-Ne pairs
-                    y = np.array((tem_EG.tem2D.ravel()/1e4, np.log10(den_EG.den2D.ravel()))).T
-                    # Instantiate, init and train the ANN
-                    self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-                    self.ANN.init_RM(**self.ANN_init_kwargs)
-                    self.ANN.train_RM()
-                else:
-                    if type(ANN) is str:
-                        self.ANN = manage_RM(RM_filename=ANN)
-                    else:
-                        self.ANN = ANN
-                # set the test values to the one we are looking for
-                shape = value_tem.shape
-                self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
-                # predict the result and denormalize them
-                self.ANN.predict()
-                if self.ANN.isfin is None:
-                    tem = self.ANN.pred[:,0]*1e4
-                    den = 10**self.ANN.pred[:,1]
-                else:
-                    tem = np.zeros_like(value_tem.ravel()) * -10
-                    tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
-                    den = np.zeros_like(value_tem.ravel()) * -10
-                    den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
-                tem = np.reshape(tem, shape)
-                den = np.reshape(den, shape)
-                if limit_res:
-                    mask = (tem<tem_min) | (tem>tem_max)
-                    tem[mask] = np.nan
-                    pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
-                    mask = (den<den_min) | (den>den_max)
-                    den[mask] = np.nan
-                    pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
+                    self.ANN = ANN
+            # set the test values to the one we are looking for
+            shape = value_tem.shape
+            self.ANN.set_test(np.array((value_tem.ravel(), value_den.ravel())).T)
+            # predict the result and denormalize them
+            self.ANN.predict()
+            if self.ANN.isfin is None:
+                tem = self.ANN.pred[:,0]*1e4
+                den = 10**self.ANN.pred[:,1]
+            else:
+                tem = np.zeros_like(value_tem.ravel()) * -10
+                tem[self.ANN.isfin] = self.ANN.pred[:,0]*1e4
+                den = np.zeros_like(value_tem.ravel()) * -10
+                den[self.ANN.isfin] = 10**self.ANN.pred[:,1]
+            tem = np.reshape(tem, shape)
+            den = np.reshape(den, shape)
+            if limit_res:
+                mask = (tem<tem_min) | (tem>tem_max)
+                tem[mask] = np.nan
+                pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
+                mask = (den<den_min) | (den>den_max)
+                den[mask] = np.nan
+                pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
@@ -856,8 +893,7 @@ class Diagnostics(object):
         return tem, den
     
     def getDiagLimits(self, diag):
-        """
-        Return the low and high density values for a given diagnostic
+        """Return the low and high density values for a given diagnostic
         """
         atom = self.atomDict[self.diags[diag][0]]
         to_eval = self.diags[diag][1]
@@ -865,18 +901,16 @@ class Diagnostics(object):
         LDR = atom.getLowDensRatio(to_eval = to_eval)
         return(np.sort((LDR, HDR)))
     
-    def eval_diag(self, label):
+    def eval_diag(self, label, obs):
         """
-
         Parameters
         ----------
-        label : diagnostic label(e.g. '[OIII] 4363/5007')
-            A string of a key included in the self.diags dictionnary.
-
+            label : diagnostic label(e.g. '[OIII] 4363/5007')
+                A string of a key included in the self.diags dictionnary.
+            obs : an Observation object 
         Returns
         -------
-        np.array
-            The evaluation of the diagnostic corresponding to the label.
+            (np.array): The evaluation of the diagnostic corresponding to the label.
 
         """
         if label not in self.diags:
