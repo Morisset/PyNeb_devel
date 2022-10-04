@@ -667,7 +667,7 @@ class Diagnostics(object):
         - limit_res  in case of using ANN, if limit_res, the tem and den values out of the start_tem, end_tem,
                      start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
         - ANN        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
-                     In both casesm the ANN needs to already be trained
+                     In both cases the ANN needs to have already be trained
 
     
         Example:
