@@ -15,8 +15,8 @@ from ..utils.misc import ROOT_DIR
 class Continuum(object):
     
     def __init__(self):
-        """
-        Part of the PyNeb library.
+        """Part of the PyNeb library.
+        
         Mainly based on pySSN library        
         Adapted by V. Gomez-Llanos and C. Morisset, 2018
         """
@@ -27,9 +27,12 @@ class Continuum(object):
 
         
     def _set_HI_case(self, case='B'):
-        """
-        Define the case (A or B) to be used for HI normalization line.
+        """Define the case (A or B) to be used for HI normalization line.
+        
         Not sure that the Free-bound coefficients from Ercolano & Storey 2006 take case A option into account.
+        
+        Parameters:
+            case (string): 'A' or 'B'
         """            
         if case != self.__HI_case:
             if case == 'A':
@@ -43,12 +46,16 @@ class Continuum(object):
             self.__HI_case = case
         
     def make_cont_Ercolano(self, tem, case, wl):
-        """
-        Adapted from http://adsabs.harvard.edu/abs/2006MNRAS.372.1875E
-        tem : electron temperature [K]. Can not be an array. In case of tem array, use get_continuum
-        case: one of "H", "He1", "He2"
-        wl: wavelength [Angstrom]. May be a float or a numpy array
-        return the continuum [erg/s.cm3/A]
+        """Adapted from http://adsabs.harvard.edu/abs/2006MNRAS.372.1875E
+        
+        Parameters:
+            tem : electron temperature [K]. Can not be an array. 
+                  In case of tem array, use get_continuum
+            case: one of "H", "He1", "He2"
+            wl: wavelength [Angstrom]. May be a float or a numpy array
+        
+        Returns:
+            The continuum [erg/s.cm3/A]
         """
         try:
             _ = (e for e in wl)
@@ -111,10 +118,13 @@ class Continuum(object):
 
     def two_photon(self, tem, den, wl):
         """
-        tem: temperature [K]. May be a float or a numpy array
-        den: density [cm-3]
-        wl: wavelength [Angstrom]. May be a float or a numpy array
-        Return 2 photons continuum [erg/s.cm3/A]
+        Parameters:
+            tem: temperature [K]. May be a float or a numpy array
+            den: density [cm-3]
+            wl: wavelength [Angstrom]. May be a float or a numpy array
+            
+        Returns:
+            2 photons continuum [erg/s.cm3/A]
         """
         #ToDo : See Schirmer, M. 2016, PASP, 128, 114001 
         try:
@@ -134,8 +144,12 @@ class Continuum(object):
         return twophot_cont
             
     def gff(self, Z, tem, wl):
-        """
-         Adaptated from http://adsabs.harvard.edu/abs/1991CoPhC..66..129S
+        """Adaptated from http://adsabs.harvard.edu/abs/1991CoPhC..66..129S
+        
+        Parameters:
+            Z: atomic number
+            tem: temperature [K]
+            wk: wavelength [Angstrom]
         """
         D= np.array([8.986940175e+00, -4.009515855e+00,  8.808871266e-01,
             2.640245111e-02, -4.580645915e-02, -3.568055702e-03,   
@@ -205,7 +219,15 @@ class Continuum(object):
         return G.squeeze()
 
     def FreeFree(self, tem, wl, He1_H=0., He2_H=0., tem_HeI=None, tem_HeII=None):
-
+        """
+        Parameters:
+            tem:
+            wl:
+            He1_H (float) default: 0.
+            He2_H (float) default: 0.
+            tem_HeI (float) default: None.
+            tem_HeII (float) default: None.
+        """
         if tem_HeI is None:
             tem_HeI = tem
         if tem_HeII is None:
@@ -225,14 +247,21 @@ class Continuum(object):
                       cont_HI=True, cont_HeI=True, cont_HeII=True, 
                       cont_2p=True, cont_ff=True):
         """
-        tem: temperature [K]. May be a float or an iterable
-        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
-        He1_H and He2_H: He+/H+ and He++/H+ abundances. Default = 0.0
-        wl: wavelengths: May be an array
-        type of continuum to take into acount defined a boolean, defaults are True:
-            cont_Hi, cont_HeI, cont_HeII: using B. Ercolano 2006 data
-            cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
-        return the resulting continuum [erg/s.cm3/A]
+        Type of continuum to take into acount defined a boolean, defaults are True
+        
+        Parameters:
+            tem: temperature [K]. May be a float or an iterable
+            den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
+            He1_H and He2_H: He+/H+ and He++/H+ abundances. Default = 0.0
+            wl: wavelengths: May be an array
+            cont_HI (bool) default: True
+            cont_HeI (bool) default: True
+            cont_HeII (bool) default:True using B. Ercolano 2006 data
+            cont_2p (bool) default: True 2 photons, using D. Pequignot fit to Osterbrock
+            cont_ff (bool) default: 
+            
+        Returns:
+            The resulting continuum [erg/s.cm3/A]
         """
 
         cont = 0.
@@ -253,16 +282,25 @@ class Continuum(object):
                       cont_HI=True, cont_HeI=True, cont_HeII=True, 
                       cont_2p=True, cont_ff=True, HI_label='11_2'):
         """
-        tem: temperature [K]. May be a float or an iterable
-        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
-        He1_H and He2_H: He+/H+ and He++/H+ abundances. Default = 0.0
-        wl: wavelengths: May be an array
-        type of continuum to take into acount defined a boolean, defaults are True:
-            cont_Hi, cont_HeI, cont_HeII: using B. Ercolano 2006 data
-            cont_2p: 2 photons, using D. Pequignot fit to Osterbrock
-            cont_ff: Free-Free, from Storey & Hummer 1991
-        HI_label: HI label to normalize the continuum. If None, no normalization is done. Default 11_2
-        return the resulting continuum. Unit [A-1] if normalized, [erg/s.cm3/A] otherwise
+        
+        Type of continuum to take into acount defined a boolean, defaults are True
+        
+        Parameters:
+            tem: temperature [K]. May be a float or an iterable.
+            den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem.
+            He1_H (float):  He+/H+ abundance. Default = 0.0
+            He2_H (float): He++/H+ abundances.  Default = 0.0
+            wl (np.array): Wavelengths Default = np.array([3500, 3600, 3700, 3800, 3900])
+            cont_HI (bool): using B. Ercolano 2006 data. Default: True
+            cont_HeI (bool): using B. Ercolano 2006 data. Default: True
+            cont_HeII (bool): using B. Ercolano 2006 data. Default: True
+            cont_2p (bool): 2 photons, using D. Pequignot fit to Osterbrock. Default: True
+            cont_ff (bool): from Storey & Hummer 1991. Default: True
+            
+            HI_label (str): HI label to normalize the continuum. If None, no normalization is done. Default: '11_2'
+            
+        Returns:
+            The resulting continuum. Unit [A-1] if normalized, [erg/s.cm3/A] otherwise
         
         Exemple of use:
             C = pn.Continuum()
@@ -315,14 +353,18 @@ class Continuum(object):
     
     def BJ_HI(self, tem, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2'):
         """
-        tem: temperature [K]. May be a float or an iterable
-        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
-        He1_H and He2_H: He+/H+ and He++/H+ abundances.
+        Parameters:
+            tem: temperature [K]. May be a float or an iterable
+            den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
+            He1_H: He+/H+ abundances.
+            He2_H: He++/H+ abundances.
         
-        wl_bbj, wl_abj: wavelengths below and above the jump resp. Defaults are 3643 and 3861.
-        HI_label: reference HI line to normalize the jump. Default is 11_2
+            wl_bbj (int): wavelengths below the jump resp. Default: 3643
+            wl_abj (int): wavelengths above the jump resp. Defaults: 3861
+            HI_label (str): reference HI line to normalize the jump. Default is 11_2
         
-        return the Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
+        Returns:
+            The Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
         """
         
         fl_bbj, fl_abj = self.get_continuum(tem = tem, den = den, He1_H = He1_H, 
@@ -335,16 +377,20 @@ class Continuum(object):
     def T_BJ(self, BJ_HI, den, He1_H, He2_H, wl_bbj = 3643, wl_abj = 3861, HI_label='11_2',
              T_min=5e2, T_max=3e4):
         """
-        BJ_HI: Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
-        den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
-        He1_H and He2_H: He+/H+ and He++/H+ abundances.
+        Parameters:
+            BJ_HI: Balmer Jump (may be any other jump if wl are changed) normalized to the HI line
+            den: density [cm-3]. May be a float or an iterable. If iterable, must have same size than tem
+            He1_H: He+/H+ abundances.
+            He2_H: He++/H+ abundances.
+            wl_bbj (int): wavelengths below the jump resp. Default: 3643
+            wl_abj (int): wavelengths above the jump resp. Defaults: 3861
+            HI_label: reference HI line to normalize the jump. Default: 11_2
         
-        wl_bbj, wl_abj: wavelengths below and above the jump resp. Defaults are 3643 and 3861.
-        HI_label: reference HI line to normalize the jump. Default is 11_2
+            T_min: minimum temperature [K] for the root finding exploration. Default: 5e2
+            T_max: maximum temperature [K] for the root finding exploration. Default: 3e4
         
-        T_min, T_max: limits for the root finding exploration
-        
-        return temperature [K] corresponding to the jump
+        Returns:
+            Temperature [K] corresponding to the jump
         """
         try:
             _ = (e for e in BJ_HI)
@@ -373,7 +419,11 @@ class Continuum(object):
         """
         From Liu, X.-W., Luo, S.-G., Barlow, M. J., Danziger, I. J., & Storey, P. J.
         2001, MNRAS, 327, 141-168
-
+        
+        Parameters:
+            BJ_H11: Balmer Jump normalized to the H11 line
+            He1_H: He+/H+ abundances.
+            He2_H: He++/H+ abundances.
         """
         T = 368 * (1 + 0.259 * He1_H + 3.409 * He2_H) * (BJ_H11)**(-3./2)
         return T

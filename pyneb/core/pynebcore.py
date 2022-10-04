@@ -1216,22 +1216,24 @@ class Atom(object):
         Atom constructor
         
         Parameters:
-            - elem          symbol of the selected element
-            - spec          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-            - atom          ion (e.g. 'O3').
-            - OmegaInterp   option "kind" from scipy.interpolate.interp1d method: 
+            elem:          symbol of the selected element
+            spec:          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+            atom:          ion (e.g. 'O3').
+            OmegaInterp:   option "kind" from scipy.interpolate.interp1d method: 
                             'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous', 'next', 
                             where 'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation of 
                             zeroth, first, second or third order; 'previous' and 'next' simply return the 
                             previous or next value of the point. 
                             "Cheb" works only for fits files for historical reasons.
-            - noExtrapol    if set to False (default), Omega will be extrapolated above and below
+            noExtrapol:    if set to False (default), Omega will be extrapolated above and below
                             the highest and lowest temperatures where it is defined. If set to True
                             a NaN will be return.
             
-        Usage:
+        **Usage:**
             O3 = pn.Atom('O',3)
+            
             N2 = pn.Atom(atom='N2')
+            
             S2 = pn.Atom(atom='S2', OmegaInterp='linear')
         """        
         self.log_ = log_
@@ -1408,19 +1410,19 @@ class Atom(object):
             for the complete array or a specified transition.
         If kappa is not None (non-maxwellian distribution of e-velocities), the collision 
             strength is corrected as in Mendoza & Bautista, 2014 ApJ 785, 91.
-
-        Usage:
-            O3.getOmega(15000.)
-            O3.getOmega([8e3, 1e4, 1.2e4])
-            O3.getOmega([8e3, 1e4, 1.2e4], 5, 4)
         
         Parameters:
-            - tem    electronic temperature in K. May be an array.
-            - lev_i  upper level
-            - lev_j  lower level
-
-        """
-        """
+            tem:    electronic temperature in K. May be an array.
+            lev_i:  upper level
+            lev_j:  lower level
+        
+        **Usage:**
+        
+            O3.getOmega(15000.)
+            
+            O3.getOmega([8e3, 1e4, 1.2e4])
+            
+            O3.getOmega([8e3, 1e4, 1.2e4], 5, 4)
         """
         
         
@@ -1476,12 +1478,14 @@ class Atom(object):
         """
         Return (n_levels x n_levels) array of collision rates at given temperature. 
         
-        Usage:
-            O3.getCollRates(tem=10000)
-            O3.getCollRates([8e3, 1e4, 1.2e4])
-        
         Parameters:
-            - tem     electronic temperature in K. May be an array.
+            tem:     electronic temperature in K. May be an array.
+            
+        **Usage:**
+            
+            O3.getCollRates(tem=10000)
+            
+            O3.getCollRates([8e3, 1e4, 1.2e4])
 
 
         """
@@ -1517,11 +1521,10 @@ class Atom(object):
             input wavelength
         
         Parameters:
-            - wave       wavelength either in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:       wavelength either in Angstrom (a float or a label: e.g., 5007, '5007A') 
                             or in micron (a label: '51.5m')
-            - maxErrorA: tolerance if the input wavelength is in Angstrom
-            - maxErrorm: tolerance if the input wavelength is in micron
-                            
+            maxErrorA: tolerance if the input wavelength is in Angstrom
+            maxErrorm: tolerance if the input wavelength is in micron                 
         """
         if str(wave)[-1] == 'A':
             inputWave = float(wave[:-1])
@@ -1557,15 +1560,17 @@ class Atom(object):
         Return the indexes (upper level, lower level) of a transition for a given atom 
             from the wavelength.
         
-        Usage:
-            O3.getTransition(4959)
+        
             
         Parameters:
-            - wave      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
                 or in micron (a label: '51.5m')
-            - maxErrorA: tolerance if the input wavelength is in Angstrom
-            - maxErrorm: tolerance if the input wavelength is in micron
-                
+            maxErrorA: tolerance if the input wavelength is in Angstrom
+            maxErrorm: tolerance if the input wavelength is in micron
+             
+        **Usage:**
+            
+            O3.getTransition(4959)   
         """ 
         res = self._Transition(wave, maxErrorA = maxErrorA, maxErrorm = maxErrorm)
         return(res[0], res[1])
@@ -1574,14 +1579,14 @@ class Atom(object):
     def printTransition(self, wave):
         """
         Print info on transition associated to input wavelength.
-        
-        Usage:
-            O3.printTransition(4959)
             
         Parameters:
-            - wave      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
                 or in micron (a label: '51.5m')
-                
+        
+        **Usage:**
+            
+            O3.printTransition(4959)        
         """
         closestTransition = self._Transition(wave)
         relativeError = closestTransition[3] / closestTransition[2] - 1
@@ -1610,7 +1615,7 @@ class Atom(object):
         Test whether selected level is legal
 
         Parameters:
-            - level        selected atom level
+            level:        selected atom level
 
         """       
         if level < -1 or level == 0 or level > self.NLevels:
@@ -1623,17 +1628,21 @@ class Atom(object):
         If no arguments are given, the whole array of A is returned.
         A specific A value can be obtained by giving either the upper and lower levels or 
             the wavelength of the transition (keyword wave).
-            
-        Usage:
-            A_O3 = O3.getA()          # The whole A array is stored in A_O3
-            O3.getA(4, 2)      # A(4, 2) of the O3 atom is printed
-            O3.getA(2, 4)      # Returns 0
-            O3.getA(wave=4959)      
 
         Parameters:
-            - lev_i  upper level of transition (default= -1, returns complete array)
-            - lev_j  lower level of transition (default= -1, returns complete array)
-            - wave   wavelength of transition. Takes precedence on lev_i and lev_j. Ignored if not set.
+            lev_i:  upper level of transition (default= -1, returns complete array)
+            lev_j:  lower level of transition (default= -1, returns complete array)
+            wave:   wavelength of transition. Takes precedence on lev_i and lev_j. Ignored if not set.
+            
+        **Usage:**
+            
+            A_O3 = O3.getA()          # The whole A array is stored in A_O3
+            
+            O3.getA(4, 2)      # A(4, 2) of the O3 atom is printed
+            
+            O3.getA(2, 4)      # Returns 0
+            
+            O3.getA(wave=4959)
             
         """
         if wave != -1:
@@ -1687,29 +1696,39 @@ class Atom(object):
             vectors, respectively). In the general case, the level index is the first 
             [WARNING! It is not in physical unit, i.e. ground level = 0; to be normalized], 
             followed by the temperature index (if it exists) and the density index. 
-
-        Usage:
-            O3.getPopulations(1e4, 1e2)
-            tem=np.array([10000., 12000., 15000., 20000]) # An array of four temperatures
-            den=np.array([600., 800., 1000])      # An array of three densities
-            O3.getPopulations(tem, den)           # is a (6, 4, 3) array
-            O3.getPopulations(tem, den)[0,2,1]    # Returns the population of level 1 for T = 15000 
-                                                    and Ne = 800
-            tem = 20000                           # tem is no longer an array
-            O3.getPopulations(tem, den)[0,2,1]  # Crashes: one index too much
-            O3.getPopulations(tem, den)[0,1]    # Returns the population of level 1 for T = 20000 
-                                                    and Ne = 800 [see warning]
-            tem=np.array([10000., 15000., 20000]) # An array of three temperatures
-            O3.getPopulations(tem, den, product = False)# is a (6, 3) array, tem and den beeing 
-                                                            taken 2 by 2.
         
         Parameters:
-            - tem       electronic temperature in K
-            - den       electronic density in cm^-3
-            - product   operate on all possible combinations of temperature and density 
+            tem:       electronic temperature in K
+            den:       electronic density in cm^-3
+            product:   operate on all possible combinations of temperature and density 
                       (product = True, default case) or on those resulting from combining 
                       the i-th value of tem with the i-th value of den (product = False).
                       If product = False, then tem and den must be the same size.
+                      
+        **Usage:**
+            
+            O3.getPopulations(1e4, 1e2)
+            
+            tem=np.array([10000., 12000., 15000., 20000]) # An array of four temperatures
+            
+            den=np.array([600., 800., 1000])      # An array of three densities
+            
+            O3.getPopulations(tem, den)           # is a (6, 4, 3) array
+            
+            O3.getPopulations(tem, den)[0,2,1]    # Returns the population of level 1 for T = 15000 
+                                                    and Ne = 800
+            
+            tem = 20000                           # tem is no longer an array
+            
+            O3.getPopulations(tem, den)[0,2,1]  # Crashes: one index too much
+            
+            O3.getPopulations(tem, den)[0,1]    # Returns the population of level 1 for T = 20000 
+                                                    and Ne = 800 [see warning]
+            
+            tem=np.array([10000., 15000., 20000]) # An array of three temperatures
+            
+            O3.getPopulations(tem, den, product = False)# is a (6, 3) array, tem and den beeing 
+                                                            taken 2 by 2.
 
         """
         tem = np.asarray(tem)
@@ -1814,9 +1833,21 @@ class Atom(object):
         
         """
         Return the value of a diagostic ratio at the low density limit
-        S2.getLowDensRatio(lev_i1 = 3, lev_i2 = 2)
-        S2.getLowDensRatio(wave1 = 6716, wave2 = 6731)
-        S2.getLowDensRatio(to_eval = 'L(6716)/L(6731)')
+        
+        Parameters:
+            lev_i1 (int):
+            lev_i2 (int):
+            wave1 (int):
+            wave2 (int):
+            to_eval (str): 
+            
+        **Usage:**
+            
+            S2.getLowDensRatio(lev_i1 = 3, lev_i2 = 2)
+        
+            S2.getLowDensRatio(wave1 = 6716, wave2 = 6731)
+            
+            S2.getLowDensRatio(to_eval = 'L(6716)/L(6731)')
         """
         
         if wave1 != -1:
@@ -1835,9 +1866,21 @@ class Atom(object):
         
         """
         Return the value of a diagostic ratio at the high density limit
-        S2.getHighDensRatio(lev_i1 = 3, lev_i2 = 2)
-        S2.getHighDensRatio(wave1 = 6716, wave2 = 6731)
-        S2.getHighDensRatio(to_eval = 'L(6716)/L(6731)')
+        
+        Parameters:
+            lev_i1 (int):
+            lev_i2 (int):
+            wave1 (int):
+            wave2 (int):
+            to_eval (str): 
+            
+        **Usage:**
+            
+            S2.getHighDensRatio(lev_i1 = 3, lev_i2 = 2)
+            
+            S2.getHighDensRatio(wave1 = 6716, wave2 = 6731)
+        
+            S2.getHighDensRatio(to_eval = 'L(6716)/L(6731)')
         """
         
         if wave1 != -1:
@@ -1857,6 +1900,15 @@ class Atom(object):
                         to_eval=None, tol=0.1, tem=1e4):
         """
         Return the range of density where a given line ratio is between 10% and 90% of the low and high density limits
+        
+        Parameters:
+            lev_i1 (int):
+            lev_i2 (int):
+            wave1 (int):
+            wave2 (int):
+            to_eval (str):
+            tol (float): 
+            tem (float):
         """
         LowLim = self.getLowDensRatio(lev_i1, lev_i2, wave1, wave2, to_eval)
         HighLim = self.getHighDensRatio(lev_i1, lev_i2, lev_j1, lev_j2, wave1, wave2, to_eval)
@@ -1876,13 +1928,15 @@ class Atom(object):
         Return the critical density of selected level at given temperature. 
         If no transition is selected, return complete array.
         
-        Usage:
-            O3.getCritDensity(12000)
-            O3.getCritDensity(12000, 4)
-        
         Parameters:
-            - tem    electronic temperature in K. May be an array.
-            - level  selected atomic level (default= -1)
+            tem:    electronic temperature in K. May be an array.
+            level:  selected atomic level (default= -1)
+            
+        **Usage:**
+            
+            O3.getCritDensity(12000)
+            
+            O3.getCritDensity(12000, 4)
 
         """
         self._test_lev(level)
@@ -1899,23 +1953,28 @@ class Atom(object):
         The transition is selected by the argument wave (if given); 
         if wave is not supplied, it is selected by the upper and lower levels (lev_i and lev_j); 
         if neither is given, the whole array is computed
-        
-        Usage:      
-            O3.getEmissivity(12000, 100, 4, 2)         # (4, 2) transition
-            O3.getEmissivity(10000, 10000, wave=5007)  # (4, 2) transition
-            O3.getEmissivity(12000, 100)               # all transitions
-            O3.getEmissivity([10000, 12000], [100, 500], 4, 2)
-            O3.getEmissivity([10000, 12000], [100, 500])
             
         Parameters:
-            - tem      electronic temperature in K. May be an array.
-            - den      electronic density in cm^-3. May be an array.
-            - lev_i    upper level (default= -1)
-            - lev_j    lower level (default= -1)
-            - wave     wavelength of transition. Takes precedence on lev_i and lev_j if set, 
+            tem:      electronic temperature in K. May be an array.
+            den:      electronic density in cm^-3. May be an array.
+            lev_i:    upper level (default= -1)
+            lev_j:    lower level (default= -1)
+            wave:     wavelength of transition. Takes precedence on lev_i and lev_j if set, 
                         ignored otherwise. It can also be a blend label.
-            - product  Boolean. If True (default), all the combination of (tem, den) are used. 
+            product:  Boolean. If True (default), all the combination of (tem, den) are used. 
                          If False, tem and den must have the same size and are joined.
+                         
+        **Usage:**      
+            
+            O3.getEmissivity(12000, 100, 4, 2)         # (4, 2) transition
+            
+            O3.getEmissivity(10000, 10000, wave=5007)  # (4, 2) transition
+            
+            O3.getEmissivity(12000, 100)               # all transitions
+            
+            O3.getEmissivity([10000, 12000], [100, 500], 4, 2)
+            
+            O3.getEmissivity([10000, 12000], [100, 500])
 
         """
         if '{0}_{1}'.format(self.atom, wave) in BLEND_LIST:
@@ -2341,35 +2400,38 @@ class Atom(object):
             to be evaluated, involving either atomic levels or wavelengths.
         An array of values, rather than a single value, can also be given, in which case the result 
             will also be an array.
-            
-        Usage: 
-            O3.getTemDen(150., den=100., wave1=5007, wave2=4363, maxError=1.e-2)
-            O3.getTemDen(150., den=100., to_eval = '(I(4,3) + I(4,2) + I(4,1)) / I(5,4)')
-            N2.getTemDen(150., den=100., to_eval = '(L(6584) + L(6548)) / L(5755)')
-            O3.getTemDen([0.02, 0.04], den=[1.e4, 1.1e4], to_eval="I(5, 4) / (I(4, 3) + I(4, 2))")
 
         Parameters:
-            - int_ratio    intensity ratio of the selected transition
-            - tem          electronic temperature
-            - den          electronic density
-            - lev_i1       upper level of 1st transition
-            - lev_j1       lower level of 1st transition
-            - lev_i2       upper level of 2nd transition
-            - lev_j2       lower level of 2nd transition
-            - wave1        wavelength of 1st transition
-            - wave2        wavelength of 2nd transition
-            - maxError     tolerance on difference between input and computed ratio 
-            - method       numerical method for finding the root (nsect_recur, nsect_iter)
-            - log          switch of log (default = True). start_x and end_x are using this parameter.
-            - start_x      lower end of the interval to explore. (default: lower end of collision 
+           int_ratio:    intensity ratio of the selected transition
+           tem:          electronic temperature
+           den:          electronic density
+           lev_i1:       upper level of 1st transition
+           lev_j1:       lower level of 1st transition
+           lev_i2:       upper level of 2nd transition
+           lev_j2:       lower level of 2nd transition
+           wave1:        wavelength of 1st transition
+           wave2:        wavelength of 2nd transition
+           maxError:     tolerance on difference between input and computed ratio 
+           method:       numerical method for finding the root (nsect_recur, nsect_iter)
+           log:          switch of log (default = True). start_x and end_x are using this parameter.
+           start_x:      lower end of the interval to explore. (default: lower end of collision 
                             strength temperature array for temperature, 1 if density)
-            - end_x        higher end of the interval to explore. (default: higher end of collision 
+           end_x:        higher end of the interval to explore. (default: higher end of collision 
                             strength temperature array for temperature, 1e8 if density)
-            - to_eval      expression to be evaluated, using either I (for transitions identified 
+           to_eval:      expression to be evaluated, using either I (for transitions identified 
                             through atomic levels) or L (for transitions identified through wavelengths)
-            - nCut        number of sections in which each step is cut. 2 would be dichotomy.
-            - maxIter     maximum number of iterations
+           nCut:        number of sections in which each step is cut. 2 would be dichotomy.
+           maxIter:     maximum number of iterations
 
+        **Usage:** 
+            
+            O3.getTemDen(150., den=100., wave1=5007, wave2=4363, maxError=1.e-2)
+            
+            O3.getTemDen(150., den=100., to_eval = '(I(4,3) + I(4,2) + I(4,1)) / I(5,4)')
+            
+            N2.getTemDen(150., den=100., to_eval = '(L(6584) + L(6548)) / L(5755)')
+            
+            O3.getTemDen([0.02, 0.04], den=[1.e4, 1.1e4], to_eval="I(5, 4) / (I(4, 3) + I(4, 2))")
         """
         if method == 'ANN':
             return self._getTemDen_ANN(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
@@ -2391,31 +2453,29 @@ class Atom(object):
         The line can be specified as a transition (i.e., giving the two atomic level involved), 
         as a wavelength, or as an algebraic expression. In the last case, a sum of lines 
         can also be supplied.
-
-        Usage:
-            O3.getIonAbundance(100, 1.5e4, 100., wave=5007)
-            O3.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
-            O3.getIonAbundance(np.array([100, 150]), np.array([1.5e4, 1.2e4]), np.array([100., 120]), 
-                wave=5007)
-            O2.getIonAbundance(int_ratio=100, tem=1.5e4, den=100., to_eval='L(3726)+L(3729)')
-
             
         Parameters:
-            - int_ratio    relative line intensity (default normalization: Hbeta = 100). 
+            int_ratio:    relative line intensity (default normalization: Hbeta = 100). 
                             May be an array.
-            - tem          electronic temperature in K. May be an array.
-            - den          electronic density in cm^-3. May be an array.
-            - lev_i        upper level of transition
-            - lev_j        lower level of transition
-            - wave         wavelength of transition. Takes precedence on lev_i and lev_j if set, 
+            tem:          electronic temperature in K. May be an array.
+            den:          electronic density in cm^-3. May be an array.
+            lev_i:        upper level of transition
+            lev_j:        lower level of transition
+            wave:         wavelength of transition. Takes precedence on lev_i and lev_j if set, 
                             ignored otherwise 
-            - to_eval      expression to be evaluated. Takes precedence on wave if set, 
+            to_eval:      expression to be evaluated. Takes precedence on wave if set, 
                             ignored otherwise.
-            - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
+            Hbeta:        line intensity normalization at Hbeta (default Hbeta = 100)
             
-            - tem_HI       HI temperature. If not set, tem is used.
-            - extrapHbeta [False] if set to True, Hbeta is extrapolated at low Te using Aller 82 function
-            - use_ANN [False] if set to True, use Machine Learning to compute line emissivities
+            tem_HI:       HI temperature. If not set, tem is used.
+            extrapHbeta: [False] if set to True, Hbeta is extrapolated at low Te using Aller 82 function
+            use_ANN: [False] if set to True, use Machine Learning to compute line emissivities
+            
+        **Usage:**
+            
+            O3.getIonAbundance(100, 1.5e4, 100., wave=5007)
+            
+            O3.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
         
         """
         if tem_HI is None:
@@ -2460,18 +2520,22 @@ class Atom(object):
         If an electron density is also given, line emissivities (also for Hbeta) are printed and level 
             populations can be printed (using printPop=True)
         
-        Usage:
-            O3.printIonic()
-            O3.printIonic(printA=True)
-            O3.printIonic(tem=10000., printCrit=True)
-            O3.printIonic(tem=10000., den=1e3, printA=True, printPop=True, printCrit=True)
-
         Parameters:
-            - tem          temperature
-            - den          density
-            - printA       also print transition probabilities (default=False)
-            - printPop     also print level populations (needs tem and den)
-            - printCrit    also print critical densities (needs tem)
+            tem:          temperature
+            den:          density
+            printA:       also print transition probabilities (default=False)
+            printPop:     also print level populations (needs tem and den)
+            printCrit:    also print critical densities (needs tem)
+
+        **Usage:**
+            
+            O3.printIonic()
+            
+            O3.printIonic(printA=True)
+            
+            O3.printIonic(tem=10000., printCrit=True)
+            
+            O3.printIonic(tem=10000., den=1e3, printA=True, printPop=True, printCrit=True)
 
         """
         print('elem = %s' % self.elem)
@@ -2546,30 +2610,33 @@ class Atom(object):
         """ 
         Print result of getTemDen function. See getTemDen for more details.
         
-        Usage:
-            O3.printTemDen(100, tem=10000, wave1=5007, wave2=4363)
+        
         
         Parameters:
-            - int_ratio    intensity ratio of the selected transition
-            - tem          electronic temperature
-            - den          electronic density
-            - lev_i1       upper level of 1st transition
-            - lev_j1       lower level of 1st transition
-            - lev_i2       upper level of 2nd transition
-            - lev_j2       lower level of 2nd transition
-            - wave1        wavelength of 1st transition
-            - wave2        wavelength of 2nd transition
-            - maxError     tolerance on difference between input and computed ratio 
-            - method       numerical method for finding the root (nsect_recur, nsect_iter)
-            - log          log switch (default = True)
-            - start_x      lower end of the interval to explore (default: lower end of collision 
+            int_ratio:    intensity ratio of the selected transition
+            tem:          electronic temperature
+            den:          electronic density
+            lev_i1:       upper level of 1st transition
+            lev_j1:       lower level of 1st transition
+            lev_i2:       upper level of 2nd transition
+            lev_j2:       lower level of 2nd transition
+            wave1:        wavelength of 1st transition
+            wave2:        wavelength of 2nd transition
+            maxError:     tolerance on difference between input and computed ratio 
+            method:       numerical method for finding the root (nsect_recur, nsect_iter)
+            log:          log switch (default = True)
+            start_x:      lower end of the interval to explore (default: lower end of collision 
                             strength temperature array)
-            - end_x        higher end of the interval to explore (default: higher end of collision 
+            end_x:        higher end of the interval to explore (default: higher end of collision 
                             strength temperature array)
-            - to_eval      expression to be evaluated, using either I (for transitions identified through 
+            to_eval:      expression to be evaluated, using either I (for transitions identified through 
                             atomic levels) or L (for transitions identified through wavelengths)
-            - nCut        number of sections in which each step is cut. 2 would be dichotomy.
-            - maxIter     maximum number of iterations
+            nCut:        number of sections in which each step is cut. 2 would be dichotomy.
+            maxIter:     maximum number of iterations
+            
+        **Usage:**
+            
+            O3.printTemDen(100, tem=10000, wave1=5007, wave2=4363)
 
         """
         if tem == -1:
@@ -2605,25 +2672,26 @@ class Atom(object):
                   total_color='black', total_label='TOTAL', ax=None):
         """ 
         Plot the emissivity as a function of temperature of all the lines of the selected atom.  
-
-        Usage: 
-            O3.plotEmiss(tem_min=10000, tem_max=20000)
         
         Parameters:
-            - tem_min         minimum value of the temperature range to span (default=1000)
-            - tem_max         maximum value of the temperature range to span (default=30000)
-            - ionic_abund     relative ionic abundance (default = 1.0)
-            - den             electron density
-            - style           line style of the plot (default: '-' [solid line])
-            - legend_loc      localization of the legend (default: 4 = lower right; see plt.legend 
+            tem_min:         minimum value of the temperature range to span (default=1000)
+            tem_max:         maximum value of the temperature range to span (default=30000)
+            ionic_abund:     relative ionic abundance (default = 1.0)
+            den:             electron density
+            style:           line style of the plot (default: '-' [solid line])
+            legend_loc:      localization of the legend (default: 4 = lower right; see plt.legend 
                                 for more details)
-            - temLog          linear (False) or logarithmic temperature axis (default = False)
-            - plot_total      flag to also plot total emissivity (default = False)
-            - plot_only_total flag to only plot total emissivity (default = False)
-            - legend          flag to place legend (default = True)
-            - total_color     color of the total emissivity (default = 'black')
-            - total_label     label of the total emissivity (default = 'TOTAL')
-            - ax              axis where to send the plot. If None, a new axis is done
+            temLog:          linear (False) or logarithmic temperature axis (default = False)
+            plot_total:      flag to also plot total emissivity (default = False)
+            plot_only_total: flag to only plot total emissivity (default = False)
+            legend:          flag to place legend (default = True)
+            total_color:     color of the total emissivity (default = 'black')
+            total_label:     label of the total emissivity (default = 'TOTAL')
+            ax:              axis where to send the plot. If None, a new axis is done
+            
+        **Usage:**
+        
+            O3.plotEmiss(tem_min=10000, tem_max=20000)
 
         """
         if ax is None:
@@ -2666,16 +2734,17 @@ class Atom(object):
         Draw a Grotrian plot of the selected atom, labelling only lines above a
         pecified intensity threshold (relative to the most intense line). 
         For ground state levels, the Russell-Saunders term symbol is also given.
-        
-        Usage:
-            O3.plotGrotrian()
-        
+
         Parameters:
-            - tem          temperature at which the intensity threshold is to be computed 
-            - den          density at which the intensity threshold is to be computed 
-            - thresh_int   intensity threshold (relative to the most intense line, default: 1.e-3)
-            - unit         one of 'eV' (default), '1/Ang' or 'Ryd'
-            - ax           axis where to plot the result
+            tem:          temperature at which the intensity threshold is to be computed 
+            den:          density at which the intensity threshold is to be computed 
+            thresh_int:   intensity threshold (relative to the most intense line, default: 1.e-3)
+            unit:         one of 'eV' (default), '1/Ang' or 'Ryd'
+            ax:           axis where to plot the result
+            
+        Usage:
+            
+            **O3.plotGrotrian()**
 
         """
         if ax is None:
@@ -2849,14 +2918,14 @@ class RecAtom(object):
     def __init__(self, elem=None, spec=None, atom=None, case='B', extrapolate=False):
         """
         RecAtom class. Used to manage recombination data and compute emissivities.
-        
-        Usage:
-            H1 = pn.RecAtom('H', 1)
-        
+
         Parameters:
-            - elem          symbol of the selected element
-            - spec          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-            - extrapolate: use the function outside the validity range [False]
+            elem:          symbol of the selected element
+            spec:          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+            extrapolate: use the function outside the validity range [False]
+            
+        **Usage:**
+            H1 = pn.RecAtom('H', 1)
         """
         self.log_ = log_
         self.type = 'rec'
@@ -2932,7 +3001,7 @@ class RecAtom(object):
         Test whether selected level is legal
 
         Parameters:
-            - level        selected atom level
+            level:        selected atom level
 
         """       
         if self.NLevels == 0:
@@ -2958,13 +3027,14 @@ class RecAtom(object):
 
     def getWave(self, lev_i=None, lev_j=None):
         """
-        Return the wavelength of a transition given the levels
-        
-        Usage:
-            He2.getWave(4, 3) 
+        Return the wavelength of a transition given the levels 
             
         Parameters:
-            - lev_i, lev_j: upper and lower levels of the transition
+            lev_i: upper level of the transition
+            lev_j: lower level of the transition
+            
+        **Usage:**
+            He2.getWave(4, 3)
                 
         """ 
         self._test_lev(lev_i)
@@ -3336,11 +3406,7 @@ class RecAtom(object):
 
     def _loadTotRecombination(self):
         """
-        Load the total recombination coefficient table. The case (A or B) is set by selecting the corresponding trc file.
-            
-        Parameters:
-            None
-                
+        Load the total recombination coefficient table. The case (A or B) is set by selecting the corresponding trc file. 
         """ 
         self.TotRecFile = atomicData.getDataFullPath(self.atom, 'trc')
         f = open(self.TotRecFile)
@@ -3358,10 +3424,10 @@ class RecAtom(object):
             input wavelength
         
         Parameters:
-            - wave       wavelength either in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:       wavelength either in Angstrom (a float or a label: e.g., 5007, '5007A') 
                             or in micron (a label: '51.5m')
-            - maxErrorA: tolerance if the input wavelength is in Angstrom
-            - maxErrorm: tolerance if the input wavelength is in micron
+            maxErrorA: tolerance if the input wavelength is in Angstrom
+            maxErrorm: tolerance if the input wavelength is in micron
                             
         """
         if self.wave_Ang is None:
@@ -3396,14 +3462,15 @@ class RecAtom(object):
     def getTotRecombination(self, tem, den, method='linear'):
         """
         Return the total recombination coefficient. The case (A or B) is set by selecting the corresponding trc file.
-        
-        Usage:
+    
+        Parameters:
+            tem:  temperature 
+            den: density
+            method:    interpolation method in the grid ('linear' = default, 'nearest', 'cubic')    
+            
+        **Usage:**
             atomicData.setDataFile('h_i_trc_SH95-caseA.dat')
             h1.getTotRecombination(tem=10000, den=5.e3)
-            
-        Parameters:
-            - tem, den  temperature and density
-            - method    interpolation method in the grid ('linear' = default, 'nearest', 'cubic')    
                 
         """ 
         self.calling = 'getTotRecombination'
@@ -3418,15 +3485,16 @@ class RecAtom(object):
         """
         Return the indexes (upper level, lower level) of a transition for a given atom 
             from the wavelength.
-        
-        Usage:
-            O3.getTransition(4959)
             
         Parameters:
-            - wave      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
                 or in micron (a label: '51.5m')
-            - maxErrorA: tolerance if the input wavelength is in Angstrom
-            - maxErrorm: tolerance if the input wavelength is in micron
+            maxErrorA: tolerance if the input wavelength is in Angstrom
+            maxErrorm: tolerance if the input wavelength is in micron
+            
+        **Usage:**
+            
+            O3.getTransition(4959)
                 
         """ 
         res = self._Transition(wave, maxErrorA = maxErrorA, maxErrorm = maxErrorm)
@@ -3439,13 +3507,14 @@ class RecAtom(object):
     def printTransition(self, wave):
         """
         Print info on transition associated to input wavelength.
-        
-        Usage:
-            O3.printTransition(4959)
-            
+    
         Parameters:
-            - wave      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
+            wave:      wavelength in Angstrom (a float or a label: e.g., 5007, '5007A') 
                 or in micron (a label: '51.5m')
+                
+        **Usage:**
+        
+            O3.printTransition(4959)
                 
         """
         closestTransition = self._Transition(wave)
@@ -3478,12 +3547,12 @@ class RecAtom(object):
         Return energy level of selected level (or array of energy levels, if level not given) 
             in Angstrom^-1 (default) or another unit
         
-        Usage:
-            O3.getEnergy(4, unit='eV')
         Parameters:
-            - level  selected atomic level (default= -1, returns complete array)
-            - unit   [str] one of '1/Ang' (default), 'eV', or 'Ryd'    
-            
+            level:  selected atomic level (default= -1, returns complete array)
+            unit:   [str] one of '1/Ang' (default), 'eV', or 'Ryd'    
+        
+        **Usage:**
+            O3.getEnergy(4, unit='eV')    
         """
         self._test_lev(level)
 
@@ -3553,29 +3622,38 @@ class RecAtom(object):
         In the second case, the transition can be specified either as a wavelength 
         or as a label.
         In either case, enter <atom>.labels to display the valid labels.
-        
+            
+        Parameters:
+            tem:            temperature (K)
+            den:            density (cm-3)
+            lev_i: upper level of transition
+            lev_j: lower level of transition
+            wave:           wavelength of the transition
+            label:          label of the transition (e.g. "50_3", "1234.5")
+            method:         interpolation method ('linear', 'nearest', 'cubic'), 
+                             sent to scipy.interpolate.griddata    
+            product:        Boolean. If True (default), all the combination of (tem, den) are used. 
+                             If False, tem and den must have the same size and are joined.
+                             
         Usage:
+            
             H1 = pn.RecAtom('H', 1)
+            
             H1.getEmissivity([1e4, 1.2e4], [1e3, 1e2], lev_i = 4, lev_j = 2)
+            
             H1.getEmissivity([1e4, 1.2e4], [1e3, 1e2], label='4_2', product=False)
+            
             tem = np.linspace(5000, 20000, 100)
+            
             den = np.logspace(2, 6, 100)
+            
             imHab = H1.getEmissivity(tem, den, label='3_2') / H1.getEmissivity(tem, den, label='4_2')
 
             He1 = pn.RecAtom('He', 1)
-            He1.getEmissivity(1e4, 1e2, wave=4471.0)
-            He1.getEmissivity(1e4, 1e2, label='4471.0')
             
-        Parameters:
-            - tem            temperature (K)
-            - den            density (cm-3)
-            - lev_i, lev_j   levels of the transition
-            - wave           wavelength of the transition
-            - label          label of the transition (e.g. "50_3", "1234.5")
-            - method         interpolation method ('linear', 'nearest', 'cubic'), 
-                             sent to scipy.interpolate.griddata    
-            - product        Boolean. If True (default), all the combination of (tem, den) are used. 
-                             If False, tem and den must have the same size and are joined.
+            He1.getEmissivity(1e4, 1e2, wave=4471.0)
+            
+            He1.getEmissivity(1e4, 1e2, label='4471.0')
         """
         
         if not config.INSTALLED['scipy']:
@@ -3679,31 +3757,38 @@ class RecAtom(object):
 
         The preferred method are the label and the I-type expressions, as the remaining parameters 
             are inherently fragile.
-
-        Usage:
-            He2.getIonAbundance(130, 1.5e4, 100., lev_i=5, lev_j=4)
-            He2.getIonAbundance(130, 1.5e4, 100., label="5_4")
-            He2.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
-            He1.getIonAbundance(100, 1.5e4, 100., wave=5016)
-            He1.getIonAbundance(100, 1.5e4, 100., label="5016.0")
-            He1.getIonAbundance(100, 1.5e4, 100., to_eval='S(5016)')
-            He1.getIonAbundance(np.array([100, 150]), np.array([1.5e4, 1.2e4]), np.array([100., 120]), 
-                label="10830.0")
             
         Parameters:
-            - int_ratio    relative line intensity (default normalization: Hbeta = 100). 
+            int_ratio:    relative line intensity (default normalization: Hbeta = 100). 
                             May be an array.
-            - tem          electronic temperature in K. May be an array.
-            - den          electronic density in cm^-3. May be an array.
-            - lev_i        upper level of transition
-            - lev_j        lower level of transition
-            - wave         wavelength of transition. Takes precedence on lev_i and lev_j if set, 
+            tem:          electronic temperature in K. May be an array.
+            den:          electronic density in cm^-3. May be an array.
+            lev_i:        upper level of transition
+            lev_j:        lower level of transition
+            wave:         wavelength of transition. Takes precedence on lev_i and lev_j if set, 
                             ignored otherwise 
-            - to_eval      expression to be evaluated. Takes precedence on wave if set, 
+            to_eval:      expression to be evaluated. Takes precedence on wave if set, 
                             ignored otherwise.
-            - Hbeta        line intensity normalization at Hbeta (default Hbeta = 100)
-            - tem_HI       HI temperature. If not set, tem is used.
-            - den_HI       HI density. If not set, den is used.
+            Hbeta:        line intensity normalization at Hbeta (default Hbeta = 100)
+            tem_HI:       HI temperature. If not set, tem is used.
+            den_HI:       HI density. If not set, den is used.
+            
+        **Usage:**
+            
+            He2.getIonAbundance(130, 1.5e4, 100., lev_i=5, lev_j=4)
+            
+            He2.getIonAbundance(130, 1.5e4, 100., label="5_4")
+            
+            He2.getIonAbundance(130, 1.5e4, 100., to_eval='I(4,3) + I(4,2)')
+            
+            He1.getIonAbundance(100, 1.5e4, 100., wave=5016)
+            
+            He1.getIonAbundance(100, 1.5e4, 100., label="5016.0")
+            
+            He1.getIonAbundance(100, 1.5e4, 100., to_eval='S(5016)')
+            
+            He1.getIonAbundance(np.array([100, 150]), np.array([1.5e4, 1.2e4]), np.array([100., 120]), 
+                label="10830.0")
         
         """
         if tem_HI is None:
@@ -3753,17 +3838,21 @@ def getRecEmissivity(tem, den, lev_i=None, lev_j=None, atom='H1', method='linear
     The function instantiates a RecAtom and store it into atomicData._RecombData for a further use.
     More possibilities are obtained using the RecAtom class.
 
-    Usage:
-        print(getRecEmissivity(1e4, 1e3, 3, 2, atom='H1') / getRecEmissivity(1e4, 1e3, 4, 2, atom='H1')) 
-            # return Ha/Hb 
+    
 
     Parameters:
-        - tem           temperature in K
-        - den           density in cm-3
-        - lev_i, lev_j  levels (lev_i>lev_j, i_min=1)
-        - atom          atom (e.g. 'H1', 'He1')
-        - method        interpolation method ('linear', 'nearest', 'cubic'), sent to scipy.interpolate.griddata
-        - wave          alternative way of identifying emision line.
+        tem:           temperature in K
+        den:           density in cm-3
+        lev_i:  levels (lev_i>lev_j, i_min=1)
+        lev_j:  levels (lev_i>lev_j, i_min=1)
+        atom:          atom (e.g. 'H1', 'He1')
+        method:        interpolation method ('linear', 'nearest', 'cubic'), sent to scipy.interpolate.griddata
+        wave:          alternative way of identifying emision line.
+        
+    **Usage:**
+        
+        print(getRecEmissivity(1e4, 1e3, 3, 2, atom='H1') / getRecEmissivity(1e4, 1e3, 4, 2, atom='H1')) 
+            # return Ha/Hb 
         
     """
     calling = 'getRecEmissivity'
@@ -3788,12 +3877,12 @@ def getHbEmissivity(tem= -1, den=1.):
     Compute Hbeta emissivity in erg/s/(N(H+)*N(e-)) for a given temperature with the formula 
         by Aller (1984)
 
-    Usage:
-        getHbemissivity(tem=10000)
-
     Parameters:
-        - tem     electronic temperature in K
+        tem:     electronic temperature in K
 
+    **Usage:**
+        
+        getHbemissivity(tem=10000)
     """ 
 #    tem4 = np.asarray(tem) * 1.0e-4
 #    j_hb = 1.387 / pow(tem4, 0.983) / pow(10., 0.0424 / tem4) * 1.e-25
@@ -3823,19 +3912,23 @@ def getAtomDict(atom_list=None, elem_list=None, spec_list=None, only_coll=False,
     Initializes all atoms, according to the atomic files available.
     The elem objects are given conventional names elem+spec (e.g., O III is O3)
 
-    Usage:
-        all = pn.getAtomDict()
-        print(all['S2'].name)
-        some = pn.getAtomDict(elem_list=['C', 'N', 'O'])
-        some = pn.getAtomDict(atom_list=['O2', 'O3', 'Ar3'])
-    
     Parameters:
-        - atom_list     a list of the ions for which the elem is to be computed 
+        atom_list:     a list of the ions for which the elem is to be computed 
                         Takes precedence on elem_list and spec_list
-        - elem_list     a list of all the elements for which the elem is to be computed (all by default)
-        - spec_list     a list of the spectra for which the elem is to be computed (all by default)
-        - only_coll     if True, ionly Atom are sent back,. Otherwise (default), Atom and RecAtom are sent back
+        elem_list:     a list of all the elements for which the elem is to be computed (all by default)
+        spec_list:     a list of the spectra for which the elem is to be computed (all by default)
+        only_coll:     if True, ionly Atom are sent back,. Otherwise (default), Atom and RecAtom are sent back
         _ **kwargs      argumentas passed to Atom, e.g. OmegaInterp
+        
+    **Usage:**
+        
+        all = pn.getAtomDict()
+        
+        print(all['S2'].name)
+        
+        some = pn.getAtomDict(elem_list=['C', 'N', 'O'])
+        
+        some = pn.getAtomDict(atom_list=['O2', 'O3', 'Ar3'])
 
     """ 
     all_atoms = {}
@@ -3883,10 +3976,10 @@ def getLineLabel(elem, spec, wave, blend=False):
                 complete line label)
     
     Parameters:
-        - elem      symbol of the selected element
-        - spec      ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-        - wave      wavelength of the line
-        - blend     blend flag (default = False)
+        elem:      symbol of the selected element
+        spec:      ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+        wave:      wavelength of the line
+        blend:     blend flag (default = False)
 
     @see parseLineLabel
     
@@ -3915,10 +4008,10 @@ def parseLineLabel(lineLabel):
     and the numerical value of the wave
     
     Parameters:
-        - label    line label in the standard PyNeb format
+        label:    line label in the standard PyNeb format
     
     Returns:
-        - elem, spec, atom_label, wave, wave_label, blend  strings containing the elem, spec, atom and 
+        elem, spec, atom_label, wave, wave_label, blend  strings containing the elem, spec, atom and 
                                                               wave; numerical value of the wave, 
                                                               in Angstrom; and blend flag 
     """
@@ -3958,12 +4051,13 @@ def parseLineLabel(lineLabel):
 def isValid(line_label):
     """
     Return True if the line label correspond to a valid line from LINE_LABEL_LIST or BLEND_LIST
-    
-    Usage:
-        isValid('O3_5007A')
 
     Parameters:
-        - line_label    label to be tested
+        line_label: label to be tested
+        
+    **Usage:**
+        
+        isValid('O3_5007A')
 
     """
     elem, spec, atom, wave, waveLabel, blend = parseLineLabel(line_label)
@@ -3985,22 +4079,24 @@ class EmissionLine(object):
         in PyNeb format, and a flag defining whether the line is a blend or a single transition. 
     The intensity parameters describe the observed intensity, the observed uncertainty and 
         the corrected uncertainty
-        
-    Usage:
-        line = pn.EmissionLine('O', 3, 5007, obsIntens=[1.4, 1.3])
-        line = pn.EmissionLine(label = 'O3_5007A', obsIntens=320, corrected = True)
     
     Parameters:
-        - elem        symbol of the selected element
-        - spec        ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
-        - wave        wavelength of the line
-        - blend       blend flag (boolean)
-        - to_eval     algebraic expression describing the emission line in terms of single transitions
-        - label       line label in the standard PyNeb format
-        - obsIntens   observed intensity
-        - obsError    uncertainty on the observed intensity
-        - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
+        elem:        symbol of the selected element
+        spec:        ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
+        wave:        wavelength of the line
+        blend:       blend flag (boolean)
+        to_eval:     algebraic expression describing the emission line in terms of single transitions
+        label:       line label in the standard PyNeb format
+        obsIntens:   observed intensity
+        obsError:    uncertainty on the observed intensity
+        errIsRelative: Boolean. True if the errors are relative to the intensities, False if they
                       are in the same unit as the intensity (default: True)
+                      
+    **Usage:**
+    
+        line = pn.EmissionLine('O', 3, 5007, obsIntens=[1.4, 1.3])
+    
+        line = pn.EmissionLine(label = 'O3_5007A', obsIntens=320, corrected = True)
         
     
     """ 
@@ -4082,8 +4178,8 @@ class EmissionLine(object):
 
 
         Parameters:
-            - RC        an instantiation of the pn.RedCorr class 
-            - normWave  a wavelength for the normalisation of the correction, e.g. 4861.  
+            RC:        an instantiation of the pn.RedCorr class 
+            normWave:  a wavelength for the normalisation of the correction, e.g. 4861.  
 
         """
         if not isinstance(RC, RedCorr):
@@ -4105,8 +4201,8 @@ class EmissionLine(object):
         Add observed values to an existing line. 
         
         Parameters:
-            - newObsIntens    observed intensity of the line
-            - newObsError     error on the observed intensity (optional)
+            newObsIntens:    observed intensity of the line
+            newObsError:     error on the observed intensity (optional)
             
         """
         self.obsIntens = np.append(self.obsIntens, newObsIntens)
@@ -4129,7 +4225,8 @@ class EmissionLine(object):
         """
         Provide information on the line: atom, label, to_eval, as well as the intensities and errors
         
-        Usage:
+        **Usage:**
+            
             line.printLine()
             
         """
@@ -4155,12 +4252,12 @@ class Observation(object):
         Includes an extinction correction object (pyneb.RedCorr) as Observation.extinction.
         
         Parameters:
-            - obsFile       name of the file containing the observations. May be a file object or a file name 
+            obsFile:       name of the file containing the observations. May be a file object or a file name 
                              If the fileFormat is 'fits_IFU', the obsFile keyword is of the form e.g.:
                              'dir/ngc6778_MUSE_*.fits' where * is of the form O3_5007A.
                              The associated error file must be named the same way, using errStr keyword value 
                              e.g. dir/ngc6778_MUSE_O3_5007A_err.fits
-            - fileFormat    format of the data file, depending on how the wavelengths are ordered.
+            fileFormat:    format of the data file, depending on how the wavelengths are ordered.
                             Available formats are :
                             - 'lines_in_cols' : Each object is on a different row. Each column corresponds to a given emission line. 
                                Line labels with tailing "e" are for errors on line intensities.
@@ -4170,22 +4267,27 @@ class Observation(object):
                             - 'lines_in_rows_err_cols' : Each object is on a different column. Each row corresponds to a given emission line. 
                                For each object (eg. "IC418"), an additional column (named eg "errIC418") contains the errors on the line intensities.
                             - 'fits_IFU': each emission line is stored into a fits file
-            - delimiter     character separating entries 
-            - err_default   [0.10] default uncertainty assumed on intensities. Will overwrite the error from the file.
-            - corrected     Boolean. True if the observed intensities are already corrected from extinction
+            delimiter:     character separating entries 
+            err_default:   [0.10] default uncertainty assumed on intensities. Will overwrite the error from the file.
+            corrected:     Boolean. True if the observed intensities are already corrected from extinction
                                 (default: False)
-            - errIsRelative Boolean. True if the errors are relative to the intensities, False if they
+            errIsRelative: Boolean. True if the errors are relative to the intensities, False if they
                                 are in the same unit as the intensity (default: True)
-            - correcLaw   ['F99'] extinction law used to correct the observed lines.
-            - errStr        - string used to identify error file when fileFormat is fits_IFU
-            - addErrDefault - [False] if True, the default error is always quadratically added to the read error.
-            - Cutout2D_position, Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
+            correcLaw:   ['F99'] extinction law used to correct the observed lines.
+            errStr (str):        String used to identify error file when fileFormat is fits_IFU
+            addErrDefault: if True, the default error is always quadratically added to the read error.
+            Cutout2D_position:
+            Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
 
-        Example:
-            Read a file containing corrected intensities:
-                obs = pn.Observation('obs.dat', corrected = True)
-            to obtain a dictionary with the observed  corrected intensities:
-                i_cor = {label: obs.getLine(label = label).corrIntens for label in obs.lineLabels}
+        **Example:**
+        
+        Read a file containing corrected intensities:
+        
+            obs = pn.Observation('obs.dat', corrected = True)
+            
+        To obtain a dictionary with the observed  corrected intensities:
+            
+            i_cor = {label: obs.getLine(label = label).corrIntens for label in obs.lineLabels}
         
         """        
         self.log_ = log_ 
@@ -4218,7 +4320,7 @@ class Observation(object):
         Add a line to an existing observation
 
         Parameters:
-            - line    the selected emission line (an instance of EmissionLine)
+            line:    the selected emission line (an instance of EmissionLine)
             
         """
         if not isinstance(line, EmissionLine):            
@@ -4242,9 +4344,9 @@ class Observation(object):
         """
         Create a fake observation of a given line, filled with a given value.
         Parameters:
-            - lineLabel: the label of the new line. If the label corresponds to an already 
+            lineLabel: the label of the new line. If the label corresponds to an already 
                 defined observation, nothing is done and a warning is issued.
-            - default: the value of the fake observations. Default is np.nan
+            default: the value of the fake observations. Default is np.nan
         """
 
         if lineLabel not in self.lineLabels:
@@ -4258,8 +4360,8 @@ class Observation(object):
         Add an observation (i.e. a list of intensities corresponding to a new object) to the existing set.
 
         Parameters:
-            - name            name of the new observation/object
-            - newObsIntens    value(s) of the line intensities. Length must match Observation.n_lines
+            name:            name of the new observation/object
+            newObsIntens:    value(s) of the line intensities. Length must match Observation.n_lines
                 
         """
         if np.ndim(newObsIntens) == 0:
@@ -4282,7 +4384,10 @@ class Observation(object):
         """
         Add a new observation. The intensity is the sum of the intensities of 
         the lines defined by the tupple labelsToAdd. The error is the quadratic sum of the absolute errors.
-        Example:
+        
+        
+        **Example:**
+            
             addSum(('O1r_7771A', 'O1r_7773A', 'O1r_7775A'), 'O1r_7773A+', to_eval = 'S("7773+")')
         """
         
@@ -4384,7 +4489,7 @@ class Observation(object):
         Return a list of lines sorted by atoms or wavelengths.
         
         Parameters:
-            - crit   criterion to sort the line list ('atom' [default] or 'wave')
+            crit:   criterion to sort the line list ('atom' [default] or 'wave')
 
         """
         if crit == 'atom':
@@ -4420,26 +4525,27 @@ class Observation(object):
         
  
         Parameters:
-            - obsFile        file containing the observations. May be a file object or a string.
+            obsFile:        file containing the observations. May be a file object or a string.
                              If the fileFormat is 'fits_IFU', the obsFile keyword is of the form e.g.:
                              'dir/ngc6778_MUSE_*.fits' where * is of the form O3_5007A.
                              The associated error file must be named the same way, using errStr keyword value 
                              e.g. dir/ngc6778_MUSE_O3_5007A_err.fits
-            - fileFormat     emission lines vary across columns ('lines_in_cols', default) or 
+            fileFormat:     emission lines vary across columns ('lines_in_cols', default) or 
                                 across rows ('lines_in_rows'), or across rows with errors in columns 
                                 ('lines_in_rows_err_cols') in which case the column label must start with "err"
                                 
                                 The format may also be 'fits_IFU', in which case each emission line comes
                                 from a different fits file
                                 
-            - delimiter      field delimiter (default: None)  
-            - err_default    default uncertainty on the line intensities
-            - corrected      Boolean. True if the observed intensities are already corrected from extinction
+            delimiter:      field delimiter (default: None)  
+            err_default:    default uncertainty on the line intensities
+            corrected:      Boolean. True if the observed intensities are already corrected from extinction
                                  (default: False)
-            - errIsRelative  Boolean. True if the errors are relative to the intensities, False if they
+            errIsRelative:  Boolean. True if the errors are relative to the intensities, False if they
                                  are in the same unit as the intensity (default: False)
-            - errStr         string to identify the error file in case the fileFormat is fits_IFU.
-            - Cutout2D_position, Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
+            errStr:         string to identify the error file in case the fileFormat is fits_IFU.
+            Cutout2D_position: In case of reading fits images, crop the image to those pixel limits
+            Cutout2D_size: In case of reading fits images, crop the image to those pixel limits
 
         """    
         format_list = ['lines_in_cols', 'lines_in_cols2', 'lines_in_rows', 
@@ -4701,9 +4807,9 @@ class Observation(object):
         Return the line intensities in form of a dictionary with line labels as keys.
         
         Parameters:
-            - returnObs  Boolean. If False (default), prints the corrected values. 
+            returnObs (bool):  If False (default), prints the corrected values. 
                             If True, prints the observed value. 
-            - obsName    name of an observation. If not set or None, all the observations are printed
+            obsName:    name of an observation. If not set or None, all the observations are printed
 
         """
         if obsName is not None:
@@ -4728,9 +4834,9 @@ class Observation(object):
         Return the line intensity error in form of a dictionary with line labels as keys.
         
         Parameters:
-            - returnObs  if False (default), prints the corrected values. 
+            returnObs:  if False (default), prints the corrected values. 
                             If True, prints the observed value. 
-            - obsName    name of an observation. If not set or None, all the observations are printed
+            obsName:    name of an observation. If not set or None, all the observations are printed
             
         """
         if obsName is not None:
@@ -4755,9 +4861,9 @@ class Observation(object):
         Print the line intensities.
         
         Parameters:
-            - returnObs   if False (default), prints the corrected values. 
+            returnObs:   if False (default), prints the corrected values. 
                             If True, prints the observed value. 
-            - obsName     name of an observation. Is unset or None, all the observations are printed
+            obsName:     name of an observation. Is unset or None, all the observations are printed
 
         """    
         if obsName is not None:
@@ -4792,8 +4898,9 @@ class Observation(object):
         Once this is done, one may call correctData to compute the EmissionLine.corrIntens
         
         Parameters:
-            - label1 and label2 [EmissionLine.label] observed line whose intensities are used
-            - r_theo [float] theoretical line ratio
+            label1: [EmissionLine.label] observed line whose intensities are used 
+            label2: [EmissionLine.label] observed line whose intensities are used
+            r_theo [float] theoretical line ratio
 
         """
         line1 = self.getLine(label=label1)
@@ -4863,7 +4970,7 @@ class Observation(object):
         Set the relative uncertainty of all emission lines to a common constant value
         
         Parameters:
-            - err_default     default value of the relative uncertainty
+            err_default:     default value of the relative uncertainty
         
         """
         for line in self.lines:
@@ -4877,9 +4984,9 @@ class Observation(object):
         The names of the fake observations will be OriginalName-MC-n, n ranging from 0 to N-1
         
         Parameters:
-        N: number of new observations to be added for each original observation.
-        i_obs: used in case only a given observations needs to be treated
-        random_seed: [default] used to initialize the numpy random generator
+            N: number of new observations to be added for each original observation.
+            i_obs: used in case only a given observations needs to be treated
+            random_seed: [default] used to initialize the numpy random generator
         """
         if self.MC_added:
             self.log_.error('Monte Carlo already applied to this observation', calling='addMonteCarloObs')

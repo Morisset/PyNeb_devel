@@ -1,0 +1,240 @@
+r613 -
+
+Atomic data: The levels are now taken from a dedicated file (one for each ion) where NIST data are stored. The energies, statistic weigths are for example not anymore in the "atom" data files. The format of the ascii data files have been changed, see the manual for a description of the new format. Better not to use anymore fits data files, they are obsoletes.
+The NIST raw data are available through e.g. o3.NIST. The number of level is limited to the levels for which atomic data are available. See documentation for more.
+
+Chianti data are available, only if the user installed the Chianti database somewhere and has set the environment variable XUVTOP to the location of the data. PyNeb does NOT provide Chianti data and is not responsible for the errors that may be found in these data.
+ 
+The directory where the pypics files of the emissivities is now only created when needed, not at every start of pyneb as it was before.
+
+We have received a lot of data from Nick Sterling, thanks a lot to him.
+
+MonteCarlo generation of fake observations is available.
+
+Grotrian diagram has a better look, with colors!
+
+New default data set is PYNEB_14_03
+ 'PYNEB_14_03': {'H1': {'rec': 'h_i_rec_SH95.fits'},
+                             'He1': {'rec': 'he_i_rec_P12corr13.fits'},
+                             'He2': {'rec': 'he_ii_rec_SH95.fits'},
+                             'Al2': {'atom': 'al_ii_atom_JSP86-HK87-VVF96-KS86.dat', 'coll': 'al_ii_coll_KHAF92-TBK85-TBK84.dat'},
+                             'Ar2': {'atom': 'ar_ii_atom_Bal06.dat', 'coll': 'ar_ii_coll_PB95.dat'},
+                             'Ar3': {'atom': 'ar_iii_atom_MB09.dat', 'coll': 'ar_iii_coll_MB09.dat'},
+                             'Ar4': {'atom': 'ar_iv_atom_MZ82.dat', 'coll': 'ar_iv_coll_RB97.dat'},
+                             'Ar5': {'atom': 'ar_v_atom_LL93-MZ82-KS86.dat', 'coll': 'ar_v_coll_GMZ95.dat'},
+                             'Ba2': {'atom': 'ba_ii_atom_C04.dat', 'coll': 'ba_ii_coll_SB98.dat'},
+                             'Ba4': {'atom': 'ba_iv_atom_BHQZ95.dat', 'coll': 'ba_iv_coll_SB98.dat'},
+                             'C1': {'atom': 'c_i_atom_FFS85.dat', 'coll': 'c_i_coll_JBK87-PA76.dat'},
+                             'C2': {'atom': 'c_ii_atom_GMZ98.dat', 'coll': 'c_ii_coll_BP92.dat'},
+                             'C3': {'atom': 'c_iii_atom_G83-NS78-WFD96.dat', 'coll': 'c_iii_coll_Bal85.dat'},
+                             'C4': {'atom': 'c_iv_atom_WFD96.dat', 'coll': 'c_iv_coll_AK04.dat'},
+                             'Ca5': {'atom': 'ca_v_atom_M83-KS86.dat', 'coll': 'ca_v_coll_GMZ95.dat'},
+                             'Cl2': {'atom': 'cl_ii_atom_MZ83.dat', 'coll': 'cl_ii_coll_T04.dat'},
+                             'Cl3': {'atom': 'cl_iii_atom_M83-KS86.dat', 'coll': 'cl_iii_coll_BZ89.dat'},
+                             'Cl4': {'atom': 'cl_iv_atom_KS86-MZ82-EM84.dat', 'coll': 'cl_iv_coll_GMZ95.dat'},
+                             'Fe3': {'atom': 'fe_iii_atom_Q96_J00.dat', 'coll': 'fe_iii_coll_Z96.dat'},
+                             'K4': {'atom': 'k_iv_atom_M83-KS86.dat', 'coll': 'k_iv_coll_GMZ95.dat'},
+                             'K5': {'atom': 'k_v_atom_M83-KS86.dat', 'coll': 'k_v_coll_BZL88.dat'},
+                             'Mg5': {'atom': 'mg_v_atom_GMZ97.dat', 'coll': 'mg_v_coll_BZ94.dat'},
+                             'Mg7': {'atom': 'mg_vii_atom_GMZ97.dat', 'coll': 'mg_vii_coll_LB94-U.dat'},
+                             'N1': {'atom': 'n_i_atom_KS86-WFD96.dat', 'coll': 'n_i_coll_PA76-DMR76.dat'},
+                             'N2': {'atom': 'n_ii_atom_GMZ97-WFD96.dat', 'coll': 'n_ii_coll_T11.dat'},
+                             'N3': {'atom': 'n_iii_atom_GMZ98.dat', 'coll': 'n_iii_coll_BP92.dat'},
+                             'N4': {'atom': 'n_iv_atom_WFD96.dat', 'coll': 'n_iv_coll_RBHB94.dat'},
+                             'Na4': {'atom': 'na_iv_atom_GMZ97.dat', 'coll': 'na_iv_coll_BZ94.dat'},
+                             'Na6': {'atom': 'na_vi_atom_GMZ97.dat', 'coll': 'na_vi_coll_LB94.dat'},
+                             'Ne2': {'atom': 'ne_ii_atom_Bal06.dat', 'coll': 'ne_ii_coll_GMB01.dat'},
+                             'Ne3': {'atom': 'ne_iii_atom_GMZ97.dat', 'coll': 'ne_iii_coll_McLB00.dat'},
+                             'Ne4': {'atom': 'ne_iv_atom_BBZ89-BK88.dat', 'coll': 'ne_iv_coll_G81.dat'},
+                             'Ne5': {'atom': 'ne_v_atom_GMZ97-U-BD93.dat', 'coll': 'ne_v_coll_LB94.dat'},
+                             'Ne6': {'atom': 'ne_vi_atom_GMZ98.dat', 'coll': 'ne_vi_coll_ZGP94.dat'},
+                             'Ni3': {'atom': 'ni_iii_atom_B01.dat', 'coll': 'ni_iii_coll_B01.dat'},
+                             'O1': {'atom': 'o_i_atom_WFD96.dat', 'coll': 'o_i_coll_BK95.dat'},
+                             'O2': {'atom': 'o_ii_atom_Z82-WFD96.dat', 'coll': 'o_ii_coll_Kal09.dat'},
+                             'O3': {'atom': 'o_iii_atom_SZ00-WFD96.dat', 'coll': 'o_iii_coll_SSB14.dat'},
+                             'O4': {'atom': 'o_iv_atom_GMZ98.dat', 'coll': 'o_iv_coll_BP92.dat'},
+                             'O5': {'atom': 'o_v_atom_H80-NS79.dat', 'coll': 'o_v_coll_BBDK85.dat'},
+                             'S2': {'atom': 's_ii_atom_PKW09.dat', 'coll': 's_ii_coll_TZ10.dat'},
+                             'S3': {'atom': 's_iii_atom_PKW09.dat', 'coll': 's_iii_coll_TG99.dat'},
+                             'S4': {'atom': 's_iv_atom_JKD86-DHKD82.dat', 'coll': 's_iv_coll_DHKD82.dat'},
+                             'Si2': {'atom': 'si_ii_atom_BL93-CSB93-N77.dat', 'coll': 'si_ii_coll_DK91.dat'},
+                             'Si3': {'atom': 'si_iii_atom_M83-OKH88-FW90-KS86.dat', 'coll': 'si_iii_coll_DK94.dat'},
+                             'Xe3': {'atom': 'xe_iii_atom_BHQZ95.dat', 'coll': 'xe_iii_coll_SB98.dat'},
+                             'Xe4': {'atom': 'xe_iv_atom_BHQZ95.dat', 'coll': 'xe_iv_coll_SB98.dat'},
+                             'Xe6': {'atom': 'xe_vi_atom_BHQZ95.dat', 'coll': 'xe_vi_coll_SB98.dat'},
+                             'Kr3': {'atom': 'kr_iii_atom_BH86.dat', 'coll':'kr_iii_coll_S97.dat'},
+                             'Kr4': {'atom': 'kr_iv_atom_BH86.dat', 'coll': 'kr_iv_coll_S97.dat'},
+                             'Kr5': {'atom': 'kr_v_atom_BH86.dat', 'coll': 'kr_v_coll_S97.dat'},
+                             'Se3': {'atom': 'se_iii_atom_BH86.dat', 'coll': 'se_iii_coll_S97.dat'},
+                             'Se4': {'atom': 'se_iv_atom_B05.dat', 'coll': 'se_iv_coll_B05.dat'},
+                             'Br3': {'atom': 'br_iii_atom_BH86.dat', 'coll': 'br_iii_coll_S97.dat'},
+                             'Br4': {'atom': 'br_iv_atom_BH86.dat', 'coll': 'br_iv_coll_S97.dat'},
+                             'Rb4': {'atom': 'rb_iv_atom_BH86.dat', 'coll': 'rb_iv_coll_S97.dat'},
+                             'Rb5': {'atom': 'rb_v_atom_BH86.dat', 'coll': 'rb_v_coll_S97.dat'},
+                             'Rb6': {'atom': 'rb_vi_atom_BH86.dat', 'coll': 'rb_vi_coll_S97.dat'}
+
+Important changes have been made to the LINE_LABEL_LIST, breaking backward compatibility with 0.9.x versions, leading to 1.0.x versions.
+There is still an access to the old dictionary, available from pyneb.utils.init.OLD_LINE_LABEL_LIST. But we strongly recommend to use the uptodate values as defined by default.
+
+Al2 NEW 4451A 4463A 4488A 164.2m 54.1m 
+Al2 OLD 4453A 4465A 4490A 162.3m 53.9m 
+===================
+Ar3 NEW 3154A 6.37m 
+Ar3 OLD 3157A 6.4m 
+===================
+Ar4 NEW 7332A 56.2m 
+Ar4 OLD 7331A 56.4m 
+===================
+Ar5 NEW 1218A 1229A 1249A 1520A 2262A 4.93m 
+Ar5 OLD 4.9m 
+===================
+Ba2 NEW 6497A 6854A 5854A 6142A 4524A 4900A 2.05m 1.76m 
+Ba2 OLD 6499A 6856A 5855A 6143A 4526A 4901A 2.1m 1.8m 
+===================
+Ba4 NEW 5697A 
+Ba4 OLD 5698A 
+===================
+Br3 NEW 7.94m 
+Br3 OLD 7.9m 
+===================
+C1 NEW 9808A 9824A 9850A 2963A 2965A 2967A 4246A 8271A 609.6m 230.3m 370.3m 
+C1 OLD 9807A 9823A 9849A 609.7m 230.0m 369.3m 
+===================
+C2 NEW 2322A 3131A 3133A 1869A 4636A 4637A 157.6m 454.4m 198.8m 353.3m 3967.2m 
+C2 OLD 2324A 2326A 3132A 3134A 1324A 1326A 3078A 3080A 3081A 4638A 4763A 157.8m 540.2m 270.1m 540.0m 17.6m 
+===================
+C3 NEW 2000A 2003A 422.0m 124.9m 177.4m 
+C3 OLD 2002A 2004A 416.7m 125.0m 178.6m 
+===================
+C4 NEW 92.8m 
+C4 OLD 
+===================
+Ca5 NEW 5309A 2413A 3998A 4.16m 3.05m 
+Ca5 OLD 5311A 2414A 3999A 4.2m 3.0m 
+===================
+Cl2 NEW 9381A 3586A 3719A 6162A 10.0m 33.3m 
+Cl2 OLD 9356A 3588A 3717A 6165A 10.4m 37.2m 
+===================
+Cl3 NEW 151.5m 108.0m 
+Cl3 OLD 153.2m 107.5m 
+===================
+Cl4 NEW 1463A 1474A 1493A 1833A 2793A 20.3m 7.45m 
+Cl4 OLD 20.4m 7.5m 
+===================
+Fe3 NEW 4701A 4734A 4755A 5011A 5085A 5270A 4881A 4925A 4931A 5412A 8729A 8838A 3240A 3286A 3319A 3323A 3335A 3355A 3357A 3366A 3371A 3406A 4046A 4080A 4097A 4607A 4770A 4778A 9701A 9960A 5440A 6096A 
+Fe3 OLD 4703A 4735A 4756A 5013A 5086A 5272A 4882A 4926A 4932A 5413A 4989A 8731A 8840A 
+===================
+H1r NEW ATOM
+['1216A', '1026A', '973A', '6563A', '4861A', '4341A', '4102A', '3970A', '3889A', '3835A', '3798A', '1.87m', '1.28m', '1.09m', '9546A', '9229A']
+===================
+He1r NEW ATOM
+['5876A', '2945A', '3188A', '3614A', '3889A', '3965A', '4026A', '4121A', '4388A', '4438A', '4472A', '4713A', '4922A', '5016A', '5048A', '5876A', '6678A', '7065A', '7281A', '9464A', '10830A', '11013A', '11969A', '12527A', '12756A', '12785A', '12790A', '12846A', '12968A', '12985A', '13412A', '15084A', '17003A', '18556A', '18685A', '18697A', '19089A', '19543A', '20425A', '20581A', '20602A', '21120A', '21132A', '21608A', '21617A']
+===================
+He2r NEW ATOM
+['1640A', '1215A', '1084A', '4686A', '3203A', '6560A', '5411A', '4859A']
+===================
+He3NEW ATOM
+['4686A', '5876A']
+===================
+K4 NEW 7109A 
+K4 OLD 7110A 
+===================
+K5 NEW 6222A 31.0m 
+K5 OLD 6223A 31.4m 
+===================
+Kr3 NEW 1.88m 1.07m 
+Kr3 OLD 1.9m 1.1m 
+===================
+Kr4 NEW 4.26m 
+Kr4 OLD 4.3m 
+===================
+Kr5 NEW 2.67m 1.32m 
+Kr5 OLD 2.7m 1.3m 
+===================
+Mg5 NEW 2992A 3.96m 
+Mg5 OLD 2994A 4.0m 
+===================
+Mg7 NEW 943A 953A 970A 1537A 4790A 3.42m 
+Mg7 OLD 847A 855A 868A 1296A 3034A 3.4m 
+===================
+N1 NEW 
+N1 OLD 1094.1m 1.0m 27777.8m 
+===================
+N2 NEW 2137A 2139A 2143A 3177A 7092A 205.3m 76.4m 121.8m 
+N2 OLD 2142A 2144A 2148A 3188A 7147A 205.4m 76.3m 121.5m 
+===================
+N3 NEW 2280A 2288A 2280A 763A 3334A 3335A 71.0m 123.3m 1492.1m 
+N3 OLD 2291A 2291A 765A 1359A 3338A 3340A 71.2m 123.8m 909.1m 
+===================
+N4 NEW 1575A 158.4m 
+N4 OLD 1574A 158.7m 
+===================
+Na4 NEW 2804A 6.34m 
+Na4 OLD 2805A 6.3m 
+===================
+Na6 NEW 2816A 2872A 2972A 1378A 14.39m 
+Na6 OLD 2815A 2871A 2970A 1377A 14.3m 
+===================
+Ne4 NEW 224.9m 1579.3m 
+Ne4 OLD 221.2m 1587.3m 
+===================
+Ne5 NEW 2973A 1721A 4083A 24.3m 
+Ne5 OLD 2975A 1722A 4090A 24.2m 
+===================
+Ne6 NEW 997A 1010A 986A 559A 563A 1271A 1278A 1289A 559A 563A 1270A 1277A 1288A 433A 436A 766A 769A 772A 1928A 1929A 7.65m 22.7m 15.5m 334.4m 
+Ne6 OLD 1005A 1017A 1011A 567A 572A 1309A 1316A 1324A 567A 572A 1305A 1313A 1324A 7.6m 22.4m 15.6m 909.1m 
+===================
+Ni3NEW ATOM
+['7890A', '8500A', '6000A', '6401A', '6534A', '6682A', '6797A', '7125A', '6946A']
+===================
+O1 NEW 5577A 
+O1 OLD 5579A 
+===================
+O2 NEW 499.3m 5023.7m 40.7m 121.3m 
+O2 OLD 505.3m 5076.1m 40.8m 121.8m 
+===================
+O3 NEW 5833A 88.3m 32.6m 
+O3 OLD 5839A 87.6m 32.5m 
+===================
+O4 NEW 1801A 1806A 1812A 608A 1076A 1078A 1080A 2671A 2672A 76.7m 53.9m 719.2m 
+O4 OLD 791A 1804A 1808A 1814A 790A 1803A 1808A 1814A 609A 1077A 1079A 1081A 2673A 2674A 76.0m 54.3m 588.2m 
+===================
+O5 NEW 73.5m 32.6m 
+O5 OLD 71.6m 33.0m 
+===================
+Rb4 NEW 1.44m 
+Rb4 OLD 1.4m 
+===================
+Rb5 NEW 2.84m 
+Rb5 OLD 2.8m 
+===================
+Rb6 NEW 1.95m 1.01m 
+Rb6 OLD 1.9m 1.0m 
+===================
+S2 NEW 1.03m 
+S2 OLD 1.0m 
+===================
+S3 NEW 33.5m 
+S3 OLD 33.6m 
+===================
+S4 NEW 29.0m 
+S4 OLD 29.2m 
+===================
+Se3 NEW 5.74m 2.54m 4.55m 
+Se3 OLD 5.7m 2.5m 4.6m 
+===================
+Se4 NEW 2.28m 
+Se4 OLD 2.3m 
+===================
+Si2 NEW 8007A 8077A 8193A 7997A 8067A 8183A 92.3m 631.5m 
+Si2 OLD 8009A 8080A 8196A 7999A 8070A 8185A 91.7m 646.8m 
+===================
+Si3 NEW 3315A 3329A 77.7m 38.2m 
+Si3 OLD 3316A 3330A 78.0m 38.3m 
+===================
+Xe3 NEW 1.23m 1.02m 1.11m 1.37m 
+Xe3 OLD 1.2m 1.0m 1.1m 1.4m 
+===================
+Xe4 NEW 2.36m 1.31m 
+Xe4 OLD 2.4m 1.3m 
+===================

@@ -1,0 +1,141 @@
+ Commits on Oct 17, 2018
+@Morisset
+Morisset
+Rerun of all manuals
+ed15715
+Commits on Nov 22, 2018
+@Morisset
+Morisset
+Hbeta low Te
+8e7d622
+Commits on Nov 27, 2018
+@Morisset
+Morisset
+recombination interpolated now on 1/Te grid, not on Te
+d4891a8
+@Morisset
+Morisset
+1.1.8b2
+f566e99
+Commits on Nov 30, 2018
+@Morisset
+Morisset
+Adding extrapolation for HI at low Te
+cdd14aa
+@Morisset
+Morisset
+1.1.8b3
+91e5c02
+Commits on Dec 30, 2018
+@Morisset
+Morisset
+Update pynebcore.py
+6de4a84
+@Morisset
+Morisset
+FeII V99
+550d86e
+@Morisset
+Morisset
+FeII Smyth19
+166101c
+@Morisset
+Morisset
+1.1.8b4
+0d780da
+Commits on Jan 04, 2019
+@Morisset
+Morisset
+Adding Continuum object
+6a8b9fe
+@Morisset
+Morisset
+Adding FreeFree
+ff8273b
+@Morisset
+Morisset
+Adding credits
+d7305f2
+@Morisset
+Morisset
+Adding Blamer jump temperature finding
+34590b5
+@Morisset
+Morisset
+1.1.8b6
+629216e
+@Morisset
+Morisset
+reformating the array mapping
+c6625c6
+@Morisset
+Morisset
+Adding case B for HI line (but not for continuum)
+0e560d3
+@Morisset
+Morisset
+Continuum is normalized by default to H11
+8898341
+@Morisset
+Morisset
+updating email
+969458c
+@Morisset
+Morisset
+1.1.8b7
+12cef14
+Commits on Jan 05, 2019
+@Morisset
+Morisset
+bug corrected
+ce7e1b3
+Commits on Jan 07, 2019
+@Morisset
+Morisset
+Bug in NII rec lines
+7890578
+@Morisset
+Morisset
+Bug in setup
+cedc28d
+Commits on Jan 08, 2019
+@Morisset
+Morisset
+tem and den integer cause bug
+d3ccaae
+@Morisset
+Morisset
+1.1.8b10
+0c7aeac
+Commits on Jan 09, 2019
+@Morisset
+Morisset
+changing output for single float function
+03e768c
+@Morisset
+Morisset
+1.1.8b11
+3293632
+@Morisset
+Morisset
+Adding single temperature to NeII
+676c242
+Commits on Feb 15, 2019
+@Morisset
+Morisset
+Missing colors in diag plot
+390712d
+Commits on Feb 20, 2019
+@Morisset
+Morisset
+Checking boundaries in EmisGrid
+f0bac9d
+@Morisset
+Morisset
+1.1.8b13
+36467a6
+Commits on Mar 21, 2019
+@Morisset
+Morisset
+1.1.8b14
+42a7576 

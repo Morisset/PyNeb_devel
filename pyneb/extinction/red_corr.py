@@ -31,8 +31,19 @@ class RedCorr(object):
         """
         Reddening correction tool.
 
-        Usage:
+        Parameters:
+            E_BV [float]: differential extinction between bands B and V
+            R_V = AV/E_BV. Default value is 3.1
+            law [str]: one of the defined laws (available with RedCorr.getLaws()) 
+            cHbeta: logarithmic extinction at Hbeta (prevalence on E_BV)
+            UserFunction X(wave, param): A user-defined function that accept 2 parameters: wavelength(s) in Angstrom 
+            and an optional parameter and return X(lambda) = A(lambda)/E_BV = R.A(lambda)/AV. 
+            The correction is: 10**(0.4*E_bv*X)
+            
+        **Usage:**
+            
             RC = RedCorr(E_BV = 1.)
+            
             RC.plot(laws = 'all')
 
             def my_X(wave, params = [5000., 1., 2., 3.]):
@@ -42,17 +53,10 @@ class RedCorr(object):
                 return params[1] * (wave/params[0]) + params[2] * (wave/params[0])**-1 + params[3] * (wave/params[0])**-2
 
             RC.UserFunction = my_X
+            
             RC.UserParams = [6000., 0., 0., 1.]
+            
             RC.getCorr(5007)
-        
-        Parameters:
-            - E_BV [float]: differential extinction between bands B and V
-            - R_V = AV/E_BV. Default value is 3.1
-            - law [str]: one of the defined laws (available with RedCorr.getLaws()) 
-            - cHbeta: logarithmic extinction at Hbeta (prevalence on E_BV)
-            - UserFunction X(wave, param): A user-defined function that accept 2 parameters: wavelength(s) in Angstrom 
-            and an optional parameter and return X(lambda) = A(lambda)/E_BV = R.A(lambda)/AV. 
-            The correction is: 10**(0.4*E_bv*X)
             
         """
         
@@ -92,12 +96,15 @@ class RedCorr(object):
     def cHbetaFromEbv(self, ebv):
         """
         Return cHbeta from E(BV)
-        Usage: 
-            (1-f_lambda).cHbeta = 0.4.EBV.X_lambda applied to lambda = 4861, with f_beta = 0.:
-            cHbeta = 0.4 . EBV . X_beta
         
         Parameter:
-            - ebv    E(B-V)
+            ebv:    E(B-V)
+            
+        **Usage:**
+            
+            (1-f_lambda).cHbeta = 0.4.EBV.X_lambda applied to lambda = 4861, with f_beta = 0.:
+            
+            cHbeta = 0.4 . EBV . X_beta
             
         """
         Xbeta = self.X(pn.CST.HBETA)
@@ -108,12 +115,16 @@ class RedCorr(object):
     def EbvFromCHbeta(self, cHbeta):
         """
         Return E(B-V) from cHbeta
-        Using: 
-            (1-f_lambda).cHbeta = 0.4.EBV.X_lambda applied to lambda = 4861, with f_beta = 0.:
-            cHbeta = 0.4 . EBV . X_beta
         
         Parameter:
-            - cHbeta
+            cHbeta: -
+            
+        Using: 
+            
+            (1-f_lambda).cHbeta = 0.4.EBV.X_lambda applied to lambda = 4861, 
+            
+            with f_beta = 0.:
+                cHbeta = 0.4 . EBV . X_beta
             
         """
         Xbeta = self.X(pn.CST.HBETA)
@@ -213,14 +224,16 @@ class RedCorr(object):
         """
         Return the extinction correction as:
             correction = 10**(0.4 * EBV * Xx) = 10**(A_lambda / 2.5)
-
-        Usage:
-            RC.getCorr(5007)
-            RC.getCorr(5007, 4861)
             
         Parameters:
-            - wave      wavelength (Angstrom)
-            - rel_wave  wavelength (Angstrom) for a relative correction
+            wave:      wavelength (Angstrom)
+            rel_wave:  wavelength (Angstrom) for a relative correction
+            
+        **Usage:**
+            
+            RC.getCorr(5007)
+            
+            RC.getCorr(5007, 4861)
 
         """
         if self.law is None:
@@ -243,7 +256,7 @@ class RedCorr(object):
         Return the extinction correction normalized to the correction at 4861AA.
             
         Parameter:
-            - wave      wavelength (Angstrom)
+            wave:  wavelength (Angstrom)
         
         """
         return self.getCorr(wave, np.ones_like(wave) * pn.CST.HBETA)
@@ -254,9 +267,9 @@ class RedCorr(object):
         Return the error on the correction for a given wavelength, given the error on E(B-V)
         
         Parameters:
-            - wave         wavelength(s)
-            - err_E_BV     error on E(B-V)
-            - rel_wave     reference wavelength for the normalization (optional)
+            wave:         wavelength(s)
+            err_E_BV:     error on E(B-V)
+            rel_wave:     reference wavelength for the normalization (optional)
 
         """
         if rel_wave is None:
@@ -272,8 +285,8 @@ class RedCorr(object):
             given the error on E(B-V)
         
         Parameters:
-            - wave         wavelength(s)
-            - err_E_BV     error on E(B-V)
+            wave:         wavelength(s)
+            err_E_BV:     error on E(B-V)
 
         """
         return self.getErrCorr(self, wave, err_E_BV, rel_wave=pn.CST.HBETA)
@@ -283,13 +296,15 @@ class RedCorr(object):
         """
         Determination of the correction using the ratio of two observed line intensities 
             relative to the theoretical value.
-        
-        Usage:
-            rc.setCorr(6.5/2.85, 6563., 4861.)
             
         Parameters:
-            - obs_over_theo    ration of the observed ratio over the theoretical ratio
-            - wave1, wave2     wavelengths at which the line rations are taken.
+            obs_over_theo:    ration of the observed ratio over the theoretical ratio
+            wave1:     wavelengths at which the line rations are taken.
+            wave2:     wavelengths at which the line rations are taken.
+            
+        **Usage:**
+            
+            rc.setCorr(6.5/2.85, 6563., 4861.)
 
         """
         COR = RedCorr(E_BV= -2.5, R_V=self.R_V, law=self.law, UserFunction=self.UserFunction)
@@ -307,11 +322,11 @@ class RedCorr(object):
         Plot extinction laws
 
         Parameters:
-            - w_inf [float] lower limit of plot
-            - w_sup [float] upper limit of plot
-            - laws [list of strings] list of extinction law labels. If set to 'all', all the laws are plotted
-            - ax : an axis object. If None, onr is created
-            - **kwargs arguments to plot
+            w_inf [float]: lower limit of plot
+            w_sup [float]: upper limit of plot
+            laws [list of strings]: list of extinction law labels. If set to 'all', all the laws are plotted
+            ax : an axis object. If None, onr is created
+            **kwargs: arguments to plot
 
         """
         if ax is None:
@@ -351,8 +366,13 @@ class RedCorr(object):
         """
         Cardelli, Clayton & Mathis 1989, ApJ 345, 245
         http://adsabs.harvard.edu/abs/1989ApJ...345..245C
+        
+        Parameters:
+            wave:  wavelength (Angstrom)
 
-        Comments: Depends on R_V, default value being 3.1
+        **Comments:**
+        
+        Depends on R_V, default value being 3.1
 
         Scope: Applicable to both dense and diffuse ISM
         Range: UV through IR
@@ -402,8 +422,12 @@ class RedCorr(object):
         http://adsabs.harvard.edu/abs/2007ApJ...655..299B
         Cardelli, Clayton & Mathis 1989, ApJ 345, 245
         http://adsabs.harvard.edu/abs/1989ApJ...345..245C
+        
+        Parameters:
+            wave:  wavelength (Angstrom)
 
-        Comments:
+        **Comments:**
+        
         Same as CCM89 for x<3.3 and x>8
         Revised values for 3.3<x<8
         Based on observation of Orion stars
@@ -457,13 +481,20 @@ class RedCorr(object):
         http://adsabs.harvard.edu/abs/1994ApJ...422..158O
         Cardelli, Clayton & Mathis 1989, ApJ 345, 245
         http://adsabs.harvard.edu/abs/1989ApJ...345..245C
+        
+        Parameters:
+            wave:  wavelength (Angstrom)
 
-        Comments:
+        **Comments:**
+        
         Same as CCM89 for x<1.1 and x>3.3
+        
         Revised values for 1.1<x<3.3
+        
         Produces lower correction in the near UV at low R_V
         
         Scope: Galactic
+        
         Range: UV through IR
         
         """
@@ -516,7 +547,11 @@ class RedCorr(object):
         Cardelli, Clayton and Mathis 1989, ApJ, 345, 245
         http://adsabs.harvard.edu/abs/1989ApJ...345..245C
         
+        Parameters:
+            wave:  wavelength (Angstrom)
+        
         Scope: Galactic
+        
         Range: UV through IR
         
         """
