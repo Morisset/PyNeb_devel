@@ -365,7 +365,11 @@ class Diagnostics(object):
                             'or an ion, or a wave range. label={0}, diag_tuple={1}, atom={2}, wave_range={3}'.format(label, diag_tuple, atom, wave_range),
                             calling=self.calling + '.addDiag')
         if atom not in self.atomDict and (type(label) is not list):
-            self.atomDict[atom] = pn.Atom(parseAtom(atom)[0], parseAtom(atom)[1], NLevels=self.NLevels)
+            this_atom, this_spec, this_rec = parseAtom2(atom)
+            if this_rec == '':
+                self.atomDict[atom] = pn.Atom(this_atom, this_spec, NLevels=self.NLevels)
+            elif this_rec == 'r':
+                self.atomDict[atom] = pn.RecAtom(this_atom, this_spec)
                
                
     def addAll(self):
@@ -482,8 +486,11 @@ class Diagnostics(object):
             pn.log_.warn('Try to add clabel in undefined label {0}'.format(label), calling=self.calling)
     
     
-    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True):
-        """PLotting tool to generate Te-Ne diagrams.
+    def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True,
+    return_CS=False, 
+             col_dic={'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
+                      'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}):
+        """Plotting tool to generate Te-Ne diagrams.
     
         Parameters:
             emis_grids:    A dictionary of EmisGrid objects refereed by their atom strings (e.g. 'O3')
@@ -496,8 +503,9 @@ class Diagnostics(object):
             alpha:         Transparency for the error bands in the plot
             error_band:    Boolean: plot [default] an error band
             
+            return_CS     [False] If True, return a list of the contour plots
+            col_dic       Colors for the different ions.            
         **Usage:**
-            
             diags.plot(emisgrids, obs, i_obs=3)
         """
         if not pn.config.INSTALLED['plt']: 
@@ -524,6 +532,7 @@ class Diagnostics(object):
             f = plt.gcf()
         X = np.log10(emis_grids[list(emis_grids.keys())[0]].den2D)
         Y = emis_grids[list(emis_grids.keys())[0]].tem2D
+        CSs = []
         for label in self.diags:
             self.log_.message('plotting {0}'.format(label), calling=self.calling)
             diag = self.diags[label]
@@ -614,8 +623,6 @@ class Diagnostics(object):
                     else:
                         RMS = lambda err: (np.asarray(err)).sum() 
                     tol_value = eval(diag[2])
-                    col_dic = {'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
-                               'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}
                     if sym in col_dic:
                         col = col_dic[sym]
                     else:
@@ -627,7 +634,9 @@ class Diagnostics(object):
                         if levels[0] < levels[1]:
                             #pn.log_.debug('{} levels {}'.format(label, levels), calling=self.calling)
                             CS = ax.contourf(X, Y, diag_map, levels=levels, alpha=alpha, colors=col)
+                            CSs.append(CS)
                     CS = ax.contour(X, Y, diag_map, levels=[diag_value], colors=col, linestyles=style)
+                    CSs.append(CS)
                     try:
                         ax.set_xlabel(r'log(n$_{\rm e}$) [cm$^{-3}$]')
                         ax.set_ylabel(r'T$_{\rm e}$ [K]')
@@ -643,8 +652,9 @@ class Diagnostics(object):
                     except:
                         self.log_.message('NOT plotted {0} {1}'.format(fmt, label),
                                           calling=self.calling)
-                        
-        
+            
+        if return_CS:
+            return CSs
         
     def getCrossTemDen(self, diag_tem, diag_den, value_tem=None, value_den=None, obs=None, i_obs=None,
                        guess_tem=10000, tol_tem=1., tol_den=1., max_iter=5, maxError=1e-3,
@@ -683,7 +693,6 @@ class Diagnostics(object):
                         start_den, end_den are set to np.nan. Otherwise, extrapolation is allowed.
             ANN:        if string, filename where to read AI4neb ANN. Otherwise, ANN is a manage_RM object.
                         In both casesm the ANN needs to already be trained
-
     
         **Example:**
             
@@ -697,14 +706,14 @@ class Diagnostics(object):
         if diag_tem not in self.diags:
             self.addDiag(diag_tem)
         atom_tem = self.diags[diag_tem][0]
-        elem_tem, spec_tem = parseAtom(atom_tem)
+        elem_tem, spec_tem, rec = parseAtom2(atom_tem)
         if atom_tem not in self.atomDict:
             self.atomDict[atom_tem] = pn.Atom(elem_tem, spec_tem, self.OmegaInterp, NLevels=self.NLevels)
         atom_tem = self.atomDict[atom_tem]
         if diag_den not in self.diags:
             self.addDiag(diag_den)
         atom_den = self.diags[diag_den][0]
-        elem_den, spec_den = parseAtom(self.diags[diag_den][0])
+        elem_den, spec_den, rec = parseAtom2(self.diags[diag_den][0])
         if (atom_den) not in self.atomDict:
             self.atomDict[atom_den] = pn.Atom(elem_den, spec_den, self.OmegaInterp, NLevels=self.NLevels)
         atom_den = self.atomDict[atom_den]

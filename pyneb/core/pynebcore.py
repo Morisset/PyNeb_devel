@@ -1539,10 +1539,10 @@ class Atom(object):
             label = '{0}_{1}A'.format(self.atom, int(wave))
             maxError = maxErrorA
         
-        self.log_.debug('{}'.format(label2levelDict))
+        #self.log_.debug('{}'.format(label2levelDict), calling='_Transition')
         if label in label2levelDict:
             result = [label2levelDict[label][0], label2levelDict[label][1], inputWave, inputWave]
-            self.log_.debug('label2levelDict[{}] = {}'.format(label, label2levelDict[label]))
+            #self.log_.debug('label2levelDict[{}] = {}'.format(label, label2levelDict[label]),calling='_Transition')
             return(result)
         
         j, i = np.unravel_index(np.argmin(abs(self.wave_Ang - inputWave)), self.wave_Ang.shape)
@@ -3686,7 +3686,8 @@ class RecAtom(object):
             label = label_str
             if label_str is None:
                 ij = self.getTransition(wave)
-                label = '{}_{}'.format(ij[0], ij[1])
+                if ij is not None:
+                    label = '{}_{}'.format(ij[0], ij[1])
         if label is None:
             res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
             return res
@@ -3815,7 +3816,6 @@ class RecAtom(object):
         L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
         S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
         
-        emis = eval(to_eval)
         try:
             emis = eval(to_eval)
         except:
@@ -4125,7 +4125,10 @@ class EmissionLine(object):
                 self.is_valid = True
                 if to_eval is None:
                     if self.blend:
-                        self.to_eval = BLEND_LIST[self.label]
+                        if self.waveLabel in LINE_LABEL_LIST[self.atom]:
+                            self.to_eval = 'S("'+ str(self.waveLabel) + '")'
+                        else:
+                            self.to_eval = BLEND_LIST[self.label]
                     else: 
                         self.to_eval = 'L(' + str(self.wave) + ')'
                 else:
@@ -4134,6 +4137,7 @@ class EmissionLine(object):
                 self.is_valid = False
                 self.to_eval = None
                 self.log_.warn('line {0} for atom {1} not valid'.format(self.waveLabel, self.atom), calling=self.calling)
+                print(self.waveLabel, LINE_LABEL_LIST[self.atom])
         else:
                 self.is_valid = False
                 self.to_eval = None
@@ -5016,7 +5020,7 @@ class Observation(object):
             new_names = np.repeat(np.asarray(self.names)[:, np.newaxis], N+1, axis=1)
             MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
             MC_names[0] = ''
-            self.names = np.core.defchararray.add(new_names , MC_names)
+            self.names = np.core.defchararray.add(new_names , MC_names).tolist()[0]
             self.log_.message('Leaving', calling='addMonteCarloObs')        
         else:
             if self.corrected:
