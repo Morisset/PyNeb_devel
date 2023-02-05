@@ -40,7 +40,5 @@ Aij
 *** N_LEVELS 34
 *** GSCONFIG d6
 *** SOURCE1 Quinet, P. 1996, A&AS, 116, 573
-*** NOTE1 A values
-*** SOURCE2 Badnell & Ballance, 2014, ApJ, 785, 99
-*** NOTE2 A values for trasitions from 3d5.4s 7S3 and 5S2 
+*** NOTE A-values revised by C. Mendoza et al. 2023, Atoms
 *** VACUUM 1
