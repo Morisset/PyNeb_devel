@@ -39,7 +39,6 @@ Aij
 *** SPECTRUM 3
 *** N_LEVELS 34
 *** GSCONFIG d6
-*** SOURCE1 Den Hartog, E.A. et al. 2019, Astrophys. J. Suppl, Ser. 2019, 243, 33
-*** NOTE A-values revised by C. Mendoza et al. 2023, Atoms
+*** SOURCE Deb & Hibbert, 2009, JPhB, 42, 065003
+*** NOTE A-values revised by C. Mendoza et al, 2023, Atoms
 *** VACUUM 1
-
