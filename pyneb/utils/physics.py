@@ -823,6 +823,11 @@ _predefinedDataFileDict['PYNEB_20_01']['Ar4']['atom'] = 'ar_iv_atom_RGJ19.dat'
 _predefinedDataFileDict['PYNEB_21_01'] = deepcopy(_predefinedDataFileDict['PYNEB_20_01'])
 _predefinedDataFileDict['PYNEB_21_01']['C2']['rec'] = 'c_ii_rec_D00.func'
 
+_predefinedDataFileDict['PYNEB_23_01'] = deepcopy(_predefinedDataFileDict['PYNEB_21_01'])
+_predefinedDataFileDict['PYNEB_23_01']['Fe2'] = {'atom': 'fe_ii_atom_TZ18_173.dat',
+                                                 'coll': 'fe_ii_coll_TZ18_173.dat'}
+_predefinedDataFileDict['PYNEB_23_01']['Fe3'] = {'atom': 'fe_iii_atom_DH09_34.dat',
+                                                 'coll': 'fe_iii_coll_BB14_144.dat'}
 
 def airtovac(wave):
     """
