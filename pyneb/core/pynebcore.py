@@ -2446,7 +2446,7 @@ class Atom(object):
                   end_x=end_x, to_eval=to_eval, nCut=nCut, maxIter=maxIter)
 
     def getIonAbundance(self, int_ratio, tem, den, lev_i= -1, lev_j= -1, wave= -1, to_eval=None, 
-                        Hbeta=100., tem_HI=None, extrapHbeta=False, use_ANN=False):
+                        Hbeta=100., tem_HI=None, den_HI=None, extrapHbeta=False, use_ANN=False):
         """
         Compute the ionic abundance relative to H+ given the intensity of a line or sum of lines, 
         the temperature, and the density. 
@@ -2480,6 +2480,8 @@ class Atom(object):
         """
         if tem_HI is None:
             tem_HI = tem
+        if den_HI is None:
+            den_HI = den
         self._test_lev(lev_i)
         self._test_lev(lev_j)
         if np.ndim(tem) != np.ndim(den):
@@ -2504,9 +2506,9 @@ class Atom(object):
             return None
         #int_ratio is in units of Hb = Hbeta keyword
         if extrapHbeta:
-            HbEmis = getHbEmissivity(tem= tem_HI, den=den)
+            HbEmis = getHbEmissivity(tem= tem_HI, den=den_HI)
         else:
-            HbEmis = getRecEmissivity(tem_HI, den, 4, 2, atom='H1', product=False)
+            HbEmis = getRecEmissivity(tem_HI, den_HI, 4, 2, atom='H1', product=False)
         ionAbundance = ((int_ratio / Hbeta) * (HbEmis / emis))
         return ionAbundance
     
@@ -3065,7 +3067,10 @@ class RecAtom(object):
         elif config.INSTALLED['h5py']:
             try:
                 hf5 = h5py.File(self.recFitsFullPath, 'r')
-                self._RecombData = hf5['updated_data'].value
+                try:
+                    self._RecombData = hf5['updated_data'].value
+                except:
+                    self._RecombData = hf5['updated_data']
                 hf5.close()
                 self.log_.message('HDF5 data read from {} using h5py'.format(self.recFitsFullPath), calling=self.calling)
             except:

@@ -988,6 +988,9 @@ class ICF(object):
         if icf_family is not None:
             icf_list = [icf for icf in self.all_icfs.keys() if icf_family in icf]
         atom_list = list(pn.LINE_LABEL_LIST.keys())
+        for elem in ('He2', 'He3'):
+            if elem not in atom_list:
+                atom_list.append(elem)
     
         # Initialize the ionic abundances so that the code does not crash when a specific abundance is invoked
         # TODO : Check that the same ion is not present as collisional and recombination !!
