@@ -402,26 +402,25 @@ class ICF(object):
 # Wrong comment. Corrected 26 Dec 2014
 #                                      'comment': 'Based on a grid of photoionization models. To be used if both O4 and N5 detected'},
                                       'comment': 'Based on a grid of photoionization models. Valid if both S2 and S3 detected. He2 detected, He3 not.'},
-# Added 26 Dec 2014
 # 26 Dec 2014 These icfs are temporarily commented out because they must be still be checked. 
-#                         'KB94_A38.6':{'elem': 'S',
-#                                     'atom': 'abun["S2"]',
-#                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A6"])**3)**(-1./3.)*(5.677 + (abun["O3"]/abun["O2"])**(0.433))',
-#                                      'type': 'PNe',
-#                                      'comment': 'Based on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
+# June 2023, after talking with L. Stanghellini, it appears there is a typo in KB94_A38, 4.677 + instead of 4.677 *
+                         'KB94_A38.6':{'elem': 'S',
+                                     'atom': 'abun["S2"]',
+                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A6"])**3)**(-1./3.)) * (4.677 * (abun["O3"]/abun["O2"])**(0.433))',
+                                      'type': 'PNe',
+                                      'comment': 'Based on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
 # Added 26 Dec 2014
-#                         'KB94_A38.8':{'elem': 'S',
-#                                     'atom': 'abun["S2"]',
-#                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A8"])**3)**(-1./3.)*(5.677 + (abun["O3"]/abun["O2"])**(0.433))',
-#                                      'type': 'PNe',
-#                                      'comment': 'BBased on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
+                         'KB94_A38.8':{'elem': 'S',
+                                     'atom': 'abun["S2"]',
+                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A8"])**3)**(-1./3.)) * (4.677 * (abun["O3"]/abun["O2"])**(0.433))',
+                                      'type': 'PNe',
+                                      'comment': 'BBased on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
 # Added 26 Dec 2014
-#                         'KB94_A38.10':{'elem': 'S',
-#                                     'atom': 'abun["S2"]',
-#                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A10"])**3)**(-1./3.)*(5.677 + (abun["O3"]/abun["O2"])**(0.433))',
-#                                      'type': 'PNe',
-#                                      'comment': 'Based on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
-# end commented block
+                         'KB94_A38.10':{'elem': 'S',
+                                     'atom': 'abun["S2"]',
+                                     'icf': '((1 - (1 - abun["O2"]/elem_abun["KB94_A10"])**3)**(-1./3.)) * (4.677 * (abun["O3"]/abun["O2"])**(0.433))',
+                                      'type': 'PNe',
+                                      'comment': 'Based on a grid of photoionization models and the S3/S2 ratio of a sample of PNe. Valid if S2 is detected but S3 is not detected'},
                          'KH01_4a': {'elem': 'He',
                                      'atom': 'abun["He2"] + abun["He3"]',
                                      'icf': '1',
