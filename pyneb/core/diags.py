@@ -10,8 +10,6 @@ import pyneb as pn
 from pyneb.utils.misc import int_to_roman, parseAtom, parseAtom2
 from pyneb.utils.init import BLEND_LIST
 from pyneb import config
-if config.INSTALLED['ai4neb']:
-    from ai4neb import manage_RM
 
 diags_dict = {}
 
@@ -778,6 +776,10 @@ class Diagnostics(object):
         else:
             if type(value_den) == type([]): value_den = np.asarray(value_den)
         if use_ANN:
+
+            if config.INSTALLED['ai4neb']:
+                from ai4neb import manage_RM
+
             if not config.INSTALLED['ai4neb']:
                 self.log_.error('_getPopulations_ANN cannot be used in absence of ai4neb package',
                               calling=self.calling)

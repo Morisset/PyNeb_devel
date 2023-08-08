@@ -2581,7 +2581,7 @@ class Atom(object):
         for i in range(1, self.NLevels):
             if printA:
                 for j in range(i):
-                    to_print = "{0:.3E}   ".format(np.float(self.getA(i + 1, j + 1)))
+                    to_print = "{0:.3E}   ".format(np.float64(self.getA(i + 1, j + 1)))
                     print(to_print, end="")
                 print("")
             for j in range(i):
@@ -3417,8 +3417,8 @@ class RecAtom(object):
         f = open(self.TotRecFile)
         data = f.readlines()
         f.close()
-        den_points = [np.float(d) for d in data[0].split()]
-        tem_points = [np.float(d) for d in data[1].split()]
+        den_points = [np.float64(d) for d in data[0].split()]
+        tem_points = [np.float64(d) for d in data[1].split()]
         self.alpha_grid = np.array([d.split() for d in data if d[0:3]!='***'][2::], dtype='float')
         self.lg_den_grid, self.lg_tem_grid = np.meshgrid(np.log10(den_points), np.log10(tem_points))
 
@@ -4933,7 +4933,7 @@ class Observation(object):
         """
         if "=" in label:
             line_label, factor = label.split('=')
-            factor = np.float(factor)
+            factor = np.float64(factor)
         else:
             line_label = label
             factor = 1.
