@@ -389,10 +389,10 @@ def get_reduced(N_rand, a, value_method = 'original', error_method='std'):
         # error = (quants[1]-quants[0])/2)
     elif error_method == 'upper':
         mask = (a - value) >= 0
-        error =  ((((a[mask] - value)**2).sum())/np.float(mask.sum()))**0.5
+        error =  ((((a[mask] - value)**2).sum())/np.float64(mask.sum()))**0.5
     elif error_method == 'lower':
         mask = (a - value) <= 0
-        error = -((((a[mask] - value)**2).sum())/np.float(mask.sum()))**0.5
+        error = -((((a[mask] - value)**2).sum())/np.float64(mask.sum()))**0.5
     elif error_method == 'std':
         error = a.std()
     else:
