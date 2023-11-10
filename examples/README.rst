@@ -11,4 +11,5 @@ VI. `The Observations <Notebooks/PyNeb_manual_6.ipynb>`_
 VII. `The Diagnostic diagrams and determination of Te-Ne <Notebooks/PyNeb_manual_7.ipynb>`_
 VIII. `The determination of ionic abundances <Notebooks/PyNeb_manual_7b.ipynb>`_
 IX. `ICFs and elemental abundances <Notebooks/PyNeb_manual_8.ipynb>`_
-X. `Some examples <Notebooks/Some_examples.ipynb>`_
+X. `Using Machine learning to speedup the determinations of Te and Ne <Notebooks/PyNeb_manual_9.ipynb>`_
+XI. `Some examples <Notebooks/Some_examples.ipynb>`_
