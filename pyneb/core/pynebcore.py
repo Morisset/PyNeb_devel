@@ -2381,7 +2381,7 @@ class Atom(object):
         # predict the result and denormalize them
         self.ANN.predict()
         to_return = np.ones_like(int_ratio) * np.nan
-        to_return.ravel()[self.ANN.isfin] = self.ANN.pred
+        to_return.ravel()[self.ANN.isfin] = self.ANN.pred.ravel()
         to_return = 10**to_return
         return to_return
 
