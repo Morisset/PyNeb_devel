@@ -2296,7 +2296,7 @@ class Atom(object):
     
     @profile
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
-                  wave1= -1, wave2= -1, start_x= -1, end_x= -1, to_eval=None):
+                  wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
         
         if not config.INSTALLED['ai4neb']:
             self.log_.error('_getTemDen_ANN cannot be used in absence of ai4neb package',
@@ -2335,9 +2335,11 @@ class Atom(object):
                 
             if start_x == -1:
                 start_x = min(self.getTemArray(keep_unit=False))
+                if log: start_x = np.log10(start_x)
             if end_x == -1:
                 end_x = max(self.getTemArray(keep_unit=False))
-            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
+                if log: end_x = np.log10(end_x)
+            y_train = np.logspace(start_x, end_x, N_train)
             
             def I(lev_i, lev_j):
                 return self.getEmissivity(tem=y_train, den=X2_train, lev_i= lev_i, lev_j= lev_j, product=False) 
@@ -2359,9 +2361,11 @@ class Atom(object):
             
             if start_x == -1:
                 start_x = 1.e0
+                if log: start_x = np.log10(start_x)
             if end_x == -1:
                 end_x = 1e8
-            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
+                if log: end_x = np.log10(end_x)
+            y_train = np.logspace(start_x, end_x, N_train)
             def I(lev_i, lev_j):
                 return self.getEmissivity(tem=X2_train, den=y_train, lev_i= lev_i, lev_j= lev_j, product=False) 
             def L(wave):
@@ -2435,7 +2439,7 @@ class Atom(object):
         """
         if method == 'ANN':
             return self._getTemDen_ANN(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
-                  wave1=wave1, wave2=wave2, start_x=start_x, end_x=end_x, to_eval=to_eval)            
+                  wave1=wave1, wave2=wave2, log=log, start_x=start_x, end_x=end_x, to_eval=to_eval)            
         elif config._use_mp:
             return self._getTemDen_MP(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
