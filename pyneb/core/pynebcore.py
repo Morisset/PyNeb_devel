@@ -149,12 +149,14 @@ class _AtomDataFits(object):
             self.gs = self.AtomHeader['GSCONFIG']
         except:
             pass
-        if 'SPECTRUM' in self.AtomHeader and int(self.AtomHeader['SPECTRUM']) != self.spec:
-            self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
+# sourcery skip: merge-nested-ifs
+        if 'SPECTRUM' in self.AtomHeader:
+            if int(self.AtomHeader['SPECTRUM']) != self.spec:
+                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
                                                                                                 self.spec), calling=self.calling)
         if 'ATOM' in self.AtomHeader:
-        if 'ATOM' in self.AtomHeader and self.AtomHeader['ATOM'] != sym2name[self.elem]:
-            self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
+            if self.AtomHeader['ATOM'] != sym2name[self.elem]:
+                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
                                                                                                 sym2name[self.elem]), calling=self.calling)
         #Read data
         self._AtomData = AtomExt.data
