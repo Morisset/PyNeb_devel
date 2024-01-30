@@ -41,7 +41,7 @@ if config.INSTALLED['pyfits from astropy']:
 elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
-    from astropy.table import Table, Column
+    from astropy.table import Table #, Column
 elif config.INSTALLED['h5py']:
     import h5py
 if config.INSTALLED['ai4neb']:
@@ -53,7 +53,7 @@ profiler = None
 if profiler == 'mem':
     try:
         from memory_profiler import profile
-    except:
+    except:  
         def profile(f):
             return f
 elif profiler is None:
@@ -2341,7 +2341,7 @@ class Atom(object):
                 if log: end_x = np.log10(end_x)
             y_train = np.logspace(start_x, end_x, N_train)
             
-            def I(lev_i, lev_j):
+            def I(lev_i, lev_j):  # noqa: E743
                 return self.getEmissivity(tem=y_train, den=X2_train, lev_i= lev_i, lev_j= lev_j, product=False) 
             def L(wave):
                 return self.getEmissivity(tem=y_train, den=X2_train, wave=wave, product=False) 
@@ -2439,7 +2439,7 @@ class Atom(object):
         """
         if method == 'ANN':
             return self._getTemDen_ANN(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
-                  wave1=wave1, wave2=wave2, log=log, start_x=start_x, end_x=end_x, to_eval=to_eval)            
+                  wave1=wave1, wave2=wave2, log=log, start_x=start_x, end_x=end_x, to_eval=to_eval)       
         elif config._use_mp:
             return self._getTemDen_MP(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
@@ -2497,12 +2497,14 @@ class Atom(object):
         if (lev_i == -1) & (lev_j == -1) & (wave == -1) & (to_eval is None):
             self.log_.error('At least one of lev_i, lev_j, wave or to_eval must be supplied', calling=self.calling)
             return None
-        if to_eval == None:
+        if to_eval is None:
             if wave != -1:
                 lev_i, lev_j = self.getTransition(wave)     
             to_eval = 'I(' + str(lev_i) + ',' + str(lev_j) + ')' 
-        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False, use_ANN=use_ANN)
-        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False, use_ANN=use_ANN)
+        def I(lev_i, lev_j): 
+            return self.getEmissivity(tem, den, lev_i, lev_j, product=False, use_ANN=use_ANN)
+        def L(wave):
+            return self.getEmissivity(tem, den, wave=wave, product=False, use_ANN=use_ANN)
         try:
             emis = eval(to_eval)
         except:
