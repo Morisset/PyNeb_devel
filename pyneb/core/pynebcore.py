@@ -1150,6 +1150,8 @@ class _CollDataAscii(object):
 
 
         """
+
+        # sourcery skip: merge-duplicate-blocks, remove-redundant-if, switch
         if keep_unit:
             return self._TemArray
         else:            
@@ -1854,7 +1856,8 @@ class Atom(object):
             lev_i2, lev_j2 = self.getTransition(wave2)
             
         if to_eval is not None:
-            L = lambda wave: self.getStatWeight(self.getTransition(wave)[0])
+            def L(wave):
+                return self.getStatWeight(self.getTransition(wave)[0])
             return eval(to_eval)
             
         return self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2)
@@ -1887,8 +1890,8 @@ class Atom(object):
             lev_i2, lev_j2 = self.getTransition(wave2)
             
         if to_eval is not None:
-            L = lambda wave: (self.getStatWeight(self.getTransition(wave)[0]) * 
-                              self.getA(self.getTransition(wave)[0], self.getTransition(wave)[1]))
+            def L(wave):
+                return self.getStatWeight(self.getTransition(wave)[0]) * self.getA(self.getTransition(wave)[0], self.getTransition(wave)[1])
             return eval(to_eval)
             
         return (self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2) *
@@ -1976,8 +1979,10 @@ class Atom(object):
 
         """
         if '{0}_{1}'.format(self.atom, wave) in BLEND_LIST:
-            L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=product)
-            I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i=lev_i, lev_j=lev_j, product=product)
+            def L(wave):
+                return self.getEmissivity(tem, den, wave=wave, product=product)
+            def I(lev_i, lev_j):
+                return self.getEmissivity(tem, den, lev_i=lev_i, lev_j=lev_j, product=product)
             try:
                 res = eval(BLEND_LIST['{0}_{1}'.format(self.atom, wave)])
             except:
@@ -2106,13 +2111,10 @@ class Atom(object):
                     populations = self.getPopulations(10.**x, den)
                 else:
                     populations = self.getPopulations(x, den)
-                I = lambda lev_i, lev_j: (populations[lev_i - 1] * 
-                                          (self._A[lev_i - 1, lev_j - 1] * 
-                                           (self._Energy[lev_i - 1] - self._Energy[lev_j - 1])))
-                L = lambda wave: (populations[self.getTransition(wave)[0] - 1] * 
-                                  (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * 
-                                   (self._Energy[self.getTransition(wave)[0] - 1] - 
-                                    self._Energy[self.getTransition(wave)[1] - 1])))
+                def I(lev_i, lev_j):
+                    return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
+                def L(wave):
+                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
             
@@ -2136,13 +2138,10 @@ class Atom(object):
                     populations = self.getPopulations(tem, pow(10., x))
                 else:
                     populations = self.getPopulations(tem, x)
-                I = lambda lev_i, lev_j: (populations[lev_i - 1] * 
-                                          (self._A[lev_i - 1, lev_j - 1] * 
-                                           (self._Energy[lev_i - 1] - self._Energy[lev_j - 1])))
-                L = lambda wave: (populations[self.getTransition(wave)[0] - 1] * 
-                                  (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * 
-                                   (self._Energy[self.getTransition(wave)[0] - 1] - 
-                                    self._Energy[self.getTransition(wave)[1] - 1])))
+                def I(lev_i, lev_j):
+                    return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
+                def L(wave):
+                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
         # improve exception handling (we must include cases where both tem, den = -1) 
@@ -2364,7 +2363,7 @@ class Atom(object):
                 end_x = 1e8
                 if log: end_x = np.log10(end_x)
             y_train = np.logspace(start_x, end_x, N_train)
-            def I(lev_i, lev_j):
+            def I(lev_i, lev_j):  # noqa: E743
                 return self.getEmissivity(tem=X2_train, den=y_train, lev_i= lev_i, lev_j= lev_j, product=False) 
             def L(wave):
                 return self.getEmissivity(tem=X2_train, den=y_train, wave=wave, product=False) 
@@ -3304,9 +3303,8 @@ class RecAtom(object):
                     d4 = data[mask4]
                     d5 = data[mask5]
                     t = 1e-4 * temp
-                    alpha_gen = lambda d, t: 10**(d['a']+d['b']*t+d['c']*t**2+
-                                              (d['d']+d['e']*t+d['f']*t**2)*np.log10(t)+
-                                              d['g']*(np.log10(t))**2+d['h']/t-15)
+                    def alpha_gen(d, t):
+                        return 10 ** (d['a'] + d['b'] * t + d['c'] * t ** 2 + (d['d'] + d['e'] * t + d['f'] * t ** 2) * np.log10(t) + d['g'] * np.log10(t) ** 2 + d['h'] / t - 15)
                     alpha2 = alpha_gen(d2, t)
                     alpha3 = alpha_gen(d3, t)
                     alpha4 = alpha_gen(d4, t)
@@ -3715,7 +3713,7 @@ class RecAtom(object):
                 
             logd = np.log10(deng)
             temp_min = np.min(self.temp)
-            temp_max = np.max(self.temp)
+            #temp_max = np.max(self.temp)
             log_dens_min = np.min(self.log_dens)
             log_dens_max = np.max(self.log_dens)
             tt = (logd < log_dens_min)
@@ -3821,9 +3819,12 @@ class RecAtom(object):
                 to_eval = 'S("{0}")'.format(label)
             else:
                 to_eval = 'I({0}, {1})'.format(lev_i, lev_j)
-        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
-        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
-        S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
+        def I(lev_i, lev_j):
+            return self.getEmissivity(tem, den, lev_i, lev_j, product=False)
+        def L(wave):
+            return self.getEmissivity(tem, den, wave=wave, product=False)
+        def S(label):
+            return self.getEmissivity(tem, den, label=label, product=False)
         
         try:
             emis = eval(to_eval)
@@ -4033,6 +4034,7 @@ def parseLineLabel(lineLabel):
     elem_spec = strExtract(lineLabel, ' ', '_')
     elem, spec = parseAtom(elem_spec)
     atom_label = elem + str(spec)
+# sourcery skip: merge-nested-ifs
     if len(elem_spec) > 0:
         if elem_spec[-1] == 'r':
             atom_label += 'r'
