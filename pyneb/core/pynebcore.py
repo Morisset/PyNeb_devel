@@ -149,15 +149,13 @@ class _AtomDataFits(object):
             self.gs = self.AtomHeader['GSCONFIG']
         except:
             pass
-        if 'SPECTRUM' in self.AtomHeader:
-            if int(self.AtomHeader['SPECTRUM']) != self.spec:
-                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
-                                                                                                    self.spec), calling=self.calling)
+        if 'SPECTRUM' in self.AtomHeader and int(self.AtomHeader['SPECTRUM']) != self.spec:
+            self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
+                                                                                                self.spec), calling=self.calling)
         if 'ATOM' in self.AtomHeader:
-            if self.AtomHeader['ATOM'] != sym2name[self.elem]:
-                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
-                                                                                                    sym2name[self.elem]), calling=self.calling)
-                
+        if 'ATOM' in self.AtomHeader and self.AtomHeader['ATOM'] != sym2name[self.elem]:
+            self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
+                                                                                                sym2name[self.elem]), calling=self.calling)
         #Read data
         self._AtomData = AtomExt.data
 
@@ -238,23 +236,22 @@ class _AtomDataFits(object):
         """
         self._test_lev(lev_i)
         self._test_lev(lev_j)
-        if (lev_i == -1):
-            if (lev_j == -1):
-                # Line below commented out because introduces bug if Nlevels(atom) > Nlevels(coll)
-                #resultArray = np.zeros([self.NLevels, self.NLevels])
-                resultArray = np.zeros([self.atomNLevels, self.atomNLevels])
-                for i in range(self.atomNLevels - 1):
-                    lev_i = i + 1
-                    j = i + 1
-                    while (j < self.atomNLevels):
-                        lev_j = j + 1
-                        resultArray[j][i] = self.getA(lev_j, lev_i)
-                        j += 1
-                return resultArray
-
-            return (self._AtomData.field('A(*->{0})'.format(lev_j)))
-        else:
+        if lev_i != -1:
             return (self._AtomData.field('A(*->{0})'.format(lev_j))[lev_i - 1])
+        if (lev_j == -1):
+            # Line below commented out because introduces bug if Nlevels(atom) > Nlevels(coll)
+            #resultArray = np.zeros([self.NLevels, self.NLevels])
+            resultArray = np.zeros([self.atomNLevels, self.atomNLevels])
+            for i in range(self.atomNLevels - 1):
+                lev_i = i + 1
+                j = i + 1
+                while (j < self.atomNLevels):
+                    lev_j = j + 1
+                    resultArray[j][i] = self.getA(lev_j, lev_i)
+                    j += 1
+            return resultArray
+
+        return (self._AtomData.field('A(*->{0})'.format(lev_j)))
 
 
     def getStatWeight(self, level= -1):
@@ -425,19 +422,19 @@ class _AtomDataAscii(object):
             self.gs = self.comments['GSCONFIG']
         else:
             self.gs = 'unknown'
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
                 self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFile, self.comments['SPECTRUM'],
-                                                                                                    self.spec), calling=self.calling)
+                                                                                                self.spec), calling=self.calling)
         if 'ATOM' in self.comments:
             if self.comments['ATOM'] != sym2name[self.elem]:
                 self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFile, self.comments['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)
-        if 'VACUUM' in self.comments:
-            if self.comments['VACUUM'] == '1':
-                self.E_in_vacuum = True
-            elif self.comments['VACUUM'] == '0':
-                self.E_in_vacuum = False
+                if self.comments['VACUUM'] == '1':
+                    self.E_in_vacuum = True
+                elif self.comments['VACUUM'] == '0':
+                    self.E_in_vacuum = False
     
     def initWaves(self):
         """
@@ -515,10 +512,7 @@ class _AtomDataAscii(object):
         self._test_lev(lev_i)
         self._test_lev(lev_j)
         if (lev_i == -1):
-            if (lev_j == -1):
-                return self._A
-            else:
-                return (self._A[lev_i - 1])
+            return self._A if (lev_j == -1) else self._A[lev_i - 1]
         else:
             return (self._A[lev_i - 1, lev_j - 1])       
     
@@ -644,6 +638,7 @@ class _CollDataFits(object):
         self.CollHeader = CollExt.header
         self.CollExtNames = CollExt.columns.names
 
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.CollHeader:
             if int(self.CollHeader['SPECTRUM']) != self.spec:
                 log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFitsFile, self.CollHeader['SPECTRUM'],
@@ -1013,6 +1008,7 @@ class _CollDataAscii(object):
             if (lev_i != 0) and (lev_j != 0) and (lev_i <= self.NLevels) and (lev_j <= self.NLevels):
                 self._CollArray[lev_i-1, lev_j-1, :] = coll_data[i,2:]
            
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
                 self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFile, self.comments['SPECTRUM'],
@@ -1753,7 +1749,7 @@ class Atom(object):
             for i in range(1, n_level):
                 for j in range(i + 1, n_level):
                     sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(0, i):
+                for j in range(i):
                     sum_q_down[i] = sum_q_down[i] + q[i, j]
             coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
                              np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
@@ -1801,14 +1797,14 @@ class Atom(object):
             for i in range(1, n_level):
                 for j in range(i + 1, n_level):
                     sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(0, i):
+                for j in range(i):
                     sum_q_down[i] = sum_q_down[i] + q[i, j]
             for row in range(1, n_level):
                 # upper right half            
                 for col in range(row + 1, n_level):
                     coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row]
                 # lower left half
-                for col in range(0, row):
+                for col in range(row):
                     coeff_matrix[row, col] = den_rav * q[col, row]
                 # diagonal
                 coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row])
@@ -2570,7 +2566,7 @@ class Atom(object):
             critdens = self.getCritDensity(tem)
         if printPop:
             pop = self.getPopulations(tem, den)
-        for i in range(0, self.NLevels):
+        for i in range(self.NLevels):
             lev_i = i + 1
             to_print = 'Level %1i:  ' % (lev_i)
             if printPop:
