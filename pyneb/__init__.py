@@ -10,6 +10,7 @@ from .version import __version__
 from .utils.Config import _Config
 config = _Config()
 log_ = config.log_
+
 from .utils.manage_atomic_data import _ManageAtomicData
 atomicData = _ManageAtomicData()
 atomicData.defaultDict = 'PYNEB_23_01'
@@ -50,8 +51,6 @@ if sys.version_info[:2] < (2, 6):
 
 log_.message('PyNeb ready.', calling='PyNeb')
 log_.timer('Starting PyNeb version %s' % __version__, quiet=True, calling='PyNeb')
-
-config.import_ai4neb()
 
 __info__ = """PyNeb version: {}.
 PyNeb is cited using: Luridiana, V.; Morisset, C.; Shaw, R. A. 2015, A&A, 573, 42
