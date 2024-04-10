@@ -1,0 +1,8 @@
+* Remove the old doxygen configuration files and install new schema to build the documentation
+* Create updatePyNeb.md that lists the process to make a new realease.
+* Accept He2 and He3 in icf.getElemAbundances atom_abun keyword.
+* Add HI density keyword to Atom/getIonAbundance method.
+* Remove test on numpy version from __init__.py
+* important updates to the FeII and FeIII atomic data, coherent with the paper published in Atoms Mendoza+23
+* Add a python jupyter Notebook to support the answer tto Ueta+Otsuka 2022 paper on Attenuation correction
+

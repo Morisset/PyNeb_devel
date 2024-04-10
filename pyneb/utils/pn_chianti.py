@@ -126,7 +126,13 @@ def get_levs_order(atom, NLevels=None):
                 if i_Ch[0] <= this_NLevels and i_N <= this_NLevels:
                     Chianti2NIST[i_N] = i_Ch[0]
     if len(Chianti2NIST) == 0:
-        Chianti2NIST = None
+        try:
+            orders = np.argsort(E_chianti[0:this_NLevels], order='ecm')
+            
+            Chianti2NIST = {i:orders[i] for i in np.arange(this_NLevels)}
+        except:   
+            Chianti2NIST = None
+        
         
         ### Il faut que ni i_N ni i_Ch depasse NLvels. Et il faut que NLevels soit diminue dansla cas contraire.
     return Chianti2NIST

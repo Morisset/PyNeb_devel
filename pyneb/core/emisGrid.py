@@ -60,13 +60,17 @@ class EmisGrid(object):
                 self.atom = Atom(elem=self.elem, spec=self.spec, NLevels=NLevels, **kwargs)
             else:
                 self.atom = atomObj
-            if self.atom.atomFitsFile != old['atomFitsFile']:
-                self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.atomFitsFile, old['atomFitsFile']),
-                                calling=self.calling)
-            if self.atom.collFitsFile != old['collFitsFile']:
-                self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.collFitsFile, old['collFitsFile']),
-                                calling=self.calling)
-            
+            if self.atom.type == 'coll':
+                if self.atom.atomFitsFile != old['atomFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.atomFitsFile, old['atomFitsFile']),
+                                    calling=self.calling)
+                if self.atom.collFitsFile != old['collFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.collFitsFile, old['collFitsFile']),
+                                    calling=self.calling)
+            elif self.atom.type == 'rec':
+                if self.atom.recFitsFile != old['recFitsFile']:
+                    self.log_.error('You are using {0}, but restoring a file made with {1}'.format(self.atom.recFitsFile, old['recFitsFile']),
+                                    calling=self.calling)
             self.compute_new_grid = False
             if n_tem != len(old['tem']):
                 self.log_.warn('len(tem) does not match saved data. New grid is computed')
@@ -154,7 +158,8 @@ class EmisGrid(object):
 
         """
         save(file_, emis_grid=self.emis_grid, tem=self.tem, den=self.den, elem=self.elem,
-             spec=self.spec, atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile)
+             spec=self.spec, 
+             atomFitsFile=self.atomFitsFile, collFitsFile=self.collFitsFile, recFitsFile=self.recFitsFile)
 
 
     def getGrid(self, lev_i=None, lev_j=None, wave= -1, to_eval=None, label=None):
@@ -234,7 +239,7 @@ class EmisGrid(object):
         plt.show()
 
 
-    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20,
+    def plotContours(self, to_eval, low_level=None, high_level=None, n_levels=20, levels=None,
                       linestyles='-', clabels=True, log_levels=True, title=None, ax=None, **kwargs):
         """
         Plot a contour map of the diagnostic defined by to_eval.
@@ -251,8 +256,7 @@ class EmisGrid(object):
             clabels:                   Boolean. Controls if line labels are printed (default: True)
             log_levels:                Boolean. If True (default), the log of the line ratio is used.
             title:                     plot title
-            **kwargs:                  sent to plt.contour
-            
+            **kwargs:                  sent to plt.contour            
         """ 
         if not config.INSTALLED['plt']:
             log_.error('Matplotlib not available', calling=self.calling)
@@ -273,12 +277,14 @@ class EmisGrid(object):
             high_level = np.max(np.log10(diag_map))
         if log_levels:
             Z = np.log10(diag_map)
-            levels = np.linspace(low_level, high_level, n_levels)
+            if levels is None:
+                levels = np.linspace(low_level, high_level, n_levels)
             if title is None:
                 title = '[%s%s]: log(%s)' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         else:
             Z = diag_map
-            levels = 10. ** (np.linspace(low_level, high_level, n_levels))
+            if levels is None:
+                levels = 10. ** (np.linspace(low_level, high_level, n_levels))
             if title is None:
                 title = '[%s%s]: %s' % (self.elem, int_to_roman(int(self.spec)), to_eval)
         
@@ -440,7 +446,7 @@ def getEmisGridDict(elem_list=None, spec_list=None, atom_list=None, restore=True
         if restore:
             if os.path.exists(file_):
                 try:
-                    emis_grids[elem + spec] = EmisGrid(restore_file=file_, n_tem=n_tem, n_den=n_den, 
+                    emis_grids[elem + spec + rec] = EmisGrid(restore_file=file_, n_tem=n_tem, n_den=n_den, 
                                                        tem_min=tem_min, tem_max=tem_max,
                                                        den_min=den_min, den_max=den_max, atomObj=atomObj)
                     log_.message('Read %s' % file_, calling=calling)
