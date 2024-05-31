@@ -1,0 +1,2 @@
+Added DataPlot.plotAllA to plot all available A for a given ion in a triangular matrix of subplots.
+Added the ICFs from Delgado-Inglada, Morisset & Stasinska 2014
