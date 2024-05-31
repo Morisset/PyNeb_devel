@@ -545,7 +545,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
             with open(masterlist, 'r') as f:
                 lines = f.readlines()
         except:
-            pn.config.error('Masterlist file not read', calling='addAllChianti')
+            pn.log_.error('Masterlist file not read', calling='addAllChianti')
             return None
         chianti_ions = [l[0:7].strip() for l in lines]
         chianti_ions = [i.capitalize().replace('_','') for i in chianti_ions if i[-1] != 'd']

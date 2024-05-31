@@ -41,7 +41,7 @@ if config.INSTALLED['pyfits from astropy']:
 elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
-    from astropy.table import Table, Column
+    from astropy.table import Table #, Column
 elif config.INSTALLED['h5py']:
     import h5py
 if config.INSTALLED['ai4neb']:
@@ -53,7 +53,7 @@ profiler = None
 if profiler == 'mem':
     try:
         from memory_profiler import profile
-    except:
+    except:  
         def profile(f):
             return f
 elif profiler is None:
@@ -149,15 +149,15 @@ class _AtomDataFits(object):
             self.gs = self.AtomHeader['GSCONFIG']
         except:
             pass
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.AtomHeader:
             if int(self.AtomHeader['SPECTRUM']) != self.spec:
                 self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
-                                                                                                    self.spec), calling=self.calling)
+                                                                                                self.spec), calling=self.calling)
         if 'ATOM' in self.AtomHeader:
             if self.AtomHeader['ATOM'] != sym2name[self.elem]:
                 self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
-                                                                                                    sym2name[self.elem]), calling=self.calling)
-                
+                                                                                                sym2name[self.elem]), calling=self.calling)
         #Read data
         self._AtomData = AtomExt.data
 
@@ -238,23 +238,22 @@ class _AtomDataFits(object):
         """
         self._test_lev(lev_i)
         self._test_lev(lev_j)
-        if (lev_i == -1):
-            if (lev_j == -1):
-                # Line below commented out because introduces bug if Nlevels(atom) > Nlevels(coll)
-                #resultArray = np.zeros([self.NLevels, self.NLevels])
-                resultArray = np.zeros([self.atomNLevels, self.atomNLevels])
-                for i in range(self.atomNLevels - 1):
-                    lev_i = i + 1
-                    j = i + 1
-                    while (j < self.atomNLevels):
-                        lev_j = j + 1
-                        resultArray[j][i] = self.getA(lev_j, lev_i)
-                        j += 1
-                return resultArray
-
-            return (self._AtomData.field('A(*->{0})'.format(lev_j)))
-        else:
+        if lev_i != -1:
             return (self._AtomData.field('A(*->{0})'.format(lev_j))[lev_i - 1])
+        if (lev_j == -1):
+            # Line below commented out because introduces bug if Nlevels(atom) > Nlevels(coll)
+            #resultArray = np.zeros([self.NLevels, self.NLevels])
+            resultArray = np.zeros([self.atomNLevels, self.atomNLevels])
+            for i in range(self.atomNLevels - 1):
+                lev_i = i + 1
+                j = i + 1
+                while (j < self.atomNLevels):
+                    lev_j = j + 1
+                    resultArray[j][i] = self.getA(lev_j, lev_i)
+                    j += 1
+            return resultArray
+
+        return (self._AtomData.field('A(*->{0})'.format(lev_j)))
 
 
     def getStatWeight(self, level= -1):
@@ -425,19 +424,19 @@ class _AtomDataAscii(object):
             self.gs = self.comments['GSCONFIG']
         else:
             self.gs = 'unknown'
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
                 self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFile, self.comments['SPECTRUM'],
-                                                                                                    self.spec), calling=self.calling)
+                                                                                                self.spec), calling=self.calling)
         if 'ATOM' in self.comments:
             if self.comments['ATOM'] != sym2name[self.elem]:
                 self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFile, self.comments['ATOM'],
                                                                                                     sym2name[self.elem]), calling=self.calling)
-        if 'VACUUM' in self.comments:
-            if self.comments['VACUUM'] == '1':
-                self.E_in_vacuum = True
-            elif self.comments['VACUUM'] == '0':
-                self.E_in_vacuum = False
+                if self.comments['VACUUM'] == '1':
+                    self.E_in_vacuum = True
+                elif self.comments['VACUUM'] == '0':
+                    self.E_in_vacuum = False
     
     def initWaves(self):
         """
@@ -515,10 +514,7 @@ class _AtomDataAscii(object):
         self._test_lev(lev_i)
         self._test_lev(lev_j)
         if (lev_i == -1):
-            if (lev_j == -1):
-                return self._A
-            else:
-                return (self._A[lev_i - 1])
+            return self._A if (lev_j == -1) else self._A[lev_i - 1]
         else:
             return (self._A[lev_i - 1, lev_j - 1])       
     
@@ -644,6 +640,7 @@ class _CollDataFits(object):
         self.CollHeader = CollExt.header
         self.CollExtNames = CollExt.columns.names
 
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.CollHeader:
             if int(self.CollHeader['SPECTRUM']) != self.spec:
                 log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFitsFile, self.CollHeader['SPECTRUM'],
@@ -1013,6 +1010,7 @@ class _CollDataAscii(object):
             if (lev_i != 0) and (lev_j != 0) and (lev_i <= self.NLevels) and (lev_j <= self.NLevels):
                 self._CollArray[lev_i-1, lev_j-1, :] = coll_data[i,2:]
            
+# sourcery skip: merge-nested-ifs
         if 'SPECTRUM' in self.comments:
             if int(self.comments['SPECTRUM']) != self.spec:
                 self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFile, self.comments['SPECTRUM'],
@@ -1152,6 +1150,8 @@ class _CollDataAscii(object):
 
 
         """
+
+        # sourcery skip: merge-duplicate-blocks, remove-redundant-if, switch
         if keep_unit:
             return self._TemArray
         else:            
@@ -1753,7 +1753,7 @@ class Atom(object):
             for i in range(1, n_level):
                 for j in range(i + 1, n_level):
                     sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(0, i):
+                for j in range(i):
                     sum_q_down[i] = sum_q_down[i] + q[i, j]
             coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
                              np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
@@ -1801,14 +1801,14 @@ class Atom(object):
             for i in range(1, n_level):
                 for j in range(i + 1, n_level):
                     sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(0, i):
+                for j in range(i):
                     sum_q_down[i] = sum_q_down[i] + q[i, j]
             for row in range(1, n_level):
                 # upper right half            
                 for col in range(row + 1, n_level):
                     coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row]
                 # lower left half
-                for col in range(0, row):
+                for col in range(row):
                     coeff_matrix[row, col] = den_rav * q[col, row]
                 # diagonal
                 coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row])
@@ -1856,7 +1856,8 @@ class Atom(object):
             lev_i2, lev_j2 = self.getTransition(wave2)
             
         if to_eval is not None:
-            L = lambda wave: self.getStatWeight(self.getTransition(wave)[0])
+            def L(wave):
+                return self.getStatWeight(self.getTransition(wave)[0])
             return eval(to_eval)
             
         return self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2)
@@ -1889,8 +1890,8 @@ class Atom(object):
             lev_i2, lev_j2 = self.getTransition(wave2)
             
         if to_eval is not None:
-            L = lambda wave: (self.getStatWeight(self.getTransition(wave)[0]) * 
-                              self.getA(self.getTransition(wave)[0], self.getTransition(wave)[1]))
+            def L(wave):
+                return self.getStatWeight(self.getTransition(wave)[0]) * self.getA(self.getTransition(wave)[0], self.getTransition(wave)[1])
             return eval(to_eval)
             
         return (self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2) *
@@ -1978,8 +1979,10 @@ class Atom(object):
 
         """
         if '{0}_{1}'.format(self.atom, wave) in BLEND_LIST:
-            L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=product)
-            I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i=lev_i, lev_j=lev_j, product=product)
+            def L(wave):
+                return self.getEmissivity(tem, den, wave=wave, product=product)
+            def I(lev_i, lev_j):
+                return self.getEmissivity(tem, den, lev_i=lev_i, lev_j=lev_j, product=product)
             try:
                 res = eval(BLEND_LIST['{0}_{1}'.format(self.atom, wave)])
             except:
@@ -2108,13 +2111,10 @@ class Atom(object):
                     populations = self.getPopulations(10.**x, den)
                 else:
                     populations = self.getPopulations(x, den)
-                I = lambda lev_i, lev_j: (populations[lev_i - 1] * 
-                                          (self._A[lev_i - 1, lev_j - 1] * 
-                                           (self._Energy[lev_i - 1] - self._Energy[lev_j - 1])))
-                L = lambda wave: (populations[self.getTransition(wave)[0] - 1] * 
-                                  (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * 
-                                   (self._Energy[self.getTransition(wave)[0] - 1] - 
-                                    self._Energy[self.getTransition(wave)[1] - 1])))
+                def I(lev_i, lev_j):
+                    return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
+                def L(wave):
+                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
             
@@ -2138,13 +2138,10 @@ class Atom(object):
                     populations = self.getPopulations(tem, pow(10., x))
                 else:
                     populations = self.getPopulations(tem, x)
-                I = lambda lev_i, lev_j: (populations[lev_i - 1] * 
-                                          (self._A[lev_i - 1, lev_j - 1] * 
-                                           (self._Energy[lev_i - 1] - self._Energy[lev_j - 1])))
-                L = lambda wave: (populations[self.getTransition(wave)[0] - 1] * 
-                                  (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * 
-                                   (self._Energy[self.getTransition(wave)[0] - 1] - 
-                                    self._Energy[self.getTransition(wave)[1] - 1])))
+                def I(lev_i, lev_j):
+                    return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
+                def L(wave):
+                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
         # improve exception handling (we must include cases where both tem, den = -1) 
@@ -2296,7 +2293,7 @@ class Atom(object):
     
     @profile
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
-                  wave1= -1, wave2= -1, start_x= -1, end_x= -1, to_eval=None):
+                  wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
         
         if not config.INSTALLED['ai4neb']:
             self.log_.error('_getTemDen_ANN cannot be used in absence of ai4neb package',
@@ -2335,11 +2332,13 @@ class Atom(object):
                 
             if start_x == -1:
                 start_x = min(self.getTemArray(keep_unit=False))
+                if log: start_x = np.log10(start_x)
             if end_x == -1:
                 end_x = max(self.getTemArray(keep_unit=False))
-            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
+                if log: end_x = np.log10(end_x)
+            y_train = np.logspace(start_x, end_x, N_train)
             
-            def I(lev_i, lev_j):
+            def I(lev_i, lev_j):  # noqa: E743
                 return self.getEmissivity(tem=y_train, den=X2_train, lev_i= lev_i, lev_j= lev_j, product=False) 
             def L(wave):
                 return self.getEmissivity(tem=y_train, den=X2_train, wave=wave, product=False) 
@@ -2359,10 +2358,12 @@ class Atom(object):
             
             if start_x == -1:
                 start_x = 1.e0
+                if log: start_x = np.log10(start_x)
             if end_x == -1:
                 end_x = 1e8
-            y_train = np.logspace(np.log10(start_x), np.log10(end_x), N_train)
-            def I(lev_i, lev_j):
+                if log: end_x = np.log10(end_x)
+            y_train = np.logspace(start_x, end_x, N_train)
+            def I(lev_i, lev_j):  # noqa: E743
                 return self.getEmissivity(tem=X2_train, den=y_train, lev_i= lev_i, lev_j= lev_j, product=False) 
             def L(wave):
                 return self.getEmissivity(tem=X2_train, den=y_train, wave=wave, product=False) 
@@ -2381,7 +2382,7 @@ class Atom(object):
         # predict the result and denormalize them
         self.ANN.predict()
         to_return = np.ones_like(int_ratio) * np.nan
-        to_return.ravel()[self.ANN.isfin] = self.ANN.pred
+        to_return.ravel()[self.ANN.isfin] = self.ANN.pred.ravel()
         to_return = 10**to_return
         return to_return
 
@@ -2435,7 +2436,7 @@ class Atom(object):
         """
         if method == 'ANN':
             return self._getTemDen_ANN(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
-                  wave1=wave1, wave2=wave2, start_x=start_x, end_x=end_x, to_eval=to_eval)            
+                  wave1=wave1, wave2=wave2, log=log, start_x=start_x, end_x=end_x, to_eval=to_eval)       
         elif config._use_mp:
             return self._getTemDen_MP(int_ratio=int_ratio, tem=tem, den=den, lev_i1=lev_i1, lev_j1=lev_j1, lev_i2=lev_i2, lev_j2=lev_j2,
                   wave1=wave1, wave2=wave2, maxError=maxError, method=method, log=log, start_x=start_x,
@@ -2493,12 +2494,14 @@ class Atom(object):
         if (lev_i == -1) & (lev_j == -1) & (wave == -1) & (to_eval is None):
             self.log_.error('At least one of lev_i, lev_j, wave or to_eval must be supplied', calling=self.calling)
             return None
-        if to_eval == None:
+        if to_eval is None:
             if wave != -1:
                 lev_i, lev_j = self.getTransition(wave)     
             to_eval = 'I(' + str(lev_i) + ',' + str(lev_j) + ')' 
-        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False, use_ANN=use_ANN)
-        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False, use_ANN=use_ANN)
+        def I(lev_i, lev_j): 
+            return self.getEmissivity(tem, den, lev_i, lev_j, product=False, use_ANN=use_ANN)
+        def L(wave):
+            return self.getEmissivity(tem, den, wave=wave, product=False, use_ANN=use_ANN)
         try:
             emis = eval(to_eval)
         except:
@@ -2564,7 +2567,7 @@ class Atom(object):
             critdens = self.getCritDensity(tem)
         if printPop:
             pop = self.getPopulations(tem, den)
-        for i in range(0, self.NLevels):
+        for i in range(self.NLevels):
             lev_i = i + 1
             to_print = 'Level %1i:  ' % (lev_i)
             if printPop:
@@ -3300,9 +3303,8 @@ class RecAtom(object):
                     d4 = data[mask4]
                     d5 = data[mask5]
                     t = 1e-4 * temp
-                    alpha_gen = lambda d, t: 10**(d['a']+d['b']*t+d['c']*t**2+
-                                              (d['d']+d['e']*t+d['f']*t**2)*np.log10(t)+
-                                              d['g']*(np.log10(t))**2+d['h']/t-15)
+                    def alpha_gen(d, t):
+                        return 10 ** (d['a'] + d['b'] * t + d['c'] * t ** 2 + (d['d'] + d['e'] * t + d['f'] * t ** 2) * np.log10(t) + d['g'] * np.log10(t) ** 2 + d['h'] / t - 15)
                     alpha2 = alpha_gen(d2, t)
                     alpha3 = alpha_gen(d3, t)
                     alpha4 = alpha_gen(d4, t)
@@ -3711,7 +3713,7 @@ class RecAtom(object):
                 
             logd = np.log10(deng)
             temp_min = np.min(self.temp)
-            temp_max = np.max(self.temp)
+            #temp_max = np.max(self.temp)
             log_dens_min = np.min(self.log_dens)
             log_dens_max = np.max(self.log_dens)
             tt = (logd < log_dens_min)
@@ -3817,9 +3819,12 @@ class RecAtom(object):
                 to_eval = 'S("{0}")'.format(label)
             else:
                 to_eval = 'I({0}, {1})'.format(lev_i, lev_j)
-        I = lambda lev_i, lev_j: self.getEmissivity(tem, den, lev_i, lev_j, product=False)
-        L = lambda wave: self.getEmissivity(tem, den, wave=wave, product=False)
-        S = lambda label: self.getEmissivity(tem, den, label=label, product=False)
+        def I(lev_i, lev_j):
+            return self.getEmissivity(tem, den, lev_i, lev_j, product=False)
+        def L(wave):
+            return self.getEmissivity(tem, den, wave=wave, product=False)
+        def S(label):
+            return self.getEmissivity(tem, den, label=label, product=False)
         
         try:
             emis = eval(to_eval)
@@ -4029,6 +4034,7 @@ def parseLineLabel(lineLabel):
     elem_spec = strExtract(lineLabel, ' ', '_')
     elem, spec = parseAtom(elem_spec)
     atom_label = elem + str(spec)
+# sourcery skip: merge-nested-ifs
     if len(elem_spec) > 0:
         if elem_spec[-1] == 'r':
             atom_label += 'r'
