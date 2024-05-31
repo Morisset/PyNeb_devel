@@ -99,9 +99,13 @@ class _Config(object):
             import cvxopt
             self.INSTALLED['cvxopt'] = True
         except:
-            self.INSTALLED['cvxopt'] = False
-            
-        self.INSTALLED['ai4neb'] = False
+            self.INSTALLED['cvxopt'] = False   
+        try:
+            from ai4neb import manage_RM
+            self.INSTALLED['ai4neb'] = True
+        except:
+            self.INSTALLED['ai4neb'] = False
+
         self.DataFiles = {}
             
         self.unuse_multiprocs()
@@ -113,14 +117,7 @@ class _Config(object):
         
         self.vactoair_low_wl = 2000. # UV in vacuum
         self.vactoair_high_wl = 1e30 # no upper limit, IR in air!!!
-                
-    def import_ai4neb(self):
-        try:
-            from ai4neb import manage_RM
-            self.INSTALLED['ai4neb'] = True
-        except:
-            self.INSTALLED['ai4neb'] = False
-        
+                        
     def set_noExtrapol(self, value):
         self._noExtrapol = bool(value)
         
