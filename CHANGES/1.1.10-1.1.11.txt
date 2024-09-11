@@ -1,0 +1,125 @@
+Release 1.1.11
+
+    add print_IPs function
+    Add ROOT_DIR variable, no use of execution_path (for W10 compatibility)
+    Update He2 data
+    Change format for Ercolano continuum data, no pickle anymore, simple ascii file
+    Add neural Network from IA4neb library to speedup diag.getCrossTemDen
+    Add collisional data from Mao et al 2020
+    Add python 3 compatibility when using Chianti data.
+
+@Morisset
+1.1.11b1
+c0a0544
+@Morisset
+clean update
+78dbe3f
+@Morisset
+print out the full path in log
+b295fcb
+@Morisset
+1.1.11b2
+042ff37
+@Morisset
+rerun
+11b11d7
+@Morisset
+adding print_IPs function
+b1e42d0
+@Morisset
+adding ROOT_DIR, removing execurtion_path. For W10 use.
+5681e14
+@Morisset
+1.1.11b4
+e540c13
+@Morisset
+adding option to addAllChainti
+20e09ed
+@Morisset
+1.1.1b5
+0b9873c
+@Morisset
+using fits file
+2985aa6
+@Morisset
+1.1.11b6
+8524f23
+@Morisset
+fits in recatom
+d3db1a4
+@Morisset
+1.1.11b7
+a4aab44
+@Morisset
+use NIST for He2 with fits
+aeb9aff
+@Morisset
+1.1.11b8
+5ec2224
+@Morisset
+Adding He2 lines
+189a356
+@Morisset
+1.1.11b9
+7c0cda7
+@Morisset
+1.1.11b10
+0a978fa
+@Morisset
+error in reference for OIII
+d12c014
+@Morisset
+Change format for Ercolano data. No pickle anymore.
+dd0bdee
+@Morisset
+bug in print
+9afdddf
+@Morisset
+python 2 and 3 compatibility
+6e467cf
+@Morisset
+1.1.11b11
+50bd9f2
+@Morisset
+adding ANN to speedup getCrossTemDen
+13b5293
+@Morisset
+1.1.11b12
+549d61a
+@Morisset
+Update diags.py
+6b30b6a
+@Morisset
+add import only if using ANN
+a921be4
+@Morisset
+add n_tem and n_den in self
+4c9a0a8
+@Morisset
+include use_log=True (managing NaN)
+89f7545
+Morisset added 9 commits 16 days ago
+@Morisset
+limit results is keyword
+7fe924b
+@Morisset
+Create o_iii_coll_MBZ20.dat
+880d97f
+@Morisset
+Adding coll data from Mao 2020
+26c7667
+@Morisset
+Create adas2pyneb.py
+70bdb11
+@Morisset
+python 3
+fcd1be1
+@Morisset
+Update continuum.py
+7d07c46
+@Morisset
+rename ai4neb
+66ce1e9
+@Morisset
+rename lib
+dbfdc1c
