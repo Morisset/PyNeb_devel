@@ -46,7 +46,9 @@ elif config.INSTALLED['h5py']:
     import h5py
 if config.INSTALLED['ai4neb']:
     from ai4neb import manage_RM
-    
+
+
+
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
 #profiler = 'cpu'
@@ -1211,7 +1213,8 @@ class Atom(object):
     
     
     @profile
-    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='linear', noExtrapol = False, NLevels=None):
+    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='linear', noExtrapol = False, NLevels=None,
+                 pumpingSED=None):
         """
         Atom constructor
         
@@ -1219,15 +1222,20 @@ class Atom(object):
             elem:          symbol of the selected element
             spec:          ionization stage in spectroscopic notation (I = 1, II = 2, etc.)
             atom:          ion (e.g. 'O3').
-            OmegaInterp:   option "kind" from scipy.interpolate.interp1d method: 
+            OmegaInterp [linear]:   option "kind" from scipy.interpolate.interp1d method: 
                             'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous', 'next', 
                             where 'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation of 
                             zeroth, first, second or third order; 'previous' and 'next' simply return the 
                             previous or next value of the point. 
                             "Cheb" works only for fits files for historical reasons.
-            noExtrapol:    if set to False (default), Omega will be extrapolated above and below
+            noExtrapol [False]:     if set to False (default), Omega will be extrapolated above and below
                             the highest and lowest temperatures where it is defined. If set to True
                             a NaN will be return.
+            NLevels [None]: If specified, set the maximum number of levels the atom will consider. 
+                            The actual value may be lower, depending on the number of levels
+                            available in the coll and atom data.
+            pumpingSED [None]: If specified, fluorescence pumping is performed in the level population estimation.
+                            It is a function of the wavelength (Angstrom) givien the flux as 
             
         **Usage:**
             O3 = pn.Atom('O',3)
@@ -1282,6 +1290,7 @@ class Atom(object):
         self.calling = 'Atom ' + self.atom
         self.log_.message('Making atom object for {0} {1}'.format(self.elem, self.spec), calling=self.calling)
         self.NLevels = NLevels
+        self.pumpingSED = pumpingSED
         dataFile = atomicData.getDataFile(self.atom, data_type='atom')
         if dataFile is None:
             self.atomFileType = None
@@ -1369,6 +1378,11 @@ class Atom(object):
         self.energy_eV = CST.RYD_EV * self.energy_Ryd
         
         self._A = self.getA() # index = quantum number - 1
+        self._B = np.zeros_like(self._A)
+        for i in range(self.atomNLevels): #upper
+            for j in range(i): #lower
+                self._B[i,j] = self._A[i,j] / (8 * np.pi * CST.HPLANCK * (self.getEnergy(i+1, unit='cm-1')-self.getEnergy(j+1, unit='cm-1'))**3) 
+                self._B[j,i] = self._B[i,j] * self.getStatWeight(i+1) / self.getStatWeight(j+1)
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()
         if self.NLevels > 0:
@@ -1404,6 +1418,21 @@ class Atom(object):
                                 }
         
             
+    def getB(self, lev_1= -1, lev_2= -1):
+        """
+        Return the value of B(i,j) or B(j,i)
+
+        Parameters:
+            lev_1:  first level
+            lev_2:  end level
+        
+        **Usage:**
+        
+            O3.getB(5,2)
+
+        """
+        return self._B[lev_1-1, lev_2-1]
+
     def getOmega(self, tem, lev_i= -1, lev_j= -1, wave= -1):
         """
         Return interpolated value of the collision strength value at the given temperature 
@@ -1787,11 +1816,18 @@ class Atom(object):
             den_rav = den.ravel()
             q = self.getCollRates(tem_rav, n_level)
             A = self._A[:n_level, :n_level]
+            if self.pumpingSED is None:
+                FB = self._B[:n_level, :n_level] * 0.0
+            else:
+                FB = self._B[:n_level, :n_level] * self.pumpingSED(self.wave_Ang[:n_level, :n_level])
+                for i in range(n_level):
+                    FB[i,i] = 0.0
             pop_result = np.zeros(res_shape_rav1)
             coeff_matrix = np.ones(res_shape_rav2)
             sum_q_up = np.zeros(res_shape_rav1)
             sum_q_down = np.zeros(res_shape_rav1)
             sum_A = A.sum(axis=1)
+            sum_FB = FB.sum(axis=1)
             n_tem = tem_rav.size
             # Following line changed 29/11/2012. It made the code crash when atom_nlevels diff coll_nlevels
             #Atem = np.outer(self._A, np.ones(n_tem)).reshape(n_level, n_level, n_tem)
@@ -1806,12 +1842,12 @@ class Atom(object):
             for row in range(1, n_level):
                 # upper right half            
                 for col in range(row + 1, n_level):
-                    coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row]
+                    coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row] + FB[col, row]
                 # lower left half
                 for col in range(row):
-                    coeff_matrix[row, col] = den_rav * q[col, row]
+                    coeff_matrix[row, col] = den_rav * q[col, row] + FB[col, row]
                 # diagonal
-                coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row])
+                coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row] + sum_FB[row])
 
             vect = np.zeros(n_level)
             vect[0] = 1.
@@ -1827,8 +1863,7 @@ class Atom(object):
             pop = np.squeeze(pop_result.reshape(res_shape1))
             
         return pop
-
-    
+  
     def getLowDensRatio(self, lev_i1=-1, lev_i2=-1, lev_j1=-1, lev_j2=-1, 
                         wave1=-1, wave2=-1, to_eval=None, tem=1e4, lowden = 1e-20):
         
