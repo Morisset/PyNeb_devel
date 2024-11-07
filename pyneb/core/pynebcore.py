@@ -1829,7 +1829,8 @@ class Atom(object):
         return pop
 
     
-    def getLowDensRatio(self, lev_i1=-1, lev_i2=-1, wave1=-1, wave2=-1, to_eval=None):
+    def getLowDensRatio(self, lev_i1=-1, lev_i2=-1, lev_j1=-1, lev_j2=-1, 
+                        wave1=-1, wave2=-1, to_eval=None, tem=1e4, lowden = 1e-20):
         
         """
         Return the value of a diagostic ratio at the low density limit
@@ -1837,17 +1838,21 @@ class Atom(object):
         Parameters:
             lev_i1 (int):
             lev_i2 (int):
+            lev_j1 (int):
+            lev_j2 (int):
             wave1 (int):
             wave2 (int):
             to_eval (str): 
+            tem (float) [1e4]:
+            lowden (float) [1e-20]
             
         **Usage:**
             
-            S2.getLowDensRatio(lev_i1 = 3, lev_i2 = 2)
+            S2.getLowDensRatio(1e4, lev_i1 = 3, lev_i2 = 2, lev_j1 = 1, lev_j2 = 1)
         
-            S2.getLowDensRatio(wave1 = 6716, wave2 = 6731)
+            S2.getLowDensRatio(1e4, wave1 = 6716, wave2 = 6731)
             
-            S2.getLowDensRatio(to_eval = 'L(6716)/L(6731)')
+            S2.getLowDensRatio(1e4, to_eval = 'L(6716)/L(6731)', tem=1.5e4)
         """
         
         if wave1 != -1:
@@ -1857,31 +1862,34 @@ class Atom(object):
             
         if to_eval is not None:
             def L(wave):
-                return self.getStatWeight(self.getTransition(wave)[0])
+                return self.getEmissivity(tem, lowden, self.getTransition(wave)[0], product=False)
             return eval(to_eval)
             
-        return self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2)
+        return self.getEmissivity(tem, lowden, lev_i = lev_i1, lev_j = lev_j1, product=False) / self.getEmissivity(tem, lowden, lev_i = lev_i2, lev_j = lev_j2, product=False)         
         
-        
-    def getHighDensRatio(self, lev_i1=-1, lev_i2=-1, lev_j1=-1, lev_j2=-1, wave1=-1, wave2=-1, to_eval=None):
+    def getHighDensRatio(self, lev_i1=-1, lev_i2=-1, lev_j1=-1, lev_j2=-1, 
+                         wave1=-1, wave2=-1, to_eval=None, tem=1e4, highden=1e20):
         
         """
         Return the value of a diagostic ratio at the high density limit
         
         Parameters:
+            tem (float):
             lev_i1 (int):
             lev_i2 (int):
             wave1 (int):
             wave2 (int):
             to_eval (str): 
+            tem (float) [1e4]:
+            highden (float) [1e20]
             
         **Usage:**
             
-            S2.getHighDensRatio(lev_i1 = 3, lev_i2 = 2)
+            S2.getHighDensRatio(lev_i1 = 3, lev_i2 = 2, lev_j1 = 1, lev_j2 = 1)
             
             S2.getHighDensRatio(wave1 = 6716, wave2 = 6731)
         
-            S2.getHighDensRatio(to_eval = 'L(6716)/L(6731)')
+            S2.getHighDensRatio(to_eval = 'L(6716)/L(6731)', tem=1.5e4)
         """
         
         if wave1 != -1:
@@ -1891,14 +1899,13 @@ class Atom(object):
             
         if to_eval is not None:
             def L(wave):
-                return self.getStatWeight(self.getTransition(wave)[0]) * self.getA(self.getTransition(wave)[0], self.getTransition(wave)[1])
+                return self.getEmissivity(tem, highden, self.getTransition(wave)[0], product=False)
             return eval(to_eval)
             
-        return (self.getStatWeight(lev_i1) / self.getStatWeight(lev_i2) *
-                self.getA(lev_i1, lev_j1) / self.getA(lev_i2, lev_j2))
+        return self.getEmissivity(tem, highden, lev_i = lev_i1, lev_j = lev_j1, product=False) / self.getEmissivity(tem, highden, lev_i = lev_i2, lev_j = lev_j2, product=False)   
            
     def getDensityRange(self, lev_i1=-1, lev_i2=-1, lev_j1=-1, lev_j2=-1, wave1=-1, wave2=-1, 
-                        to_eval=None, tol=0.1, tem=1e4):
+                        to_eval=None, tol=0.1, tem=1e4, lowden=1e-20, highden=1e20):
         """
         Return the range of density where a given line ratio is between 10% and 90% of the low and high density limits
         
@@ -1909,10 +1916,10 @@ class Atom(object):
             wave2 (int):
             to_eval (str):
             tol (float): 
-            tem (float):
+            tem (float) [1e4]:
         """
-        LowLim = self.getLowDensRatio(lev_i1, lev_i2, wave1, wave2, to_eval)
-        HighLim = self.getHighDensRatio(lev_i1, lev_i2, lev_j1, lev_j2, wave1, wave2, to_eval)
+        LowLim = self.getLowDensRatio(lev_i1, lev_i2, lev_j1, lev_j2, wave1, wave2, to_eval, tem=tem, lowden=lowden)
+        HighLim = self.getHighDensRatio(lev_i1, lev_i2, lev_j1, lev_j2, wave1, wave2, to_eval, tem=tem, highden=highden)
         
         delta = abs(LowLim - HighLim)
         minRatio = min((LowLim, HighLim)) + tol * delta
