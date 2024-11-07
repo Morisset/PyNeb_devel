@@ -27,6 +27,7 @@ Publish the new version on the pypi server
 =============================
 
 * Switch to master branch
+* synchronize with repository: git pull
 * Run the following from the root directory (where dist is) and check the tar file is created in dist:
     `python setup.py sdist`
 * Run the following to upload the tar file to pypi server. **Update the value of the distribution in {0}:**
