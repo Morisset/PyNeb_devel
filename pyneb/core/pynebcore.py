@@ -1848,7 +1848,7 @@ class Atom(object):
                     coeff_matrix[row, col] = den_rav * q[col, row] + FB[col, row]
                 # diagonal
                 coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row] + sum_FB[row])
-
+                
             vect = np.zeros(n_level)
             vect[0] = 1.
             
