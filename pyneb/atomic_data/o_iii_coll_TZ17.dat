@@ -20305,6 +20305,6 @@
 *** NOTE1    Collision strengths
 *** ATOM oxygen
 *** SPECTRUM 3
-*** N_LEVELS 5
+*** N_LEVELS 202
 *** GSCONFIG p2 
 *** T_UNIT K
