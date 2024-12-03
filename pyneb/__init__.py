@@ -5,8 +5,8 @@ PyNeb - python package for the analysis of emission lines
 PyNeb - python package for the analysis of emission lines
 """
 import sys
+import importlib.metadata
 
-from .version import __version__
 from .utils.Config import _Config
 config = _Config()
 log_ = config.log_
@@ -44,6 +44,7 @@ __all__ = ['Atom', 'RecAtom', 'getAtomDict', 'getRecEmissivity', 'EmissionLine',
 
 __pyversion__ = sys.version_info[0]
 
+__version__ = importlib.metadata.version("pyneb") 
 log_.message('Starting PyNeb version %s' % __version__, calling='PyNeb')
 
 if sys.version_info[:2] < (2, 6):

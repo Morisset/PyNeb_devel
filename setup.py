@@ -13,7 +13,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 from pyneb.version import __version__
 
-setup(name='PyNeb', 
+setup(name='pyneb', 
       version=__version__,
       description='Nebular tools',
       author='Christophe Morisset, Valentina Luridiana',
