@@ -47,8 +47,6 @@ elif config.INSTALLED['h5py']:
 if config.INSTALLED['ai4neb']:
     from ai4neb import manage_RM
 
-
-
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
 #profiler = 'cpu'
@@ -1685,7 +1683,7 @@ class Atom(object):
         Private method to obtain level population using Artificial Neuron Network.
         """
         if not config.INSTALLED['ai4neb']:
-            self.log_.error('_getPopulations_ANN cannot be used in absence of ai4neb package',
+            self.log_.error('_getPopulations_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
                           calling=self.calling)
             return None
         
@@ -2338,7 +2336,7 @@ class Atom(object):
                   wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
         
         if not config.INSTALLED['ai4neb']:
-            self.log_.error('_getTemDen_ANN cannot be used in absence of ai4neb package',
+            self.log_.error('_getTemDen_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
                           calling=self.calling)
             return None
 

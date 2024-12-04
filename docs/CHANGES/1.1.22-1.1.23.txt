@@ -1,0 +1,4 @@
+* Migrate the setup to pyproject.toml. Minimalist version of setup.py is kept. 
+* Remove the version.py file, the version is now in pyproject.toml
+* Move the import ai4neb into a specific config method: pn.config.import_AI4Neb() before using the Machine Learning tools. This avoid annoying message about Tensorflow to appear and speedup the import of pyneb when not using ML facilities.
+* Change the name of the package to pyneb instead of PyNeb (seems to be mandatory soon).
