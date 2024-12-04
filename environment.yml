@@ -8,7 +8,5 @@ dependencies:
   - matplotlib
   - scipy
   - h5py
-  - pandas
-  - astropy
   - pip:
      - pyneb
