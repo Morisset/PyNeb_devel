@@ -10,8 +10,8 @@ dependencies = [
 "numpy",
 "matplotlib",
 "scipy",
+"h5py",
 # astropy
-# hdf5
 ]
 description = "A Python package for nebular analysis"
 authors = [
@@ -27,8 +27,6 @@ Homepage = "http://www.iac.es/proyecto/PyNeb/"
 Repository = "https://github.com/Morisset/PyNeb_devel"
 Documentation = "http://morisset.github.io/PyNeb_devel/"
 Changelog = "https://github.com/Morisset/PyNeb_devel/tree/master/docs/CHANGES"
-
-[project.optional-dependencies]
 
 [tool.setuptools]
 packages=['pyneb',
