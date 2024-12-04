@@ -25,4 +25,3 @@ setup()
 #                    'pyneb.plot':['level_diagrams/*.png']
 #                    }
 #    )
-
