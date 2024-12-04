@@ -10,8 +10,8 @@ dependencies = [
 "numpy",
 "matplotlib",
 "scipy",
-"h5py",
-# astropy
+#"h5py",
+"astropy",
 ]
 description = "A Python package for nebular analysis"
 authors = [
