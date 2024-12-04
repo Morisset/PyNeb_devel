@@ -16,10 +16,10 @@ Pool request to master
 
 Once the devel branch is validated and passed all the tests:
 
-* update the version removing the beta indices
+* update the version in pyproject.toml removing the beta indices
 * Merge it to the master branch
 
-Make a new release tab on the github server
+Make a new release tag on the github server
 ==============================
 
 
