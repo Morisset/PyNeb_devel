@@ -29,9 +29,9 @@ Publish the new version on the pypi server
 * Switch to master branch
 * synchronize with repository: git pull
 * Run the following from the root directory (where dist is) and check the tar file is created in dist:
-    `python setup.py sdist`
+    `python -m build`
 * Run the following to upload the tar file to pypi server. **Update the value of the distribution in {0}:**
-    `twine upload dist/PyNeb-{0}.tar.gz`
+    `twine upload dist/pyneb-{0}*`
 * Check that the new relase is the current one on pypi server: https://pypi.org/project/PyNeb/
 
 Publish the new release on the Google group
