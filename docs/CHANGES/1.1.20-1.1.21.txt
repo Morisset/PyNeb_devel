@@ -1,0 +1,2 @@
+Correct bug in utils/manage_atomic_data/extract_flt : bytes and str confusion.
+

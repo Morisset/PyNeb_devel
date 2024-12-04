@@ -77,6 +77,7 @@ class RedCorr(object):
         #self._laws_dict['F99-like IDL'] = self._F99_like_IDL
         self._laws_dict['F99'] = self._F99
         self._laws_dict['F88 F99 LMC'] = self._FM88_F99_LMC
+        self._laws_dict['Cal00'] = self._Cal00
 
         self.UserFunction = UserFunction
         self.UserParams = None
@@ -332,7 +333,7 @@ class RedCorr(object):
         if ax is None:
             f, ax = plt.subplots()
         colors = ['r', 'g', 'b', 'y', 'm', 'c']
-        styles = ['-', '--', '-:', ':']
+        styles = ['-', '--', '-.', ':']
         if not pn.config.INSTALLED['plt']:
             pn.log_.error('matplotlib.pyplot not available for plotting', calling=self.calling)
         old_E_BV = self.E_BV
@@ -918,7 +919,33 @@ class RedCorr(object):
         self.FitzParams = [x0, gamma, c1, c2, c3, c4]
         return self._F99_like(wave)
     
-    
+    def _Cal00(self, wave):
+
+        """
+        This function returns the extinction curve proposed by Calzetti et al. 2000 
+        for actively star-forming galaxies.
+
+        reference:
+        The Dust Content and Opacity of Actively Star-forming Galaxies 
+        Calzetti, D., Armus, L., Bohlin, R. C., Kinney, A. L., Koornneef, J., & Storchi-Bergmann, T.
+        2000, Astrophysical Journal, 533, 682-695
+        http://adsabs.harvard.edu/abs/2000ApJ...533..682C
+        """
+
+        x = 1e4 / np.asarray([wave]) # inv microns
+
+        Xx = np.zeros_like(x)
+
+        tt = (x > 1/0.63) & (x <= 1/0.12)
+        res = 2.659 * (((0.011 * x[tt] - 0.198) * x[tt] + 1.509) * x[tt] - 2.156)
+        Xx[tt] = res + self.R_V
+
+        tt = (x > 1/2.2) & (x <= 1/0.63)
+        res = 2.659 * (-1.857 + 1.040 * x[tt])
+        Xx[tt] = res + self.R_V
+
+        return np.squeeze(Xx)
+
     def _zeros(self, wave):
         """
         No correction, return 0.0
