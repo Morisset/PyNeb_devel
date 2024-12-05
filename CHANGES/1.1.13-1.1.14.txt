@@ -1,0 +1,3 @@
+* Updating license files to be coherent with Chianti licenses.
+* Adding some units in the docstrings
+* Add support for Chianti 10.0 database
