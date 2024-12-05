@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyneb"
-version = "1.1.24b2"
+version = "1.1.24b3"
 requires-python = ">= 3.8"
 dependencies = [
 "numpy",
 "matplotlib",
 "scipy",
-#"h5py",
+"h5py",
 "astropy",
 ]
 description = "A Python package for nebular analysis"
