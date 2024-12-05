@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyneb"
-version = "1.1.24b1"
+version = "1.1.24b3"
 requires-python = ">= 3.8"
 dependencies = [
 "numpy",
 "matplotlib",
 "scipy",
 "h5py",
-# astropy
+"astropy",
 ]
 description = "A Python package for nebular analysis"
 authors = [
@@ -37,12 +37,12 @@ packages=['pyneb',
 
 [tool.setuptools.package-data]
 'pyneb'=['atomic_data_fits/*.fits',
-		 'atomic_data_fits/*.hdf5',
-		 'atomic_data_fits/old_fits/*.fits',
-		 'atomic_data/*.dat',
-		 'atomic_data/*.func',
-		 'atomic_data/*.txt',
-		 'atomic_data/levels/*.dat',
-         'atomic_data/deprecated/*.dat']
+		'atomic_data_fits/*.hdf5',
+		'atomic_data_fits/old_fits/*.fits',
+		'atomic_data/*.dat',
+		'atomic_data/*.func',
+		'atomic_data/*.txt',
+		'atomic_data/levels/*.dat',
+        'atomic_data/deprecated/*.dat']
 'pyneb.extinction'=['*.txt']
 'pyneb.plot'=['level_diagrams/*.png']
