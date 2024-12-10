@@ -43,3 +43,6 @@ packages=['pyneb',
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[tool.pytest.ini_options]
+testpaths = [ "tests"]
