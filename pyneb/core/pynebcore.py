@@ -42,7 +42,7 @@ elif config.INSTALLED['pyfits']:
     import pyfits
 if config.INSTALLED['astropy Table']:
     from astropy.table import Table #, Column
-elif config.INSTALLED['h5py']:
+if config.INSTALLED['h5py']:
     import h5py
 if config.INSTALLED['ai4neb']:
     from ai4neb import manage_RM
