@@ -545,7 +545,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
             with open(masterlist, 'r') as f:
                 lines = f.readlines()
         except:
-            pn.config.error('Masterlist file not read', calling='addAllChianti')
+            pn.log_.error('Masterlist file not read', calling='addAllChianti')
             return None
         chianti_ions = [l[0:7].strip() for l in lines]
         chianti_ions = [i.capitalize().replace('_','') for i in chianti_ions if i[-1] != 'd']
@@ -617,18 +617,15 @@ def extract_flt(str_):
     extract_flt('(123.00?') -> 123.00
     """
     res = ''
-    if len(str_) > 0:
-        if str_.decode()[0] in ('(', '['):
-            str_ = str_[1:]
-    for l in str_.decode():
+    this_str_ = str_.decode() if isinstance(str_, bytes) else str_
+    if len(this_str_) > 0 and this_str_[0] in ('(', '['):
+        this_str_ = this_str_[1:]
+    for l in this_str_:
         if l.isdigit() or l == '.':
             res += l
         else:
             break
-    if res == '':
-        return np.nan
-    else:
-        return float(res)
+    return np.nan if res == '' else float(res)
 
 def readNIST(NISTfile,NLevels=None):
     """

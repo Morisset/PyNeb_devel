@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyneb"
+version = "1.1.23"
+requires-python = ">= 3.8"
+dependencies = [
+"numpy",
+"matplotlib",
+"scipy",
+"h5py",
+# astropy
+]
+description = "A Python package for nebular analysis"
+authors = [
+    { name = "Christophe Morisset", email = "chris.morisset@gmail.com" },
+    { name = "Valentina Luridiana"}
+]
+license = { file = "LICENCE.md" }
+readme = "README.rst"
+keywords = ["nebular", "analysis", "astronomy"]
+
+[project.urls]
+Homepage = "http://www.iac.es/proyecto/PyNeb/"
+Repository = "https://github.com/Morisset/PyNeb_devel"
+Documentation = "http://morisset.github.io/PyNeb_devel/"
+Changelog = "https://github.com/Morisset/PyNeb_devel/tree/master/docs/CHANGES"
+
+[tool.setuptools]
+packages=['pyneb',
+		  'pyneb.core',
+		  'pyneb.plot',
+		  'pyneb.utils',
+		  'pyneb.extinction']
+
+[tool.setuptools.package-data]
+'pyneb'=['atomic_data_fits/*.fits',
+			     'atomic_data_fits/*.hdf5',
+			     'atomic_data_fits/old_fits/*.fits',
+			     'atomic_data/*.dat',
+			     'atomic_data/*.func',
+			     'atomic_data/*.txt',
+			     'atomic_data/levels/*.dat',
+                 'atomic_data/deprecated/*.dat']
+'pyneb.extinction'=['*.txt']
+'pyneb.plot'=['level_diagrams/*.png']
