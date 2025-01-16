@@ -1,5 +1,6 @@
 import unittest 
 import pyneb as pn
+import numpy as np
 
 class TestAtom(unittest.TestCase):
     def test_Atom_O3(self):
