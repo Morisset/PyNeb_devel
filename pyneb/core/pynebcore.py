@@ -1686,6 +1686,8 @@ class Atom(object):
             self.log_.error('_getPopulations_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
                           calling=self.calling)
             return None
+        else:
+            from ai4neb import manage_RM
         
         N = 5000
         tem_min = 10**np.min(self.getTemArray())
@@ -2339,6 +2341,8 @@ class Atom(object):
             self.log_.error('_getTemDen_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
                           calling=self.calling)
             return None
+        else:
+            from ai4neb import manage_RM
 
         self._test_lev(lev_i1)
         self._test_lev(lev_j1)
