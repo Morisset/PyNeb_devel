@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyneb"
-version = "1.1.24b3"
+version = "1.1.24"
 requires-python = ">= 3.8"
 dynamic = ["dependencies"]
 description = "A Python package for nebular analysis"
