@@ -12,3 +12,5 @@ VII. `The Diagnostic diagrams and determination of Te-Ne <Notebooks/PyNeb_manual
 VIII. `The determination of ionic abundances <Notebooks/PyNeb_manual_7b.ipynb>`_
 IX. `ICFs and elemental abundances <Notebooks/PyNeb_manual_8.ipynb>`_
 X. `Some examples <Notebooks/Some_examples.ipynb>`_
+XI. `Use of Monte Carlo (Uncertainty estimations) and Neural Network (speed-up Te-Ne determination) <Notebooks/MonteCarlo_and_ANN.ipynb>`_
+
