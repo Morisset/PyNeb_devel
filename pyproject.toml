@@ -4,15 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyneb"
-version = "1.1.23"
+version = "1.1.24"
 requires-python = ">= 3.8"
-dependencies = [
-"numpy",
-"matplotlib",
-"scipy",
-"h5py",
-# astropy
-]
+dynamic = ["dependencies"]
 description = "A Python package for nebular analysis"
 authors = [
     { name = "Christophe Morisset", email = "chris.morisset@gmail.com" },
@@ -46,3 +40,9 @@ packages=['pyneb',
                  'atomic_data/deprecated/*.dat']
 'pyneb.extinction'=['*.txt']
 'pyneb.plot'=['level_diagrams/*.png']
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.pytest.ini_options]
+testpaths = [ "tests"]
