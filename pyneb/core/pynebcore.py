@@ -13,6 +13,8 @@ import warnings
 import os
 import sys
 from pathlib import Path
+import itertools
+
 
 from pyneb import config, log_, atomicData
 from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _returnNone, solve, bs
@@ -2957,7 +2959,59 @@ class Atom(object):
         except:
             pass
 
-    
+    def plotGrotrian2(self, A_lim=-3, coeff_lw=7, ax=None):
+
+        parities = ('','*')
+        T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
+        T2 = (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+        all_x_term_dic = {f'{t2}{t1}{p}': i 
+                            for i, (t2, t1, p) in enumerate(itertools.product(T2, T1, parities))
+                            }
+        delta_E = 0.1
+        levels = self.NIST
+        NLevels = len(levels)
+        levels_E_eV = levels['energy'] / 8065.56
+        levels_Size = np.ones(NLevels)
+        for i in np.arange(len(levels)):
+            level = levels[i]
+            level_E_eV = levels_E_eV[i]
+            mask1 = level['term'] == levels['term']
+            mask2 = (level_E_eV - levels_E_eV) > 0.0
+            mask3 = np.abs(level_E_eV - levels_E_eV) < delta_E
+            mask4 = (levels_Size >= 1)
+            mask = mask1 & mask2 & mask3 & mask4
+            if mask.sum() != 0:
+                levels_Size[mask] += 1
+                levels_Size[i] = 0
+
+        terms = np.unique(levels['term'])
+        i_terms = [all_x_term_dic[t] for t in terms]
+        terms = [terms[i] for i in np.argsort(i_terms)]
+        x_term_dic = dict(zip(terms, np.arange(len(terms))))
+
+        if ax is None:
+            fig, ax = plt.subplots()
+        As = self._A[np.log10(self._A) > A_lim]
+        ccodes = (np.log10(As) - A_lim)
+        for i in np.arange(len(levels)):
+            for j in np.arange(i+1, len(levels)):
+                if np.log10(self._A[j,i]) > A_lim:
+                    x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
+                    y = (levels_E_eV[i], levels_E_eV[j])
+                    lw = 2 #(np.log10(self._A[j,i]) - A_lim)/coeff_lw
+                    ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
+                    ax.plot(x, y, lw = lw, c=ccode)
+        for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
+            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5)            
+
+        x_ticks = [x_term_dic[t] for t in x_term_dic]
+        x_labels = list(x_term_dic)
+        ax.set_xticks(x_ticks)
+        ax.set_xticklabels(x_labels)
+        ax.set_xlabel('Term')
+        ax.set_ylabel('Energy (eV)')
+        ax.set_title(f'{self.elem}{int_to_roman(self.spec)} Grotrian diagram')   
+
     def __repr__(self):
         return 'Atom {0}{1} from {2} and {3}'.format(self.elem, self.spec, self.atomFile, self.collFile)
 
