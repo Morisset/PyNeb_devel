@@ -25,6 +25,7 @@ class _ManageAtomicData(object):
         self.addDataFilePath('./')
         self._RecombData = {}
         self._initChianti()
+        self._initStout()
         self.read_gsconf()        
         self.usedFiles = {} 
     
@@ -174,6 +175,18 @@ class _ManageAtomicData(object):
                 return('{}/{}/{}'.format(self.Chianti_path, elem.lower(), atom2chianti(atom)))
             if (data_type == 'coll') and (atom2chianti(atom) in self.ChiantiIONS['coll']):
                 return('{}/{}/{}'.format(self.Chianti_path, elem.lower(), atom2chianti(atom)))
+        elif data_file.split('.')[-1] == 'stout':
+            strs = data_file.split('_')
+            elem = strs[0].capitalize()
+            spec = roman_to_int(strs[1])
+            atom = elem + str(spec)
+            strs = re.split(r'[_.]+',data_file)
+            data_type = strs[2]
+            if (data_type == 'atom') and (atom2chianti(atom) in self.StoutIONS['atom']):
+                return('{}/{}/{}'.format(self.Stout_path, elem.lower(), atom2chianti(atom)))
+            if (data_type == 'coll') and (atom2chianti(atom) in self.StoutIONS['coll']):
+                return('{}/{}/{}'.format(self.Stout_path, elem.lower(), atom2chianti(atom)))
+            
         else:
             return None
  
@@ -480,7 +493,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
             for item in at_set:
                 atom = parseAtom(item)[0]
                 spec = parseAtom(item)[1]
-                if spec is '':
+                if spec == '':
                     for ispec in SPEC_LIST:
                         try:
                             at_dict[atom+ispec] = pn.Atom(atom, ispec)
@@ -505,6 +518,29 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         for item in sorted(at_dict):                                                              
             at_dict[item].printSources()
     
+    def _initStout(self):
+        self.StoutIONS = {'atom':[], 'coll':[]}
+        self.Stout_path = None
+        
+        if pn.config.INSTALLED['Stout']:
+    
+            self.Stout_path = os.environ['STOUT_DIR']
+            masterlist = '{0}/masterlist/Stout.ini'.format(self.Stout_path)
+            try:
+                with open(masterlist) as master:
+                    for line in master.readlines():
+                        atom = line.split()[0]
+                        elem = atom.split('_')[0]
+                        coll_file = '{0}/{1}/{2}/{2}.coll'.format(self.Stout_path, elem, atom)
+                        atom_file = '{0}/{1}/{2}/{2}.tp'.format(self.Stout_path, elem, atom)
+                        if os.path.exists(coll_file): 
+                            self.StoutIONS['coll'].append(atom)
+                        if os.path.exists(atom_file):
+                            self.StoutIONS['atom'].append(atom)
+            except:
+                pn.log_.warn('File not found {}, no Stout data available'.format(masterlist), 
+                             calling='_initStout')
+
     def _initChianti(self):
         self.ChiantiIONS = {'atom':[], 'coll':[]}
         self.Chianti_path = None
@@ -761,7 +797,7 @@ def _atom_fits2ascii(filename):
     atom = pn.Atom(elem, spec)
     atom.printSources()
     print('')
-    fileout = raw_input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
+    fileout = input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
     
     fout = open('{0[0]}_{0[1]}_{0[2]}_{1}.dat'.format(strs,fileout), 'w')
     fout.write('Aij\n')
@@ -805,7 +841,7 @@ def _coll_fits2ascii(filename, overwrite=None):
     
     if overwrite is not True:
         if os.path.exists(fileout):
-            erase = raw_input('{} exists, overwrite?'.format(fileout))
+            erase = input('{} exists, overwrite?'.format(fileout))
             if erase != 'y':
                 return
     fout = open(fileout, 'w')
