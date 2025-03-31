@@ -4756,7 +4756,7 @@ class Observation(object):
             #names_locations = [name in self.names for name in data_tab.dtype.names]
             #errors_locations = [name[0:3] == 'err' for name in data_tab.dtype.names]
             for i, label in enumerate(data_tab['LINE']):
-                if sys.version_info.major >= 3:
+                if sys.version_info.major >= 3 and isinstance(label, bytes):
                     label = label.decode()
                 label = label.strip()
                 if label == 'cHbeta':
