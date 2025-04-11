@@ -609,7 +609,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         if np.sum(mask) == 0:
             return None
         elif np.sum(mask) == 1:
-            return self.hei_DZS22_levels[mask][0] if getDetailed else self.hei_DZS22_levels[mask]['wl'][0]
+            return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl'][0]
         else:
             return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl']
 
