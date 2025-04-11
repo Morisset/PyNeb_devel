@@ -590,11 +590,11 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
             self.log_.error('Could not read the HeI DZS22 levels file', calling=self.calling)
             return None 
 
-    def getDZN22Level_from_wl(self, wl, air=False, tol_wl=0.001, getDetailed=False):
+    def getDZN22Level_from_wl(self, wl, wl_in_air=False, tol_wl=0.001, getDetailed=False):
         """
         Return the level for the del Zanna & Storey 22 HeI lines from the wavelength
         wl: wavelength in Angstrom
-        air [False]: if True, wl is in air
+        wl_in_air [False]: if True, wl is in air
         tol_wl [0.01]: tolerance in wavelength
         getDetailed [False]: if True, return the detailed level information, else only 
             the label (wl in vaccuum)
@@ -603,7 +603,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         if self.hei_DZS22_levels is None:
             self._setHei_DZS22_Levels()
 
-        wl_str = 'wl_air' if air else 'wl'
+        wl_str = 'wl_air' if wl_in_air else 'wl'
         mask = np.abs(self.hei_DZS22_levels[wl_str].astype(float) - wl)/wl < tol_wl
 
         if np.sum(mask) == 0:
