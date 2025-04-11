@@ -599,7 +599,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         getDetailed [False]: if True, return the detailed level information, else only 
             the label (wl in vaccuum)
         """
-        
+
         if self.hei_DZS22_levels is None:
             self._setHei_DZS22_Levels()
 
@@ -803,7 +803,7 @@ def _atom_fits2ascii(filename):
     atom = pn.Atom(elem, spec)
     atom.printSources()
     print('')
-    fileout = raw_input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
+    fileout = input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
     
     fout = open('{0[0]}_{0[1]}_{0[2]}_{1}.dat'.format(strs,fileout), 'w')
     fout.write('Aij\n')
@@ -847,7 +847,7 @@ def _coll_fits2ascii(filename, overwrite=None):
     
     if overwrite is not True:
         if os.path.exists(fileout):
-            erase = raw_input('{} exists, overwrite?'.format(fileout))
+            erase = input('{} exists, overwrite?'.format(fileout))
             if erase != 'y':
                 return
     fout = open(fileout, 'w')
