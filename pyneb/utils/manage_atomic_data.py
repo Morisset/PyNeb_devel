@@ -1,3 +1,4 @@
+#%%
 import os
 import pyneb as pn
 import numpy as np
@@ -27,6 +28,7 @@ class _ManageAtomicData(object):
         self._initChianti()
         self.read_gsconf()        
         self.usedFiles = {} 
+        self.hei_DZS22_levels = None
     
     def includeFitsPath(self):
         self.addDataFilePath('atomic_data_fits/old_fits/', inPyNeb=True)
@@ -475,12 +477,12 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
                        
         """        
         self.calling = 'printAllSources'
-        if (type(at_set) == list) or (type(at_set) == tuple) or at_set == '':
+        if isinstance(at_set, (list, tuple)) or at_set == '':
             at_dict = {}
             for item in at_set:
                 atom = parseAtom(item)[0]
                 spec = parseAtom(item)[1]
-                if spec is '':
+                if spec == '':
                     for ispec in SPEC_LIST:
                         try:
                             at_dict[atom+ispec] = pn.Atom(atom, ispec)
@@ -491,7 +493,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         elif at_set is not None:
             pn.log_.error('The argument at_set must be a list or a tuple', calling=self.calling)
             return None
-        elif (at_set is None) and (predef is None):
+        elif predef is None:
             at_dict = pn.getAtomDict()
         elif predef in pn.atomicData.getAllPredefinedDict():
             current = pn.atomicData.predefined
@@ -501,7 +503,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         else: 
             pn.log_.error('The argument predef must be the label of a predefined dictionary', 
                           calling=self.calling)
-        
+
         for item in sorted(at_dict):                                                              
             at_dict[item].printSources()
     
@@ -573,6 +575,43 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         elif file not in self.usedFiles[atom]:
             self.usedFiles[atom].append(file)
 
+    def _setHei_DZS22_Levels(self):
+        dt = np.dtype([('S', '<i4'), 
+                       ('n_low', '<i4'), ('L_low', '<U2'), 
+                       ('n_up', '<i4'), ('L_up', '<U2'), 
+                       ('wl', '<U10'), ('wl_air', '<U10')])
+        hei_DZS22_file = f'{ROOT_DIR}/atomic_data_fits/he_i_rec_DZS22_levels.csv'
+        try:
+            self.hei_DZS22_levels = np.genfromtxt(hei_DZS22_file, 
+                                                  delimiter=",", 
+                                                  dtype=dt, 
+                                                  skip_header=1)
+        except Exception:
+            self.log_.error('Could not read the HeI DZS22 levels file', calling=self.calling)
+            return None 
+
+    def getDZN22Level_from_wl(self, wl, wl_in_air=True, tol_wl=0.001, getDetailed=False):
+        """
+        Return the level for the del Zanna & Storey 22 HeI lines from the wavelength
+        wl: wavelength in Angstrom
+        wl_in_air [True]: if True, wl is in air
+        tol_wl [0.01]: tolerance in wavelength
+        getDetailed [False]: if True, return the detailed level information, else only 
+            the label (wl in vacuum)
+        """
+
+        if self.hei_DZS22_levels is None:
+            self._setHei_DZS22_Levels()
+
+        wl_str = 'wl_air' if wl_in_air else 'wl'
+        mask = np.abs(self.hei_DZS22_levels[wl_str].astype(float) - wl)/wl < tol_wl
+
+        if np.sum(mask) == 0:
+            return None
+        elif np.sum(mask) == 1:
+            return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl'][0]
+        else:
+            return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl']
 
     def printPoem(self, yr=0):
         """
@@ -617,15 +656,18 @@ def extract_flt(str_):
     extract_flt('(123.00?') -> 123.00
     """
     res = ''
-    this_str_ = str_.decode() if isinstance(str_, bytes) else str_
-    if len(this_str_) > 0 and this_str_[0] in ('(', '['):
-        this_str_ = this_str_[1:]
-    for l in this_str_:
+    if len(str_) > 0:
+        if str_.decode()[0] in ('(', '['):
+            str_ = str_[1:]
+    for l in str_.decode():
         if l.isdigit() or l == '.':
             res += l
         else:
             break
-    return np.nan if res == '' else float(res)
+    if res == '':
+        return np.nan
+    else:
+        return float(res)
 
 def readNIST(NISTfile,NLevels=None):
     """
@@ -761,7 +803,7 @@ def _atom_fits2ascii(filename):
     atom = pn.Atom(elem, spec)
     atom.printSources()
     print('')
-    fileout = raw_input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
+    fileout = input('Enter the name of the output file (between {0[0]}_{0[1]}_{0[2]}_ and .dat:'.format(strs))
     
     fout = open('{0[0]}_{0[1]}_{0[2]}_{1}.dat'.format(strs,fileout), 'w')
     fout.write('Aij\n')
@@ -805,7 +847,7 @@ def _coll_fits2ascii(filename, overwrite=None):
     
     if overwrite is not True:
         if os.path.exists(fileout):
-            erase = raw_input('{} exists, overwrite?'.format(fileout))
+            erase = input('{} exists, overwrite?'.format(fileout))
             if erase != 'y':
                 return
     fout = open(fileout, 'w')
@@ -861,5 +903,4 @@ def print_stout_coll(Atom, file_):
         f.write('Refs:\n')
         for s in Atom.CollData.getSources():
             f.write('{} \n'.format(s))
-
 
