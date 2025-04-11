@@ -597,7 +597,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         wl_in_air [True]: if True, wl is in air
         tol_wl [0.01]: tolerance in wavelength
         getDetailed [False]: if True, return the detailed level information, else only 
-            the label (wl in vaccuum)
+            the label (wl in vacuum)
         """
 
         if self.hei_DZS22_levels is None:
