@@ -842,12 +842,12 @@ class Diagnostics(object):
             tem = np.reshape(tem, shape)
             den = np.reshape(den, shape)
             if limit_res:
-                mask = (tem<tem_min) | (tem>tem_max)
+                mask_tem = (tem<tem_min) | (tem>tem_max)
+                mask_den = (den<den_min) | (den>den_max)
+                mask = mask_tem & mask_den
                 tem[mask] = np.nan
-                pn.log_.debug('Removing {} points out of Te range'.format(mask.sum()), calling='getCrossTemDen')
-                mask = (den<den_min) | (den>den_max)
                 den[mask] = np.nan
-                pn.log_.debug('Removing {} points out of Ne range'.format(mask.sum()), calling='getCrossTemDen')
+                pn.log_.debug('Removing {} points out of Te-Ne range'.format(mask.sum()), calling='getCrossTemDen')
         else:
             den = atom_den.getTemDen(value_den, tem=guess_tem, to_eval=eval_den,
                                      maxError=maxError, start_x=start_den, end_x=end_den)
