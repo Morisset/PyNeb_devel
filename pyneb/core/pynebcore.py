@@ -19,7 +19,7 @@ from ..utils.misc import int_to_roman, strExtract, parseAtom, quiet_divide, _ret
 from ..utils import chebyshev
 from ..utils.init import LINE_LABEL_LIST, BLEND_LIST, SPEC_LIST, label2levelDict
 from ..utils.physics import sym2name, gsLevelDict, gsFromAtom, vactoair, CST, Z, IP
-from ..utils.manage_atomic_data import getLevelsNIST
+from ..utils.manage_atomic_data import getLevelsNIST, atom2chianti
 from ..utils.pn_chianti import _AtomChianti, _CollChianti
 from ..extinction.red_corr import RedCorr
 from fractions import Fraction
@@ -570,10 +570,86 @@ class _AtomDataAscii(object):
             return self._Energy[level-1] * unit_dict[unit]
         
 
-class _AtomDataStout(object):
+class _AtomDataStout(_AtomDataAscii):
     
-    def __init__(self):
-        pass
+
+    def _loadAscii(self):
+        
+        self.atomFile = atomicData.getDataFile(self.atom, data_type='atom')
+        if self.atomFile is None:
+            self.log_.error('No atom data for ion {0}'.format(self.atom), calling=self.calling)
+            return None
+            
+        self.atomPath = atomicData.getDirForFile(self.atomFile)
+        file_to_open =  f'{self.atomPath}/{atom2chianti(self.atom)}.tp'   #'{0}/{1}'.format(self.atomPath, self.atomFile)
+        if not os.path.exists(file_to_open):
+            self.log_.error('File {0} not found'.format(file_to_open), calling=self.calling)
+            
+        self.log_.message('Reading atom data from {0}'.format(self.atomFile), calling=self.calling)
+
+    
+        self.E_in_vacuum = True
+        # Read data from ascii file
+        #
+        # Read energies and stat weights 
+        with open(file_to_open) as f:
+            data = f.readlines()
+
+        need_NIST = True
+        i_s = []
+        j_s = []
+        A_s = []
+        self.comments = {}
+        i_comments = 0 
+        read_data = True
+        for d in data[1:]:
+            if read_data:
+                if d[:3] == '***':
+                    read_data = False
+                else:
+                    ds = d.split()
+                    j_s.append(int(ds[1]))
+                    i_s.append(int(ds[2]))
+                    A_s.append(float(ds[3]))
+            else:
+                self.comments[str(i_comments)] = d
+                i_comments += 1
+
+        NLevels = np.max(i_s)
+        A = np.zeros([NLevels, NLevels])
+        for i, j, Aij in zip(i_s, j_s, A_s):
+            A[i-1, j-1] += Aij
+
+        if (self.NLevels is not None) and (self.NLevels < NLevels):
+            A = A[0:self.NLevels, 0:self.NLevels]
+        self.NLevels = A.shape[0]
+
+        if need_NIST:
+            self.NIST = getLevelsNIST(self.atom, self.NLevels)
+            if len(self.NIST) <  self.NLevels:
+                 self.NLevels = len(self.NIST)
+                 A = A[0:self.NLevels, 0:self.NLevels]
+        else:
+            self.NIST = None
+            
+        if self.NIST is not None:
+            web = 'Ref. {0} of NIST 2014 (try this: http://physics.nist.gov/cgi-bin/ASBib1/get_ASBib_ref.cgi?db=el&db_id={0}&comment_code=&element={1}&spectr_charge={2}&'
+            energy = self.NIST['energy'] / 1e8
+            stat_weight = 1 + 2 * self.NIST['J']
+            self.comments['VACUUM'] = '1'
+            self.comments['NOTE'] = 'Energy levels'
+            source = '\n    '
+            for ref in np.unique(self.NIST['ref']):
+                source = source + web.format(ref[1:], self.elem, self.spec) + ')\n  + ' 
+            self.comments['SOURCE'] = source[:-5]
+        elif need_NIST:
+            self.log_.error('NIST data are needed for this format of atomic data', calling=self.calling) 
+        
+        self._Energy = energy
+        self._StatWeight = stat_weight
+        self._A = A
+        self.atomNLevels = self.NLevels
+
         
 class _CollDataFits(object):
     
@@ -1164,41 +1240,204 @@ class _CollDataAscii(object):
                     return self._TemArray
 
 
-class _CollDataStout(object):
+class _CollDataStout(_CollDataAscii):
     
-    def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='Linear', noExtrapol = False, 
-                 NLevelsMax=None):
-        self.log_ = log_
-        self.calling = '_CollDataStout'
-        if not config.INSTALLED['Stout']:
-            log_.error('The STOUT_DIR environment variable is not defined', calling=self.calling)
+    def _loadAscii(self): # reading stout file
+
+        self.collFile = atomicData.getDataFile(self.atom, data_type='coll')
+        if self.collFile is None:
+            self.log_.error('No coll data for ion {0}'.format(self.atom), calling=self.calling)
             return None
+            
+        self.collPath = atomicData.getDirForFile(self.collFile)
+        file_to_open =  f'{self.collPath}/{atom2chianti(self.atom)}.coll'   
+        if not os.path.exists(file_to_open):
+            self.log_.error('File {0} not found'.format(file_to_open), calling=self.calling)
+            
+        self.log_.message('Reading atom data from {0}'.format(self.collFile), calling=self.calling)
+
+        self.E_in_vacuum = True
+        # Read data from ascii file
+        #
+        with open(file_to_open) as f:
+            data = f.readlines()
         
-        if atom is not None:
-            self.atom = atom
-            self.elem = parseAtom(atom)[0]
-            self.spec = int(parseAtom(atom)[1])
+        self.N_temps = [len(d.split())-1 for d in data if d[:4] == 'TEMP']
+        if len(self.N_temps) != 1:
+            self._TemArray = []
+        i_s = []
+        j_s = []
+        self.ind_block = []
+        Coll_s = []
+        i_comments = 0 
+        self.comments = {}
+        read_data = True
+        i_block = -1
+        for d in data[1:]:
+            if read_data:
+                if d[:3] == '***':
+                    read_data = False
+                elif d[:4] == 'TEMP':
+                    if len(self.N_temps) == 1:
+                        self._TemArray = np.asarray([float(t) for t in d.split()[1:]])
+                    else:
+                        self._TemArray.append(np.asarray([float(t) for t in d.split()[1:]]))
+                    i_block += 1
+                else:
+                    ds = d.split()
+                    j_s.append(int(ds[2]))
+                    i_s.append(int(ds[3]))
+                    Coll_s.append([float(dd) for dd in ds[4:]])
+                    self.ind_block.append(i_block)
+            else:
+                self.comments[str(i_comments)] = d
+                i_comments += 1
+
+        i_s = np.asarray(i_s)
+        j_s = np.asarray(j_s)
+        Coll_s = np.asarray(Coll_s, dtype=object)
+        self.ind_block = np.asarray(self.ind_block)
+
+        if len(self.N_temps) == 1:
+            
+            NLevels = np.max(i_s)
+            self._lev_is = i_s
+            self._lev_js = j_s
+            self._CollArray = np.zeros((NLevels, NLevels, len(self._TemArray)))
+            for i, j, coll in zip(i_s, j_s, Coll_s):
+                self._CollArray[j-1, i-1, :] = coll
+            self.i_temps = None
         else:
-            self.elem = elem
-            self.spec = int(spec)
-            self.atom = elem + str(self.spec)
-        self.name = sym2name[self.elem]
-        self.noExtrapol = noExtrapol
+            self._lev_is = []
+            self._lev_js = []
+            self._CollArray = []
+            NLevels = 0
+            for i_block in np.unique(self.ind_block):
+                mask = self.ind_block == i_block
+                iis = i_s[mask]
+                self._lev_is.append(iis)
+                jjs = j_s[mask]
+                self._lev_js.append(jjs)
+                this_NLevels = np.max(iis)
+                NLevels = np.max((NLevels, this_NLevels))
+                colls = np.zeros((this_NLevels, this_NLevels, self.N_temps[i_block]))
+ 
+                for i, j, coll in zip(iis, jjs, Coll_s[mask]):
+                    colls[j-1, i-1] += coll
+                    
+                self._CollArray.append(colls)
+
+            self.i_temps = np.zeros((NLevels, NLevels), dtype=int) + len(self.N_temps)
+            for i_temp, (i_s, j_s) in enumerate(zip(self._lev_is, self._lev_js)):
+               for i, j in zip(i_s, j_s):
+                    self.i_temps[j-1, i-1] = i_temp
+
+        self.NLevels = NLevels
+        self.comments['T_UNIT']= 'K'
+
+    def getTemArray(self, keep_unit=True, lev_i= -1, lev_j= -1):
+        """
+        Return array of tabulated original temperature points (as in fits file) 
+            of collision strengths.
         
-        if OmegaInterp != 'Linear':
-            self.log_.error('Stout files does not support other interpolation than Linear', 
-                            calling = self.calling)
+        Parameters:
+            - keep_unit   return temperature in file units (default) or change it to Kelvin (False)
+
+
+        """
+        if lev_i == -1 or lev_j == -1 or self.i_temps is None:
+            return self._TemArray
+        else:
+            if self.i_temps[lev_j-1, lev_i-1] == len(self.N_temps):
+                return np.array((0, 1e10))
+            else:
+                return self._TemArray[self.i_temps[lev_j-1, lev_i-1]]
+
+    def getOmegaArray(self, lev_i= -1, lev_j= -1):
+        """
+        Return array of original tabulated collision strengths for a given transition, 
+            as a function of temperature.
         
-        self._loadStout()
+        Usage:
+            O3.getOmegaArray()
+        
+        Parameters:
+            - lev_j  lower level (default= -1, returns complete array)
+            - lev_i  upper level (default= -1, returns complete array)
+
+        """
+        self._test_lev(lev_i)
+        self._test_lev(lev_j)
+        if (lev_i <= lev_j) and (lev_i != -1):
+            self.log_.warn("wrong levels given {0} <= {1}".format(lev_i, lev_j), calling=self.calling)
+            return None
+        elif lev_i == -1 or lev_j == -1:
+            return self._CollArray
+        elif self.i_temps is None:
+            return self._CollArray[lev_j-1, lev_i-1,:]
+        elif self.i_temps[lev_j-1, lev_i-1] == len(self.N_temps):
+            return np.zeros(2)
+        else:
+            return self._CollArray[self.i_temps[lev_j-1, lev_i-1]][lev_j-1, lev_i-1,:]
+
+    def getOmega(self, tem, lev_i= -1, lev_j= -1):
+        """
+        Return interpolated value of the collision strength value at the given temperature 
+            for the complete array or a specified transition.
+
+        Usage:
+            O3.getOmega(15000.)
+            O3.getOmega([8e3, 1e4, 1.2e4])
+            O3.getOmega([8e3, 1e4, 1.2e4], 5, 4)
+        
+        Parameters:
+            - tem    electronic temperature in K. May be an array.
+            - lev_i  upper level
+            - lev_j  lower level
+
+        """
+        self._test_lev(lev_i)
+        self._test_lev(lev_j)
+        if (lev_i <= lev_j) and (lev_i != -1):
+            self.log_.warn("wrong levels given {0} <= {1}".format(lev_i, lev_j), calling=self.calling)
+            return None            
+        tem_in_file_units = self._transfo_tem(tem)
+        if (lev_i == -1) and (lev_j == -1): # Return all transitions
+            tem = np.asarray(tem)
+            res_shape = [self.NLevels, self.NLevels]
+            for sh in tem.shape:
+                res_shape.append(sh)
+            Omega = np.zeros(res_shape)
     
-    def _loadStout(self):
-        st_ion = '{}_{}'.format(self.atom.lower(), self.spec)
-        self.fullFileName = '{0}/{1}/{1}.coll'.format(config.Stout_dir, st_ion)
+            for i in range(self.NLevels - 1):
+                j = i + 1
+                while (j < self.NLevels):
+                    Omega[j][i] = self.getOmega(tem, j + 1, i + 1)
+                    j += 1
+        else:
+            OmegaArray = self.getOmegaArray(lev_i, lev_j)
+            if self.noExtrapol or config.get_noExtrapol():
+                leftExtrapol = np.NAN
+                rightExtrapol = np.NAN
+            else:
+                leftExtrapol = OmegaArray[0]
+                rightExtrapol = OmegaArray[-1]
+            #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
+            #                 left=leftExtrapol, right=rightExtrapol)
+            if OmegaArray.size == 1:
+                if leftExtrapol is np.NAN:
+                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.NAN)
+                else:
+                    Omega = np.ones_like(self.getTemArray(lev_i=lev_i, lev_j=lev_j)) * OmegaArray
+            else:
+                fOmega = interpolate.interp1d(self.getTemArray(lev_i=lev_i, lev_j=lev_j), OmegaArray,
+                                              kind = self.OmegaInterp,
+                                              fill_value=(leftExtrapol, rightExtrapol),
+                                              bounds_error=False)
+                Omega = fOmega(tem_in_file_units)
         
-        self.collFile = self.fullFileName.split('/')[-1]
-        self.collPath = self.fullFileName[:-len(self.collFile)]
-        
-        
+        return np.squeeze(Omega)
+
 
 class Atom(object):
     """
@@ -1212,7 +1451,7 @@ class Atom(object):
     
     @profile
     def __init__(self, elem=None, spec=None, atom=None, OmegaInterp='linear', noExtrapol = False, NLevels=None,
-                 pumpingSED=None):
+                 pumpingSED=None, i_temp=0):
         """
         Atom constructor
         
@@ -1234,7 +1473,8 @@ class Atom(object):
                             available in the coll and atom data.
             pumpingSED [None]: If specified, fluorescence pumping is performed in the level population estimation.
                             It is a function of the wavelength (Angstrom) givien the flux as 
-            
+            i_temp [None] : Default value for the temperature table in case multiple are read from coll datafile (stout format)
+
         **Usage:**
             O3 = pn.Atom('O',3)
             
@@ -1289,6 +1529,7 @@ class Atom(object):
         self.log_.message('Making atom object for {0} {1}'.format(self.elem, self.spec), calling=self.calling)
         self.NLevels = NLevels
         self.pumpingSED = pumpingSED
+        self.i_temp = i_temp
         dataFile = atomicData.getDataFile(self.atom, data_type='atom')
         if dataFile is None:
             self.atomFileType = None
@@ -1301,7 +1542,8 @@ class Atom(object):
         elif self.atomFileType == 'chianti':
             self.AtomData = _AtomChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType == 'stout':
-            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
+            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, 
+                                           OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels) 
         elif self.atomFileType is None:
             self.AtomData = _AtomDataNone()
             self.is_valid = False
@@ -2132,12 +2374,19 @@ class Atom(object):
 
 
         if tem == -1:
+            temArray = self.getTemArray(keep_unit=False)
             if start_x == -1:
-                start_x = min(self.getTemArray(keep_unit=False))
+                if isinstance(temArray, list): # multiple temperature tables in coll file
+                    start_x = min(temArray[self.i_temp])
+                else:
+                    start_x = min(temArray) 
                 if log:
                     start_x = np.log10(start_x)
             if end_x == -1:
-                end_x = max(self.getTemArray(keep_unit=False))
+                if isinstance(temArray, list):
+                    end_x = max(temArray[self.i_temp])
+                else:
+                    end_x = max(temArray) 
                 if log:
                     end_x = np.log10(end_x)
             
@@ -2374,12 +2623,21 @@ class Atom(object):
                 X2_test = np.asarray(den).ravel()
                 X2_train = np.min(den) + np.random.rand(N_train) * (np.max(den) - np.min(den)) 
                 
+            temArray = self.getTemArray(keep_unit=False)
             if start_x == -1:
-                start_x = min(self.getTemArray(keep_unit=False))
-                if log: start_x = np.log10(start_x)
+                if isinstance(temArray, list): # multiple temperature tables in coll file
+                    start_x = min(temArray[self.i_temp])
+                else:
+                    start_x = min(temArray)
+                if log:
+                    start_x = np.log10(start_x)
             if end_x == -1:
-                end_x = max(self.getTemArray(keep_unit=False))
-                if log: end_x = np.log10(end_x)
+                if isinstance(temArray, list):
+                    end_x = max(temArray[self.i_temp])
+                else:
+                    end_x = max(temArray)
+                if log:
+                    end_x = np.log10(end_x) 
             y_train = np.logspace(start_x, end_x, N_train)
             
             def I(lev_i, lev_j):  # noqa: E743
