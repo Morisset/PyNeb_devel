@@ -42,4 +42,3 @@ class TestRecAtom(unittest.TestCase):
     def test_RecAtom_atom(self):
         H1 = pn.RecAtom('H',1)
         self.assertEqual(H1.atom, 'H1')
-    

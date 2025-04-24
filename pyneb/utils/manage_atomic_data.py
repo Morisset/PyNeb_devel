@@ -28,6 +28,7 @@ class _ManageAtomicData(object):
         self._initStout()
         self.read_gsconf()        
         self.usedFiles = {} 
+        self.hei_DZS22_levels = None
     
     def includeFitsPath(self):
         self.addDataFilePath('atomic_data_fits/old_fits/', inPyNeb=True)
@@ -488,7 +489,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
                        
         """        
         self.calling = 'printAllSources'
-        if (type(at_set) == list) or (type(at_set) == tuple) or at_set == '':
+        if isinstance(at_set, (list, tuple)) or at_set == '':
             at_dict = {}
             for item in at_set:
                 atom = parseAtom(item)[0]
@@ -504,7 +505,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         elif at_set is not None:
             pn.log_.error('The argument at_set must be a list or a tuple', calling=self.calling)
             return None
-        elif (at_set is None) and (predef is None):
+        elif predef is None:
             at_dict = pn.getAtomDict()
         elif predef in pn.atomicData.getAllPredefinedDict():
             current = pn.atomicData.predefined
@@ -609,6 +610,43 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         elif file not in self.usedFiles[atom]:
             self.usedFiles[atom].append(file)
 
+    def _setHei_DZS22_Levels(self):
+        dt = np.dtype([('S', '<i4'), 
+                       ('n_low', '<i4'), ('L_low', '<U2'), 
+                       ('n_up', '<i4'), ('L_up', '<U2'), 
+                       ('wl', '<U10'), ('wl_air', '<U10')])
+        hei_DZS22_file = f'{ROOT_DIR}/atomic_data_fits/he_i_rec_DZS22_levels.csv'
+        try:
+            self.hei_DZS22_levels = np.genfromtxt(hei_DZS22_file, 
+                                                  delimiter=",", 
+                                                  dtype=dt, 
+                                                  skip_header=1)
+        except Exception:
+            self.log_.error('Could not read the HeI DZS22 levels file', calling=self.calling)
+            return None 
+
+    def getDZN22Level_from_wl(self, wl, wl_in_air=True, tol_wl=0.001, getDetailed=False):
+        """
+        Return the level for the del Zanna & Storey 22 HeI lines from the wavelength
+        wl: wavelength in Angstrom
+        wl_in_air [True]: if True, wl is in air
+        tol_wl [0.01]: tolerance in wavelength
+        getDetailed [False]: if True, return the detailed level information, else only 
+            the label (wl in vacuum)
+        """
+
+        if self.hei_DZS22_levels is None:
+            self._setHei_DZS22_Levels()
+
+        wl_str = 'wl_air' if wl_in_air else 'wl'
+        mask = np.abs(self.hei_DZS22_levels[wl_str].astype(float) - wl)/wl < tol_wl
+
+        if np.sum(mask) == 0:
+            return None
+        elif np.sum(mask) == 1:
+            return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl'][0]
+        else:
+            return self.hei_DZS22_levels[mask] if getDetailed else self.hei_DZS22_levels[mask]['wl']
 
     def printPoem(self, yr=0):
         """
