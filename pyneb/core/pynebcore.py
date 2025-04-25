@@ -1542,8 +1542,7 @@ class Atom(object):
         elif self.atomFileType == 'chianti':
             self.AtomData = _AtomChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.atomFileType == 'stout':
-            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, 
-                                           OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels) 
+            self.AtomData = _AtomDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels) 
         elif self.atomFileType is None:
             self.AtomData = _AtomDataNone()
             self.is_valid = False
@@ -1574,7 +1573,8 @@ class Atom(object):
         elif self.collFileType == 'chianti':
             self.CollData = _CollChianti(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)
         elif self.collFileType == 'stout':
-            self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom, NLevels=self.NLevels)            
+            self.CollData = _CollDataStout(elem=self.elem, spec=self.spec, atom=self.atom, 
+                                         OmegaInterp=OmegaInterp, noExtrapol = noExtrapol, NLevels=self.NLevels)          
         elif self.collFileType is None:
             self.CollData = _CollDataNone()
             self.is_valid = False
