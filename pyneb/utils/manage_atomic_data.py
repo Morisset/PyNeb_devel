@@ -1,4 +1,3 @@
-#%%
 import os
 import pyneb as pn
 import numpy as np
@@ -26,6 +25,7 @@ class _ManageAtomicData(object):
         self.addDataFilePath('./')
         self._RecombData = {}
         self._initChianti()
+        self._initStout()
         self.read_gsconf()        
         self.usedFiles = {} 
         self.hei_DZS22_levels = None
@@ -176,6 +176,18 @@ class _ManageAtomicData(object):
                 return('{}/{}/{}'.format(self.Chianti_path, elem.lower(), atom2chianti(atom)))
             if (data_type == 'coll') and (atom2chianti(atom) in self.ChiantiIONS['coll']):
                 return('{}/{}/{}'.format(self.Chianti_path, elem.lower(), atom2chianti(atom)))
+        elif data_file.split('.')[-1] == 'stout':
+            strs = data_file.split('_')
+            elem = strs[0].capitalize()
+            spec = roman_to_int(strs[1])
+            atom = elem + str(spec)
+            strs = re.split(r'[_.]+',data_file)
+            data_type = strs[2]
+            if (data_type == 'atom') and (atom2chianti(atom) in self.StoutIONS['atom']):
+                return('{}/{}/{}'.format(self.Stout_path, elem.lower(), atom2chianti(atom)))
+            if (data_type == 'coll') and (atom2chianti(atom) in self.StoutIONS['coll']):
+                return('{}/{}/{}'.format(self.Stout_path, elem.lower(), atom2chianti(atom)))
+            
         else:
             return None
  
@@ -503,10 +515,33 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         else: 
             pn.log_.error('The argument predef must be the label of a predefined dictionary', 
                           calling=self.calling)
-
+        
         for item in sorted(at_dict):                                                              
             at_dict[item].printSources()
     
+    def _initStout(self):
+        self.StoutIONS = {'atom':[], 'coll':[]}
+        self.Stout_path = None
+        
+        if pn.config.INSTALLED['Stout']:
+    
+            self.Stout_path = os.environ['STOUT_DIR']
+            masterlist = '{0}/masterlist/Stout.ini'.format(self.Stout_path)
+            try:
+                with open(masterlist) as master:
+                    for line in master.readlines():
+                        atom = line.split()[0]
+                        elem = atom.split('_')[0]
+                        coll_file = '{0}/{1}/{2}/{2}.coll'.format(self.Stout_path, elem, atom)
+                        atom_file = '{0}/{1}/{2}/{2}.tp'.format(self.Stout_path, elem, atom)
+                        if os.path.exists(coll_file): 
+                            self.StoutIONS['coll'].append(atom)
+                        if os.path.exists(atom_file):
+                            self.StoutIONS['atom'].append(atom)
+            except:
+                pn.log_.warn('File not found {}, no Stout data available'.format(masterlist), 
+                             calling='_initStout')
+
     def _initChianti(self):
         self.ChiantiIONS = {'atom':[], 'coll':[]}
         self.Chianti_path = None
@@ -522,7 +557,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
                         elem = atom.split('_')[0]
                         if pn.config.Chianti_version_main == '7':
                             coll_file = '{0}/{1}/{2}/{2}.splups'.format(self.Chianti_path, elem, atom)
-                        elif pn.config.Chianti_version_main in ('8', '9', '10'):
+                        elif pn.config.Chianti_version_main in ('8', '9', '10', '11'):
                             coll_file = '{0}/{1}/{2}/{2}.scups'.format(self.Chianti_path, elem, atom)
                         else:
                             pn.log_.error('Unknown version of Chianti {}'.format(pn.config.Chianti_version),
@@ -656,18 +691,15 @@ def extract_flt(str_):
     extract_flt('(123.00?') -> 123.00
     """
     res = ''
-    if len(str_) > 0:
-        if str_.decode()[0] in ('(', '['):
-            str_ = str_[1:]
-    for l in str_.decode():
+    this_str_ = str_.decode() if isinstance(str_, bytes) else str_
+    if len(this_str_) > 0 and this_str_[0] in ('(', '['):
+        this_str_ = this_str_[1:]
+    for l in this_str_:
         if l.isdigit() or l == '.':
             res += l
         else:
             break
-    if res == '':
-        return np.nan
-    else:
-        return float(res)
+    return np.nan if res == '' else float(res)
 
 def readNIST(NISTfile,NLevels=None):
     """
@@ -903,4 +935,5 @@ def print_stout_coll(Atom, file_):
         f.write('Refs:\n')
         for s in Atom.CollData.getSources():
             f.write('{} \n'.format(s))
+
 
