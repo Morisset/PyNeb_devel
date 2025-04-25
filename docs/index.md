@@ -24,13 +24,13 @@ To install or upgrade PyNeb, you need pip. Get it [here](https://pypi.org/projec
 
 Once pip is installed, enter from the command line:
 
-* `pip install PyNeb`
+* `pip install --user PyNeb`
 
 to install PyNeb, and:
 
-* `pip install --upgrade PyNeb`
+* `pip install --upgrade --user PyNeb`
 
-to upgrade previous versions of PyNeb.
+to upgrade previous versions of PyNeb (but omit the option --user if your python has been installed with Ureka or Canopy).
 
 Uninstalling PyNeb is easy as well
 

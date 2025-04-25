@@ -1,0 +1,2 @@
+Add a test to avoid crash using new version of numpy.genfromtxt that read strings as string and not bytes anymore.
+
