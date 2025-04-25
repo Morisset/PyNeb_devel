@@ -1,0 +1,283 @@
+h_1         ;  hydrogen  sequence
+he_2        
+c_6
+n_7
+o_8
+ne_10
+na_11
+mg_12
+al_13
+si_14
+p_15
+s_16
+cl_17
+ar_18
+k_19
+ca_20
+fe_26
+ni_28
+he_1        ;  helium sequence
+c_5
+n_6
+o_7
+ne_9
+na_10
+mg_11
+al_12
+si_13
+p_14
+s_15
+cl_16
+ar_17
+k_18
+ca_19
+ti_21
+cr_23
+fe_25
+ni_27
+zn_29       ; added in V8
+c_4         ;  lithium sequence
+n_5
+o_6
+ne_8
+na_9
+mg_10
+al_11
+si_12
+p_13
+s_14
+cl_15
+ar_16
+k_17
+ca_18
+ti_20
+cr_22
+mn_23
+fe_24
+co_25
+ni_26
+zn_28
+c_3         ;  beryllium sequence
+n_4
+o_5
+ne_7
+na_8
+mg_9
+al_10
+si_11
+p_12
+s_13
+cl_14
+ar_15
+k_16
+ca_17
+ti_19
+cr_21
+mn_22
+fe_23
+co_24
+ni_25
+zn_27
+fe_17d      ;  neon-like lines produced by dielectronic recombination
+fe_15d      ;  magnesium-like lines produced by dielectronic recombination
+fe_14d      ;  aluminum-like lines produced by dielectronic recombination
+fe_13d      ;  silicon-like lines produced by dielectronic recombination
+fe_12d      ;  phosphorus-like lines produced by dielectronic recombination
+fe_11d      ;  sulphur-like lines produced by dielectronic recombination
+fe_10d      ;  chlorine-like lines produced by dielectronic recombination
+fe_9d       ;  argon-like lines produced by dielectronic recombination
+fe_8d       ;  potassium-like lines produced by dielectronic recombination
+fe_7d       ;  calcium-like lines produced by dielectronic recombination
+fe_6d       ;  scandium-like lines produced by dielectronic recombination
+fe_5d       ;  titanium-like lines produced by dielectronic recombination
+fe_4d       ;  vanadium-like lines produced by dielectronic recombination
+fe_3d       ;  chromium-like lines produced by dielectronic recombination
+fe_2d       ;  manganese-like lines produced by dielectronic recombination
+c_2         ;  boron  sequence
+n_3
+o_4
+ne_6
+na_7
+mg_8
+al_9
+si_10
+p_11
+s_12
+cl_13       ; added in V8
+ar_14
+k_15
+ca_16
+ti_18
+cr_20
+mn_21
+fe_22
+co_23  
+ni_24
+c_1         ; added in V8 -   carbon  sequence      
+n_2     
+o_3
+ne_5
+na_6
+mg_7
+al_8
+si_9
+p_10
+s_11
+cl_12
+ar_13
+k_14
+ca_15
+ti_17
+cr_19
+mn_20
+fe_21
+co_22
+ni_23
+zn_25
+n_1        ;  nitrogen  sequence
+o_2
+ne_4
+na_5
+mg_6
+al_7
+si_8
+p_9
+s_10
+cl_11
+ar_12
+k_13
+ca_14
+ti_16
+cr_18
+mn_19
+fe_20
+co_21
+ni_22
+zn_24
+o_1        ;  oxygen  sequence
+ne_3
+na_4
+mg_5
+al_6
+si_7
+p_8
+s_9
+cl_10
+ar_11
+k_12
+ca_13
+ti_15
+cr_17
+mn_18
+fe_19
+co_20
+ni_21
+zn_23
+ne_2        ;  fluorine  sequence 
+na_3
+mg_4
+al_5
+si_6
+p_7
+s_8
+ar_10
+k_11
+ca_12
+ti_14
+cr_16
+mn_17
+fe_18
+co_19
+ni_20       
+na_2       ; added in V.8  ne-like  neon sequence
+mg_3       ; added in V.8
+al_4       ; added in V.8
+si_5       
+p_6        ; added in V.8
+s_7
+ar_9
+k_10       ; added in V.8
+ca_11
+ti_13      ; added in V.8
+cr_15       ; added in V.8
+mn_16       ; added in V.8
+fe_17
+co_18       ; added in V.8
+ni_19   
+zn_21       ; added in V.8
+mg_2        ; na-like  sodium sequence
+al_3
+si_4
+p_5
+s_6
+ar_8
+k_9
+ca_10
+ti_12
+cr_14
+mn_15
+fe_16
+co_17
+ni_18
+zn_20
+al_2        ;  magnesium sequence
+si_3
+p_4        ; added in v.10
+s_5
+cl_6         ; added in v.10
+ar_7
+k_8         ; added in v.10
+ca_9
+ti_11
+cr_13
+mn_14         ; added in v.10
+fe_15
+co_16        ; added in v.10
+ni_17
+zn_19       ; added in v.10
+si_2        ;  aluminum sequence
+s_4
+ca_8
+fe_14
+ni_16
+s_3         ;  silicon sequence
+cl_4
+ar_5
+k_6
+ca_7
+fe_13
+ni_15
+s_2         ;  phosphorus sequence
+cl_3
+ar_4
+k_5
+ca_6
+fe_12
+ni_14
+s_1          ; added in V.8   sulphur sequence
+cl_2         ;       
+ar_3
+k_4
+ca_5
+cr_9
+mn_10
+fe_11
+ni_13
+cr_8        ;  chlorine sequence
+mn_9
+fe_10          
+ni_12
+cr_7        ;  argon sequence
+mn_8
+fe_9
+ni_11       
+ca_2        ;  potassium  sequence
+fe_8
+fe_7        ;  calcium sequence
+fe_6        ;  scandium sequence
+fe_5        ;  titanium sequence
+fe_4        ;  vanadium sequence
+cr_2
+fe_3        ; added in V.8
+fe_2        ;  manganese sequence
+ni_2        ;  cobalt sequence
