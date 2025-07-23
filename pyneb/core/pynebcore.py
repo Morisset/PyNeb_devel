@@ -1254,7 +1254,7 @@ class _CollDataStout(_CollDataAscii):
         if not os.path.exists(file_to_open):
             self.log_.error('File {0} not found'.format(file_to_open), calling=self.calling)
             
-        self.log_.message('Reading atom data from {0}'.format(self.collFile), calling=self.calling)
+        self.log_.message('Reading atom data from {0}'.format(file_to_open), calling=self.calling)
 
         self.E_in_vacuum = True
         # Read data from ascii file
@@ -1277,6 +1277,8 @@ class _CollDataStout(_CollDataAscii):
             if read_data:
                 if d[:3] == '***':
                     read_data = False
+                elif d[0] == '#':
+                    pass
                 elif d[:4] == 'TEMP':
                     if len(self.N_temps) == 1:
                         self._TemArray = np.asarray([float(t) for t in d.split()[1:]])
@@ -3215,7 +3217,7 @@ class Atom(object):
         except:
             pass
 
-    def plotGrotrian2(self, A_lim=-3, coeff_lw=7, ax=None):
+    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1):
 
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
@@ -3254,11 +3256,10 @@ class Atom(object):
                 if np.log10(self._A[j,i]) > A_lim:
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
-                    lw = 1 #(np.log10(self._A[j,i]) - A_lim)/coeff_lw
                     ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
                     ax.plot(x, y, lw = lw, c=ccode)
         for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
-            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5)            
+            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
 
         x_ticks = [x_term_dic[t] for t in x_term_dic]
         x_labels = list(x_term_dic)
