@@ -485,7 +485,7 @@ class Diagnostics(object):
     
     
     def plot(self, emis_grids, obs, quad=True, i_obs=None, alpha=0.3, ax=None, error_band=True,
-    return_CS=False, 
+             return_CS=False, 
              col_dic={'C':'cyan', 'N':'blue', 'O':'green', 'Ne':'magenta',
                       'Ar':'red', 'Cl':'magenta', 'S':'black', 'Fe':'blue'}):
         """Plotting tool to generate Te-Ne diagrams.

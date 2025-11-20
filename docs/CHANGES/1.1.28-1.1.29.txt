@@ -1,0 +1,4 @@
+* Correct minor bugs
+* Add Full_Pipeline.ipynb in docs
+* update all the other notebooks
+* Add normwave in Observation/addLine

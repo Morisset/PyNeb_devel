@@ -4632,7 +4632,7 @@ class Observation(object):
     # RedCor object
 
 
-    def addLine(self, line):
+    def addLine(self, line, normWave=None):
         """
         Add a line to an existing observation
 
@@ -4645,7 +4645,7 @@ class Observation(object):
             return None
         if self.corrected and not line.corrected:
             line.corrected = True
-            self.correctData(line)
+            self.correctData(line, normWave=normWave)
         self.lines.append(line)
         
     def removeLine(self, lineLabel):
