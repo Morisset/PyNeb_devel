@@ -530,14 +530,15 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
             try:
                 with open(masterlist) as master:
                     for line in master.readlines():
-                        atom = line.split()[0]
-                        elem = atom.split('_')[0]
-                        coll_file = '{0}/{1}/{2}/{2}.coll'.format(self.Stout_path, elem, atom)
-                        atom_file = '{0}/{1}/{2}/{2}.tp'.format(self.Stout_path, elem, atom)
-                        if os.path.exists(coll_file): 
-                            self.StoutIONS['coll'].append(atom)
-                        if os.path.exists(atom_file):
-                            self.StoutIONS['atom'].append(atom)
+                        if line != '\n':
+                            atom = line.split()[0]
+                            elem = atom.split('_')[0]
+                            coll_file = '{0}/{1}/{2}/{2}.coll'.format(self.Stout_path, elem, atom)
+                            atom_file = '{0}/{1}/{2}/{2}.tp'.format(self.Stout_path, elem, atom)
+                            if os.path.exists(coll_file): 
+                                self.StoutIONS['coll'].append(atom)
+                            if os.path.exists(atom_file):
+                                self.StoutIONS['atom'].append(atom)
             except:
                 pn.log_.warn('File not found {}, no Stout data available'.format(masterlist), 
                              calling='_initStout')
