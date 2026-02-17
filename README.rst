@@ -25,13 +25,13 @@ Citation
 
 If you use PyNeb in your research, please cite the following paper:
 
-* Luridiana, V., Morisset, C. and Shaw, R. A. 2013, A&A, 558, A57  http://dx.doi.org/10.1051/0004-6361/201323152
+* Luridiana, V., Morisset, C. and Shaw, R. A. 2013, A&A, 558, A57  http://adsabs.harvard.edu/abs/2015A%26A...573A..42L
 
 * Morisset, C., Luridiana, V., García-Rojas, J., Gómez-Llanos, V., Bautista, M., & Mendoza, C. 2020, Atoms, 8, 66, 
-«Atomic Data Assessment with PyNeb» https://doi.org/10.3390/atoms8040066
+«Atomic Data Assessment with PyNeb» https://ui.adsabs.harvard.edu/abs/2020Atoms...8...66M
 
 * Mendoza, C., Méndez-Delgado, J. E., Bautista, M., García-Rojas, J., & Morisset, C. 2023, Atoms, 11, 63, 
-«Atomic Data Assessment with PyNeb: Radiative and Electron Impact Excitation Rates for [Fe ii] and [Fe iii]» https://doi.org/10.3390/atoms11040063
+«Atomic Data Assessment with PyNeb: Radiative and Electron Impact Excitation Rates for [Fe ii] and [Fe iii]» https://ui.adsabs.harvard.edu/abs/2023Atoms..11...63M
 
 Requirements
 ============
