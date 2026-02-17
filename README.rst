@@ -36,7 +36,8 @@ If you use PyNeb in your research, please cite the following paper:
 Requirements
 ============
 
-PyNeb uses numpy, matplotlib, pyfits, scipy and other standard python libraries.
+PyNeb uses numpy, matplotlib, scipy, h5py, astropy. Machine learning acceleration needs scikit-learn and the AI4Neb library (https://github.com/Morisset/AI4neb).
+
 
 Installation
 ============
