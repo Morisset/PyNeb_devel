@@ -1,0 +1,17 @@
+name: pynebML
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pip
+  - ipython
+  - jupyter
+  - numpy
+  - matplotlib
+  - scipy
+  - h5py
+  - scikit-learn
+  - pip:
+     - pyneb
+     - git+https://github.com/morisset/AI4neb.git
