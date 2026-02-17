@@ -24,6 +24,7 @@ Citation
 ========
 
 If you use PyNeb in your research, please cite the following paper:
+
 * Luridiana, V., Morisset, C. and Shaw, R. A. 2013, A&A, 558, A57  http://dx.doi.org/10.1051/0004-6361/201323152
 
 * Morisset, C., Luridiana, V., García-Rojas, J., Gómez-Llanos, V., Bautista, M., & Mendoza, C. 2020, Atoms, 8, 66, 
