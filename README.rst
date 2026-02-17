@@ -20,10 +20,24 @@ Atomic data can easily be changed and updated.
 Additional tools are provided, like reddening determination and correction procedures, Balmer/Pashen jump 
 temperature determinations.
 
+Citation
+========
+
+If you use PyNeb in your research, please cite the following paper:
+
+* Luridiana, V., Morisset, C. and Shaw, R. A. 2013, A&A, 558, A57  http://adsabs.harvard.edu/abs/2015A%26A...573A..42L
+
+* Morisset, C., Luridiana, V., García-Rojas, J., Gómez-Llanos, V., Bautista, M., & Mendoza, C. 2020, Atoms, 8, 66, 
+«Atomic Data Assessment with PyNeb» https://ui.adsabs.harvard.edu/abs/2020Atoms...8...66M
+
+* Mendoza, C., Méndez-Delgado, J. E., Bautista, M., García-Rojas, J., & Morisset, C. 2023, Atoms, 11, 63, 
+«Atomic Data Assessment with PyNeb: Radiative and Electron Impact Excitation Rates for [Fe ii] and [Fe iii]» https://ui.adsabs.harvard.edu/abs/2023Atoms..11...63M
+
 Requirements
 ============
 
-PyNeb uses numpy, matplotlib, pyfits, scipy and other standard python libraries.
+PyNeb uses numpy, matplotlib, scipy, h5py, astropy. Machine learning acceleration needs scikit-learn and the AI4Neb library (https://github.com/Morisset/AI4neb).
+
 
 Installation
 ============
@@ -32,7 +46,7 @@ You may find useful to download, install and upgrade PyNeb using `pip <http://ww
 
 For example:
 
-* pip install -U PyNeb
+* pip install PyNeb
 
 Note: you MAY need --user if you installed python without Anaconda or Canopy
 
@@ -42,9 +56,9 @@ You can also install from the github repository:
 
 * pip install -U git+https://github.com/Morisset/PyNeb_devel.git
 
-To use the development branch (at your own risks!!!):
+To use an old release, you can specify the version:
 
-* pip install -U git+https://github.com/Morisset/PyNeb_devel.git@devel
+* pip install PyNeb==1.1.28
 
 Warranty
 ========
