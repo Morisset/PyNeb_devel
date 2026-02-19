@@ -13,7 +13,7 @@ authors = [
     { name = "Valentina Luridiana"}
 ]
 license = { file = "LICENCE.md" }
-readme = "README.rst"
+readme = { file = "README.md", content-type = "text/markdown" }
 keywords = ["nebular", "analysis", "astronomy"]
 
 [project.urls]
