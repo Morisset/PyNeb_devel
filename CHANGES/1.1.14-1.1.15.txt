@@ -1,0 +1,11 @@
+* Add eval_diag method in Diagnostic class, to allow the evaluation of a diagnostic
+* Correct some bug in using Chianti 7.0
+* Optimize the use of Monte Carlo for multiple observations
+* Add some labels to LINE_LABEL_LIST
+* Add facility in Observation to read fits IFU images, each file corresponding to an emission line
+* The default set of atomic data is now PYNENB_21_01
+* Add add_sum (adding a new line corresponding to the sum of observed lines) and remove line methods to Observation
+* Add an option to include a systematic error to the observations
+* Add atomic data from Pequignot et al 1991 for OII recombination lines
+* Add "mass" as criterium to print out the emission lines in Observation
+* Add Cutout2D options when reading image from fits file, to crop the images

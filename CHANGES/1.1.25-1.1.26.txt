@@ -1,0 +1,4 @@
+* Add atomic data for HeI recombinations form Del Zanna & Storey 2022. A total of 1034 lines are available using this atomic data reference.
+* In atomic_data_fits, a new directory HeI_Zanna contains the original data from the journal, as well as a python script used to produce to 2 files needed by PyNeb: he_i_rec_DZS22.hdf5 and he_i_rec_DZS22_levels.csv
+* A new method getDZN22Level_from_wl is added to pn.atomicData to look for the label(s) corresponding to a given wavelength.
+* A new Notebook use_HeI_DZS22.ipynb is added to the docs/Notebooks directory to show the use of this method.
