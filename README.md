@@ -1,3 +1,5 @@
+# PyNeb
+
 PyNeb (Luridiana V., Morisset C. and Shaw, R. A 2013) is a modern python tool to compute emission line emissivities (recombination and collisionally excited lines).
 
 In PyNeb, the atom is represented as an n-level atom. For given density and temperature, PyNeb's machinery solves the equilibrium equations and determines the level populations. These are some of the things it can do:
@@ -65,6 +67,7 @@ PyNeb is provided as it is. No warranty at all.
 
 ## Manual
 
+- An introduction to PyNeb is available here: <https://github.com/Morisset/PyNeb_devel/tree/master/docs/PyNeb.pdf>
 - The manuals are here: <https://github.com/Morisset/PyNeb_devel/tree/master/docs>
 - The reference manual is accessible from <http://morisset.github.io/PyNeb_devel/>
 
