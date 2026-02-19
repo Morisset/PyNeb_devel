@@ -67,6 +67,7 @@ PyNeb is provided as it is. No warranty at all.
 
 ## Manual
 
+- An introduction to PyNeb is available here: <https://github.com/Morisset/PyNeb_devel/tree/master/docs/PyNeb.pdf>
 - The manuals are here: <https://github.com/Morisset/PyNeb_devel/tree/master/docs>
 - The reference manual is accessible from <http://morisset.github.io/PyNeb_devel/>
 
