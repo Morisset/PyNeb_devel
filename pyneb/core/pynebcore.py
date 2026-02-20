@@ -3220,8 +3220,19 @@ class Atom(object):
             pass
 
 
-    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1):
-
+    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1, cmap = plt.cm.Spectral, **kwargs):
+        """
+        Draw a Grotrian plot of the selected atom, labelling only lines above a
+        specified transition probability threshold (default: 1.e-3). 
+        The term symbol is also given.
+        Parameters:
+            A_lim:        transition probability threshold in log10 (default: -3, i.e. 1.e-3)
+            ax:           axis where to plot the result
+            lw:           line width (default = 1)
+            ms:           marker size (default = 1)
+            cmap:         colormap to use for the lines (default: plt.cm.Spectral)
+            **kwargs:     other keyword arguments to be passed to the plot function for the lines (e.g., colormap, linestyle, etc.)
+        """
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
         T2 = (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
@@ -3260,8 +3271,8 @@ class Atom(object):
                 if mask[j,i]:
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
-                    ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
-                    ax.plot(x, y, lw = lw, c=ccode)
+                    ccode = cmap(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
+                    ax.plot(x, y, lw = lw, c=ccode, **kwargs)
         for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
             ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
 
