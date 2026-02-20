@@ -3252,11 +3252,12 @@ class Atom(object):
 
         if ax is None:
             fig, ax = plt.subplots()
-        As = self._A[np.log10(self._A) > A_lim]
+        mask = self._A > 10**A_lim
+        As = self._A[mask]
         ccodes = (np.log10(As) - A_lim)
         for i in np.arange(len(levels)):
             for j in np.arange(i+1, len(levels)):
-                if np.log10(self._A[j,i]) > A_lim:
+                if mask[j,i]:
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
                     ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
