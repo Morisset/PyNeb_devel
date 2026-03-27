@@ -2017,14 +2017,16 @@ class Atom(object):
             self._critDensity = sum_A / q.sum(axis=1)
             _mask_up = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
             _mask_down = np.tril(np.ones((n_level, n_level), dtype=bool), k=-1)
-            sum_q_up = np.where(_mask_up[:, :, np.newaxis], q, 0.0).sum(axis=1)
-            sum_q_down = np.where(_mask_down[:, :, np.newaxis], q, 0.0).sum(axis=1)
+            _q_3d = q.reshape(n_level, n_level, n_tem)  # ensure 3-D when tem is scalar
+            sum_q_up = np.where(_mask_up[:, :, np.newaxis], _q_3d, 0.0).sum(axis=1)
+            sum_q_down = np.where(_mask_down[:, :, np.newaxis], _q_3d, 0.0).sum(axis=1)
             coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
                              np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
             coeff_matrix[0, :] = 1.
             _diag_idx = np.arange(1, n_level)
-            _diag_vals = -(np.einsum('it,d->itd', sum_q_up[1:] + sum_q_down[1:], den) +
-                           sum_A[1:, :, np.newaxis])
+            _sum_A_2d = Atem.sum(axis=1)  # (n_level, n_tem) — no squeeze, always 2-D
+            _diag_vals = -(np.einsum('it,d->itd', sum_q_up[1:] + sum_q_down[1:], np.atleast_1d(den)) +
+                           _sum_A_2d[1:, :, np.newaxis])
             coeff_matrix[_diag_idx, _diag_idx] = _diag_vals
             vect = np.zeros(n_level)
             vect[0] = 1.
