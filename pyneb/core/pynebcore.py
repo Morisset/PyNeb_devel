@@ -137,43 +137,39 @@ class _AtomDataFits(object):
         file_to_open = '{0}/{1}'.format(self.atomPath, self.atomFile)
         if not os.path.exists(file_to_open):
             self.log_.error('File {0} not found'.format(file_to_open), calling=self.calling)
-        atomFits = pyfits.open(file_to_open, ignore_missing_end=True)
-        self.log_.message('Reading atom data from {0}'.format(self.atomFile), calling=self.calling)
-        
-        AtomExt = atomFits[1]
+        with pyfits.open(file_to_open, ignore_missing_end=True) as atomFits:
+            self.log_.message('Reading atom data from {0}'.format(self.atomFile), calling=self.calling)
+            AtomExt = atomFits[1]
 
+            #Read headers
+            self.AtomHeader = AtomExt.header
 
-        #Read headers
-        self.AtomHeader = AtomExt.header
-
-        self.gs = 'unknown'
-        try:
-            self.gs = self.AtomHeader['GSCONFIG']
-        except:
-            pass
+            self.gs = 'unknown'
+            try:
+                self.gs = self.AtomHeader['GSCONFIG']
+            except:
+                pass
 # sourcery skip: merge-nested-ifs
-        if 'SPECTRUM' in self.AtomHeader:
-            if int(self.AtomHeader['SPECTRUM']) != self.spec:
-                self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
-                                                                                                self.spec), calling=self.calling)
-        if 'ATOM' in self.AtomHeader:
-            if self.AtomHeader['ATOM'] != sym2name[self.elem]:
-                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
-                                                                                                sym2name[self.elem]), calling=self.calling)
-        #Read data
-        self._AtomData = AtomExt.data
+            if 'SPECTRUM' in self.AtomHeader:
+                if int(self.AtomHeader['SPECTRUM']) != self.spec:
+                    self.log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.atomFitsFile, self.AtomHeader['SPECTRUM'],
+                                                                                                    self.spec), calling=self.calling)
+            if 'ATOM' in self.AtomHeader:
+                if self.AtomHeader['ATOM'] != sym2name[self.elem]:
+                    self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.atomFitsFile, self.AtomHeader['ATOM'],
+                                                                                                    sym2name[self.elem]), calling=self.calling)
+            #Read data
+            self._AtomData = AtomExt.data
 
-        try:
-            self.atomNLevels = self.AtomHeader['N_LEVELS']
-        except:
-            self.log_.error('N_LEVELS is not set in {0}'.format(self.atomFitsFile))
-            
-        self.log_.message('NLevels of atomic data: {0}'.format(self.atomNLevels),
-                          calling=self.calling)
-        
-        self.NLevels = self.atomNLevels
-        
-        atomFits.close()
+            try:
+                self.atomNLevels = self.AtomHeader['N_LEVELS']
+            except:
+                self.log_.error('N_LEVELS is not set in {0}'.format(self.atomFitsFile))
+
+            self.log_.message('NLevels of atomic data: {0}'.format(self.atomNLevels),
+                              calling=self.calling)
+
+            self.NLevels = self.atomNLevels
 
 
     def initWaves(self):
@@ -351,9 +347,8 @@ class _AtomDataAscii(object):
         # Read data from ascii file
         #
         # Read energies and stat weights 
-        f = open(file_to_open)
-        data = f.readlines()
-        f.close()
+        with open(file_to_open) as f:
+            data = f.readlines()
         if data[0].strip() == 'Aij':
             # This means that we are dealing with new format (no more energies nor stats weights
             # so NIST data are needed
@@ -709,36 +704,34 @@ class _CollDataFits(object):
         file_to_open = '{0}/{1}'.format(self.collPath, self.collFile)
         if not os.path.exists(file_to_open):
             self.log_.error('File {0} not found'.format(file_to_open), calling=self.calling)        
-        collFits = pyfits.open(file_to_open, ignore_missing_end=True)
-        self.log_.message('Reading coll data from {0}'.format(self.collFile), calling=self.calling)
-        
-        CollExt = collFits[1]
+        with pyfits.open(file_to_open, ignore_missing_end=True) as collFits:
+            self.log_.message('Reading coll data from {0}'.format(self.collFile), calling=self.calling)
+            CollExt = collFits[1]
 
-        #Read headers
-        self.CollHeader = CollExt.header
-        self.CollExtNames = CollExt.columns.names
+            #Read headers
+            self.CollHeader = CollExt.header
+            self.CollExtNames = CollExt.columns.names
 
 # sourcery skip: merge-nested-ifs
-        if 'SPECTRUM' in self.CollHeader:
-            if int(self.CollHeader['SPECTRUM']) != self.spec:
-                log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFitsFile, self.CollHeader['SPECTRUM'],
-                                                                                                    self.spec), calling=self.calling)
-        if 'ATOM' in self.CollHeader:
-            if self.CollHeader['ATOM'] != sym2name[self.elem]:
-                self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFitsFile, self.CollHeader['ATOM'],
-                                                                                                    sym2name[self.elem]), calling=self.calling)
-                
-        #Read data
-        self._CollData = CollExt.data
-        if self.NLevels is None:
-            try:
-                self.NLevels = self.CollHeader['N_LEVELS']
-            except:
-                self.log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
-            
-        self.log_.message('NLevels of collisional data: {0}'.format(self.NLevels),
-                          calling=self.calling)
-        collFits.close()
+            if 'SPECTRUM' in self.CollHeader:
+                if int(self.CollHeader['SPECTRUM']) != self.spec:
+                    log_.error('The spectrum I read in the file {0} is {1}, but you are requesting {2}'.format(self.collFitsFile, self.CollHeader['SPECTRUM'],
+                                                                                                        self.spec), calling=self.calling)
+            if 'ATOM' in self.CollHeader:
+                if self.CollHeader['ATOM'] != sym2name[self.elem]:
+                    self.log_.error('The element name I read in the file {0} is {1}, but I was expecting {2}. Check the keyword ATOM'.format(self.collFitsFile, self.CollHeader['ATOM'],
+                                                                                                        sym2name[self.elem]), calling=self.calling)
+
+            #Read data
+            self._CollData = CollExt.data
+            if self.NLevels is None:
+                try:
+                    self.NLevels = self.CollHeader['N_LEVELS']
+                except:
+                    self.log_.error('N_LEVELS is not set in {0}'.format(self.collFitsFile))
+
+            self.log_.message('NLevels of collisional data: {0}'.format(self.NLevels),
+                              calling=self.calling)
 
 
     def initOmegas(self, OmegaInterp='Cheb'):
@@ -1063,10 +1056,9 @@ class _CollDataAscii(object):
         # Read data from ascii file
         #
         # Read energies and stat weights 
-        f = open(file_to_open)
-        data = f.readlines()
-        f.close()
-    
+        with open(file_to_open) as f:
+            data = f.readlines()
+
         coll_data = np.array([d.split() for d in data if d[0:3]!='***'], dtype='float')
         comments_tab = [d for d in data if d[0:3]=='***']
         self.comments = {}
@@ -2021,33 +2013,32 @@ class Atom(object):
             q = self.getCollRates(tem, n_level)
             Atem = np.outer(self._A[:n_level, :n_level], tem_ones).reshape(n_level, n_level, n_tem)
             pop_result = np.zeros((n_level, n_tem, n_den))
-            sum_q_up = np.zeros((n_level, n_tem))
-            sum_q_down = np.zeros((n_level, n_tem))
             sum_A = np.squeeze(Atem.sum(axis=1))
             self._critDensity = sum_A / q.sum(axis=1)
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
+            _mask_up = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
+            _mask_down = np.tril(np.ones((n_level, n_level), dtype=bool), k=-1)
+            sum_q_up = np.where(_mask_up[:, :, np.newaxis], q, 0.0).sum(axis=1)
+            sum_q_down = np.where(_mask_down[:, :, np.newaxis], q, 0.0).sum(axis=1)
             coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
                              np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
             coeff_matrix[0, :] = 1.
-            for i in range(1, n_level):
-                coeff_matrix[i, i] = (-(np.outer((sum_q_up[i] + sum_q_down[i]), den) + 
-                                        np.outer(sum_A[i], den_ones)).reshape(1, 1, n_tem, n_den))
+            _diag_idx = np.arange(1, n_level)
+            _diag_vals = -(np.einsum('it,d->itd', sum_q_up[1:] + sum_q_down[1:], den) +
+                           sum_A[1:, :, np.newaxis])
+            coeff_matrix[_diag_idx, _diag_idx] = _diag_vals
             vect = np.zeros(n_level)
             vect[0] = 1.
     
-            for i_tem in range(n_tem):
-                for i_den in range(n_den):
-                    pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    try:
-                        pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    #except np.linalg.LinAlgError:
-                    #    pop_result[:, i_tem, i_den] = np.nan
-                    except:
-                        self.log_.error('Error solving population matrix', calling=self.calling)
+            _A_batch = coeff_matrix.transpose(2, 3, 0, 1)  # (n_tem, n_den, n_level, n_level)
+            try:
+                pop_result = np.linalg.solve(
+                    _A_batch, np.broadcast_to(vect, (n_tem, n_den, n_level))
+                ).transpose(2, 0, 1)
+            except np.linalg.LinAlgError:
+                pop_result = np.full((n_level, n_tem, n_den), np.nan)
+            except Exception:
+                self.log_.error('Error solving population matrix', calling=self.calling)
+                pop_result = np.full((n_level, n_tem, n_den), np.nan)
             pop = np.squeeze(pop_result)
         else:
             if tem.shape != den.shape:
@@ -2068,10 +2059,7 @@ class Atom(object):
                 FB = self._B[:n_level, :n_level] * self.pumpingSED(self.wave_Ang[:n_level, :n_level])
                 for i in range(n_level):
                     FB[i,i] = 0.0
-            pop_result = np.zeros(res_shape_rav1)
             coeff_matrix = np.ones(res_shape_rav2)
-            sum_q_up = np.zeros(res_shape_rav1)
-            sum_q_down = np.zeros(res_shape_rav1)
             sum_A = A.sum(axis=1)
             sum_FB = FB.sum(axis=1)
             n_tem = tem_rav.size
@@ -2079,33 +2067,34 @@ class Atom(object):
             #Atem = np.outer(self._A, np.ones(n_tem)).reshape(n_level, n_level, n_tem)
             Atem = np.outer(self._A[:n_level, :n_level], np.ones(n_tem)).reshape(n_level, n_level, n_tem)
             self._critDensity = Atem.sum(axis=1) / q.sum(axis=1)
-
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
-            for row in range(1, n_level):
-                # upper right half            
-                for col in range(row + 1, n_level):
-                    coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row] + FB[col, row]
-                # lower left half
-                for col in range(row):
-                    coeff_matrix[row, col] = den_rav * q[col, row] + FB[col, row]
-                # diagonal
-                coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row] + sum_FB[row])
+            _mask_up = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
+            _mask_down = np.tril(np.ones((n_level, n_level), dtype=bool), k=-1)
+            sum_q_up = np.where(_mask_up[:, :, np.newaxis], q, 0.0).sum(axis=1)
+            sum_q_down = np.where(_mask_down[:, :, np.newaxis], q, 0.0).sum(axis=1)
+            _qt = q.transpose(1, 0, 2)  # _qt[row, col] = q[col, row]
+            _upper_mask = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
+            # Fill rows 1..n_level-1: off-diagonal = den*q[col,row] + FB[col,row] + A[col,row] if col>row
+            coeff_matrix[1:] = (den_rav * _qt[1:] + FB.T[1:, :, np.newaxis] +
+                                (A.T * _upper_mask)[1:, :, np.newaxis])
+            # Override diagonal for rows 1..n_level-1
+            _diag_idx = np.arange(1, n_level)
+            coeff_matrix[_diag_idx, _diag_idx] = -(den_rav * (sum_q_up[1:] + sum_q_down[1:]) +
+                                                    sum_A[1:, np.newaxis] + sum_FB[1:, np.newaxis])
                 
             vect = np.zeros(n_level)
             vect[0] = 1.
             
-            for i in range(tem.size):
-                try:
-                    pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
-                except np.linalg.LinAlgError:
-                    pop_result[:, i] = np.nan
-                except:
-                    self.log_.error('Error solving population matrix', calling=self.calling)
-            
+            _A_batch = coeff_matrix.transpose(2, 0, 1)  # (n_tem, n_level, n_level)
+            try:
+                pop_result = np.linalg.solve(
+                    _A_batch, np.broadcast_to(vect, (n_tem, n_level))
+                ).T
+            except np.linalg.LinAlgError:
+                pop_result = np.full((n_level, n_tem), np.nan)
+            except Exception:
+                self.log_.error('Error solving population matrix', calling=self.calling)
+                pop_result = np.full((n_level, n_tem), np.nan)
+
             pop = np.squeeze(pop_result.reshape(res_shape1))
             
         return pop
@@ -3463,7 +3452,8 @@ class RecAtom(object):
         """
         
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
-        header = pyfits.open(self.recFitsFullPath, ignore_missing_end=True)[1].header
+        with pyfits.open(self.recFitsFullPath, ignore_missing_end=True) as fits_tmp:
+            header = fits_tmp[1].header
         for record in header.items():
             if 'SOURCE' in record[0]:
                 number = record[0].lstrip('SOURCE')
@@ -3481,12 +3471,11 @@ class RecAtom(object):
             return None
         self.recFitsFullPath = atomicData.getDataFullPath(self.atom, 'rec')
         try:
-            hdu = pyfits.open(self.recFitsFullPath)
-        except:
+            with pyfits.open(self.recFitsFullPath) as hdu:
+                self._RecombData = hdu[1].data
+                header = hdu[1].header
+        except Exception:
             self.log_.error('{0} recombination file not read'.format(self.recFitsFile), calling=self.calling)
-        self._RecombData = hdu[1].data
-        header = hdu[1].header
-        hdu.close()
         try:
             self.temp = self._RecombData['TEMP']
         except:
@@ -5116,10 +5105,11 @@ class Observation(object):
                         if atom in LINE_LABEL_LIST:
                             self.log_.message('Reading {}_{} from {}'.format(atom, line, f.name),
                                               calling='Observation.readData')
-                            fits_hdu = pyfits.open(f)[0]
-                            fits_data = fits_hdu.data
-                            self.origin_fits_shape = fits_data.shape
-                            self.fits_header = fits_hdu.header
+                            with pyfits.open(f, memmap=False) as fits_tmp:
+                                fits_hdu = fits_tmp[0]
+                                fits_data = fits_hdu.data
+                                self.origin_fits_shape = fits_data.shape
+                                self.fits_header = fits_hdu.header
                             self.wcs = WCS(self.fits_header).celestial
                             if Cutout2D_position is not None:
                                 self.log_.debug('Cutout2D applied to data shape {}.'.format(fits_data.shape),
@@ -5140,11 +5130,12 @@ class Observation(object):
                             if err_file.exists():
                                 self.log_.message('Reading error {}_{} from {}'.format(atom, line, err_file.name),
                                                   calling='Observation.readData')
-                                err_fits_hdu = pyfits.open(err_file)[0]
-                                if err_fits_hdu.data.shape != self.origin_fits_shape:
-                                    self.log_.error('error shape in file {} is {}. data shape is {}.'.format(
-                                                    err_file.name, err_fits_hdu.data.shape, self.fits_shape))
-                                err_fits_data = err_fits_hdu.data
+                                with pyfits.open(err_file, memmap=False) as err_fits_tmp:
+                                    err_fits_hdu = err_fits_tmp[0]
+                                    if err_fits_hdu.data.shape != self.origin_fits_shape:
+                                        self.log_.error('error shape in file {} is {}. data shape is {}.'.format(
+                                                        err_file.name, err_fits_hdu.data.shape, self.fits_shape))
+                                    err_fits_data = err_fits_hdu.data
                                 if Cutout2D_position is not None:
                                     C2D = Cutout2D(data=err_fits_data, position=Cutout2D_position, 
                                                    size=Cutout2D_size, mode='trim',
