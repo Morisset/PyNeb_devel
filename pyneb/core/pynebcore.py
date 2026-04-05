@@ -2033,8 +2033,8 @@ class Atom(object):
             _A_batch = coeff_matrix.transpose(2, 3, 0, 1)  # (n_tem, n_den, n_level, n_level)
             try:
                 pop_result = np.linalg.solve(
-                    _A_batch, np.broadcast_to(vect, (n_tem, n_den, n_level))
-                ).transpose(2, 0, 1)
+                    _A_batch, np.broadcast_to(vect, (n_tem, n_den, n_level))[..., np.newaxis]
+                )[..., 0].transpose(2, 0, 1)
             except np.linalg.LinAlgError:
                 pop_result = np.full((n_level, n_tem, n_den), np.nan)
             except Exception as e:
@@ -2084,8 +2084,8 @@ class Atom(object):
             _A_batch = coeff_matrix.transpose(2, 0, 1)  # (n_tem, n_level, n_level)
             try:
                 pop_result = np.linalg.solve(
-                    _A_batch, np.broadcast_to(vect, (n_tem, n_level))
-                ).T
+                    _A_batch, np.broadcast_to(vect, (n_tem, n_level))[..., np.newaxis]
+                )[..., 0].T
             except np.linalg.LinAlgError:
                 pop_result = np.full((n_level, n_tem), np.nan)
             except Exception:
