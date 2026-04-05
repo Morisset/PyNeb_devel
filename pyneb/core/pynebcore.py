@@ -2007,26 +2007,25 @@ class Atom(object):
         if product:
             n_tem = tem.size
             n_den = den.size
-            tem_ones = np.ones(n_tem)
-            den_ones = np.ones(n_den)
             # q is vector-indexed (q(0, 1) = rate between levels 1 and 2)
-            q = self.getCollRates(tem, n_level)
-            Atem = np.outer(self._A[:n_level, :n_level], tem_ones).reshape(n_level, n_level, n_tem)
-            pop_result = np.zeros((n_level, n_tem, n_den))
-            sum_A = np.squeeze(Atem.sum(axis=1))
-            self._critDensity = sum_A / q.sum(axis=1)
-            _mask_up = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
+            q = self.getCollRates(tem, n_level)          # (n_level, n_level, n_tem)
+            A_nd = self._A[:n_level, :n_level]           # (n_level, n_level), T-independent
+
+            sum_A = A_nd.sum(axis=1)                     # (n_level,)
+            _q_3d = q.reshape(n_level, n_level, n_tem)   # ensure 3-D when tem is scalar
+            self._critDensity = sum_A[:, np.newaxis] / _q_3d.sum(axis=1)
+            _mask_up   = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
             _mask_down = np.tril(np.ones((n_level, n_level), dtype=bool), k=-1)
-            _q_3d = q.reshape(n_level, n_level, n_tem)  # ensure 3-D when tem is scalar
-            sum_q_up = np.where(_mask_up[:, :, np.newaxis], _q_3d, 0.0).sum(axis=1)
+            sum_q_up   = np.where(_mask_up  [:, :, np.newaxis], _q_3d, 0.0).sum(axis=1)
             sum_q_down = np.where(_mask_down[:, :, np.newaxis], _q_3d, 0.0).sum(axis=1)
-            coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
-                             np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
+
+            # coeff_matrix[i, j, t, d] = q[j, i, t] * den[d] + A[j, i]
+            coeff_matrix = (_q_3d.transpose(1, 0, 2)[..., np.newaxis] * den
+                            + A_nd.T[:, :, np.newaxis, np.newaxis])
             coeff_matrix[0, :] = 1.
-            _diag_idx = np.arange(1, n_level)
-            _sum_A_2d = Atem.sum(axis=1)  # (n_level, n_tem) — no squeeze, always 2-D
-            _diag_vals = -(np.einsum('it,d->itd', sum_q_up[1:] + sum_q_down[1:], np.atleast_1d(den)) +
-                           _sum_A_2d[1:, :, np.newaxis])
+            _diag_idx  = np.arange(1, n_level)
+            _diag_vals = -(np.einsum('it,d->itd', sum_q_up[1:] + sum_q_down[1:], np.atleast_1d(den))
+                           + sum_A[1:, np.newaxis, np.newaxis])
             coeff_matrix[_diag_idx, _diag_idx] = _diag_vals
             vect = np.zeros(n_level)
             vect[0] = 1.
@@ -2038,8 +2037,8 @@ class Atom(object):
                 ).transpose(2, 0, 1)
             except np.linalg.LinAlgError:
                 pop_result = np.full((n_level, n_tem, n_den), np.nan)
-            except Exception:
-                self.log_.error('Error solving population matrix', calling=self.calling)
+            except Exception as e:
+                self.log_.error('Error solving population matrix: {0}'.format(e), calling=self.calling)
                 pop_result = np.full((n_level, n_tem, n_den), np.nan)
             pop = np.squeeze(pop_result)
         else:
@@ -2065,19 +2064,15 @@ class Atom(object):
             sum_A = A.sum(axis=1)
             sum_FB = FB.sum(axis=1)
             n_tem = tem_rav.size
-            # Following line changed 29/11/2012. It made the code crash when atom_nlevels diff coll_nlevels
-            #Atem = np.outer(self._A, np.ones(n_tem)).reshape(n_level, n_level, n_tem)
-            Atem = np.outer(self._A[:n_level, :n_level], np.ones(n_tem)).reshape(n_level, n_level, n_tem)
-            self._critDensity = Atem.sum(axis=1) / q.sum(axis=1)
-            _mask_up = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
+            self._critDensity = sum_A[:, np.newaxis] / q.sum(axis=1)
+            _mask_up   = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
             _mask_down = np.tril(np.ones((n_level, n_level), dtype=bool), k=-1)
-            sum_q_up = np.where(_mask_up[:, :, np.newaxis], q, 0.0).sum(axis=1)
+            sum_q_up   = np.where(_mask_up  [:, :, np.newaxis], q, 0.0).sum(axis=1)
             sum_q_down = np.where(_mask_down[:, :, np.newaxis], q, 0.0).sum(axis=1)
             _qt = q.transpose(1, 0, 2)  # _qt[row, col] = q[col, row]
-            _upper_mask = np.triu(np.ones((n_level, n_level), dtype=bool), k=1)
             # Fill rows 1..n_level-1: off-diagonal = den*q[col,row] + FB[col,row] + A[col,row] if col>row
             coeff_matrix[1:] = (den_rav * _qt[1:] + FB.T[1:, :, np.newaxis] +
-                                (A.T * _upper_mask)[1:, :, np.newaxis])
+                                (A.T * _mask_up)[1:, :, np.newaxis])
             # Override diagonal for rows 1..n_level-1
             _diag_idx = np.arange(1, n_level)
             coeff_matrix[_diag_idx, _diag_idx] = -(den_rav * (sum_q_up[1:] + sum_q_down[1:]) +

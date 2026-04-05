@@ -7,8 +7,20 @@ PyNeb - python package for the analysis of emission lines
 import sys
 
 #from .version import __version__
-from importlib.metadata import version
-__version__ = version("PyNeb")
+import re as _re
+from pathlib import Path as _Path
+
+def _get_version():
+    pyproject = _Path(__file__).parent.parent / 'pyproject.toml'
+    if pyproject.exists():
+        m = _re.search(r'^version\s*=\s*"([^"]+)"', pyproject.read_text(), _re.MULTILINE)
+        if m:
+            return m.group(1)
+    from importlib.metadata import version
+    return version("PyNeb")
+
+__version__ = _get_version()
+del _re, _Path, _get_version
 
 from .utils.Config import _Config
 config = _Config()
