@@ -2865,7 +2865,7 @@ class Atom(object):
             if printPop:
                 to_print += "%.3E  " % (pop[i])
             if printCrit:
-                to_print += "%.3E" % critdens[i]
+                to_print += "%.3E" % float(critdens[i].flat[0])
             if printPop or printCrit:
                 print(to_print)
         if printPop or printCrit:
