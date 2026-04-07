@@ -1,9 +1,7 @@
 """
 PyNeb - python package for the analysis of emission lines
 """
-"""
-PyNeb - python package for the analysis of emission lines
-"""
+
 import sys
 
 #from .version import __version__
