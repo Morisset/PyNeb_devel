@@ -120,10 +120,19 @@ class TestGetCrossTemDen:
         true_tem = 1e4
         true_den = 500.
 
-        r_O3 = (O3.getEmissivity(true_tem, true_den, wave=4363) /
-                O3.getEmissivity(true_tem, true_den, wave=5007))
-        r_S2 = (S2.getEmissivity(true_tem, true_den, wave=6731) /
-                S2.getEmissivity(true_tem, true_den, wave=6716))
+        emiss_O3_4363 = O3.getEmissivity(true_tem, true_den, wave=4363)
+        emiss_O3_5007 = O3.getEmissivity(true_tem, true_den, wave=5007)
+        emiss_S2_6731 = S2.getEmissivity(true_tem, true_den, wave=6731)
+        emiss_S2_6716 = S2.getEmissivity(true_tem, true_den, wave=6716)
+        
+        # Assert non-None to satisfy type checker and ensure validity
+        assert emiss_O3_4363 is not None and np.isfinite(emiss_O3_4363)
+        assert emiss_O3_5007 is not None and np.isfinite(emiss_O3_5007)
+        assert emiss_S2_6731 is not None and np.isfinite(emiss_S2_6731)
+        assert emiss_S2_6716 is not None and np.isfinite(emiss_S2_6716)
+        
+        r_O3 = emiss_O3_4363 / emiss_O3_5007
+        r_S2 = emiss_S2_6731 / emiss_S2_6716
 
         diags = pn.Diagnostics()
         diags.addDiag(['[OIII] 4363/5007', '[SII] 6731/6716'])
