@@ -4039,6 +4039,9 @@ class RecAtom(object):
                 ij = self.getTransition(wave)
                 if ij is not None:
                     label = '{}_{}'.format(ij[0], ij[1])
+                else:
+                    self.log_.warn('Wrong wavelength {0}'.format(wave), calling=self.calling)
+                    return None
         if label is None:
             res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
             return res
