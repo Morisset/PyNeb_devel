@@ -3206,7 +3206,7 @@ class Atom(object):
             pass
 
 
-    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1):
+    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1, cmap='Spectral', colorbar=False):
 
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
@@ -3245,11 +3245,19 @@ class Atom(object):
                 if np.log10(self._A[j,i]) > A_lim:
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
-                    ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
+                    ccode = plt.get_cmap(cmap)(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
                     ax.plot(x, y, lw = lw, c=ccode)
         for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
             ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
 
+        if colorbar:
+            import matplotlib as mpl
+            log_A_min = ccodes.min() + A_lim
+            log_A_max = ccodes.max() + A_lim
+            norm = mpl.colors.Normalize(vmin=log_A_min, vmax=log_A_max)
+            sm = mpl.cm.ScalarMappable(cmap=plt.get_cmap(cmap), norm=norm)
+            sm.set_array([])
+            plt.colorbar(sm, ax=ax, label=r'log$_{10}$(A [s$^{-1}$])')
         x_ticks = [x_term_dic[t] for t in x_term_dic]
         x_labels = list(x_term_dic)
         ax.set_xticks(x_ticks)
