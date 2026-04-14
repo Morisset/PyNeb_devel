@@ -3207,7 +3207,13 @@ class Atom(object):
 
 
     def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1, cmap='Spectral', colorbar=False):
-
+        """
+        Draw a Grotrian plot of the selected atom, labelling only lines above a
+        specified transition probability threshold (default: 1.e-3 s^-1).
+        For ground state levels, the Russell-Saunders term symbol is also given.
+        The size of the points is proportional to the number of levels within a given energy range,
+        to make it easier to identify multiplets. The color of the lines is proportional to the transition probability.
+        """
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
         T2 = (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
