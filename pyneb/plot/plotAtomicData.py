@@ -166,7 +166,7 @@ class DataPlot(object):
                         if A[j, i] > 0:
                             Ay.append(np.log10(A[j, i]))
                         else:
-                            Ay.append(np.NaN)
+                            Ay.append(np.nan)
                 plt.scatter(x, Ay, marker=mark[i_marker], s=300., c=color, alpha=0.35, linewidths=1, label='%s' % (data['ID']))
                 ax.set_xticks(ticks)
             except:
@@ -217,7 +217,7 @@ class DataPlot(object):
                 A[i, 0:A_tmp.shape[0], 0:A_tmp.shape[1]] = A_tmp
             color.append(data['color'])
         
-        A[np.where((A<=0))] = np.NaN
+        A[np.where((A<=0))] = np.nan
         lgA = np.log10(A)
         
         x = ticks

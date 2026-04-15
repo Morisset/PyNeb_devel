@@ -28,7 +28,8 @@ from fractions import Fraction
 if config.INSTALLED['scipy']:
     from scipy import interpolate
     from scipy.special import gamma
-if config.INSTALLED['plt']: 
+if config.INSTALLED['plt']:
+    import matplotlib as mpl
     import matplotlib.pyplot as plt
     from matplotlib import cm
     from matplotlib.collections import LineCollection
@@ -939,8 +940,8 @@ class _CollDataFits(object):
             fit = self.ChebCoeffs[lev_j - 1, lev_i - 1, 0: self._ChebOrder[lev_i - 1, lev_j - 1]]
             tem_eval = tem_in_file_units
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = TemArray[0]
                 rightExtrapol = TemArray[-1]
@@ -959,8 +960,8 @@ class _CollDataFits(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
@@ -1189,16 +1190,16 @@ class _CollDataAscii(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray()) * OmegaArray
             else:
@@ -1413,16 +1414,16 @@ class _CollDataStout(_CollDataAscii):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray(lev_i=lev_i, lev_j=lev_j)) * OmegaArray
             else:
@@ -3210,9 +3211,15 @@ class Atom(object):
         """
         Draw a Grotrian plot of the selected atom, labelling only lines above a
         specified transition probability threshold (default: 1.e-3 s^-1).
-        For ground state levels, the Russell-Saunders term symbol is also given.
         The size of the points is proportional to the number of levels within a given energy range,
         to make it easier to identify multiplets. The color of the lines is proportional to the transition probability.
+        Parameters:
+            A_lim:        transition probability threshold in log10 (default: -3, i.e. 1.e-3 s^-1)
+            ax:           axis where to plot the result (default: None, i.e. a new axis is done)
+            lw:           line width (default = 1)
+            ms:           marker size (default = 1)
+            cmap:         colormap to use for the lines (default: plt.cm.Spectral)
+            colorbar:     flag to place colorbar (default = False)
         """
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
@@ -3244,11 +3251,12 @@ class Atom(object):
 
         if ax is None:
             fig, ax = plt.subplots()
-        As = self._A[np.log10(self._A) > A_lim]
+        mask = self._A > 10**A_lim
+        As = self._A[mask]
         ccodes = (np.log10(As) - A_lim)
         for i in np.arange(len(levels)):
             for j in np.arange(i+1, len(levels)):
-                if np.log10(self._A[j,i]) > A_lim:
+                if mask[j,i]:
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
                     ccode = plt.get_cmap(cmap)(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
@@ -3257,7 +3265,6 @@ class Atom(object):
             ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
 
         if colorbar:
-            import matplotlib as mpl
             log_A_min = ccodes.min() + A_lim
             log_A_max = ccodes.max() + A_lim
             norm = mpl.colors.Normalize(vmin=log_A_min, vmax=log_A_max)
