@@ -100,7 +100,11 @@ class _Config(object):
             self.INSTALLED['cvxopt'] = True
         except:
             self.INSTALLED['cvxopt'] = False   
-
+        try:
+            from sklearn.neural_network import MLPRegressor
+            self.INSTALLED['sklearn'] = True
+        except:
+            self.INSTALLED['sklearn'] = False
 
         self.DataFiles = {}
             

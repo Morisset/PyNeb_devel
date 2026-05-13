@@ -1641,7 +1641,9 @@ class Atom(object):
         self.ANN_inst_kwargs = { 
                                 'verbose' : False, 
                                 'scaling' : True,
-                                'use_log' : True
+                                'use_log' : True,
+                                'RM_filename' : None,
+                                'random_seed' : None
                                 }
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
@@ -2585,6 +2587,11 @@ class Atom(object):
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
                   wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
 
+
+        if not config.INSTALLED['sklearn']:
+            self.log_.error('getTemDen with ANN method cannot be used in absence of sklearn package',
+                          calling=self.calling)
+            return None
         from pyneb.utils.ai_neb import manage_RM
 
         self._test_lev(lev_i1)
@@ -2601,8 +2608,7 @@ class Atom(object):
             
         tem = np.asarray(tem)
         den = np.asarray(den)
-
-            
+       
         X1_test = np.asarray(int_ratio).ravel()
         if (tem == -1).any(): # Looking for Tem
             if np.asarray(den).size == 1: # Single density
@@ -2666,25 +2672,30 @@ class Atom(object):
         else:
             self.log_.error('getTemDen: one of tem or den must be unset', calling=self.calling)
 
-        X1_train = eval(to_eval)
-        X = np.array((X1_train, X2_train)).T
-        y = np.log10(y_train)
-        self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-        self.ANN.init_RM(**self.ANN_init_kwargs)
-        print("X shape =", X.shape)
-        print("y shape =", y.shape)
-        print("X min/max =", np.nanmin(X, axis=0), np.nanmax(X, axis=0))
-        print("y min/max =", np.nanmin(y), np.nanmax(y))
-        self.ANN.train_RM()
+        if self.ANN_inst_kwargs['RM_filename'] is None:
+            X1_train = eval(to_eval)
+            X = np.array((X1_train, X2_train)).T
+            y = np.log10(y_train)
+            self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+            self.ANN.init_RM(**self.ANN_init_kwargs)
+            #print("X shape =", X.shape)
+            #print("y shape =", y.shape)
+            #print("X min/max =", np.nanmin(X, axis=0), np.nanmax(X, axis=0))
+            #print("y min/max =", np.nanmin(y), np.nanmax(y))
+            self.ANN.train_RM()
+            self.log_.message('ANN trained', calling=self.calling)
         # set the test values to the one we are looking for
+        else:
+            self.log_.message('Loading ANN from file {0}'.format(self.ANN_inst_kwargs['RM_filename']), calling=self.calling)
+            self.ANN = manage_RM(**self.ANN_inst_kwargs)
         X_test = np.array((X1_test, X2_test)).T
         self.ANN.set_test(X_test)
         # predict the result and denormalize them
         self.ANN.predict()
         #testing#
-        print("X_test =", X_test)
-        print("isfin =", self.ANN.isfin)
-        print("pred =", self.ANN.pred)
+        #print("X_test =", X_test)
+        #print("isfin =", self.ANN.isfin)
+        #print("pred =", self.ANN.pred)
         to_return = np.ones_like(np.asarray(int_ratio), dtype=float) * np.nan
         to_return_flat = to_return.ravel()
         to_return_flat[self.ANN.isfin] = self.ANN.pred.ravel()
