@@ -6,7 +6,7 @@ This is a simplified version of the original ai4neb manage_RM class,
 restricted to scikit-learn MLPRegressor models.
 
 
-@author: ChristopheMorisset & RogelioOrozcoDuarte
+@author: ChristopheMorisset & RogelioOrozcoDuarte & OskarArangure
 """
 
 # coding: utf-8
