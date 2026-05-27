@@ -2587,6 +2587,11 @@ class Atom(object):
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
                   wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
 
+
+        if not config.INSTALLED['sklearn']:
+            self.log_.error('getTemDen with ANN method cannot be used in absence of sklearn package',
+                          calling=self.calling)
+            return None
         from pyneb.utils.ai_neb import manage_RM
 
         self._test_lev(lev_i1)
@@ -2603,8 +2608,7 @@ class Atom(object):
             
         tem = np.asarray(tem)
         den = np.asarray(den)
-
-            
+       
         X1_test = np.asarray(int_ratio).ravel()
         if (tem == -1).any(): # Looking for Tem
             if np.asarray(den).size == 1: # Single density
