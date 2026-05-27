@@ -14,6 +14,7 @@ import numpy as np
 import time
 import random
 from glob import glob
+import json
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPRegressor
@@ -86,6 +87,7 @@ class manage_RM(object):
         self.y_test = self._copy_None(y_test)
         self._init_dims(train=True, test=True)
         self.RM_version = "0.17"
+        self.RM_metadata = {} #new attribute to load the medata from the pre-trained ANN
         if self.verbose:
             #check N_train and N_test
             print('Training set size = {}, Test set size = {}'.format(self.N_train, self.N_test))
@@ -335,7 +337,7 @@ class manage_RM(object):
             print('Predicting from {} inputs to {} outputs using {} data in {:.2f} secs.'.format(self.N_in_test,
                   self.N_out, self.N_test, end - start))
         
-    def save_RM(self, filename='RM', save_train=False, save_test=False, **kwargs):
+    def save_RM(self, filename='RM', save_train=False, save_test=False, save_metadata=True,**kwargs):
         """
         Save the current regression model and its configuration.
         
@@ -388,6 +390,24 @@ class manage_RM(object):
                 ]
 
         joblib.dump(to_save, filename+".ai4neb_sk", **kwargs)
+
+        if save_metadata:
+            metadata = getattr(self, "metadata", None)
+
+            if metadata is not None:
+                metadata = dict(metadata)
+
+                if "filename" not in metadata:
+                    metadata["filename"] = filename + ".ai4neb_sk"
+
+                with open(filename + ".json", "w") as f:
+                    json.dump(metadata, f, indent=2)
+
+                if self.verbose:
+                    print('RM metadata saved to {}.json'.format(filename))
+        if self.verbose:
+            print('RM saved to {}.ai4neb_sk'.format(filename))
+
         # if self.RM_type[0:3] == 'SK_': 
         #     joblib.dump(to_save, filename+'.ai4neb_sk', **kwargs)
         #     if self.verbose:
@@ -467,6 +487,22 @@ class manage_RM(object):
             self.X_train_unscaled = self.X_train
             self.X_test_unscaled = self.X_test
             self.y_train_unscaled = self.y_train
+
+
+        # Read optional metadata file
+        metadata_file = "{}.json".format(filename)
+        if metadata_file in files:
+            try:
+                with open(metadata_file, "r") as f:
+                    self.metadata = json.load(f)
+                if self.verbose:
+                    print("RM metadata loaded from {}".format(metadata_file))
+            except:
+                self.metadata = {}
+                if self.verbose:
+                    print("WARNING: could not read metadata file {}".format(metadata_file))
+        else:
+            self.metadata = {}
         self.model_read =True
         
 def score(RM, X, y_true, axis=None):

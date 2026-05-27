@@ -1642,6 +1642,8 @@ class Atom(object):
                                 'verbose' : False, 
                                 'scaling' : True,
                                 'use_log' : True
+                                #RMfile : None,
+                                #random_seed : None
                                 }
         self.ANN_init_kwargs = {'solver' : 'lbfgs', 
                                 'activation' : 'tanh', 
@@ -2665,35 +2667,59 @@ class Atom(object):
                 return self.getEmissivity(tem=X2_train, den=y_train, wave=wave, product=False) 
         else:
             self.log_.error('getTemDen: one of tem or den must be unset', calling=self.calling)
-
-        X1_train = eval(to_eval)
-        X = np.array((X1_train, X2_train)).T
-        y = np.log10(y_train)
-        self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
-        self.ANN.init_RM(**self.ANN_init_kwargs)
-        print("X shape =", X.shape)
-        print("y shape =", y.shape)
-        print("X min/max =", np.nanmin(X, axis=0), np.nanmax(X, axis=0))
-        print("y min/max =", np.nanmin(y), np.nanmax(y))
-        self.ANN.train_RM()
+        #TERMINA IF
+        #else:
+            #self.ANN = manage_RM(**self.ANN_inst_kwargs)
         # set the test values to the one we are looking for
+        RM_filename = self.ANN_inst_kwargs.get('RM_filename', None)
+
+        if RM_filename is not None:
+            self.ANN = manage_RM(**self.ANN_inst_kwargs)
+
+        else:
+            X1_train = eval(to_eval)
+            X = np.array((X1_train, X2_train)).T
+            y = np.log10(y_train)
+
+            self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
+            self.ANN.init_RM(**self.ANN_init_kwargs)
+            self.ANN.train_RM()
+
+            # This line indicates in which mode we are training the ANN
+            mode = 'tem' if (tem == -1).any() else 'den'
+
+            # Metadata used in the training
+            self.ANN.metadata = {
+            "atom": self.elem,
+            "ion": int(self.spec),
+            "to_eval": to_eval,
+            "mode": mode,
+            "wave1": None if wave1 == -1 else int(wave1),
+            "wave2": None if wave2 == -1 else int(wave2),
+            "lev_i1": None if lev_i1 == -1 else int(lev_i1),
+            "lev_j1": None if lev_j1 == -1 else int(lev_j1),
+            "lev_i2": None if lev_i2 == -1 else int(lev_i2),
+            "lev_j2": None if lev_j2 == -1 else int(lev_j2),
+            "start_x": float(start_x),
+            "end_x": float(end_x),
+            "log": bool(log),
+            "ANN_n_temden": int(self.ANN_n_temden),
+            "n_train": int(N_train),
+            "scaling": bool(self.ANN.scaling),
+            "use_log": bool(self.ANN.use_log),
+            "random_seed": self.ANN.random_seed,
+            "atom_file": getattr(self, "atomFile", None),
+            "coll_file": getattr(self, "collFile", None)
+            }
         X_test = np.array((X1_test, X2_test)).T
         self.ANN.set_test(X_test)
         # predict the result and denormalize them
         self.ANN.predict()
-        #testing#
-        print("X_test =", X_test)
-        print("isfin =", self.ANN.isfin)
-        print("pred =", self.ANN.pred)
+
         to_return = np.ones_like(np.asarray(int_ratio), dtype=float) * np.nan
         to_return_flat = to_return.ravel()
         to_return_flat[self.ANN.isfin] = self.ANN.pred.ravel()
         to_return = 10**to_return_flat.reshape(to_return.shape)
-        #this last three lines only work for list/arrays 
-        #If we input a single value it will return a nan.
-        # to_return = np.ones_like(int_ratio) * np.nan
-        # to_return.ravel()[self.ANN.isfin] = self.ANN.pred.ravel()
-        # to_return = 10**to_return
         return to_return
 
 
