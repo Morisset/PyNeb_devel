@@ -2038,15 +2038,21 @@ class Atom(object):
                                         np.outer(sum_A[i], den_ones)).reshape(1, 1, n_tem, n_den))
             vect = np.zeros(n_level)
             vect[0] = 1.
-    
-            for i_tem in range(n_tem):
-                for i_den in range(n_den):
-                    try:
-                        pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    except np.linalg.LinAlgError:
-                        pop_result[:, i_tem, i_den] = np.nan
-                    except Exception:
-                        self.log_.error('Error solving population matrix', calling=self.calling)
+
+            try:
+                # solve all the (tem, den) systems in a single batched LAPACK call
+                stacked = np.moveaxis(coeff_matrix, (0, 1), (2, 3))
+                pop_result = np.moveaxis(solve(stacked, vect[:, None])[..., 0], 2, 0)
+            except np.linalg.LinAlgError:
+                # at least one matrix is singular: solve one by one, NaN where singular
+                for i_tem in range(n_tem):
+                    for i_den in range(n_den):
+                        try:
+                            pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
+                        except np.linalg.LinAlgError:
+                            pop_result[:, i_tem, i_den] = np.nan
+                        except Exception:
+                            self.log_.error('Error solving population matrix', calling=self.calling)
             pop = np.squeeze(pop_result)
         else:
             if tem.shape != den.shape:
@@ -2095,15 +2101,21 @@ class Atom(object):
 
             vect = np.zeros(n_level)
             vect[0] = 1.
-            
-            for i in range(tem.size):
-                try:
-                    pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
-                except np.linalg.LinAlgError:
-                    pop_result[:, i] = np.nan
-                except Exception:
-                    self.log_.error('Error solving population matrix', calling=self.calling)
-            
+
+            try:
+                # solve all the (tem, den) systems in a single batched LAPACK call
+                # (vect shaped (1, n_level, 1) so numpy treats it as a stacked column vector)
+                pop_result = solve(np.moveaxis(coeff_matrix, 2, 0), vect[None, :, None])[..., 0].T
+            except np.linalg.LinAlgError:
+                # at least one matrix is singular: solve one by one, NaN where singular
+                for i in range(tem.size):
+                    try:
+                        pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
+                    except np.linalg.LinAlgError:
+                        pop_result[:, i] = np.nan
+                    except Exception:
+                        self.log_.error('Error solving population matrix', calling=self.calling)
+
             pop = np.squeeze(pop_result.reshape(res_shape1))
             
         return pop
