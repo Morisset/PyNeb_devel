@@ -11,8 +11,34 @@ from ..utils.physics import CST
 from ..utils.misc import ROOT_DIR
 
 
+# Free-bound coefficient files from Ercolano & Storey 2006 and the
+# log-spaced temperature grids of their columns
+_ERCOLANO_FILES = {
+    'H': ('atomic_data/coeff_ercolano_H.txt',
+          10**np.array([2. , 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3. , 3.1, 3.2,
+                        3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5,
+                        4.6, 4.7, 4.8, 4.9, 5. ])),
+    'He1': ('atomic_data/coeff_ercolano_He1.txt',
+            10**np.array([2.  , 2.04, 2.08, 2.12, 2.16, 2.2 , 2.24, 2.28, 2.32, 2.36, 2.4 ,
+                          2.44, 2.48, 2.52, 2.56, 2.6 , 2.64, 2.68, 2.72, 2.76, 2.8 , 2.84,
+                          2.88, 2.92, 2.96, 3.  , 3.04, 3.08, 3.12, 3.16, 3.2 , 3.24, 3.28,
+                          3.32, 3.36, 3.4 , 3.44, 3.48, 3.52, 3.56, 3.6 , 3.64, 3.68, 3.72,
+                          3.76, 3.8 , 3.84, 3.88, 3.92, 3.96, 4.  , 4.04, 4.08, 4.12, 4.16,
+                          4.2 , 4.24, 4.28, 4.32, 4.36, 4.4 , 4.44, 4.48, 4.52, 4.56, 4.6 ,
+                          4.64, 4.68, 4.72, 4.76, 4.8 , 4.84, 4.88, 4.92, 4.96, 5.  ])),
+    'He2': ('atomic_data/coeff_ercolano_He2.txt',
+            10**np.array([2. , 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3. , 3.1, 3.2,
+                          3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5,
+                          4.6, 4.7, 4.8, 4.9, 5. ])),
+    }
+
 
 class Continuum(object):
+
+    # class-level caches: the Ercolano & Storey tables are static package data,
+    # shared by all Continuum instances
+    _ercolano_cache = {}
+    _ercolano_interp_cache = {}
     
     def __init__(self):
         """Part of the PyNeb library.
@@ -62,52 +88,39 @@ class Continuum(object):
         except TypeError:
             wl = np.array([wl])
 
-        n_wl = len(wl)
         hnu =  CST.CLIGHT * 1e8 / wl * CST.HPLANCK  #!phy.c_ang_sec/wl*!phy.h
-        if case == 'H':
-            tab_T = 10**np.array([2. , 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3. , 3.1, 3.2,
-                                  3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5,
-                                  4.6, 4.7, 4.8, 4.9, 5. ])
-            D = np.loadtxt(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano_H.txt')
-        elif case == 'He1':
-            tab_T = 10**np.array([2.  , 2.04, 2.08, 2.12, 2.16, 2.2 , 2.24, 2.28, 2.32, 2.36, 2.4 ,
-                                  2.44, 2.48, 2.52, 2.56, 2.6 , 2.64, 2.68, 2.72, 2.76, 2.8 , 2.84,
-                                  2.88, 2.92, 2.96, 3.  , 3.04, 3.08, 3.12, 3.16, 3.2 , 3.24, 3.28,
-                                  3.32, 3.36, 3.4 , 3.44, 3.48, 3.52, 3.56, 3.6 , 3.64, 3.68, 3.72,
-                                  3.76, 3.8 , 3.84, 3.88, 3.92, 3.96, 4.  , 4.04, 4.08, 4.12, 4.16,
-                                  4.2 , 4.24, 4.28, 4.32, 4.36, 4.4 , 4.44, 4.48, 4.52, 4.56, 4.6 ,
-                                  4.64, 4.68, 4.72, 4.76, 4.8 , 4.84, 4.88, 4.92, 4.96, 5.  ])
-            D = np.loadtxt(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano_He1.txt')
-        elif case == 'He2':
-            tab_T = 10**np.array([2. , 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3. , 3.1, 3.2,
-                                  3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5,
-                                  4.6, 4.7, 4.8, 4.9, 5. ])
-            D = np.loadtxt(ROOT_DIR + '/' + 'atomic_data/coeff_ercolano_He2.txt')
-        else:
+        if case not in _ERCOLANO_FILES:
             self.log_.warn('Invalid case {0}'.format(case), calling='Continuum.make_cont_Ercolano')
             return np.nan
+        if case not in Continuum._ercolano_cache:
+            fname, tab_T = _ERCOLANO_FILES[case]
+            D = np.loadtxt(ROOT_DIR + '/' + fname)
+            BE_E_erg = D[:, 1] * CST.RYD_erg
+            BE_E_Thr = BE_E_erg[D[:, 0] == 1]
+            Continuum._ercolano_cache[case] = (tab_T, D, BE_E_erg, BE_E_Thr)
+        tab_T, D, BE_E_erg, BE_E_Thr = Continuum._ercolano_cache[case]
         if (tem < np.min(tab_T)).any() or (tem > np.max(tab_T)).any():
-            self.log_.warn('Invalid temperature {0}'.format(tem), calling='Continuum.make_cont_Ercolano')            
+            self.log_.warn('Invalid temperature {0}'.format(tem), calling='Continuum.make_cont_Ercolano')
             return np.nan
-        
-        BE_E_Ry = D[:,1]
-        BE_E_erg = BE_E_Ry * CST.RYD_erg
-        BE_E_Thr = BE_E_erg[D[:,0] == 1]
-        Delta_E = np.zeros(n_wl)
-        for i in np.arange(n_wl):
-            DE = hnu[i] - BE_E_Thr
-            Delta_E[i] = np.min(DE[DE > 0])
-            
+
+        # distance to the closest threshold below each photon energy; photons below
+        # every threshold get Delta_E = inf, i.e. a null free-bound continuum
+        # (they used to raise an error)
+        DE = hnu[:, None] - BE_E_Thr[None, :]
+        Delta_E = np.where(DE > 0, DE, np.inf).min(axis=1)
+
         n_T_sup = np.min(np.where(tab_T >= tem)[0])
         n_T_inf = n_T_sup - 1
         T_sup = tab_T[n_T_sup]
         T_inf = tab_T[n_T_inf]
-        
-        BE_coeff_sup = D[:, n_T_sup+2]
-        BE_coeff_inf = D[:, n_T_inf+2]
-        
-        coeff_sup = interp1d(BE_E_erg, BE_coeff_sup)(hnu)
-        coeff_inf = interp1d(BE_E_erg, BE_coeff_inf)(hnu)
+
+        interp_key = (case, n_T_sup)
+        if interp_key not in Continuum._ercolano_interp_cache:
+            Continuum._ercolano_interp_cache[interp_key] = (interp1d(BE_E_erg, D[:, n_T_sup+2]),
+                                                            interp1d(BE_E_erg, D[:, n_T_inf+2]))
+        interp_sup, interp_inf = Continuum._ercolano_interp_cache[interp_key]
+        coeff_sup = interp_sup(hnu)
+        coeff_inf = interp_inf(hnu)
 
         C_interp= (np.log10(tem) - np.log10(T_inf)) / (np.log10(T_sup) - np.log10(T_inf))
         
