@@ -1765,26 +1765,25 @@ class Atom(object):
         tem = np.asarray(tem)
         if NLevels is None:
             NLevels = np.min((self.collNLevels, self.EnergyNLevels))
-        res_shape = [NLevels, NLevels]
-        for sh in tem.shape:
-            res_shape.append(sh)
-        resultArray = np.zeros(res_shape)
-        Omegas = self.getOmega(tem)
-        for i in range(NLevels - 1):
-            lev_i = i + 1
-            j = i + 1
-            energy_i = self._Energy[i]
-            stat_weight_i = self._StatWeight[i]
-            while (j < NLevels):
-                lev_j = j + 1 
-                energy_j = self._Energy[j]
-                stat_weight_j = self._StatWeight[j]
-                resultArray[j][i] = CST.KCOLLRATE / tem ** 0.5 / stat_weight_j * Omegas[lev_j-1, lev_i-1]
-                resultArray[i][j] = ((stat_weight_j) / (stat_weight_i) * 
-                                      np.exp((energy_i - energy_j) / (CST.BOLTZMANN_ANGK * tem)) * 
-                                      resultArray[j][i])
-                j += 1
-        
+        N = NLevels
+        # getOmega squeezes its output and may cover more levels than asked for
+        Om = np.asarray(self.getOmega(tem))[:N, :N].reshape((N, N) + tem.shape)
+        trail = (1,) * tem.ndim
+        energy = self._Energy[:N]
+        sw = self._StatWeight[:N]
+        low_mask = np.tril(np.ones((N, N), dtype=bool), -1)  # (j, i) with j > i
+        up_mask = low_mask.T
+        # de-excitation rates at position (j, i), j > i
+        deex = CST.KCOLLRATE / tem ** 0.5 / sw.reshape((N, 1) + trail) * Om
+        # excitation rates at position (i, j), j > i, by detailed balance with deex[j, i];
+        # the exponent is masked *before* exp to avoid overflow in the unused half
+        dE = np.where(up_mask, energy[:, None] - energy[None, :], 0.)
+        exc = ((sw[None, :] / sw[:, None]).reshape((N, N) + trail) *
+               np.exp(dE.reshape((N, N) + trail) / (CST.BOLTZMANN_ANGK * tem)) *
+               np.swapaxes(deex, 0, 1))
+        resultArray = np.zeros((N, N) + tem.shape)
+        resultArray[low_mask] = deex[low_mask]
+        resultArray[up_mask] = exc[up_mask]
         return np.squeeze(resultArray)
 
     
