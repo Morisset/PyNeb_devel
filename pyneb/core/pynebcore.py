@@ -2041,12 +2041,11 @@ class Atom(object):
     
             for i_tem in range(n_tem):
                 for i_den in range(n_den):
-                    pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
                     try:
                         pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    #except np.linalg.LinAlgError:
-                    #    pop_result[:, i_tem, i_den] = np.nan
-                    except:
+                    except np.linalg.LinAlgError:
+                        pop_result[:, i_tem, i_den] = np.nan
+                    except Exception:
                         self.log_.error('Error solving population matrix', calling=self.calling)
             pop = np.squeeze(pop_result)
         else:
@@ -2103,7 +2102,7 @@ class Atom(object):
                     pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
                 except np.linalg.LinAlgError:
                     pop_result[:, i] = np.nan
-                except:
+                except Exception:
                     self.log_.error('Error solving population matrix', calling=self.calling)
             
             pop = np.squeeze(pop_result.reshape(res_shape1))
