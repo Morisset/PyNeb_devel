@@ -2302,16 +2302,15 @@ class Atom(object):
             tem_ones = np.ones(n_tem)
             populations = self.getPopulations(tem, den, product=True)
             if ((lev_i == -1) and (lev_j == -1)):
-                resultArray = np.zeros((NLevels, NLevels, n_tem, n_den))
-                for i in range(NLevels):
-                    lev_i = i + 1
-                    j = i - 1 
-                    while (j >= 0):
-                        lev_j = j + 1
-                        deltaE = (self._Energy[i] - self._Energy[j]) * CST.HPLANCK * CST.CLIGHT * 1.e8 
-                        resultArray[i][j] = (deltaE * self._A[i, j] * populations[i].reshape(1, 1, n_tem, n_den) / 
-                                             np.outer(tem_ones, den).reshape(1, 1, n_tem, n_den))
-                        j -= 1
+                # getPopulations squeezes its output, so undo a possible squeeze
+                pops = np.asarray(populations).reshape(NLevels, n_tem, n_den)
+                energy = self._Energy[:NLevels]
+                deltaE = (energy[:, None] - energy[None, :]) * CST.HPLANCK * CST.CLIGHT * 1.e8
+                low_mask = np.tril(np.ones((NLevels, NLevels), dtype=bool), -1)
+                resultArray = np.where(low_mask[:, :, None, None],
+                                       deltaE[:, :, None, None] * self._A[:NLevels, :NLevels, None, None] *
+                                       pops[:, None, :, :] / den.ravel()[None, None, None, :],
+                                       0.)
                 return np.squeeze(resultArray)
             else:
                 if (lev_i <= lev_j):
