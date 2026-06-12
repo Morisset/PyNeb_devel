@@ -16,6 +16,7 @@ class _ManageAtomicData(object):
     def __init__(self):
         self.log_ = pn.log_
         self.calling = '_ManageAtomicData'
+        self._dir_cache = {}
         self.root_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
         self._predefinedDataFileDict = _predefinedDataFileDict
         self.setDataFileDict()
@@ -111,6 +112,7 @@ class _ManageAtomicData(object):
            - inPyNeb     Boolean.
 
         """
+        self._dir_cache = {}
         if fits_dir is None:
             self._DataFilePaths = []
         else:
@@ -119,7 +121,7 @@ class _ManageAtomicData(object):
                     self._DataFilePaths.append(ROOT_DIR + '/' + fits_dir)
                 else:
                     self._DataFilePaths.append(os.path.abspath(fits_dir))
-            except:
+            except Exception:
                 self.log_.warn('{0} could not be added to the path list', calling=self.calling)
  
  
@@ -131,16 +133,17 @@ class _ManageAtomicData(object):
            - fits_dir    name of the directory to be removed
 
         """
+        self._dir_cache = {}
         if fits_dir is None:
             pass
         else:
             try:
                 self._DataFilePaths.remove(os.path.abspath(fits_dir))
-            except:
+            except ValueError:
                 pass
             try:
                 self._DataFilePaths.remove(ROOT_DIR + '/' + fits_dir)
-            except:
+            except ValueError:
                 pass
  
                 
@@ -152,6 +155,17 @@ class _ManageAtomicData(object):
         return self._DataFilePaths
  
             
+    def _listDir(self, dir_, refresh=False):
+        """
+        Cached os.listdir. The cache is cleared whenever the list of data file
+        paths changes (addDataFilePath/removeDataFilePath).
+
+        """
+        if refresh or dir_ not in self._dir_cache:
+            self._dir_cache[dir_] = frozenset(os.listdir(dir_))
+        return self._dir_cache[dir_]
+
+
     def getDirForFile(self, data_file):
         """
         Return the first directory from getDataFilePaths() where a file is found.
@@ -161,10 +175,15 @@ class _ManageAtomicData(object):
            - data_file    name of the file
 
         """
-        
+
         for dir in self._DataFilePaths:
-            if data_file in os.listdir(dir):
+            if data_file in self._listDir(dir):
                 return dir
+        if data_file.split('.')[-1] not in ('chianti', 'stout'):
+            # not found: the cached listings may be stale, refresh them and retry
+            for dir in self._DataFilePaths:
+                if data_file in self._listDir(dir, refresh=True):
+                    return dir
         if data_file.split('.')[-1] == 'chianti':
             strs = data_file.split('_')
             elem = strs[0].capitalize()
@@ -269,7 +288,7 @@ class _ManageAtomicData(object):
                         ff = '* ' + ff
                     file_list.append(ff)
         for dir in self._DataFilePaths:
-            files = os.listdir(dir)
+            files = self._listDir(dir)
             for ff in files:
                 if (('.fits' in ff) or ('.func' in ff) or ('.hdf5' in ff) or ('.dat' in ff) ) and (atom_str in ff):
                     for dt in data_types:
@@ -294,7 +313,7 @@ class _ManageAtomicData(object):
         """
         atom_dict = {'atom':[], 'coll': [], 'rec': []}
         for path in self._DataFilePaths:
-            files = os.listdir(path)
+            files = self._listDir(path)
             for elem in ELEM_LIST:
                 for spec in SPEC_LIST:
                     atom = elem + spec
