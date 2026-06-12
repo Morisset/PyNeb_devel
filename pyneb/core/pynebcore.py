@@ -2021,15 +2021,15 @@ class Atom(object):
             q = self.getCollRates(tem, n_level)
             Atem = np.outer(self._A[:n_level, :n_level], tem_ones).reshape(n_level, n_level, n_tem)
             pop_result = np.zeros((n_level, n_tem, n_den))
-            sum_q_up = np.zeros((n_level, n_tem))
-            sum_q_down = np.zeros((n_level, n_tem))
             sum_A = np.squeeze(Atem.sum(axis=1))
             self._critDensity = sum_A / q.sum(axis=1)
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
+            # getCollRates squeezes its output, so undo a possible squeeze before summing
+            q3 = q.reshape(n_level, n_level, n_tem)
+            up_mask = np.triu(np.ones((n_level, n_level), dtype=bool), 1)
+            down_mask = np.tril(np.ones((n_level, n_level), dtype=bool), -1)
+            sum_q_up = np.where(up_mask[:, :, None], q3, 0.).sum(axis=1)
+            sum_q_up[0] = 0.  # ground level is replaced by the normalization equation
+            sum_q_down = np.where(down_mask[:, :, None], q3, 0.).sum(axis=1)
             coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
                              np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
             coeff_matrix[0, :] = 1.
@@ -2054,7 +2054,6 @@ class Atom(object):
                 return None
             res_shape1 = [n_level]
             res_shape_rav1 = [n_level, tem.size]
-            res_shape_rav2 = [n_level, n_level, tem.size]
             for sh in tem.shape:
                 res_shape1.append(sh)
             tem_rav = tem.ravel()
@@ -2068,9 +2067,6 @@ class Atom(object):
                 for i in range(n_level):
                     FB[i,i] = 0.0
             pop_result = np.zeros(res_shape_rav1)
-            coeff_matrix = np.ones(res_shape_rav2)
-            sum_q_up = np.zeros(res_shape_rav1)
-            sum_q_down = np.zeros(res_shape_rav1)
             sum_A = A.sum(axis=1)
             sum_FB = FB.sum(axis=1)
             n_tem = tem_rav.size
@@ -2079,21 +2075,24 @@ class Atom(object):
             Atem = np.outer(self._A[:n_level, :n_level], np.ones(n_tem)).reshape(n_level, n_level, n_tem)
             self._critDensity = Atem.sum(axis=1) / q.sum(axis=1)
 
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
-            for row in range(1, n_level):
-                # upper right half            
-                for col in range(row + 1, n_level):
-                    coeff_matrix[row, col] = den_rav * q[col, row] + A[col, row] + FB[col, row]
-                # lower left half
-                for col in range(row):
-                    coeff_matrix[row, col] = den_rav * q[col, row] + FB[col, row]
-                # diagonal
-                coeff_matrix[row, row] = -(den_rav * (sum_q_up[row] + sum_q_down[row]) + sum_A[row] + sum_FB[row])
-                
+            # getCollRates squeezes its output, so undo a possible squeeze before summing
+            q3 = q.reshape(n_level, n_level, n_tem)
+            up_mask = np.triu(np.ones((n_level, n_level), dtype=bool), 1)
+            sum_q_up = np.where(up_mask[:, :, None], q3, 0.).sum(axis=1)
+            sum_q_up[0] = 0.  # ground level is replaced by the normalization equation
+            down_mask = np.tril(np.ones((n_level, n_level), dtype=bool), -1)
+            sum_q_down = np.where(down_mask[:, :, None], q3, 0.).sum(axis=1)
+            # coeff_matrix[row, col] = den*q[col, row] (+ A[col, row] above the diagonal) + FB[col, row]
+            qT = np.swapaxes(q3, 0, 1)
+            coeff_matrix = (den_rav[None, None, :] * qT
+                            + np.triu(A.T, 1)[:, :, None]
+                            + FB.T[:, :, None])
+            rows = np.arange(1, n_level)
+            coeff_matrix[rows, rows, :] = -(den_rav[None, :] * (sum_q_up[1:] + sum_q_down[1:])
+                                            + sum_A[1:, None] + sum_FB[1:, None])
+            # the ground-level equation is replaced by the normalization sum(pop) = 1
+            coeff_matrix[0, :, :] = 1.
+
             vect = np.zeros(n_level)
             vect[0] = 1.
             
