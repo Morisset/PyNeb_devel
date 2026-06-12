@@ -749,7 +749,7 @@ class ICF(object):
         return self.all_icfs[label]['icf'].replace('elem_abun["', '').replace('abun["', '').replace('"]', '')
 
     
-    def getAvailableICFs(self, elem_list=ELEM_LIST, type_=['HII', 'PNe', 'All']):
+    def getAvailableICFs(self, elem_list=ELEM_LIST, type_=('HII', 'PNe', 'All')):
         """ 
         Get a list of all the available ICFs for the specified elements. 
         Details can be obtained by invoking getReference('label') and getExpression('label') or printAllICFs()
@@ -766,8 +766,8 @@ class ICF(object):
         icf.getAvailableICFs('S', type_='HII')
 
         """        
-        if type(type_) == type(''):
-            type_ = [type_] 
+        if isinstance(type_, str):
+            type_ = [type_]
         if elem_list.__class__ is str:
             elem_list = [elem_list]
         icf_dict = {}
@@ -783,7 +783,7 @@ class ICF(object):
         return icf_dict
    
     
-    def printAllICFs(self, type_=['HII', 'PNe', 'All']):
+    def printAllICFs(self, type_=('HII', 'PNe', 'All')):
         """ 
         Print a list of all the available ICFs. Details can be obtained by 
             invoking getReference('label') and getExpression('label')
@@ -792,8 +792,8 @@ class ICF(object):
             - type_    object class to which the icf is appliable (e.g. "PNe", "HII"; default: both)
 
         """
-        if type(type_) == type(''):
-            type_ = [type_] 
+        if isinstance(type_, str):
+            type_ = [type_]
         for label in self.all_icfs:
             if self.all_icfs[label]['type'] in type_:
                 print(label + ': elem = ' + self.all_icfs[label]['elem'] + '; atom = ' + 
@@ -959,7 +959,7 @@ class ICF(object):
         """
         return self.all_icfs[label]['comment']
 
-    def getElemAbundance(self, atom_abun, icf_list=[], icf_family=None, absentIon=np.nan, use_coll=True,
+    def getElemAbundance(self, atom_abun, icf_list=(), icf_family=None, absentIon=np.nan, use_coll=True,
                          use_MC=False):
         """
         Compute elemental abundances from ionic abundances. The complete iventory is printed through pn.ICF().printAllICFs().
@@ -981,7 +981,7 @@ class ICF(object):
             getElemAbundance(atom_abun)
          
         """
-        if type(icf_list) == type(''):
+        if isinstance(icf_list, str):
             icf_list = [icf_list]
         # List of all existing atoms. Necessary to initialize the ionic abundance dictionary
         if icf_family is not None:

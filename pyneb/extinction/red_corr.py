@@ -8,7 +8,7 @@ if pn.config.INSTALLED['scipy']:
 from ..utils.misc import ROOT_DIR
 
 
-def my_X2(wave, params=[5000., 1., 2., 3.]):
+def my_X2(wave, params=(5000., 1., 2., 3.)):
     return params[1] * (wave / params[0]) + params[2] * (wave / params[0]) ** -1 + params[3] * (wave / params[0]) ** -2
 
 def poly(x, coeffs):

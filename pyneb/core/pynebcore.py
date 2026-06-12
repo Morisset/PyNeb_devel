@@ -860,7 +860,7 @@ class _CollDataFits(object):
         if np.max(self._ChebOrder) == -1:
             return -1
         else:
-            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, np.int(np.max(self._ChebOrder))])
+            ChebCoeffArray = np.zeros([self.NLevels, self.NLevels, int(np.max(self._ChebOrder))])
             for i in range(self.NLevels - 1):
                 lev_i = i + 1
                 j = i + 1
@@ -946,8 +946,8 @@ class _CollDataFits(object):
             fit = self.ChebCoeffs[lev_j - 1, lev_i - 1, 0: self._ChebOrder[lev_i - 1, lev_j - 1]]
             tem_eval = tem_in_file_units
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = TemArray[0]
                 rightExtrapol = TemArray[-1]
@@ -966,8 +966,8 @@ class _CollDataFits(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
@@ -1197,16 +1197,16 @@ class _CollDataAscii(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray()) * OmegaArray
             else:
@@ -1421,16 +1421,16 @@ class _CollDataStout(_CollDataAscii):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray(lev_i=lev_i, lev_j=lev_j)) * OmegaArray
             else:

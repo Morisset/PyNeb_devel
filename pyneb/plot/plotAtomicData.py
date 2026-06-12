@@ -16,7 +16,7 @@ class DataPlot(object):
     Plot transition probabilities and collision strengths from different data sets
     
     """
-    def __init__(self, elem=None, spec=None, all_data=[], atom=None, n_tem_points=10000, 
+    def __init__(self, elem=None, spec=None, all_data=None, atom=None, n_tem_points=10000,
                  ref_tem=None, OmegaInterp='linear',NLevels=None):
         """
     Parameters:
@@ -59,7 +59,7 @@ class DataPlot(object):
         # Separate omega and A data sets    
         atom_data = []
         coll_data = []
-        if all_data == []:
+        if all_data is None or all_data == []:
             all_data = pn.atomicData.getAllAvailableFiles(self.atom, mark_current=False)
         i_colors = 0    
         for file_ in all_data:
