@@ -6,12 +6,11 @@ def save(file_, *args, **kwargs):
     Usage: save('misdatos.pypic','a',b=b)
 
     """
-    f=open(file_, "wb")
     dict = kwargs
     for name in args:
         dict[name] = eval(name)
-    pickle.dump(dict, f, protocol=2)
-    f.close
+    with open(file_, "wb") as f:
+        pickle.dump(dict, f, protocol=2)
 
 def restore(file_):
     """
@@ -19,7 +18,6 @@ def restore(file_):
     Usage: datos = restore('misdatos.pypic')
 
     """
-    f=open(file_, "rb")
-    result = pickle.load(f)
-    f.close
+    with open(file_, "rb") as f:
+        result = pickle.load(f)
     return result
