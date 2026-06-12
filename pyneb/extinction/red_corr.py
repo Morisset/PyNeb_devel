@@ -12,10 +12,8 @@ def my_X2(wave, params=[5000., 1., 2., 3.]):
     return params[1] * (wave / params[0]) + params[2] * (wave / params[0]) ** -1 + params[3] * (wave / params[0]) ** -2
 
 def poly(x, coeffs):
-    res = 0
-    for i, coeff in enumerate(coeffs):
-        res += coeff * x ** i
-    return res
+    """Evaluate a polynomial with coefficients in increasing-power order."""
+    return np.polynomial.polynomial.polyval(x, coeffs)
 
 class RedCorr(object):
     """
