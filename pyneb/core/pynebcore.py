@@ -1188,12 +1188,34 @@ class _CollDataAscii(object):
             for sh in tem.shape:
                 res_shape.append(sh)
             Omega = np.zeros(res_shape)
-    
-            for i in range(self.NLevels - 1):
-                j = i + 1
-                while (j < self.NLevels):
-                    Omega[j][i] = self.getOmega(tem, j + 1, i + 1)
-                    j += 1
+            N = self.NLevels
+            CollArray = self._CollArray[:N, :N]  # (N, N, n_grid)
+            if CollArray.shape[-1] == 1:
+                # single tabulated temperature: keep the per-transition logic
+                for i in range(N - 1):
+                    j = i + 1
+                    while (j < N):
+                        Omega[j][i] = self.getOmega(tem, j + 1, i + 1)
+                        j += 1
+            else:
+                # All transitions share the same temperature grid, so interpolate
+                # the whole (N, N) block in a single interp1d build/evaluation
+                # instead of constructing one interpolator per transition.
+                if self.noExtrapol or config.get_noExtrapol():
+                    leftExtrapol = np.nan
+                    rightExtrapol = np.nan
+                else:
+                    leftExtrapol = CollArray[..., 0]
+                    rightExtrapol = CollArray[..., -1]
+                fOmega = interpolate.interp1d(self.getTemArray(), CollArray, axis=-1,
+                                              kind=self.OmegaInterp,
+                                              fill_value=(leftExtrapol, rightExtrapol),
+                                              bounds_error=False)
+                interp_all = fOmega(tem_in_file_units)  # (N, N, *tem.shape)
+                # getOmega(lev_i=j+1, lev_j=i+1) reads CollArray[i, j], stored at Omega[j, i]
+                T = np.swapaxes(interp_all, 0, 1)
+                il = np.tril_indices(N, -1)
+                Omega[il] = T[il]
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
@@ -1768,23 +1790,28 @@ class Atom(object):
         res_shape = [NLevels, NLevels]
         for sh in tem.shape:
             res_shape.append(sh)
-        resultArray = np.zeros(res_shape)
-        Omegas = self.getOmega(tem)
-        for i in range(NLevels - 1):
-            lev_i = i + 1
-            j = i + 1
-            energy_i = self._Energy[i]
-            stat_weight_i = self._StatWeight[i]
-            while (j < NLevels):
-                lev_j = j + 1 
-                energy_j = self._Energy[j]
-                stat_weight_j = self._StatWeight[j]
-                resultArray[j][i] = CST.KCOLLRATE / tem ** 0.5 / stat_weight_j * Omegas[lev_j-1, lev_i-1]
-                resultArray[i][j] = ((stat_weight_j) / (stat_weight_i) * 
-                                      np.exp((energy_i - energy_j) / (CST.BOLTZMANN_ANGK * tem)) * 
-                                      resultArray[j][i])
-                j += 1
-        
+        Omegas = self.getOmega(tem)[:NLevels, :NLevels].reshape(res_shape)
+        g = self._StatWeight[:NLevels]
+        E = self._Energy[:NLevels]
+        d = tem.ndim
+        shp_row = (NLevels, 1) + (1,) * d   # index on upper-axis (axis 0)
+        shp_col = (1, NLevels) + (1,) * d   # index on lower-axis (axis 1)
+        tem_b = tem.reshape((1, 1) + tem.shape)
+        # down-rates fill the strictly lower triangle (Omegas is 0 elsewhere):
+        # K / sqrt(tem) / g_j * Omega[j, i]
+        down = CST.KCOLLRATE / tem_b ** 0.5 / g.reshape(shp_row) * Omegas
+        # up-rates (strictly upper triangle) by detailed balance. The Boltzmann
+        # argument is forced to 0 outside the upper triangle so the unused
+        # entries stay finite (avoiding inf*0 -> nan) without touching the values
+        # that are actually used.
+        mask_upper = np.triu(np.ones((NLevels, NLevels), dtype=bool), 1).reshape(
+            (NLevels, NLevels) + (1,) * d)
+        arg = np.where(mask_upper,
+                       (E.reshape(shp_row) - E.reshape(shp_col)) / (CST.BOLTZMANN_ANGK * tem_b),
+                       0.0)
+        up = g.reshape(shp_col) / g.reshape(shp_row) * np.exp(arg) * np.swapaxes(down, 0, 1)
+        resultArray = down + up
+
         return np.squeeze(resultArray)
 
     
@@ -2015,39 +2042,52 @@ class Atom(object):
         if product:
             n_tem = tem.size
             n_den = den.size
-            tem_ones = np.ones(n_tem)
-            den_ones = np.ones(n_den)
             # q is vector-indexed (q(0, 1) = rate between levels 1 and 2)
             q = self.getCollRates(tem, n_level)
-            Atem = np.outer(self._A[:n_level, :n_level], tem_ones).reshape(n_level, n_level, n_tem)
+            A_block = self._A[:n_level, :n_level]
+            Atem = np.broadcast_to(A_block[:, :, None], (n_level, n_level, n_tem))
             pop_result = np.zeros((n_level, n_tem, n_den))
-            sum_q_up = np.zeros((n_level, n_tem))
-            sum_q_down = np.zeros((n_level, n_tem))
             sum_A = np.squeeze(Atem.sum(axis=1))
             self._critDensity = sum_A / q.sum(axis=1)
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
-            coeff_matrix = ((np.outer(np.swapaxes(q, 0, 1), den) + 
-                             np.outer(np.swapaxes(Atem, 0, 1), den_ones)).reshape(n_level, n_level, n_tem, n_den))
+            # sum of collision rates to upper (q_up) and lower (q_down) levels,
+            # vectorized over the strictly upper/lower triangles of q
+            q3 = q.reshape(n_level, n_level, n_tem)
+            mask_up = np.triu(np.ones((n_level, n_level)), 1)[:, :, None]
+            mask_down = np.tril(np.ones((n_level, n_level)), -1)[:, :, None]
+            sum_q_up = (mask_up * q3).sum(axis=1)
+            sum_q_down = (mask_down * q3).sum(axis=1)
+            # coeff_matrix[i, j, t, d] = q[j, i, t] * den[d] + A[j, i]   (A independent of den)
+            qT = np.swapaxes(q3, 0, 1)
+            coeff_matrix = (qT[:, :, :, None] * den.ravel()[None, None, None, :] +
+                            A_block.T[:, :, None, None])
             coeff_matrix[0, :] = 1.
-            for i in range(1, n_level):
-                coeff_matrix[i, i] = (-(np.outer((sum_q_up[i] + sum_q_down[i]), den) + 
-                                        np.outer(sum_A[i], den_ones)).reshape(1, 1, n_tem, n_den))
+            # diagonal terms for all levels at once: -(sum_q*den + sum_A)
+            sum_q_total = sum_q_up + sum_q_down                  # (n_level, n_tem)
+            sA = sum_A.reshape(n_level, -1)                      # (n_level, n_tem)
+            diag_all = -(sum_q_total[:, :, None] * den.ravel()[None, None, :] + sA[:, :, None])
+            idx = np.arange(1, n_level)
+            coeff_matrix[idx, idx] = diag_all[idx]
             vect = np.zeros(n_level)
             vect[0] = 1.
     
-            for i_tem in range(n_tem):
-                for i_den in range(n_den):
-                    pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    try:
-                        pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
-                    #except np.linalg.LinAlgError:
-                    #    pop_result[:, i_tem, i_den] = np.nan
-                    except:
-                        self.log_.error('Error solving population matrix', calling=self.calling)
+            # Solve the (n_tem * n_den) statistical-equilibrium systems in a
+            # single batched LAPACK call (matrix axes moved last so np.linalg.solve
+            # broadcasts over the temperature/density grid). Fall back to the
+            # per-point loop if any matrix is singular.
+            try:
+                M = np.moveaxis(coeff_matrix, (0, 1), (-2, -1))  # (n_tem, n_den, n_level, n_level)
+                rhs = vect.reshape((1,) * (M.ndim - 2) + (n_level, 1))
+                sol = np.linalg.solve(M, rhs)[..., 0]            # (n_tem, n_den, n_level)
+                pop_result = np.moveaxis(sol, -1, 0)             # (n_level, n_tem, n_den)
+            except np.linalg.LinAlgError:
+                for i_tem in range(n_tem):
+                    for i_den in range(n_den):
+                        try:
+                            pop_result[:, i_tem, i_den] = solve(np.squeeze(coeff_matrix[:, :, i_tem, i_den]), vect)
+                        except np.linalg.LinAlgError:
+                            pop_result[:, i_tem, i_den] = np.nan
+                        except:
+                            self.log_.error('Error solving population matrix', calling=self.calling)
             pop = np.squeeze(pop_result)
         else:
             if tem.shape != den.shape:
@@ -2070,21 +2110,18 @@ class Atom(object):
                     FB[i,i] = 0.0
             pop_result = np.zeros(res_shape_rav1)
             coeff_matrix = np.ones(res_shape_rav2)
-            sum_q_up = np.zeros(res_shape_rav1)
-            sum_q_down = np.zeros(res_shape_rav1)
             sum_A = A.sum(axis=1)
             sum_FB = FB.sum(axis=1)
             n_tem = tem_rav.size
             # Following line changed 29/11/2012. It made the code crash when atom_nlevels diff coll_nlevels
-            #Atem = np.outer(self._A, np.ones(n_tem)).reshape(n_level, n_level, n_tem)
-            Atem = np.outer(self._A[:n_level, :n_level], np.ones(n_tem)).reshape(n_level, n_level, n_tem)
+            Atem = np.broadcast_to(A[:, :, None], (n_level, n_level, n_tem))
             self._critDensity = Atem.sum(axis=1) / q.sum(axis=1)
 
-            for i in range(1, n_level):
-                for j in range(i + 1, n_level):
-                    sum_q_up[i] = sum_q_up[i] + q[i, j]
-                for j in range(i):
-                    sum_q_down[i] = sum_q_down[i] + q[i, j]
+            q3 = q.reshape(n_level, n_level, n_tem)
+            mask_up = np.triu(np.ones((n_level, n_level)), 1)[:, :, None]
+            mask_down = np.tril(np.ones((n_level, n_level)), -1)[:, :, None]
+            sum_q_up = (mask_up * q3).sum(axis=1)
+            sum_q_down = (mask_down * q3).sum(axis=1)
             for row in range(1, n_level):
                 # upper right half            
                 for col in range(row + 1, n_level):
@@ -2098,14 +2135,21 @@ class Atom(object):
             vect = np.zeros(n_level)
             vect[0] = 1.
             
-            for i in range(tem.size):
-                try:
-                    pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
-                except np.linalg.LinAlgError:
-                    pop_result[:, i] = np.nan
-                except:
-                    self.log_.error('Error solving population matrix', calling=self.calling)
-            
+            # Batched solve over the temperature axis; per-point fallback on singularity.
+            try:
+                M = np.moveaxis(coeff_matrix, (0, 1), (-2, -1))  # (n_tem, n_level, n_level)
+                rhs = vect.reshape((1,) * (M.ndim - 2) + (n_level, 1))
+                sol = np.linalg.solve(M, rhs)[..., 0]            # (n_tem, n_level)
+                pop_result = np.moveaxis(sol, -1, 0)             # (n_level, n_tem)
+            except np.linalg.LinAlgError:
+                for i in range(tem.size):
+                    try:
+                        pop_result[:, i] = solve(np.squeeze(coeff_matrix[:, :, i]), vect)
+                    except np.linalg.LinAlgError:
+                        pop_result[:, i] = np.nan
+                    except:
+                        self.log_.error('Error solving population matrix', calling=self.calling)
+
             pop = np.squeeze(pop_result.reshape(res_shape1))
             
         return pop
@@ -2409,7 +2453,8 @@ class Atom(object):
                 def I(lev_i, lev_j):
                     return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
                 def L(wave):
-                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
+                    li, lj = self.getTransition(wave)
+                    return populations[li - 1] * (self._A[li - 1, lj - 1] * (self._Energy[li - 1] - self._Energy[lj - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
             
@@ -2436,7 +2481,8 @@ class Atom(object):
                 def I(lev_i, lev_j):
                     return populations[lev_i - 1] * (self._A[lev_i - 1, lev_j - 1] * (self._Energy[lev_i - 1] - self._Energy[lev_j - 1]))
                 def L(wave):
-                    return populations[self.getTransition(wave)[0] - 1] * (self._A[self.getTransition(wave)[0] - 1, self.getTransition(wave)[1] - 1] * (self._Energy[self.getTransition(wave)[0] - 1] - self._Energy[self.getTransition(wave)[1] - 1]))
+                    li, lj = self.getTransition(wave)
+                    return populations[li - 1] * (self._A[li - 1, lj - 1] * (self._Energy[li - 1] - self._Energy[lj - 1]))
                 result = eval(to_eval)
                 return quiet_divide((result - int_ratio), int_ratio)
         # improve exception handling (we must include cases where both tem, den = -1) 
