@@ -1334,7 +1334,7 @@ class _CollDataStout(_CollDataAscii):
                for i, j in zip(i_s, j_s):
                     self.i_temps[j-1, i-1] = i_temp
 
-        self.NLevels = NLevels
+        self.NLevels = NLevels if self.NLevels is None else np.min((self.NLevels, NLevels))
         self.comments['T_UNIT']= 'K'
 
     def getTemArray(self, keep_unit=True, lev_i= -1, lev_j= -1):
