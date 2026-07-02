@@ -13,7 +13,7 @@ def conv_apap(str_in):
     """
     transform "1.3-01" into 1.3e-01 
     """
-    a, b = re.split('\+|-',str_in)
+    a, b = re.split(r'\+|-',str_in)
     if '-' in str_in:
         return float(a) / 10**float(b)
     else:

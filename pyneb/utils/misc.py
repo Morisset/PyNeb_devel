@@ -425,7 +425,7 @@ def get_reduced_dic(N_rand, n_obs_ori, dic, value_method = 'original',
                 values = np.insert(values, 0, dic[key][i])
             tt = np.isfinite(values)
             if tt.sum() == 0:
-                value.append(np.NAN)
+                value.append(np.nan)
                 error.append(0.0)
             else:
                 v, e = get_reduced(N_rand, values[tt], value_method = value_method, 

@@ -132,7 +132,9 @@ class Continuum(object):
         except TypeError:
             wl = np.array([wl])
         y = 1215.7 / wl
-        A = 202.0 * (y * (1. - y) * (1. -(4. * y * (1 - y))**0.8) + 0.88 * ( y * (1 - y))**1.53 * (4. * y * (1 - y))**0.8)
+        with np.errstate(invalid='ignore'):
+            # NaNs produced for y > 1 are zeroed by the mask below
+            A = 202.0 * (y * (1. - y) * (1. -(4. * y * (1 - y))**0.8) + 0.88 * ( y * (1 - y))**1.53 * (4. * y * (1 - y))**0.8)
         mask = y > 1.0 # Thanks to Daniel Schaerer for pointing out this potential issue
         A[mask] = 0.
         alfa_eff = 0.838e-13 * (tem / 1e4)**(-0.728) # fit DP de Osterbrock
