@@ -402,6 +402,9 @@ class _AtomDataAscii(object):
 
         if need_NIST:
             self.NIST = getLevelsNIST(self.atom, self.NLevels)
+            if len(self.NIST) < self.NLevels:
+                self.NLevels = len(self.NIST)
+                A = A[0:self.NLevels, 0:self.NLevels]
         else:
             self.NIST = None
             
@@ -5046,7 +5049,7 @@ class Observation(object):
                     except:
                         pass
                 elif label[-1] != 'e':
-                    if data_tab[label].dtype.type != np.string_:
+                    if data_tab[label].dtype.kind not in ('S', 'U'):
                         intens = data_tab[label]
                         try:
                             error = data_tab[label + 'e']
@@ -5404,7 +5407,7 @@ class Observation(object):
         
         """
         for line in self.lines:
-            line.obs_err = np.ones_like(line.obs_err) * err_default
+            line.obsError = np.ones_like(line.obsError) * err_default
 
     
     
@@ -5446,7 +5449,7 @@ class Observation(object):
             new_names = np.repeat(np.asarray(self.names)[:, np.newaxis], N+1, axis=1)
             MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
             MC_names[0] = ''
-            self.names = np.core.defchararray.add(new_names , MC_names).tolist()[0]
+            self.names = np.char.add(new_names, MC_names).ravel().tolist()
             self.log_.message('Leaving', calling='addMonteCarloObs')        
         else:
             if self.corrected:

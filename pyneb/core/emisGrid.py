@@ -361,9 +361,10 @@ class EmisGrid(object):
         CS = plt.contour(X, Y, Z, levels=levels, linestyles=linestyles, **kwargs)
         
         if legend:
-            for i_level in range(len(levels)):
-                CS.collections[i_level].set_label(leg_format.format(levels[i_level]))
-                plt.legend(title=leg_title, loc=loc)
+            # ContourSet.collections was removed in matplotlib 3.10
+            handles, _ = CS.legend_elements()
+            labels = [leg_format.format(level) for level in CS.levels]
+            plt.legend(handles, labels, title=leg_title, loc=loc)
 
         if title is None:
             title = '[%s%s]' % (self.elem, int_to_roman(int(self.spec)))
