@@ -1,6 +1,6 @@
 # PyNeb test suite
 
-14 test files, 241 tests. Run from the repository root with the same
+15 test files, 251 tests. Run from the repository root with the same
 invocation as CI (`.github/workflows/tests.yml`, Python 3.8 and 3.12):
 
 ```
@@ -79,6 +79,28 @@ physical invariants (5007/4959 constant ~2.98, 4363/5007 strictly
 increasing with Te), save/restore roundtrip and recompute-on-mismatch,
 `getEmisGridDict` compute-then-cache behavior, and smoke tests for
 `plotImage`/`plotContours`/`plotLineRatio`.
+
+## Golden-value regression tests
+
+**[test_golden.py](test_golden.py) — 10 tests.** Compares 54 numerical
+quantities against reference values stored in
+[golden_values.json](golden_values.json), computed once and committed to the
+repository. Covered sections: collisional emissivities (O III, N II, S II,
+O II), O III level populations, transition probabilities, critical
+densities, `getTemDen` solutions, recombination emissivities (H I, He II,
+Hbeta fit), extinction corrections (CCM89, F99), the nebular continuum
+(including the Balmer jump and two-photon components), ICF abundances, and
+`getCrossTemDen`. Default relative tolerance is 1e-6 (1e-4/1e-3 for the
+iterative solvers), with `abs=0` so the relative check is meaningful for
+values of order 1e-21.
+
+A failure means the numerical output of the library changed. If the change
+is intended (new atomic data, algorithm update), regenerate and commit the
+reference file:
+
+```
+python tests/test_golden.py --update
+```
 
 ## Extinction, data management, utilities
 
