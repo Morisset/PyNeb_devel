@@ -46,3 +46,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.pytest.ini_options]
 testpaths = [ "tests"]
+filterwarnings = [
+    # plt.show() is a no-op on the Agg backend used by the test suite
+    "ignore:FigureCanvasAgg is non-interactive:UserWarning",
+]

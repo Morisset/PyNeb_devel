@@ -4,6 +4,11 @@ Session-scoped fixtures for PyNeb test suite.
 Using session scope so each Atom/RecAtom is built only once per test run,
 avoiding repeated ~1-second data-loading costs.
 """
+import os
+
+import matplotlib
+matplotlib.use('Agg')
+
 import pytest
 import pyneb as pn
 
@@ -36,3 +41,20 @@ def H1():
 @pytest.fixture(scope="session")
 def He2():
     return pn.RecAtom('He', 2)
+
+
+@pytest.fixture(scope="session")
+def O3_grid():
+    """
+    Small O III emissivity grid, shared read-only by emisGrid and plotting
+    tests. The default 100x100 grid is far too slow for a test suite.
+    """
+    return pn.EmisGrid('O', 3, n_tem=10, n_den=8,
+                       tem_min=8000., tem_max=12000.,
+                       den_min=1e2, den_max=1e4)
+
+
+@pytest.fixture(scope="session")
+def smc24_path():
+    """Path to the smc24.dat observation file shipped with PyNeb (lines_in_rows format)."""
+    return os.path.join(pn.ROOT_DIR, 'sample_scripts', 'smc24.dat')

@@ -53,4 +53,4 @@ except:
         import astropy.io.fits as pyfits
         print('pyfits: from astropy')
     except:
-        pn.log_.error('pyfits not installed')
+        print('NO pyfits')
