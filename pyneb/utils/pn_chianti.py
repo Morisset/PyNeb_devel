@@ -70,13 +70,13 @@ def get_levs_order(atom, NLevels=None):
     if E_NIST is None:
         return None
     # Here follow a list of filter to try to find coincidence between the configuration used in Chanti and in NIST
-    remove_stars = lambda str: re.sub('\*','', str)
+    remove_stars = lambda str: re.sub(r'\*','', str)
     remove_par = lambda str: re.sub(r'\([^)]*\)','', str)
-    change_2pto1p = lambda str: re.sub('\.\.', '.', str)
-    change_2pto0p = lambda str: re.sub('\.\.', '', str)
-    remove_point_before_par = lambda str: re.sub('\.\(', '(', str)
+    change_2pto1p = lambda str: re.sub(r'\.\.', '.', str)
+    change_2pto0p = lambda str: re.sub(r'\.\.', '', str)
+    remove_point_before_par = lambda str: re.sub(r'\.\(', '(', str)
     remove_before_firstp = lambda str: re.sub('^[^.]*.', '', str)
-    change_ptpsp = lambda str: re.sub('\.', ' ', str)
+    change_ptpsp = lambda str: re.sub(r'\.', ' ', str)
     # Define the Dictionary
     Chianti2NIST = {}
     if NLevels is not None:
@@ -327,13 +327,15 @@ class _AtomChianti(object):
         
         """
         self.wave_Ang = np.zeros((self.NLevels, self.NLevels))
-        
-        for i in range(1, self.NLevels):
-            for j in range(i):
-                wave = 1. / abs(self._Energy[i] - self._Energy[j])
-                if self.E_in_vacuum:
-                    wave = vactoair(wave)
-                self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
+
+        # degenerate level pairs (identical energies) give an infinite wavelength
+        with np.errstate(divide='ignore', invalid='ignore'):
+            for i in range(1, self.NLevels):
+                for j in range(i):
+                    wave = 1. / abs(self._Energy[i] - self._Energy[j])
+                    if self.E_in_vacuum:
+                        wave = vactoair(wave)
+                    self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
  
     def _test_lev(self, level):
         """

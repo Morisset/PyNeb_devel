@@ -449,14 +449,16 @@ class _AtomDataAscii(object):
         
         """
         self.wave_Ang = np.zeros((self.NLevels, self.NLevels))
-        
-        for i in range(1, self.NLevels):
-            for j in range(i):
-                wave = 1. / abs(self._Energy[i] - self._Energy[j])
-                if self.E_in_vacuum:
-                    wave = vactoair(wave)
-                self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
-        
+
+        # degenerate level pairs (identical energies) give an infinite wavelength
+        with np.errstate(divide='ignore', invalid='ignore'):
+            for i in range(1, self.NLevels):
+                for j in range(i):
+                    wave = 1. / abs(self._Energy[i] - self._Energy[j])
+                    if self.E_in_vacuum:
+                        wave = vactoair(wave)
+                    self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
+
     def _test_lev(self, level):
         """
         Test whether selected level is legal
@@ -1630,10 +1632,12 @@ class Atom(object):
         
         self._A = self.getA() # index = quantum number - 1
         self._B = np.zeros_like(self._A)
-        for i in range(self.atomNLevels): #upper
-            for j in range(i): #lower
-                self._B[i,j] = self._A[i,j] / (8 * np.pi * CST.HPLANCK * (self.getEnergy(i+1, unit='cm-1')-self.getEnergy(j+1, unit='cm-1'))**3) 
-                self._B[j,i] = self._B[i,j] * self.getStatWeight(i+1) / self.getStatWeight(j+1)
+        # degenerate level pairs (identical energies) give inf/nan, never used for real lines
+        with np.errstate(divide='ignore', invalid='ignore'):
+            for i in range(self.atomNLevels): #upper
+                for j in range(i): #lower
+                    self._B[i,j] = self._A[i,j] / (8 * np.pi * CST.HPLANCK * (self.getEnergy(i+1, unit='cm-1')-self.getEnergy(j+1, unit='cm-1'))**3)
+                    self._B[j,i] = self._B[i,j] * self.getStatWeight(i+1) / self.getStatWeight(j+1)
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()
         if self.NLevels > 0:
@@ -5034,7 +5038,8 @@ class Observation(object):
         elif fileFormat == 'lines_in_cols2':
             if closeAfterUse:
                 f.close()
-            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, deletechars='')
+            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, deletechars='',
+                                     encoding=None)
             for label in data_tab.dtype.names:
                 if label == 'cHbeta':
                     self.extinction.cHbeta = data_tab[label]
@@ -5119,7 +5124,7 @@ class Observation(object):
             if closeAfterUse:
                 f.close()
                 
-            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True)
+            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, encoding=None)
             self.names = [name for name in data_tab.dtype.names[1::] if name[0:3] != 'err']
             error_names = [name for name in data_tab.dtype.names if name[0:3] == 'err']
             if len(self.names) != len(error_names):

@@ -60,13 +60,13 @@ RC = pn.RedCorr(law='CCM 89')
 I_obs_HaHb = 3.5 
 I_theo_HaHb = 2.86 
 RC.setCorr(I_obs_HaHb / I_theo_HaHb, 6563., 4861.)
-print 'Correct based on the given law and the observed Ha/Hb ratio:'
-print str(wave1) + ': I_obs =', I_obs1, ' I_dered =', I_obs1 * RC.getCorrHb(wave1)
-print str(wave2) + ': I_obs =', I_obs2, ' I_dered =', I_obs2 * RC.getCorrHb(wave2)
+print('Correct based on the given law and the observed Ha/Hb ratio:')
+print(str(wave1) + ': I_obs =', I_obs1, ' I_dered =', I_obs1 * RC.getCorrHb(wave1))
+print(str(wave2) + ': I_obs =', I_obs2, ' I_dered =', I_obs2 * RC.getCorrHb(wave2))
 
 # Correct based on the given law and c(Hb)
 RC = pn.RedCorr(law='CCM 89', cHbeta=0.3)
-print '\nCorrect based on the given law and the observed Ha/Hb ratio:'
-print str(wave1) + ': I_obs =', I_obs1, ' I_dered =', I_obs1 * RC.getCorrHb(wave1)
-print str(wave2) + ': I_obs =', I_obs2, ' I_dered =', I_obs2 * RC.getCorrHb(wave2)
+print('\nCorrect based on the given law and the observed Ha/Hb ratio:')
+print(str(wave1) + ': I_obs =', I_obs1, ' I_dered =', I_obs1 * RC.getCorrHb(wave1))
+print(str(wave2) + ': I_obs =', I_obs2, ' I_dered =', I_obs2 * RC.getCorrHb(wave2))
 
