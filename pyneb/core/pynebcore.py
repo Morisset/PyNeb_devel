@@ -1342,9 +1342,9 @@ class _CollDataStout(_CollDataAscii):
                     self.i_temps[j-1, i-1] = i_temp
 
         if self.NLevels is None:
-            self.NLevels = int(np.max(self._lev_js))
+            self.NLevels = int(np.max(self._lev_is))
         else:
-            self.NLevels = np.min((self.NLevels, int(np.max(self._lev_js))))
+            self.NLevels = np.min((self.NLevels, int(np.max(self._lev_is))))
 
         self.comments['T_UNIT']= 'K'
 
