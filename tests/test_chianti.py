@@ -10,13 +10,6 @@ both on a machine with a real CHIANTI installation and on CI without one.
 """
 import os
 
-with open('.env', 'w') as f:
-    f.write('XUVTOP={}\n'.format(os.path.join(os.path.dirname(__file__), 'CHIANTI')))
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
 import pyneb as pn
 import pyneb.utils.pn_chianti as pn_chianti
 
