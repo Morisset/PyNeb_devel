@@ -3224,19 +3224,33 @@ class Atom(object):
             pass
 
 
-    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1):
+    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1, cmap=plt.cm.Spectral,
+                      add_cb=True, tem=None, den=None, log_emis_lim=None, **kwargs):
         """
         Draw a Grotrian plot of the selected atom, labelling only lines above a
-        specified transition probability threshold (default: 1.e-3). 
-        For ground state levels, the Russell-Saunders term symbol is also given.
+        specified transition probability threshold (default: 1.e-3).
+        The term symbol is also given.
         Parameters:
             A_lim:        transition probability threshold in log10 (default: -3, i.e. 1.e-3)
             ax:           axis where to plot the result
-            """
+            lw:           line width (default = 1)
+            ms:           marker size (default = 1)
+            cmap:         colormap to use for the lines (default: plt.cm.Spectral)
+            add_cb:       if True, add a colorbar to the plot (default = True)
+            tem:          electron temperature in K; if given together with den, lines are
+                            color-coded by emissivity instead of A(i,j)
+            den:          electron density in cm^-3; if given together with tem, lines are
+                            color-coded by emissivity instead of A(i,j)
+            log_emis_lim:     lower limit of log10(emissivity) below which transitions are not shown;
+                            only used when tem and den are provided (default: None, show all)
+            **kwargs:     other keyword arguments passed to ax.plot for the transition lines
+        """
+        if isinstance(cmap, str):
+            cmap = plt.get_cmap(cmap)
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
         T2 = (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-        all_x_term_dic = {f'{t2}{t1}{p}': i 
+        all_x_term_dic = {f'{t2}{t1}{p}': i
                             for i, (t2, t1, p) in enumerate(itertools.product(T2, T1, parities))
                             }
         delta_E = 0.1
@@ -3263,18 +3277,39 @@ class Atom(object):
 
         if ax is None:
             fig, ax = plt.subplots()
-        mask = self._A > 10**A_lim
-        As = self._A[mask]
-        ccodes = (np.log10(As) - A_lim)
+        A_mask = self._A > 10**A_lim
+
+        if tem is not None and den is not None:
+            val_matrix = self.getEmissivity(tem, den)
+            emis_threshold = 10**log_emis_lim if log_emis_lim is not None else 0.0
+            val_matrix = np.where(A_mask & (val_matrix > emis_threshold), val_matrix, 0.0)
+            valid_vals = val_matrix[val_matrix > 0]
+            log_vals = np.log10(valid_vals) if len(valid_vals) > 0 else np.array([0., 1.])
+            cb_label = r'log$_{10}$(Emissivity) [erg cm$^3$ s$^{-1}$]'
+        else:
+            val_matrix = None
+            log_vals = np.log10(self._A[A_mask])
+            cb_label = r'log$_{10}$(A) [s$^{-1}$]'
+
+        vmin, vmax = log_vals.min(), log_vals.max()
+
         for i in np.arange(len(levels)):
             for j in np.arange(i+1, len(levels)):
-                if mask[j,i]:
+                if A_mask[j, i]:
+                    if val_matrix is not None:
+                        v = val_matrix[j, i]
+                        if v <= 0:
+                            continue
+                        raw = np.log10(v)
+                    else:
+                        raw = np.log10(self._A[j, i])
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
-                    ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
-                    ax.plot(x, y, lw = lw, c=ccode)
+                    ccode = cmap((raw - vmin) / (vmax - vmin))
+                    ax.plot(x, y, lw=lw, c=ccode, **kwargs)
+
         for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
-            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
+            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)
 
         x_ticks = [x_term_dic[t] for t in x_term_dic]
         x_labels = list(x_term_dic)
@@ -3282,7 +3317,14 @@ class Atom(object):
         ax.set_xticklabels(x_labels)
         ax.set_xlabel('Term')
         ax.set_ylabel('Energy (eV)')
-        ax.set_title(f'{self.elem}{int_to_roman(self.spec)} Grotrian diagram')   
+        ax.set_title(f'{self.elem}{int_to_roman(self.spec)} Grotrian diagram')
+        if add_cb:
+            import matplotlib as mpl
+            norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+            sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+            sm.set_array([])
+            cb = plt.colorbar(sm, ax=ax)
+            cb.set_label(cb_label)
 
     def __repr__(self):
         return 'Atom {0}{1} from {2} and {3}'.format(self.elem, self.spec, self.atomFile, self.collFile)
