@@ -166,12 +166,12 @@ class DataPlot(object):
                         if A[j, i] > 0:
                             Ay.append(np.log10(A[j, i]))
                         else:
-                            Ay.append(np.NaN)
-                plt.scatter(x, Ay, marker=mark[i_marker], s=300., c=color, alpha=0.35, linewidths=1, label='%s' % (data['ID']))
-                ax.set_xticks(ticks)
+                            Ay.append(np.nan)
+                plt.scatter(x, Ay, marker=mark[i_marker % len(mark)], s=300., c=color, alpha=0.35, linewidths=1, label='%s' % (data['ID']))
             except:
                 pn.log_.warn('Problem in plotting A', calling=self.calling + '.plotA')
             i_marker += 1
+        ax.set_xticks(ticks)
         ax.set_xticklabels(tick_label)
 
         # Plot features
@@ -217,7 +217,7 @@ class DataPlot(object):
                 A[i, 0:A_tmp.shape[0], 0:A_tmp.shape[1]] = A_tmp
             color.append(data['color'])
         
-        A[np.where((A<=0))] = np.NaN
+        A[np.where((A<=0))] = np.nan
         lgA = np.log10(A)
         
         x = ticks
@@ -443,7 +443,7 @@ class DataPlot(object):
                         if (first and (data['atom'].collNLevels == coll_n_max)):
                             for tem in self.ref_tem:
                                 ax.axvline(tem, c='blue', alpha=0.4, ls=':')
-                            lbl = "$\Omega$" + "(" + str(j) + "," + str(i) + ")"
+                            lbl = r"$\Omega$" + "(" + str(j) + "," + str(i) + ")"
                             ax.text(0.95, 0.95, lbl, transform=ax.transAxes, ha="right", va="top")   
                             first_done = True                                 
                         # Maximum number of ticks to avoid overcrowding
@@ -460,7 +460,7 @@ class DataPlot(object):
                     rotation=65, fontsize=12, color='#FF0000', alpha=0.35)
         # Axis labels, title and legend    
         fig.text(.5, .05, "Log($T_e/K$)", fontsize=16, ha='center', va='top')
-        fig.text(.05, .5, "$\Omega$", va='center', fontsize=20, rotation=90)
+        fig.text(.05, .5, r"$\Omega$", va='center', fontsize=20, rotation=90)
         fig.text(.5, .95, "[%s %s] collision strengths" % (self.elem, int_to_roman(int(self.spec))), 
                  color="#191970", fontsize=16, ha='center')
 #        plt.legend(legend_lines, legend_text, loc='upper right', borderpad=1, 

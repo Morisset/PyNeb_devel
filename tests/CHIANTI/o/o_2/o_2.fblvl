@@ -1,0 +1,24 @@
+    1              2s22p3    2    1  p   20           25549.881           26759.200
+    2            2s22p23s    3    0  s   30          196327.290               0.000
+    3            2s22p23p    3    1  p   90          219023.464               0.000
+    4            2s22p23d    3    2  d  150          242130.724               0.000
+    5            2s22p24s    4    0  s   30          248853.212               0.000
+    6            2s22p24p    4    1  p   90          253886.794               0.000
+    7            2s22p24d    4    2  d  150          255751.033               0.000
+    8            2s22p24f    4    3  f  210          262191.634               0.000
+    9            2s22p25s    5    0  s   30          265252.675               0.000
+   10            2s22p25p    5    1  p   90          261424.016               0.000
+   11            2s22p25d    5    2  d  150          265509.179               0.000
+   12            2s22p25f    5    3  f  210          265854.775               0.000
+   13            2s22p25g    5    4  g  250          265902.463               0.000
+ -1
+%filename: o_2.fblvl
+%energy levels: Martin, W.C., Sugar, J., Musgrove, A., Dalton, G.R., 1995, 
+   NIST Database for Atomic Spectroscopy, Version 1.0, NIST Standard Reference Database 61
+%additional energy levels: NIST Atomic Spectra Database Version 2.0
+%Theoretical energy levels: Bhatia A.K. (private communications)
+%comment: free-bound data file developed from .elvlc file
+% produced as part of the Arcetri/Cambridge/NRL 'CHIANTI' atomic data base collaboration
+%
+% Ken Dere - Jul 18 2002
+ -1

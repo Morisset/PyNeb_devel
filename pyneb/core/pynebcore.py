@@ -402,6 +402,9 @@ class _AtomDataAscii(object):
 
         if need_NIST:
             self.NIST = getLevelsNIST(self.atom, self.NLevels)
+            if len(self.NIST) < self.NLevels:
+                self.NLevels = len(self.NIST)
+                A = A[0:self.NLevels, 0:self.NLevels]
         else:
             self.NIST = None
             
@@ -446,14 +449,16 @@ class _AtomDataAscii(object):
         
         """
         self.wave_Ang = np.zeros((self.NLevels, self.NLevels))
-        
-        for i in range(1, self.NLevels):
-            for j in range(i):
-                wave = 1. / abs(self._Energy[i] - self._Energy[j])
-                if self.E_in_vacuum:
-                    wave = vactoair(wave)
-                self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
-        
+
+        # degenerate level pairs (identical energies) give an infinite wavelength
+        with np.errstate(divide='ignore', invalid='ignore'):
+            for i in range(1, self.NLevels):
+                for j in range(i):
+                    wave = 1. / abs(self._Energy[i] - self._Energy[j])
+                    if self.E_in_vacuum:
+                        wave = vactoair(wave)
+                    self.wave_Ang[i, j] = self.wave_Ang[j, i] = wave
+
     def _test_lev(self, level):
         """
         Test whether selected level is legal
@@ -946,8 +951,8 @@ class _CollDataFits(object):
             fit = self.ChebCoeffs[lev_j - 1, lev_i - 1, 0: self._ChebOrder[lev_i - 1, lev_j - 1]]
             tem_eval = tem_in_file_units
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = TemArray[0]
                 rightExtrapol = TemArray[-1]
@@ -966,8 +971,8 @@ class _CollDataFits(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
@@ -1197,16 +1202,16 @@ class _CollDataAscii(object):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray() , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray()) * OmegaArray
             else:
@@ -1336,7 +1341,11 @@ class _CollDataStout(_CollDataAscii):
                for i, j in zip(i_s, j_s):
                     self.i_temps[j-1, i-1] = i_temp
 
-        self.NLevels = NLevels
+        if self.NLevels is None:
+            self.NLevels = int(np.max(self._lev_is))
+        else:
+            self.NLevels = np.min((self.NLevels, int(np.max(self._lev_is))))
+
         self.comments['T_UNIT']= 'K'
 
     def getTemArray(self, keep_unit=True, lev_i= -1, lev_j= -1):
@@ -1421,16 +1430,16 @@ class _CollDataStout(_CollDataAscii):
         else:
             OmegaArray = self.getOmegaArray(lev_i, lev_j)
             if self.noExtrapol or config.get_noExtrapol():
-                leftExtrapol = np.NAN
-                rightExtrapol = np.NAN
+                leftExtrapol = np.nan
+                rightExtrapol = np.nan
             else:
                 leftExtrapol = OmegaArray[0]
                 rightExtrapol = OmegaArray[-1]
             #Omega = np.interp(tem_in_file_units, self.getTemArray(), OmegaArray,
             #                 left=leftExtrapol, right=rightExtrapol)
             if OmegaArray.size == 1:
-                if leftExtrapol is np.NAN:
-                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.NAN)
+                if leftExtrapol is np.nan:
+                    Omega = np.where(tem_in_file_units == self.getTemArray(lev_i=lev_i, lev_j=lev_j) , OmegaArray, np.nan)
                 else:
                     Omega = np.ones_like(self.getTemArray(lev_i=lev_i, lev_j=lev_j)) * OmegaArray
             else:
@@ -1623,10 +1632,12 @@ class Atom(object):
         
         self._A = self.getA() # index = quantum number - 1
         self._B = np.zeros_like(self._A)
-        for i in range(self.atomNLevels): #upper
-            for j in range(i): #lower
-                self._B[i,j] = self._A[i,j] / (8 * np.pi * CST.HPLANCK * (self.getEnergy(i+1, unit='cm-1')-self.getEnergy(j+1, unit='cm-1'))**3) 
-                self._B[j,i] = self._B[i,j] * self.getStatWeight(i+1) / self.getStatWeight(j+1)
+        # degenerate level pairs (identical energies) give inf/nan, never used for real lines
+        with np.errstate(divide='ignore', invalid='ignore'):
+            for i in range(self.atomNLevels): #upper
+                for j in range(i): #lower
+                    self._B[i,j] = self._A[i,j] / (8 * np.pi * CST.HPLANCK * (self.getEnergy(i+1, unit='cm-1')-self.getEnergy(j+1, unit='cm-1'))**3)
+                    self._B[j,i] = self._B[i,j] * self.getStatWeight(i+1) / self.getStatWeight(j+1)
         self._Energy = self.getEnergy() # Angstrom^-1
         self._StatWeight = self.getStatWeight()
         if self.NLevels > 0:
@@ -3220,12 +3231,33 @@ class Atom(object):
             pass
 
 
-    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1):
-
+    def plotGrotrian2(self, A_lim=-3, ax=None, lw=1, ms=1, cmap=plt.cm.Spectral,
+                      add_cb=True, tem=None, den=None, log_emis_lim=None, **kwargs):
+        """
+        Draw a Grotrian plot of the selected atom, labelling only lines above a
+        specified transition probability threshold (default: 1.e-3).
+        The term symbol is also given.
+        Parameters:
+            A_lim:        transition probability threshold in log10 (default: -3, i.e. 1.e-3)
+            ax:           axis where to plot the result
+            lw:           line width (default = 1)
+            ms:           marker size (default = 1)
+            cmap:         colormap to use for the lines (default: plt.cm.Spectral)
+            add_cb:       if True, add a colorbar to the plot (default = True)
+            tem:          electron temperature in K; if given together with den, lines are
+                            color-coded by emissivity instead of A(i,j)
+            den:          electron density in cm^-3; if given together with tem, lines are
+                            color-coded by emissivity instead of A(i,j)
+            log_emis_lim:     lower limit of log10(emissivity) below which transitions are not shown;
+                            only used when tem and den are provided (default: None, show all)
+            **kwargs:     other keyword arguments passed to ax.plot for the transition lines
+        """
+        if isinstance(cmap, str):
+            cmap = plt.get_cmap(cmap)
         parities = ('','*')
         T1 = ('S', 'P', 'D', 'F', 'G', 'H', 'I')
         T2 = (10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-        all_x_term_dic = {f'{t2}{t1}{p}': i 
+        all_x_term_dic = {f'{t2}{t1}{p}': i
                             for i, (t2, t1, p) in enumerate(itertools.product(T2, T1, parities))
                             }
         delta_E = 0.1
@@ -3252,17 +3284,39 @@ class Atom(object):
 
         if ax is None:
             fig, ax = plt.subplots()
-        As = self._A[np.log10(self._A) > A_lim]
-        ccodes = (np.log10(As) - A_lim)
+        A_mask = self._A > 10**A_lim
+
+        if tem is not None and den is not None:
+            val_matrix = self.getEmissivity(tem, den)
+            emis_threshold = 10**log_emis_lim if log_emis_lim is not None else 0.0
+            val_matrix = np.where(A_mask & (val_matrix > emis_threshold), val_matrix, 0.0)
+            valid_vals = val_matrix[val_matrix > 0]
+            log_vals = np.log10(valid_vals) if len(valid_vals) > 0 else np.array([0., 1.])
+            cb_label = r'log$_{10}$(Emissivity) [erg cm$^3$ s$^{-1}$]'
+        else:
+            val_matrix = None
+            log_vals = np.log10(self._A[A_mask])
+            cb_label = r'log$_{10}$(A) [s$^{-1}$]'
+
+        vmin, vmax = log_vals.min(), log_vals.max()
+
         for i in np.arange(len(levels)):
             for j in np.arange(i+1, len(levels)):
-                if np.log10(self._A[j,i]) > A_lim:
+                if A_mask[j, i]:
+                    if val_matrix is not None:
+                        v = val_matrix[j, i]
+                        if v <= 0:
+                            continue
+                        raw = np.log10(v)
+                    else:
+                        raw = np.log10(self._A[j, i])
                     x = (x_term_dic[levels[i]['term']], x_term_dic[levels[j]['term']])
                     y = (levels_E_eV[i], levels_E_eV[j])
-                    ccode = plt.cm.Spectral(((np.log10(self._A[j,i]) - A_lim)- ccodes.min())/(ccodes.max() - ccodes.min()))
-                    ax.plot(x, y, lw = lw, c=ccode)
+                    ccode = cmap((raw - vmin) / (vmax - vmin))
+                    ax.plot(x, y, lw=lw, c=ccode, **kwargs)
+
         for level, level_Size, level_E_eV in zip(levels, levels_Size, levels_E_eV):
-            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)            
+            ax.plot(x_term_dic[level['term']], level_E_eV, 'ro', markersize=(level_Size+1)*5*ms)
 
         x_ticks = [x_term_dic[t] for t in x_term_dic]
         x_labels = list(x_term_dic)
@@ -3270,7 +3324,14 @@ class Atom(object):
         ax.set_xticklabels(x_labels)
         ax.set_xlabel('Term')
         ax.set_ylabel('Energy (eV)')
-        ax.set_title(f'{self.elem}{int_to_roman(self.spec)} Grotrian diagram')   
+        ax.set_title(f'{self.elem}{int_to_roman(self.spec)} Grotrian diagram')
+        if add_cb:
+            import matplotlib as mpl
+            norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+            sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+            sm.set_array([])
+            cb = plt.colorbar(sm, ax=ax)
+            cb.set_label(cb_label)
 
     def __repr__(self):
         return 'Atom {0}{1} from {2} and {3}'.format(self.elem, self.spec, self.atomFile, self.collFile)
@@ -4053,6 +4114,9 @@ class RecAtom(object):
                 ij = self.getTransition(wave)
                 if ij is not None:
                     label = '{}_{}'.format(ij[0], ij[1])
+                else:
+                    self.log_.warn('Wrong wavelength {0}'.format(wave), calling=self.calling)
+                    return None                    
         if label is None:
             res = {label: self.getEmissivity(tem, den, label=label, method=method, product=product) for label in self.labels}
             return res
@@ -4974,7 +5038,8 @@ class Observation(object):
         elif fileFormat == 'lines_in_cols2':
             if closeAfterUse:
                 f.close()
-            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, deletechars='')
+            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, deletechars='',
+                                     encoding=None)
             for label in data_tab.dtype.names:
                 if label == 'cHbeta':
                     self.extinction.cHbeta = data_tab[label]
@@ -4989,7 +5054,7 @@ class Observation(object):
                     except:
                         pass
                 elif label[-1] != 'e':
-                    if data_tab[label].dtype.type != np.string_:
+                    if data_tab[label].dtype.kind not in ('S', 'U'):
                         intens = data_tab[label]
                         try:
                             error = data_tab[label + 'e']
@@ -5059,7 +5124,7 @@ class Observation(object):
             if closeAfterUse:
                 f.close()
                 
-            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True)
+            data_tab = np.genfromtxt(obsFile, dtype=None, delimiter=delimiter, names=True, encoding=None)
             self.names = [name for name in data_tab.dtype.names[1::] if name[0:3] != 'err']
             error_names = [name for name in data_tab.dtype.names if name[0:3] == 'err']
             if len(self.names) != len(error_names):
@@ -5347,7 +5412,7 @@ class Observation(object):
         
         """
         for line in self.lines:
-            line.obs_err = np.ones_like(line.obs_err) * err_default
+            line.obsError = np.ones_like(line.obsError) * err_default
 
     
     
@@ -5389,7 +5454,7 @@ class Observation(object):
             new_names = np.repeat(np.asarray(self.names)[:, np.newaxis], N+1, axis=1)
             MC_names = np.asarray(['-MC-{}'.format(i) for i in np.arange(N+1)])
             MC_names[0] = ''
-            self.names = np.core.defchararray.add(new_names , MC_names).tolist()[0]
+            self.names = np.char.add(new_names, MC_names).ravel().tolist()
             self.log_.message('Leaving', calling='addMonteCarloObs')        
         else:
             if self.corrected:
