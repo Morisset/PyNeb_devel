@@ -17,8 +17,9 @@ must not contain `>>>` in their docstrings.
   read-only.
 - `O3_grid`: a small 10x8 `pn.EmisGrid` (Te 8000-12000 K, Ne 1e2-1e4),
   shared read-only by the emisGrid and plotting tests.
-- `smc24_path`: path to the `smc24.dat` observation file shipped in
-  `pyneb/sample_scripts` (`lines_in_rows` format).
+- `smc24_path`: path to the `smc24.dat` observation file (`lines_in_rows`
+  format). A copy lives in `tests/` because `sample_scripts` is not part
+  of the installed package, against which CI runs the tests.
 - Forces the matplotlib Agg backend before `pyneb` is imported.
 
 ## Core physics classes
@@ -118,7 +119,10 @@ switch-and-restore roundtrip verified on a freshly built atom.
 
 **[test_chianti.py](test_chianti.py) — 1 test.** Loads O III
 atom+collision data in CHIANTI format from the bundled `tests/CHIANTI/`
-tree and builds a 19-level atom.
+tree and builds a 19-level atom. Self-contained: it points `XUVTOP` at the
+bundled tree, redoes pyneb's import-time CHIANTI initialization, and
+restores everything afterwards, so it passes with or without a real
+CHIANTI installation.
 
 **[test_physics.py](test_physics.py) — 10 tests.** `airtovac`/`vactoair`
 (IDL reference value, roundtrip, vacuum > air, no-op outside the conversion

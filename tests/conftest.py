@@ -56,5 +56,9 @@ def O3_grid():
 
 @pytest.fixture(scope="session")
 def smc24_path():
-    """Path to the smc24.dat observation file shipped with PyNeb (lines_in_rows format)."""
-    return os.path.join(pn.ROOT_DIR, 'sample_scripts', 'smc24.dat')
+    """
+    Path to the smc24.dat observation file (lines_in_rows format).
+    A copy lives in tests/ because sample_scripts is not part of the
+    installed package, against which CI runs the tests.
+    """
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'smc24.dat')

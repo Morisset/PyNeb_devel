@@ -167,11 +167,11 @@ class DataPlot(object):
                             Ay.append(np.log10(A[j, i]))
                         else:
                             Ay.append(np.nan)
-                plt.scatter(x, Ay, marker=mark[i_marker], s=300., c=color, alpha=0.35, linewidths=1, label='%s' % (data['ID']))
-                ax.set_xticks(ticks)
+                plt.scatter(x, Ay, marker=mark[i_marker % len(mark)], s=300., c=color, alpha=0.35, linewidths=1, label='%s' % (data['ID']))
             except:
                 pn.log_.warn('Problem in plotting A', calling=self.calling + '.plotA')
             i_marker += 1
+        ax.set_xticks(ticks)
         ax.set_xticklabels(tick_label)
 
         # Plot features
