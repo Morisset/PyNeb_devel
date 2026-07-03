@@ -6,6 +6,11 @@ class _Config(object):
     This is the place where to put stuff that any module may need, a kind of COMMON.
     An instantiation is done in the main __init__ file using the "config" name.
 
+    The CHIANTI and Stout database directories are read at import time from the
+    XUVTOP and STOUT_DIR environment variables, and can be changed at runtime with
+    set_chianti_path() and set_stout_path() (which also update the corresponding
+    environment variable for this process, as the low-level readers rely on it).
+
     """
 
 
@@ -53,19 +58,11 @@ class _Config(object):
             self.Nprocs = 1
         if 'XUVTOP' in os.environ:
             self.INSTALLED['Chianti'] = True
-            try:
-                xuvtop = os.environ['XUVTOP']
-                vFileName = os.path.join(xuvtop, 'VERSION')
-                vFile = open(vFileName)
-                versionStr = vFile.readline()
-                vFile.close()
-                self.Chianti_version = versionStr.strip()
-                self.Chianti_version_main = self.Chianti_version.split('.')[0]
-            except:
-                self.Chianti_version = None
-                self.Chianti_version_main = None
+            self.Chianti_path = os.environ['XUVTOP']
+            self.Chianti_version, self.Chianti_version_main = self._read_chianti_version(self.Chianti_path)
         else:
             self.INSTALLED['Chianti'] = False
+            self.Chianti_path = None
             self.Chianti_version = None
             self.Chianti_version_main = None
         if 'STOUT_DIR' in os.environ:
@@ -124,10 +121,106 @@ class _Config(object):
 
     def set_noExtrapol(self, value):
         self._noExtrapol = bool(value)
-        
+
     def get_noExtrapol(self):
         return self._noExtrapol
-        
+
+    @staticmethod
+    def _read_chianti_version(chianti_path):
+        """
+        Return (version, version_main) read from {chianti_path}/VERSION, or (None, None).
+        """
+        try:
+            with open(os.path.join(chianti_path, 'VERSION')) as vFile:
+                version = vFile.readline().strip()
+            return version, version.split('.')[0]
+        except Exception:
+            return None, None
+
+    def set_chianti_path(self, chianti_path=None):
+        """
+        Set (or unset, with None) the CHIANTI database directory at runtime,
+        as an alternative to the XUVTOP environment variable.
+        Side effect: sets/removes the XUVTOP environment variable for this process,
+        since the low-level CHIANTI readers use it. The CHIANTI version is read
+        from {chianti_path}/VERSION and pn.atomicData is refreshed.
+        Existing Atom objects keep their already-loaded data; build new ones to
+        use the new path.
+
+        Parameters:
+            chianti_path: the CHIANTI database directory, or None to unset
+
+        """
+        if chianti_path is None:
+            os.environ.pop('XUVTOP', None)
+            self.INSTALLED['Chianti'] = False
+            self.Chianti_path = None
+            self.Chianti_version = None
+            self.Chianti_version_main = None
+        else:
+            chianti_path = os.path.abspath(os.path.expanduser(chianti_path))
+            if not os.path.isdir(chianti_path):
+                self.log_.error('Directory {0} does not exist'.format(chianti_path),
+                                calling=self.calling)
+            version, version_main = self._read_chianti_version(chianti_path)
+            if version is None:
+                self.log_.error('Cannot read {0}/VERSION; not a valid CHIANTI directory'.format(chianti_path),
+                                calling=self.calling)
+            os.environ['XUVTOP'] = chianti_path
+            self.INSTALLED['Chianti'] = True
+            self.Chianti_path = chianti_path
+            self.Chianti_version = version
+            self.Chianti_version_main = version_main
+        self._refresh_chianti()
+
+    def _refresh_chianti(self):
+        # lazy imports: Config.py must not import pn_chianti/manage_atomic_data at
+        # module top (circular); also tolerate being called before pyneb finished importing
+        try:
+            import pyneb as pn
+            from . import pn_chianti
+            pn_chianti._refresh_chianti_tools()
+            pn.atomicData._initChianti()
+        except (ImportError, AttributeError):
+            pass
+
+    def get_chianti_path(self):
+        return self.Chianti_path
+
+    def set_stout_path(self, stout_path=None):
+        """
+        Set (or unset, with None) the Stout database directory at runtime,
+        as an alternative to the STOUT_DIR environment variable.
+        Side effect: sets/removes the STOUT_DIR environment variable for this
+        process. pn.atomicData is refreshed.
+        Existing Atom objects keep their already-loaded data; build new ones to
+        use the new path.
+
+        Parameters:
+            stout_path: the Stout database directory, or None to unset
+
+        """
+        if stout_path is None:
+            os.environ.pop('STOUT_DIR', None)
+            self.INSTALLED['Stout'] = False
+            self.Stout_dir = None
+        else:
+            stout_path = os.path.abspath(os.path.expanduser(stout_path))
+            if not os.path.isdir(stout_path):
+                self.log_.error('Directory {0} does not exist'.format(stout_path),
+                                calling=self.calling)
+            os.environ['STOUT_DIR'] = stout_path
+            self.INSTALLED['Stout'] = True
+            self.Stout_dir = stout_path
+        try:
+            import pyneb as pn
+            pn.atomicData._initStout()
+        except (ImportError, AttributeError):
+            pass
+
+    def get_stout_path(self):
+        return self.Stout_dir
+
     def _get_PypicPath(self):
         pypic_path = self.__pypic_path
         if pypic_path is None:

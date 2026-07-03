@@ -2,16 +2,13 @@
 Test reading atomic data in CHIANTI format, using the small CHIANTI tree
 bundled in tests/CHIANTI (O III only, CHIANTI version 10.0.1).
 
-pyneb configures its CHIANTI support at import time from the XUVTOP
-environment variable, so this test cannot rely on it having been set:
-it points XUVTOP at the bundled tree, redoes the import-time
-initializations, and restores everything afterwards. It therefore works
-both on a machine with a real CHIANTI installation and on CI without one.
+The database location is set at runtime with pn.config.set_chianti_path(),
+so the test works both on a machine with a real CHIANTI installation
+(XUVTOP set) and on CI without one; the previous state is restored at the end.
 """
 import os
 
 import pyneb as pn
-import pyneb.utils.pn_chianti as pn_chianti
 
 CHIANTI_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'CHIANTI')
 
@@ -19,24 +16,13 @@ CHIANTI_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'CHIANTI'
 class TestChianti:
 
     def test_O3(self):
-        old_xuvtop = os.environ.get('XUVTOP')
-        old_installed = pn.config.INSTALLED['Chianti']
-        old_version = pn.config.Chianti_version
-        old_version_main = pn.config.Chianti_version_main
-
-        os.environ['XUVTOP'] = CHIANTI_DIR
-        pn.config.INSTALLED['Chianti'] = True
-        with open(os.path.join(CHIANTI_DIR, 'VERSION')) as f:
-            pn.config.Chianti_version = f.readline().strip()
-        pn.config.Chianti_version_main = pn.config.Chianti_version.split('.')[0]
-        # if pyneb was imported without XUVTOP set, the version-dependent
-        # _chianti_tools import in pn_chianti was skipped: bind it now
-        if not hasattr(pn_chianti, '_chianti_tools'):
-            from pyneb.utils import _chianti_tools_9 as _chianti_tools
-            pn_chianti._chianti_tools = _chianti_tools
-
+        old_path = pn.config.get_chianti_path()
+        pn.config.set_chianti_path(CHIANTI_DIR)
         try:
-            pn.atomicData._initChianti()
+            assert pn.config.INSTALLED['Chianti'] is True
+            assert pn.config.Chianti_version == '10.0.1'
+            assert 'o_3' in pn.atomicData.ChiantiIONS['atom']
+            assert 'o_3' in pn.atomicData.ChiantiIONS['coll']
             pn.atomicData.setDataFile('o_iii_atom.chianti')
             pn.atomicData.setDataFile('o_iii_coll.chianti')
             O3_chianti = pn.Atom('O', 3, NLevels=19)
@@ -51,11 +37,5 @@ class TestChianti:
                     os.path.normpath(os.path.join(CHIANTI_DIR, 'o', 'o_3')))
         finally:
             pn.atomicData.resetDataFileDict()
-            if old_xuvtop is None:
-                del os.environ['XUVTOP']
-            else:
-                os.environ['XUVTOP'] = old_xuvtop
-            pn.config.INSTALLED['Chianti'] = old_installed
-            pn.config.Chianti_version = old_version
-            pn.config.Chianti_version_main = old_version_main
-            pn.atomicData._initChianti()
+            pn.config.set_chianti_path(old_path)
+        assert pn.config.INSTALLED['Chianti'] == (old_path is not None)
