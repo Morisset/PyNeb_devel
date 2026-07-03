@@ -5,12 +5,37 @@ import sys
 import re
 import pyneb as pn
 from copy import deepcopy
-if pn.config.Chianti_version_main == '8':
-    from . import _chianti_tools_8 as _chianti_tools
-elif pn.config.Chianti_version_main == '7':
-    from . import _chianti_tools
-elif pn.config.Chianti_version_main in ('9', '10', '11'):
-    from . import _chianti_tools_9 as _chianti_tools
+_chianti_tools = None
+
+def _select_chianti_tools(version_main):
+    """
+    Return the _chianti_tools module matching a CHIANTI major version,
+    or None if the version is unknown.
+    """
+    if version_main == '7':
+        from . import _chianti_tools as tools
+    elif version_main == '8':
+        from . import _chianti_tools_8 as tools
+    elif version_main in ('9', '10', '11'):
+        from . import _chianti_tools_9 as tools
+    else:
+        return None
+    return tools
+
+def _refresh_chianti_tools():
+    """
+    (Re)bind the module-level _chianti_tools to match pn.config.Chianti_version_main.
+    Called at import time and by pn.config.set_chianti_path().
+    """
+    global _chianti_tools
+    tools = _select_chianti_tools(pn.config.Chianti_version_main)
+    if tools is not None:
+        _chianti_tools = tools
+    elif pn.config.Chianti_version_main is not None:
+        pn.log_.warn('Unknown CHIANTI version {0}; supported major versions are 7 to 11'.format(
+                     pn.config.Chianti_version), calling='pn_chianti')
+
+_refresh_chianti_tools()
 from . import _chianti_constants as const
 from .physics import sym2name, vactoair
 from .manage_atomic_data import getLevelsNIST, atom2chianti
@@ -246,7 +271,8 @@ class _AtomChianti(object):
     def __init__(self, elem=None, spec=None, atom=None, NLevels=None):
         """
         Object dealing with As values from the Chianti database.
-        The directory where to find the data must be given through the environment variable XUVTOP.
+        The directory where to find the data must be given through the environment variable XUVTOP
+        or at runtime with pn.config.set_chianti_path().
         This object is not aimed to be used by itself, it is called by Atom.
         """
         self.log_ = pn.log_
@@ -451,7 +477,8 @@ class _CollChianti(object):
     def __init__(self, elem=None, spec=None, atom=None, NLevels=None, TemArray=np.logspace(2, 5, 20)):
         """
         Object dealing with Upsilon values from the Chianti database.
-        The directory where to find the data must be given through the environment variable XUVTOP.
+        The directory where to find the data must be given through the environment variable XUVTOP
+        or at runtime with pn.config.set_chianti_path().
         This object is not aimed to be used by itself, it is called by Atom.
         """
 

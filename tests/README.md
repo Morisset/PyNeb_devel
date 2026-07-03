@@ -1,6 +1,6 @@
 # PyNeb test suite
 
-15 test files, 251 tests. Run from the repository root with the same
+16 test files, 253 tests. Run from the repository root with the same
 invocation as CI (`.github/workflows/tests.yml`, Python 3.8 and 3.12):
 
 ```
@@ -119,10 +119,18 @@ switch-and-restore roundtrip verified on a freshly built atom.
 
 **[test_chianti.py](test_chianti.py) — 1 test.** Loads O III
 atom+collision data in CHIANTI format from the bundled `tests/CHIANTI/`
-tree and builds a 19-level atom. Self-contained: it points `XUVTOP` at the
-bundled tree, redoes pyneb's import-time CHIANTI initialization, and
-restores everything afterwards, so it passes with or without a real
-CHIANTI installation.
+tree (version 10.0.1) via `pn.config.set_chianti_path()` and builds a
+19-level atom, restoring the previous configuration afterwards. Passes
+with or without a real CHIANTI installation.
+
+**[test_stout.py](test_stout.py) — 2 tests.** Loads O III atom+collision
+data in Stout format from the bundled `tests/STOUT/` tree (truncated to 5
+levels from Cloudy c23.01) via `pn.config.set_stout_path()`: Stout ion
+discovery, `setDataFile('*.stout')`, tabulated Omega/A round-trips, and
+the NLevels-from-upper-levels regression (`collNLevels == 5` while the
+maximum lower level is 4). Also checks that `set_stout_path(None)` /
+`set_chianti_path(None)` revert config, environment variables, and
+`pn.atomicData` cleanly.
 
 **[test_physics.py](test_physics.py) — 10 tests.** `airtovac`/`vactoair`
 (IDL reference value, roundtrip, vacuum > air, no-op outside the conversion

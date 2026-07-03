@@ -1,0 +1,13 @@
+17 09 05
+A	1	2	2.62e-05
+A	1	3	4.94e-11
+A	1	4	6.65e-06
+A	2	3	1.45e-04
+A	2	4	7.60e-03
+A	2	5	2.31e-01
+A	3	4	2.22e-02
+A	3	5	4.15e-04
+A	4	5	8.54e-01
+*************************
+Truncated to the 5 first levels for the PyNeb test suite.
+Original data: Cloudy c23.01 Stout database, o_3.

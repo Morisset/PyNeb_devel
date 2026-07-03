@@ -525,7 +525,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         
         if pn.config.INSTALLED['Stout']:
     
-            self.Stout_path = os.environ['STOUT_DIR']
+            self.Stout_path = pn.config.Stout_dir
             masterlist = '{0}/masterlist/Stout.ini'.format(self.Stout_path)
             try:
                 with open(masterlist) as master:
@@ -549,7 +549,7 @@ Or you may mean one of these files: {1}""".format(data_file, av_data),
         
         if pn.config.INSTALLED['Chianti']:
     
-            self.Chianti_path = os.environ['XUVTOP']
+            self.Chianti_path = pn.config.Chianti_path
             masterlist = '{0}/masterlist/masterlist.ions'.format(self.Chianti_path)
             try:
                 with open(masterlist) as master:
