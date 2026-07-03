@@ -26,20 +26,26 @@ Changelog = "https://github.com/Morisset/PyNeb_devel/tree/master/docs/CHANGES"
 packages=['pyneb',
 		  'pyneb.core',
 		  'pyneb.plot',
+		  'pyneb.plot.level_diagrams',
 		  'pyneb.utils',
-		  'pyneb.extinction']
+		  'pyneb.extinction',
+		  'pyneb.atomic_data',
+		  'pyneb.atomic_data.levels',
+		  'pyneb.atomic_data.deprecated',
+		  'pyneb.atomic_data_fits',
+		  'pyneb.atomic_data_fits.old_fits']
 
 [tool.setuptools.package-data]
-'pyneb'=['atomic_data_fits/*.fits',
-			     'atomic_data_fits/*.hdf5',
-			     'atomic_data_fits/old_fits/*.fits',
-			     'atomic_data/*.dat',
-			     'atomic_data/*.func',
-			     'atomic_data/*.txt',
-			     'atomic_data/levels/*.dat',
-                 'atomic_data/deprecated/*.dat']
+'pyneb.atomic_data'=['*.dat',
+			     '*.func',
+			     '*.txt']
+'pyneb.atomic_data.levels'=['*.dat']
+'pyneb.atomic_data.deprecated'=['*.dat']
+'pyneb.atomic_data_fits'=['*.fits',
+			     '*.hdf5']
+'pyneb.atomic_data_fits.old_fits'=['*.fits']
 'pyneb.extinction'=['*.txt']
-'pyneb.plot'=['level_diagrams/*.png']
+'pyneb.plot.level_diagrams'=['*.png']
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
