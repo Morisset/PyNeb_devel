@@ -46,8 +46,7 @@ if config.INSTALLED['astropy Table']:
     from astropy.table import Table #, Column
 if config.INSTALLED['h5py']:
     import h5py
-if config.INSTALLED['ai4neb']:
-    from ai4neb import manage_RM
+
 
 # Change the profiler to 'cpu', 'mem' or None to profile the execution of Atom.
 profiler = None
@@ -1649,7 +1648,8 @@ class Atom(object):
         atomicData.add2usedFiles(self.atom, self.collFile)
         
         self.ANN_n_temden=30
-        self.ANN_inst_kwargs = {'RM_type' : 'SK_ANN', 
+        #need to be edited because RM_type is going to  be removed
+        self.ANN_inst_kwargs = { 
                                 'verbose' : False, 
                                 'scaling' : True,
                                 'use_log' : True
@@ -1660,7 +1660,7 @@ class Atom(object):
                                 'tol' : 1e-6,
                                 'max_iter' : 20000
                                 }
-        self.ANN_Pop_inst_kwargs = {'RM_type' : 'SK_ANN', 
+        self.ANN_Pop_inst_kwargs = { 
                                 'verbose' : False, 
                                 'scaling' : True,
                                 'use_log' : True
@@ -1939,12 +1939,7 @@ class Atom(object):
         """
         Private method to obtain level population using Artificial Neuron Network.
         """
-        if not config.INSTALLED['ai4neb']:
-            self.log_.error('_getPopulations_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
-                          calling=self.calling)
-            return None
-        else:
-            from ai4neb import manage_RM
+        from pyneb.utils.ai_neb import manage_RM
         
         N = 5000
         tem_min = 10**np.min(self.getTemArray())
@@ -2600,13 +2595,8 @@ class Atom(object):
     @profile
     def _getTemDen_ANN(self, int_ratio, tem= -1, den= -1, lev_i1= -1, lev_j1= -1, lev_i2= -1, lev_j2= -1,
                   wave1= -1, wave2= -1, log=True, start_x= -1, end_x= -1, to_eval=None):
-        
-        if not config.INSTALLED['ai4neb']:
-            self.log_.error('_getTemDen_ANN cannot be used if ai4neb is not imported. Try to run pn.config.import_AI4Neb().',
-                          calling=self.calling)
-            return None
-        else:
-            from ai4neb import manage_RM
+
+        from pyneb.utils.ai_neb import manage_RM
 
         self._test_lev(lev_i1)
         self._test_lev(lev_j1)
@@ -2692,15 +2682,29 @@ class Atom(object):
         y = np.log10(y_train)
         self.ANN = manage_RM(X_train=X, y_train=y, **self.ANN_inst_kwargs)
         self.ANN.init_RM(**self.ANN_init_kwargs)
+        print("X shape =", X.shape)
+        print("y shape =", y.shape)
+        print("X min/max =", np.nanmin(X, axis=0), np.nanmax(X, axis=0))
+        print("y min/max =", np.nanmin(y), np.nanmax(y))
         self.ANN.train_RM()
         # set the test values to the one we are looking for
         X_test = np.array((X1_test, X2_test)).T
         self.ANN.set_test(X_test)
         # predict the result and denormalize them
         self.ANN.predict()
-        to_return = np.ones_like(int_ratio) * np.nan
-        to_return.ravel()[self.ANN.isfin] = self.ANN.pred.ravel()
-        to_return = 10**to_return
+        #testing#
+        print("X_test =", X_test)
+        print("isfin =", self.ANN.isfin)
+        print("pred =", self.ANN.pred)
+        to_return = np.ones_like(np.asarray(int_ratio), dtype=float) * np.nan
+        to_return_flat = to_return.ravel()
+        to_return_flat[self.ANN.isfin] = self.ANN.pred.ravel()
+        to_return = 10**to_return_flat.reshape(to_return.shape)
+        #this last three lines only work for list/arrays 
+        #If we input a single value it will return a nan.
+        # to_return = np.ones_like(int_ratio) * np.nan
+        # to_return.ravel()[self.ANN.isfin] = self.ANN.pred.ravel()
+        # to_return = 10**to_return
         return to_return
 
 
