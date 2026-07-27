@@ -1,0 +1,4 @@
+A bug when using ANN is corrected
+A bug when using new version of numpy, previously corrected byt canceled due to misuse of github
+Option to read stout file. The stout directory needs to be located by the environment variable STOUT_DIR
+

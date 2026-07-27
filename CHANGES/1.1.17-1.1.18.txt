@@ -1,0 +1,2 @@
+* Fix the last np.float to np.float64 in pynebcore and misc
+* Correct bug in ICF of S+, allow it again (it was set unavailable)

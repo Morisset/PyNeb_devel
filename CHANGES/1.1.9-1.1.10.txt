@@ -1,0 +1,104 @@
+commit 0e978c32118aca405f202a20309c5da3144e0541
+Merge: 21982bb 86479ad
+Author: morisset <chris.morisset@gmail.com>
+Date:   Tue Sep 3 10:50:50 2019 -0700
+
+    Merge branch 'devel'
+
+commit 86479ad3d2d9950220213f95cad7945ef388add1
+Author: morisset <chris.morisset@gmail.com>
+Date:   Tue Sep 3 10:42:45 2019 -0700
+
+    1.1.10
+
+commit 5391462c3a3c488124e38f732dc6ce72f20f57e0
+Author: morisset <chris.morisset@gmail.com>
+Date:   Mon Sep 2 09:42:41 2019 -0700
+
+    Bug in levels names in plotGrotrian
+
+commit 2c913fd82e897d894aebf49395aa4132ec19d032
+Author: morisset <chris.morisset@gmail.com>
+Date:   Mon Sep 2 09:40:25 2019 -0700
+
+    Adding auroral lines
+
+commit 34877a3b94ef58bd3a74ade7f2b1da9bab6c936a
+Author: Christophe Morisset <chris.morisset@gmail.com>
+Date:   Wed Jul 10 18:23:59 2019 -0700
+
+    v 1.1.10b1
+
+commit b02fb40668bf5c9565c139d5e01b097e7ea65a87
+Author: morisset <chris.morisset@gmail.com>
+Date:   Wed Jul 10 14:55:23 2019 -0700
+
+    Adding S96 for HeI
+
+commit 21982bb5ecb479895741cdb68958ac9eb0332c08
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sun Jul 7 11:33:18 2019 -0700
+
+    Update README.rst
+
+commit 73f276d0670e08edb1b78ce788604a8ae153cf09
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sun Jul 7 11:25:15 2019 -0700
+
+    update READMEs
+
+commit 3a36c8bc9326981ad50920c7edaa9e53f0a93158
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sun Jul 7 11:33:18 2019 -0700
+
+    Update README.rst
+
+commit e03e6c700c8d12d29f484b381fc11a8514393958
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sun Jul 7 11:25:15 2019 -0700
+
+    update READMEs
+
+commit 2ac064147a28b84e5a4d61bebc234541ca87096e
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 14:58:00 2019 -0700
+
+    error issued if nothing is givento Atom
+
+commit 7d74633891a35512b2ec5002401f0ca76c5d69f2
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 14:57:38 2019 -0700
+
+    sample scripts py3
+
+commit f75e4eceaaf9c355e499f6e31ed4dea78cc43de3
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 12:50:33 2019 -0700
+
+    space and TAB
+
+commit 6f62c7a643f41f505928c3c7c034cab600f3ae9d
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 12:02:11 2019 -0700
+
+    Devel branch download instructions
+
+commit 49d09ed23dfa656678e5eb96814504ffdd9a533c
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 11:57:43 2019 -0700
+
+    Update README.rst
+    
+    Add the devel download instructions
+
+commit 75cbd26054fb51f9e841fbe6d44e8b60175c7cb6
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 11:50:57 2019 -0700
+
+    Preference given to astropy for pyfits
+
+commit 7f70cc513384df51020009c15b3ce5244b5db176
+Author: morisset <chris.morisset@gmail.com>
+Date:   Sat Jul 6 11:33:41 2019 -0700
+
+    Create 1.1.8-1.1.9.txt

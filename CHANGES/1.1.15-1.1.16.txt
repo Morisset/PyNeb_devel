@@ -1,0 +1,15 @@
+* emisGrid/plotContours now have a level keyword.
+* N3r and N5r added to LINE_LABEL_LIST dictionnary defined in utils/init.py
+* o_i_coll_ZT03 added to atomic data
+* HeI labels now have a dot after the wavelength (ex: 4471. instead of 4471)
+* IPs from utils/physics are now generated also for H and He
+recombination lines can now be used in emisGrid
+* parseAtom2 returns rec='r' code to identify recombination atoms 
+* Some minor bugs corrected
+
+* Add the option of using Artificial Neural Network to speed-up getCrossTemDen. This implies the library AI4neb is installed (https://github.com/Morisset/AI4neb) with Tensorflow and Scikit-learn. This will be described in a forthcoming paper, any information can be asked using the Google group.
+
+* File requierements.dev added to root directory (only for developpers).
+* A lot of docstrings have been modified to prepare the API documentation
+* Directory pyneb/docs reorganized
+* A workflow directory is added to automatize the API documentation (all this from MJChimal fork)

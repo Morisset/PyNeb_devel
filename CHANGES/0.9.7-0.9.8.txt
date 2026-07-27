@@ -1,0 +1,8 @@
+Added module stellar.py in utils. It contains a Zanstra class to compute Zanstra stellar T and a couple of methods to deal with stellar luminosities.
+
+Corrected a bug in the He I and He II atomic files that coased the code to crash
+
+The input to Atom and RecAtom is no longer case-sensitive (i.e. pn.Atom('Ne', 2), pn.Atom('ne', 2), pn.Atom('NE', 2) and pn.Atom('nE', 2) are all valid calls) 
+
+Added small function getAllPossibleIons to return the list of all the atoms for which data existe (as opposed to those that are included in the current atomic data dictionary, which may be less).
+

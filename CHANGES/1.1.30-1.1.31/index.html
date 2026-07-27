@@ -1,0 +1,959 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="http://research.iac.es/proyecto/PyNeb/CHANGES/1.1.30-1.1.31/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Changes from 1.1.30 to 1.1.31 - PyNeb</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#changes-from-1130-to-1131" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PyNeb" class="md-header__button md-logo" aria-label="PyNeb" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PyNeb
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changes from 1.1.30 to 1.1.31
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PyNeb" class="md-nav__button md-logo" aria-label="PyNeb" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PyNeb
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/continuum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/diags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/emisGrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EmisGrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/icf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ICF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/core/pynebcore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyNebCore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extinction
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extinction
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/extinction/red_corr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Red Corr
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plot
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plot
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/plot/plot_atomic_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plot Atomic Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#new-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-bugs-fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library bugs fixed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warnings-cleaned-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warnings cleaned up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-test-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full test suite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full test suite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-physics-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core physics classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observations-and-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observations and analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#golden-value-regression-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Golden-value regression tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extinction-data-management-utilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extinction, data management, utilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="changes-from-1130-to-1131">Changes from 1.1.30 to 1.1.31</h1>
+<h2 id="new-features">New features</h2>
+<ul>
+<li><strong><code>Atom.plotGrotrian2</code></strong>: a new Grotrian diagram for collisional atoms, complementing
+  <code>plotGrotrian</code>. Levels are laid out by spectroscopic term (with term symbols), and the
+  transitions are drawn color-coded by log A(i,j) — or by line emissivity when <code>tem</code> and <code>den</code>
+  are given — with a colorbar, a selectable colormap, and thresholds to only show transitions
+  above a given transition probability (<code>A_lim</code>) or emissivity (<code>log_emis_lim</code>).</li>
+<li><strong>Runtime CHIANTI / Stout paths</strong>: the database directories can now be set at runtime with
+  <code>pn.config.set_chianti_path(path)</code> and <code>pn.config.set_stout_path(path)</code>, as an alternative to the
+  <code>XUVTOP</code> / <code>STOUT_DIR</code> environment variables (which remain the import-time default).
+  Passing <code>None</code> unsets them. Matching getters: <code>get_chianti_path()</code> / <code>get_stout_path()</code>.
+  Side effect (documented): the setters also update the corresponding environment variable for the
+  process, since the low-level CHIANTI readers use it. The CHIANTI version is re-read from
+  <code>{path}/VERSION</code> and the version-specific tools module is re-selected, so a session started
+  without <code>XUVTOP</code> can gain CHIANTI support at runtime.</li>
+<li><strong>New atomic data file</strong> <code>o_iii_atom_TZ17_202.dat</code>: 202-level O III transition probabilities
+  from Tayal &amp; Zatsarinny (2017).</li>
+<li><code>RecAtom.getEmissivity</code> now warns when the requested wavelength does not correspond to any
+  known transition, instead of failing silently.</li>
+</ul>
+<h2 id="other-changes">Other changes</h2>
+<ul>
+<li>NumPy 2.0 compatibility: <code>np.NAN</code>/<code>np.NaN</code> replaced by <code>np.nan</code> throughout.</li>
+<li>CI now tests on Python 3.8 and 3.12 (previously 3.8 only).</li>
+<li>All documentation notebooks rerun for this release.</li>
+<li>Packaging: the atomic data directories (<code>atomic_data</code>, <code>atomic_data_fits</code>,
+  <code>plot/level_diagrams</code> and their subdirectories) are now declared as packages with their own
+  <code>package-data</code> in <code>pyproject.toml</code>, removing the "Package would be ignored" warnings of
+  recent setuptools at build time. The wheel contents are unchanged.</li>
+</ul>
+<h2 id="library-bugs-fixed">Library bugs fixed</h2>
+<ul>
+<li><code>Observation.setAllErrors</code> read a nonexistent <code>line.obs_err</code> attribute, so it always crashed
+  (<code>pynebcore.py</code>).</li>
+<li><code>readData(fileFormat='lines_in_cols2')</code> used <code>np.string_</code>, removed in NumPy 2.0 — replaced with a
+  dtype-kind check.</li>
+<li><code>addMonteCarloObs</code> truncated <code>names</code> to the first object for multi-object observations (and used
+  the deprecated <code>np.core.defchararray</code>).</li>
+<li><code>save()</code> with positional args evaluated names in the wrong scope and always raised <code>NameError</code>;
+  both <code>save()</code> and <code>restore()</code> also leaked file handles (<code>saverestore.py</code>).</li>
+<li><code>EmisGrid.plotLineRatio</code> used <code>ContourSet.collections</code>, removed in matplotlib 3.10
+  (<code>emisGrid.py</code>).</li>
+<li><code>_AtomDataAscii</code> crashed when a data file has more levels than NIST provides
+  (e.g. <code>o_iii_atom_TZ17_202.dat</code>, hit by <code>DataPlot('O', 3)</code>) — added the same NLevels clamp the
+  Stout reader already had (<code>pynebcore.py</code>).</li>
+<li><code>_CollDataStout</code> computed <code>NLevels</code> from the maximum <em>lower</em> level instead of the maximum <em>upper</em>
+  level, losing the top level of the collision data (<code>pynebcore.py</code>).</li>
+<li><code>DataPlot.plotA</code> set the x-ticks inside the per-dataset <code>try</code> block (matplotlib warning when a
+  dataset failed) and indexed past its 5-entry marker list, so datasets beyond the fifth were
+  silently never plotted — markers now cycle like the colors.</li>
+<li>Renamed the misplaced diagnostic script <code>pyneb/utils/test_config.py</code> → <code>check_config.py</code>
+  (its <code>test_*</code> name got it collected by pytest discovery, and it had a latent <code>NameError</code>);
+  verified it still runs standalone.</li>
+</ul>
+<h2 id="warnings-cleaned-up">Warnings cleaned up</h2>
+<ul>
+<li><code>np.genfromtxt</code> deprecation — added <code>encoding=None</code> to both <code>readData</code> call sites in
+  <code>pynebcore.py</code> (<code>lines_in_cols2</code> and <code>lines_in_rows_err_cols</code>).</li>
+<li><code>two_photon</code> invalid-power warning — wrapped the fit formula in
+  <code>with np.errstate(invalid='ignore'):</code> in <code>continuum.py</code>; the NaNs for y &gt; 1 are zeroed by the
+  mask right below.</li>
+<li>Divide-by-zero from degenerate levels — wrapped the three 1/ΔE-style loops
+  (<code>_AtomDataAscii.initWaves</code>, the B-coefficient loop in <code>Atom</code>, and <code>initWaves</code> in
+  <code>pn_chianti.py</code>) in <code>np.errstate(divide='ignore', invalid='ignore')</code>.</li>
+<li><code>FigureCanvasAgg is non-interactive</code> — added a <code>filterwarnings</code> ignore to
+  <code>[tool.pytest.ini_options]</code> in <code>pyproject.toml</code>, since <code>plt.show()</code> is deliberately a no-op on
+  the test backend.</li>
+<li>Latent <code>SyntaxWarning</code>s — invalid escape sequences (<code>'\.'</code>, <code>'\*'</code>, <code>'$\Omega$'</code>, <code>'\+'</code>) in
+  <code>pn_chianti.py</code>, <code>plotAtomicData.py</code>, and <code>apap.py</code> converted to raw strings. These warned on
+  every fresh install, and Python is moving toward making them errors.</li>
+</ul>
+<h2 id="full-test-suite">Full test suite</h2>
+<p>16 test files, 253 tests, all passing (<code>pytest tests --doctest-modules</code>, mirrored by CI on
+Python 3.8 and 3.12; the suite also passes without <code>XUVTOP</code> / <code>STOUT_DIR</code> set, as on CI).</p>
+<p>Shared fixtures live in <code>conftest.py</code>: session-scoped atoms (<code>O3</code>, <code>N2</code>, <code>S2</code>, <code>O2</code>),
+recombination atoms (<code>H1</code>, <code>He2</code>), a small 10×8 <code>O3_grid</code> emissivity grid, the <code>smc24_path</code>
+sample file, plus the forced matplotlib Agg backend. See <code>tests/README.md</code> for the full
+documentation of the suite.</p>
+<h3 id="core-physics-classes">Core physics classes</h3>
+<ul>
+<li><code>test_atom.py</code> — 60 tests. The collisional <code>Atom</code> class. Constructor variants and attributes
+  (<code>elem</code>/<code>spec</code>/<code>Z</code>/<code>NLevels</code>, energy and wavelength arrays); <code>getA</code> (matrix structure, known
+  [OIII] 5007/4959 values, lookup by wavelength); <code>getEnergy</code> ordering; <code>getOmega</code>/<code>getCollRates</code>
+  shapes and positivity; <code>getPopulations</code> normalization; <code>getEmissivity</code> (absolute values for
+  5007/4959/4363, line ratios, scalar/array/product shapes, temperature dependence);
+  <code>getCritDensity</code>; <code>getTemDen</code> roundtrips (N II temperature, S II density) with <code>to_eval</code>, wave,
+  and level syntaxes; <code>getTransition</code>; <code>printIonic</code> smoke tests.</li>
+<li><code>test_recatom.py</code> — 18 tests. The <code>RecAtom</code> class (H I, He II): constructor attributes,
+  <code>getWave</code> for Hα/Hβ/He II 4686, emissivity values including the Balmer decrement (~2.85) and
+  Hγ/Hβ ratio, temperature dependence, density insensitivity, and the module-level
+  <code>getRecEmissivity</code> helper's agreement with <code>RecAtom</code>.</li>
+<li><code>test_continuum.py</code> — 11 tests. The <code>Continuum</code> class: continuum shape/positivity/magnitude,
+  the Balmer-jump discontinuity sign, normalized output shapes for temperature arrays, <code>BJ_HI</code>
+  decreasing with Te, a <code>T_BJ</code> roundtrip recovering 10⁴ K to 0.1%, the closed-form <code>T_BJ_Liu</code>,
+  two-photon continuum (zero below Lyα, suppressed at high density), Gaunt factors of order
+  unity, free-free increasing with helium, and NaN returns for invalid <code>make_cont_Ercolano</code>
+  inputs.</li>
+</ul>
+<h3 id="observations-and-analysis">Observations and analysis</h3>
+<ul>
+<li><code>test_observation.py</code> — 39 tests. <code>EmissionLine</code> (constructors by elem/spec/wave and by label,
+  blends, invalid labels, relative-vs-absolute errors, <code>correctIntens</code>, <code>addObs</code>, <code>printLine</code>)
+  and <code>Observation</code>: reading all four ASCII formats (<code>lines_in_cols</code>, <code>lines_in_cols2</code>,
+  <code>lines_in_rows</code> via <code>smc24.dat</code>, <code>lines_in_rows_err_cols</code>), line access (<code>getLine</code>,
+  <code>getIntens</code>, <code>getError</code>, sorting, unique atoms), editing (<code>addLine</code>, <code>removeLine</code>, <code>fillObs</code>,
+  <code>addObs</code>, <code>addSum</code>), extinction (<code>def_EBV</code> + <code>correctData</code> restoring the Balmer ratio to 2.85),
+  Monte Carlo replication for one and two objects, and <code>setAllErrors</code>.</li>
+<li><code>test_diagnostics.py</code> — 16 tests. The <code>Diagnostics</code> class: the diagnostics catalog
+  (≥100 entries, known labels), <code>addDiag</code>/<code>addAll</code>/<code>delDiag</code>/<code>getDiagFromLabel</code>,
+  <code>getUniqueAtoms</code>, and <code>getCrossTemDen</code> (an [OIII]+[SII] roundtrip and an [NII]+[SII]
+  physical-range check).</li>
+<li><code>test_icf.py</code> — 12 tests. The <code>ICF</code> class: catalog queries (<code>getAvailableICFs</code>, filtered by
+  type), metadata (<code>getExpression</code>, <code>getType</code>, <code>getComment</code>, <code>getReference</code>, <code>getURL</code>), and
+  <code>getElemAbundance</code> with hand-checkable inputs (direct O sum = 3×10⁻⁵, ICF factor exactly 3 for
+  TPP77_14, ICF ≥ 1 sanity), array inputs, NaN for absent ions, and <code>addICF</code>/<code>delICF</code>.</li>
+<li><code>test_emisgrid.py</code> — 13 tests. The <code>EmisGrid</code> class: grid shapes and Te/Ne ranges, <code>getGrid</code>
+  by wavelength/levels/<code>to_eval</code>, physical invariants (5007/4959 constant ≈ 2.98, 4363/5007
+  strictly increasing with Te), save/restore roundtrip and recompute-on-mismatch,
+  <code>getEmisGridDict</code> compute-then-cache behavior, and smoke tests for
+  <code>plotImage</code>/<code>plotContours</code>/<code>plotLineRatio</code>.</li>
+</ul>
+<h3 id="golden-value-regression-tests">Golden-value regression tests</h3>
+<ul>
+<li><code>test_golden.py</code> — 10 tests. Compares 54 numerical quantities against reference values stored
+  in <code>tests/golden_values.json</code>, computed once and committed: collisional emissivities (O III,
+  N II, S II, O II), O III level populations, transition probabilities, critical densities,
+  <code>getTemDen</code> solutions, recombination emissivities, extinction corrections (CCM89, F99), the
+  nebular continuum, ICF abundances, and <code>getCrossTemDen</code>. A failure means the numerical output
+  of the library changed; if intended, regenerate with <code>python tests/test_golden.py --update</code>.</li>
+</ul>
+<h3 id="extinction-data-management-utilities">Extinction, data management, utilities</h3>
+<ul>
+<li><code>test_extinction.py</code> — 21 tests. The <code>RedCorr</code> class: defaults (R_V = 3.1), E(B-V) ↔ cHβ
+  roundtrip, <code>getCorr</code> (unity for no correction or zero reddening, wavelength dependence, array
+  input), <code>getCorrHb</code>, <code>setCorr</code> from observed ratios, and the catalog of ≥12 laws (CCM89, F99,
+  Cal00, …).</li>
+<li><code>test_atomic_manager.py</code> — 7 tests. The <code>pn.atomicData</code> singleton: <code>getDataFile</code>,
+  <code>getAllAvailableFiles</code> (with the <code>*</code> current-file marker), <code>getAllAtoms</code> (collisional and
+  recombination), predefined dictionaries (PYNEB_23_01), and a <code>setDataFile</code> switch-and-restore
+  roundtrip verified on a freshly built atom.</li>
+<li><code>test_chianti.py</code> — 1 test. Loads O III atom+collision data in CHIANTI format from the bundled
+  <code>tests/CHIANTI/</code> tree (version 10.0.1) via <code>pn.config.set_chianti_path()</code> and builds a
+  19-level atom; passes with or without a real CHIANTI installation.</li>
+<li><code>test_stout.py</code> — 2 tests. Loads O III atom+collision data in Stout format from the bundled
+  <code>tests/STOUT/</code> tree (truncated to 5 levels from Cloudy c23.01) via
+  <code>pn.config.set_stout_path()</code>: Stout ion discovery, <code>setDataFile('*.stout')</code>, tabulated Ω/A
+  round-trips, the NLevels regression, and clean revert of <code>set_*_path(None)</code>.</li>
+<li><code>test_physics.py</code> — 10 tests. <code>airtovac</code>/<code>vactoair</code> (IDL reference value, roundtrip,
+  vacuum &gt; air, no-op outside the conversion window), <code>gsFromAtom</code> ground states, <code>CST</code>
+  constants (Hβ wavelength, Rydberg, Boltzmann), and <code>getHbEmissivity</code> against both the Aller
+  fit and H I recombination data.</li>
+<li><code>test_helpers.py</code> — 14 tests. <code>getLineLabel</code> / <code>parseLineLabel</code> (plain lines, blends, micron
+  wavelengths, <code>H1r</code> labels), <code>isValid</code>, <code>getAtomDict</code>, and <code>save</code>/<code>restore</code> (kwargs and
+  positional paths, error on unknown names).</li>
+<li><code>test_utils.py</code> — 14 tests. <code>int_to_roman</code>/<code>roman_to_int</code> (including a full 1–3999 roundtrip),
+  <code>parseAtom</code>, and <code>ROOT_DIR</code>.</li>
+<li><code>test_plotting.py</code> — 5 tests. Agg-backend smoke tests that assert content was actually drawn:
+  <code>Atom.plotEmiss</code>, <code>Atom.plotGrotrian</code>, <code>RedCorr.plot</code>, <code>DataPlot.plotA</code> (loads every O III
+  dataset), and <code>Diagnostics.plot</code> over the <code>O3_grid</code> with a synthetic corrected observation.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

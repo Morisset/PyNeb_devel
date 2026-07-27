@@ -1,0 +1,12 @@
+A new format for the data, where the errors are in columns, following the corresponding intensity. It is read with fileFormat='lines_in_rows_err_cols'
+
+Example:
+
+LINE TT err TT2 err TT3 err
+cHbeta	 1.2  0.0  1.5 0.2 1.1 0.2
+O3_5007A 1.5  0.15 1.3  .2 1.1 0.1
+H1_6563A 2.89 0.05 1.6 0.3 1.3 0.1
+N2_6584A 1.   0.20 0.3 0.5 1.5 0.1
+
+obs = pn.Observation('tt.dat',fileFormat='lines_in_rows_err_cols', corrected = False)
+

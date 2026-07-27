@@ -1,0 +1,3 @@
+Change the way the low and High density ratios are obtained. Old way was using the statistical weigths ratio, but this only woirk for S+-type of density diagnostics. Not for IR line ratios.
+Add a Notebook in the doc directory to explore Critical densities.
+
